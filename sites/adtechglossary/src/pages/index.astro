@@ -1,0 +1,141 @@
+---
+import { getCollection } from 'astro:content'
+import BaseLayout from '@agenticbrief/shared-ui/BaseLayout.astro'
+import AnswerBox from '@agenticbrief/shared-ui/AnswerBox.astro'
+import FaqBlock from '@agenticbrief/shared-ui/FaqBlock.astro'
+import { publishedOnly } from '@agenticbrief/content-utils'
+import {
+  graph,
+  organizationNode,
+  personNode,
+  webSiteNode,
+  webPageNode,
+  articleNode,
+  faqPageNode,
+  definedTermSetNode,
+} from '@agenticbrief/seo/schema'
+import { siteUrl } from '@agenticbrief/shared-ui/sites'
+import { SECTIONS, sectionFor } from '../lib/sections'
+
+const BASE = siteUrl('adtechglossary')
+const HUB = siteUrl('agenticadlab')
+
+const entries = publishedOnly(await getCollection('glossary')).sort((a, b) =>
+  a.data.term.localeCompare(b.data.term),
+)
+
+const bySection = new Map<string, typeof entries>()
+for (const entry of entries) {
+  const key = sectionFor(entry.id)
+  bySection.set(key, [...(bySection.get(key) ?? []), entry])
+}
+
+const answer = `This glossary defines the vocabulary of agentic advertising from the specifications themselves. Every entry names the file and version it comes from, and says whether the other stack has a counterpart term or none.`
+
+const faq = [
+  {
+    question: 'Where do these definitions come from?',
+    answer:
+      'From the AdCP and AAMP specification repositories directly, at a recorded commit. AdCP terms come from a published release; AAMP terms come from reference implementations rather than a ratified specification, and each page says which.',
+  },
+  {
+    question: 'Why are CPM, DSP and SSP not here?',
+    answer:
+      'Commodity programmatic terms are excluded by policy. A dozen glossaries define them well already, and adding thin duplicates of well-served terms would dilute the entries that are genuinely underserved.',
+  },
+  {
+    question: 'Do AdCP and AAMP use the same words for the same things?',
+    answer:
+      'Often not. AdCP says sales agent where AAMP says seller agent, and the phrase "sales agent" appears nowhere in the AAMP corpus. Each entry names its counterpart in the other stack, or states that there is none.',
+  },
+]
+
+const url = `${BASE}/`
+const title = 'Ad Tech Glossary — agentic advertising terms, defined from the specs'
+const description = `${entries.length} agentic advertising terms defined from the AdCP and AAMP specification repositories, each version-pinned and cross-referenced to its counterpart in the other stack.`
+
+const jsonLd = graph([
+  organizationNode(),
+  personNode(),
+  webSiteNode({ siteUrl: BASE, name: 'Ad Tech Glossary', description }),
+  webPageNode({ url, siteUrl: BASE, title, description }),
+  definedTermSetNode({
+    url,
+    name: 'Ad Tech Glossary — agentic advertising terms',
+    description,
+  }),
+  articleNode({
+    url,
+    title,
+    description,
+    datePublished: '2026-08-09',
+    technical: true,
+    keywords: ['agentic advertising glossary', 'ad tech glossary', 'adcp terms', 'aamp terms'],
+  }),
+  faqPageNode(url, faq),
+])
+---
+
+<BaseLayout
+  site="adtechglossary"
+  title={title}
+  description={description}
+  path="/"
+  jsonLd={jsonLd}
+  wide
+  keywords={['agentic advertising glossary', 'ad tech glossary', 'adcp glossary']}
+>
+  <h1>Ad Tech Glossary</h1>
+
+  <AnswerBox answer={answer} />
+
+  <p>
+    {entries.length} terms across {bySection.size} sections. Every definition is traceable: the entry
+    names the schema file or specification document it came from and the version that file was read at.
+    Where the two stacks disagree on a word, the entry says so rather than picking one.
+  </p>
+
+  {
+    Object.entries(SECTIONS).map(([key, meta]) => {
+      const list = bySection.get(key) ?? []
+      if (list.length === 0) return null
+      return (
+        <section>
+          <h2 id={key}>
+            <a href={`/${key}/`}>{meta.title}</a>
+          </h2>
+          <p>{meta.summary}</p>
+          <ul class="term-list">
+            {list.map((e) => (
+              <li>
+                <a class="term-name" href={`/${key}/${e.id}/`}>
+                  {e.data.term}
+                </a>
+                <br />
+                {e.data.answer}
+              </li>
+            ))}
+          </ul>
+        </section>
+      )
+    })
+  }
+
+  <FaqBlock entries={faq} />
+
+  <h2>Related</h2>
+  <ul>
+    <li>
+      <a href={`${HUB}/protocols/adcp-vs-aamp/`} rel="noopener">AdCP compared with AAMP</a> — the architectural
+      comparison behind the terminology
+    </li>
+    <li>
+      <a href="https://adcpexplorer.noetis.dev/" rel="noopener">AdCP Explorer</a> — every AdCP operation,
+      field by field
+    </li>
+    <li>
+      <a href="https://aampexplorer.noetis.dev/" rel="noopener">AAMP Explorer</a> — what IAB Tech Lab
+      has actually published
+    </li>
+  </ul>
+</BaseLayout>

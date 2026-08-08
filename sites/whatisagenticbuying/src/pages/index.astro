@@ -1,0 +1,20 @@
+---
+import { getEntry, render } from 'astro:content'
+import DocPage from '@agenticbrief/shared-ui/DocPage.astro'
+import { siteUrl } from '@agenticbrief/shared-ui/sites'
+
+const entry = await getEntry('guides', 'agentic-buying-answer')
+if (!entry) throw new Error('content/guides/agentic-buying-answer.md is missing — it is this site')
+const { Content } = await render(entry)
+const BASE = siteUrl('whatisagenticbuying')
+---
+
+<DocPage
+  site="whatisagenticbuying"
+  entry={entry}
+  path="/"
+  technical={false}
+  breadcrumbs={[{ name: 'What Is Agentic Buying', url: `${BASE}/` }]}
+>
+  <Content />
+</DocPage>

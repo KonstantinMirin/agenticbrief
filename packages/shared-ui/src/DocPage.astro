@@ -1,0 +1,123 @@
+---
+/**
+ * Renders one markdown entry as a full page.
+ *
+ * The hub, answer and brief sites all render the same thing — a document with
+ * an answer-first opening, a body, sources and related links — so the JSON-LD
+ * assembly lives here once rather than being retyped in six route files.
+ */
+import PageLayout from './PageLayout.astro'
+import {
+  graph,
+  organizationNode,
+  personNode,
+  webSiteNode,
+  webPageNode,
+  articleNode,
+  breadcrumbNode,
+  faqPageNode,
+  howToNode,
+} from '@agenticbrief/seo/schema'
+import { SITES, siteUrl, type SiteKey } from './sites'
+
+export interface Props {
+  site: SiteKey
+  entry: any
+  path: string
+  /** override the <h1> */
+  heading?: string
+  breadcrumbs?: { name: string; url: string }[]
+  /** Article vs TechArticle */
+  technical?: boolean
+  /** emit HowTo when the entry declares steps */
+  section?: string
+}
+
+const { site, entry, path, heading, breadcrumbs = [], technical = true, section } = Astro.props
+const BASE = siteUrl(site)
+const url = `${BASE}${path}`
+const d = entry.data
+
+const crumbs = breadcrumbs.length
+  ? breadcrumbs
+  : [
+      { name: SITES[site].name, url: `${BASE}/` },
+      { name: d.title, url },
+    ]
+
+const faq = d.faq ?? []
+const steps = d.steps ?? []
+
+const jsonLd = graph([
+  organizationNode(),
+  personNode(),
+  webSiteNode({ siteUrl: BASE, name: SITES[site].name, description: SITES[site].tagline }),
+  webPageNode({
+    url,
+    siteUrl: BASE,
+    title: d.title,
+    description: d.description,
+    datePublished: d.pubDate.toISOString(),
+    dateModified: (d.updatedDate ?? d.pubDate).toISOString(),
+    breadcrumb: {},
+  }),
+  breadcrumbNode(url, crumbs),
+  articleNode({
+    url,
+    title: d.title,
+    description: d.description,
+    datePublished: d.pubDate.toISOString(),
+    dateModified: (d.updatedDate ?? d.pubDate).toISOString(),
+    technical,
+    section,
+    keywords: d.keywords ?? [],
+    citations: d.citations ?? [],
+  }),
+  faq.length ? faqPageNode(url, faq) : null,
+  steps.length
+    ? howToNode({ url, name: d.title, description: d.description, steps, totalTime: d.totalTime })
+    : null,
+])
+
+const related = (d.related ?? []).map((href: string) => ({
+  href,
+  title: href.replace(/^https?:\/\//, '').replace(/\/$/, ''),
+}))
+---
+
+<PageLayout
+  site={site}
+  title={d.title}
+  heading={heading ?? d.title}
+  description={d.description}
+  path={path}
+  answer={d.answer}
+  breadcrumbs={crumbs}
+  faq={faq}
+  related={related}
+  jsonLd={jsonLd}
+  ogType="article"
+  publishDate={d.pubDate}
+  modifiedDate={d.updatedDate ?? d.pubDate}
+  keywords={d.keywords ?? []}
+  wide
+>
+  <slot />
+
+  {
+    (d.citations ?? []).length > 0 && (
+      <>
+        <h2>Sources</h2>
+        <ul>
+          {d.citations.map((c: string) => (
+            <li>
+              <a href={c} rel="noopener nofollow">
+                {c.replace(/^https?:\/\//, '')}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </>
+    )
+  }
+</PageLayout>

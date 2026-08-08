@@ -1,0 +1,254 @@
+---
+/**
+ * The strongest AAMP material in the corpus, and the clearest structural
+ * difference between the two stacks: AdCP has no negotiation protocol at all.
+ *
+ * Every number below is read from seller-agent/docs/integration/negotiation.md
+ * and docs/api/quotes.md. The plan requires all FOUR tier rows — an earlier
+ * draft elsewhere printed three.
+ */
+import BaseLayout from '@agenticbrief/shared-ui/BaseLayout.astro'
+import AnswerBox from '@agenticbrief/shared-ui/AnswerBox.astro'
+import FaqBlock from '@agenticbrief/shared-ui/FaqBlock.astro'
+import SpecSource from '@agenticbrief/shared-ui/SpecSource.astro'
+import { aamp, adcp } from '@agenticbrief/protocol-data'
+import {
+  graph,
+  organizationNode,
+  personNode,
+  webSiteNode,
+  webPageNode,
+  articleNode,
+  breadcrumbNode,
+  faqPageNode,
+} from '@agenticbrief/seo/schema'
+import { BASE, HUB } from '../lib/site'
+
+const SELLER = 'https://github.com/IABTechLab/seller-agent/blob/main/docs'
+
+const TIERS = [
+  {
+    tier: 'public',
+    strategy: 'aggressive',
+    rounds: 3,
+    perRound: '3%',
+    total: '8%',
+    gapShare: '30%',
+  },
+  { tier: 'seat', strategy: 'standard', rounds: 4, perRound: '4%', total: '12%', gapShare: '40%' },
+  {
+    tier: 'agency',
+    strategy: 'collaborative',
+    rounds: 5,
+    perRound: '5%',
+    total: '15%',
+    gapShare: '50%',
+  },
+  {
+    tier: 'advertiser',
+    strategy: 'premium',
+    rounds: 6,
+    perRound: '6%',
+    total: '20%',
+    gapShare: '65%',
+  },
+]
+
+const TRUST = ['unknown', 'registered', 'approved', 'preferred', 'blocked']
+
+const path = '/negotiation/'
+const url = `${BASE}${path}`
+const title = 'Quote, negotiate, book — price negotiation in AAMP'
+const description =
+  'AAMP is the only agentic advertising stack that specifies price negotiation between agents: four actions, tier-keyed concession caps, and a 24-hour quote TTL. AdCP has no equivalent.'
+const answer =
+  'AAMP specifies multi-round price negotiation between buyer and seller agents. A buyer requests a non-binding quote with a 24-hour TTL, then both sides exchange counters bounded by per-round and cumulative concession caps keyed to the buyer’s access tier.'
+
+const faq = [
+  {
+    question: 'Does AdCP have a negotiation protocol?',
+    answer: `No. Across all ${adcp.tasks.length} operations in AdCP ${adcp.version} there is no counter-offer, no quote object and no concession model. An AdCP buyer discovers products and creates a media buy; price is a property of the product, not something the two agents converge on.`,
+  },
+  {
+    question: 'What are the four negotiation actions?',
+    answer:
+      'accept, counter, final_offer and reject. Each round records the buyer price, the seller price, the action taken, the concession made in that round and the cumulative concession so far.',
+  },
+  {
+    question: 'How long is a quote valid?',
+    answer:
+      'Twenty-four hours. After that the quote expires and retrieving it returns HTTP 410. Quotes are explicitly non-binding until converted into a deal.',
+  },
+  {
+    question: 'Is this a ratified specification?',
+    answer:
+      'No, and that qualification matters. This model is documented in the seller-agent reference implementation, not in a ratified IAB Tech Lab specification. It is what one implementation does, published openly, rather than something an implementer is obliged to match.',
+  },
+]
+
+const breadcrumbs = [
+  { name: 'AAMP Explorer', url: `${BASE}/` },
+  { name: 'Negotiation', url },
+]
+
+const jsonLd = graph([
+  organizationNode(),
+  personNode(),
+  webSiteNode({ siteUrl: BASE, name: 'AAMP Explorer', description }),
+  webPageNode({ url, siteUrl: BASE, title, description, breadcrumb: {} }),
+  breadcrumbNode(url, breadcrumbs),
+  articleNode({
+    url,
+    title,
+    description,
+    datePublished: '2026-08-09',
+    technical: true,
+    proficiencyLevel: 'Expert',
+    keywords: ['agent to agent deal negotiation', 'aamp negotiation', 'agentic price negotiation'],
+    citations: [`${SELLER}/integration/negotiation.md`, `${SELLER}/api/quotes.md`],
+  }),
+  faqPageNode(url, faq),
+])
+---
+
+<BaseLayout
+  site="aampexplorer"
+  title={title}
+  description={description}
+  path={path}
+  jsonLd={jsonLd}
+  wide
+  ogType="article"
+  publishDate={new Date('2026-08-09')}
+  keywords={['agent to agent deal negotiation', 'aamp negotiation']}
+>
+  <nav class="breadcrumbs" aria-label="Breadcrumb">
+    <ol><li><a href="/">AAMP Explorer</a></li><li><span>Negotiation</span></li></ol>
+  </nav>
+  <h1>Price negotiation in AAMP</h1>
+  <AnswerBox answer={answer} />
+
+  <p>
+    This is the most substantial thing in the AAMP corpus, and it has no counterpart in AdCP. It is
+    also the clearest illustration of what the two stacks are each for: AdCP models a catalogue you
+    buy from, AAMP models a conversation you haggle in.
+  </p>
+
+  <p>
+    One qualification, stated up front because it changes how much weight the numbers below can
+    carry: this model lives in the <strong>seller-agent reference implementation</strong>, not in a
+    ratified specification. It is what one implementation does and publishes, not a conformance
+    requirement.
+  </p>
+
+  <h2>How does an AAMP negotiation run?</h2>
+  <ol>
+    <li>The buyer requests <strong>avails</strong> against the seller's media kit.</li>
+    <li>
+      The seller issues a <strong>quote</strong> — a non-binding price offer with a 24-hour TTL.
+    </li>
+    <li>
+      Either side may <strong>counter</strong>. Each round is recorded with both prices, the action,
+      and the concession made.
+    </li>
+    <li>
+      The exchange ends on <code>accept</code>, <code>reject</code>, a <code>final_offer</code> that is
+      accepted or refused, or the round limit.
+    </li>
+    <li>
+      An accepted quote is converted into a <strong>deal</strong>, and the seller issues the deal
+      ID. The sell side is the system of record.
+    </li>
+  </ol>
+
+  <h2>What bounds the negotiation?</h2>
+  <p>
+    Concessions are capped, and the caps are keyed to the buyer's access tier. A buyer with no
+    relationship gets three rounds and eight percent; a named advertiser gets six rounds and twenty.
+  </p>
+
+  <figure class="comparison">
+    <table>
+      <caption
+        >Negotiation strategy by access tier, from seller-agent docs/integration/negotiation.md</caption
+      >
+      <thead>
+        <tr>
+          <th scope="col">Access tier</th>
+          <th scope="col">Strategy</th>
+          <th scope="col">Max rounds</th>
+          <th scope="col">Per-round cap</th>
+          <th scope="col">Total cap</th>
+          <th scope="col">Buyer gap share</th>
+        </tr>
+      </thead>
+      <tbody>
+        {
+          TIERS.map((t) => (
+            <tr>
+              <th scope="row">
+                <code>{t.tier}</code>
+              </th>
+              <td>
+                <code>{t.strategy}</code>
+              </td>
+              <td>{t.rounds}</td>
+              <td>{t.perRound}</td>
+              <td>{t.total}</td>
+              <td>{t.gapShare}</td>
+            </tr>
+          ))
+        }
+      </tbody>
+    </table>
+  </figure>
+
+  <h2>How does a buyer get a better tier?</h2>
+  <p>
+    Not by claiming one. A buyer's effective tier is the minimum of the tier it claims and the
+    ceiling its trust status allows, so identity alone does not buy a discount. Trust status runs
+    {' '}{
+      TRUST.map((t, i) => (
+        <>
+          {i > 0 && ' → '}
+          <code>{t}</code>
+        </>
+      ))
+    }, where <code>registered</code>
+    {' '}means the agent was found in the AAMP registry.
+  </p>
+
+  <h2>Why does AdCP have nothing like this?</h2>
+  <p>
+    Because it models a different transaction. In AdCP {adcp.version}, a product carries its pricing
+    options and a buyer either buys it or does not. There is no object representing an offer under
+    discussion. Whether that is a gap or a deliberate scope boundary is exactly the kind of question
+    the two camps have not published a joint answer to — and neither corpus references the other.
+  </p>
+
+  <FaqBlock entries={faq} />
+
+  <h2>Related</h2>
+  <ul>
+    <li><a href="/repos/seller-agent/">The seller agent, where this model is implemented</a></li>
+    <li>
+      <a href="/repos/iab-agentic-primitives/">The wire contract these objects are defined in</a>
+    </li>
+    <li>
+      <a href="https://adtechglossary.noetis.dev/negotiation/" rel="noopener"
+        >Negotiation vocabulary, term by term</a
+      >
+    </li>
+    <li><a href={`${HUB}/protocols/adcp-vs-aamp/`} rel="noopener">AdCP compared with AAMP</a></li>
+  </ul>
+
+  <SpecSource
+    provenance={{
+      repo: 'https://github.com/IABTechLab/seller-agent',
+      commit: aamp.components.find((c) => c.name === 'seller-agent')?.commit ?? '',
+      parsedAt: aamp.provenance.parsedAt,
+      sourcePath: 'docs/integration/negotiation.md',
+      sourceUrl: `${SELLER}/integration/negotiation.md`,
+    }}
+  />
+</BaseLayout>

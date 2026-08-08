@@ -1,0 +1,74 @@
+---
+/**
+ * Convenience wrapper over BaseLayout for a standard document page:
+ * breadcrumb, H1, answer box, body slot, FAQ, related links.
+ *
+ * Pages that need a bespoke layout use BaseLayout directly.
+ */
+import BaseLayout from './BaseLayout.astro'
+import AnswerBox from './AnswerBox.astro'
+import FaqBlock from './FaqBlock.astro'
+import RelatedLinks from './RelatedLinks.astro'
+import type { SiteKey } from './sites'
+
+export interface Props {
+  site: SiteKey
+  title: string
+  /** the <h1>, if it should differ from the <title> */
+  heading?: string
+  description: string
+  path: string
+  answer?: string
+  eyebrow?: string
+  breadcrumbs?: { name: string; url: string }[]
+  faq?: { question: string; answer: string }[]
+  related?: { href: string; title: string; note?: string }[]
+  jsonLd?: string
+  ogImage?: string
+  ogType?: 'website' | 'article'
+  publishDate?: Date
+  modifiedDate?: Date
+  keywords?: string[]
+  current?: string
+  wide?: boolean
+}
+
+const {
+  site,
+  title,
+  heading,
+  description,
+  path,
+  answer,
+  eyebrow,
+  breadcrumbs = [],
+  faq = [],
+  related = [],
+  ...rest
+} = Astro.props
+---
+
+<BaseLayout site={site} title={title} description={description} path={path} {...rest}>
+  {
+    breadcrumbs.length > 0 && (
+      <nav class="breadcrumbs" aria-label="Breadcrumb">
+        <ol>
+          {breadcrumbs.map((b, i) => (
+            <li>
+              {i < breadcrumbs.length - 1 ? <a href={b.url}>{b.name}</a> : <span>{b.name}</span>}
+            </li>
+          ))}
+        </ol>
+      </nav>
+    )
+  }
+
+  <article>
+    {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+    <h1>{heading ?? title}</h1>
+    {answer && <AnswerBox answer={answer} />}
+    <slot />
+    <FaqBlock entries={faq} />
+    <RelatedLinks links={related} />
+  </article>
+</BaseLayout>

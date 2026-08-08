@@ -1,0 +1,13 @@
+{
+  "extends": "astro/tsconfigs/strict",
+  "compilerOptions": {
+    "strictNullChecks": true,
+    "allowJs": true,
+    "resolveJsonModule": true,
+    "moduleResolution": "bundler",
+    "module": "ESNext",
+    "target": "ES2022",
+    "verbatimModuleSyntax": false,
+    "skipLibCheck": true
+  }
+}

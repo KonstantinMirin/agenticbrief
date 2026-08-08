@@ -1,0 +1,48 @@
+---
+/**
+ * A comparison table.
+ *
+ * Comparison tables are called out repeatedly in the GEO research as one of the
+ * highest-yield formats for citation, because the row/column structure survives
+ * text extraction intact. Rendered as a real <table> with scoped headers — not
+ * a grid of divs — for exactly that reason.
+ */
+
+export interface Props {
+  caption: string
+  /** first column header, e.g. "Capability" */
+  rowHeader: string
+  columns: string[]
+  rows: { label: string; cells: (string | null)[]; note?: string }[]
+  /** text shown in place of a null cell */
+  emptyLabel?: string
+}
+
+const { caption, rowHeader, columns, rows, emptyLabel = 'Not covered' } = Astro.props
+---
+
+<figure class="comparison">
+  <table>
+    <caption>{caption}</caption>
+    <thead>
+      <tr>
+        <th scope="col">{rowHeader}</th>
+        {columns.map((c) => <th scope="col">{c}</th>)}
+        {rows.some((r) => r.note) && <th scope="col">Notes</th>}
+      </tr>
+    </thead>
+    <tbody>
+      {
+        rows.map((row) => (
+          <tr>
+            <th scope="row">{row.label}</th>
+            {row.cells.map((cell) => (
+              <td class={cell === null ? 'cell-empty' : undefined}>{cell ?? emptyLabel}</td>
+            ))}
+            {rows.some((r) => r.note) && <td class="cell-note">{row.note ?? ''}</td>}
+          </tr>
+        ))
+      }
+    </tbody>
+  </table>
+</figure>

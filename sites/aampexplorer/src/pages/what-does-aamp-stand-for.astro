@@ -1,0 +1,184 @@
+---
+/**
+ * A page that exists because the normative source is structurally disqualified
+ * from writing it: IAB Tech Lab cannot publish "our own repositories disagree
+ * about our acronym". Every row is a file path and a line number, so the claim
+ * is checkable in one click.
+ */
+import BaseLayout from '@agenticbrief/shared-ui/BaseLayout.astro'
+import AnswerBox from '@agenticbrief/shared-ui/AnswerBox.astro'
+import FaqBlock from '@agenticbrief/shared-ui/FaqBlock.astro'
+import { aamp } from '@agenticbrief/protocol-data'
+import {
+  graph,
+  organizationNode,
+  personNode,
+  webSiteNode,
+  webPageNode,
+  articleNode,
+  breadcrumbNode,
+  faqPageNode,
+  definedTermNode,
+  definedTermSetNode,
+} from '@agenticbrief/seo/schema'
+import { BASE, HUB } from '../lib/site'
+
+const GH = 'https://github.com/IABTechLab'
+
+const EXPANSIONS = [
+  {
+    expansion: 'Agentic Advertising Management Protocols',
+    where: 'AAMP/README.md:1 and :5',
+    url: `${GH}/AAMP/blob/main/README.md`,
+    note: 'The hub repository, and therefore the naming authority. Also used in two buyer-agent docs.',
+  },
+  {
+    expansion: 'IAB Agent & API Management Protocol',
+    where: 'seller-agent/docs/architecture/overview.md:143',
+    url: `${GH}/seller-agent/blob/main/docs/architecture/overview.md`,
+    note: 'Singular "Protocol", and a completely different second and third word.',
+  },
+  {
+    expansion: 'Agent-to-Agent Marketplace Protocol',
+    where:
+      'seller-agent/docs/guides/agent-management.md:401, buyer-agent/docs/ai-assistant/slash-commands.md:79',
+    url: `${GH}/seller-agent/blob/main/docs/guides/agent-management.md`,
+    note: 'Used in both reference agents, in text describing the same registry.',
+  },
+]
+
+const path = '/what-does-aamp-stand-for/'
+const url = `${BASE}${path}`
+const title = 'What does AAMP stand for? Three expansions, one codebase'
+const description =
+  "IAB Tech Lab's own AAMP repositories expand the acronym three different ways. Each expansion, the file and line it appears in, and which one to use."
+const answer =
+  'AAMP officially stands for Agentic Advertising Management Protocols, per the hub README. Two other expansions appear inside the same corpus: IAB Agent & API Management Protocol, and Agent-to-Agent Marketplace Protocol.'
+
+const faq = [
+  {
+    question: 'Which expansion is correct?',
+    answer:
+      'Agentic Advertising Management Protocols. It is the one in the hub repository README and on the IAB Tech Lab standards page, which makes it the naming authority. The others appear in reference-implementation documentation.',
+  },
+  {
+    question: 'Does the disagreement matter?',
+    answer:
+      'For citation, yes. Three expansions means three different strings a search engine or assistant may index for the same entity, and it splits the term. For implementation, no — all three refer to the same set of repositories.',
+  },
+  {
+    question: 'Where did the other expansions come from?',
+    answer:
+      'Both appear in documentation describing the agent registry, in the buyer and seller reference agents. They read as independently drafted rather than copied, which fits a corpus assembled from separately authored projects.',
+  },
+]
+
+const breadcrumbs = [
+  { name: 'AAMP Explorer', url: `${BASE}/` },
+  { name: 'What does AAMP stand for?', url },
+]
+
+const jsonLd = graph([
+  organizationNode(),
+  personNode(),
+  webSiteNode({ siteUrl: BASE, name: 'AAMP Explorer', description }),
+  webPageNode({ url, siteUrl: BASE, title, description, breadcrumb: {} }),
+  breadcrumbNode(url, breadcrumbs),
+  definedTermSetNode({
+    url: `${BASE}/`,
+    name: 'AAMP Explorer reference',
+    description: "IAB Tech Lab's AAMP corpus, documented from source.",
+  }),
+  definedTermNode({
+    url,
+    term: 'AAMP',
+    definition: answer,
+    termSetUrl: `${BASE}/`,
+    alternateNames: EXPANSIONS.map((e) => e.expansion),
+  }),
+  articleNode({
+    url,
+    title,
+    description,
+    datePublished: '2026-08-09',
+    technical: true,
+    keywords: ['what does aamp stand for', 'aamp acronym', 'aamp meaning'],
+    citations: [`${GH}/AAMP`, aamp.homepage],
+  }),
+  faqPageNode(url, faq),
+])
+---
+
+<BaseLayout
+  site="aampexplorer"
+  title={title}
+  description={description}
+  path={path}
+  jsonLd={jsonLd}
+  wide
+  ogType="article"
+  publishDate={new Date('2026-08-09')}
+  keywords={['what does aamp stand for', 'aamp acronym']}
+>
+  <nav class="breadcrumbs" aria-label="Breadcrumb">
+    <ol><li><a href="/">AAMP Explorer</a></li><li><span>What does AAMP stand for?</span></li></ol>
+  </nav>
+  <h1>What does AAMP stand for?</h1>
+  <AnswerBox answer={answer} term="AAMP" />
+
+  <h2>The three expansions, and where each one appears</h2>
+  <p>
+    Found by searching every markdown, Python and YAML file across all eight AAMP repositories. Each
+    row names the file and line so the claim can be checked rather than taken on trust.
+  </p>
+
+  <figure class="comparison">
+    <table>
+      <caption>Expansions of "AAMP" found inside the AAMP corpus</caption>
+      <thead
+        ><tr
+          ><th scope="col">Expansion</th><th scope="col">Where it appears</th><th scope="col"
+            >Note</th
+          ></tr
+        ></thead
+      >
+      <tbody>
+        {
+          EXPANSIONS.map((e) => (
+            <tr>
+              <th scope="row">{e.expansion}</th>
+              <td>
+                <a href={e.url} rel="noopener nofollow">
+                  <code>{e.where}</code>
+                </a>
+              </td>
+              <td>{e.note}</td>
+            </tr>
+          ))
+        }
+      </tbody>
+    </table>
+  </figure>
+
+  <h2>Which one should you use?</h2>
+  <p>
+    <strong>Agentic Advertising Management Protocols.</strong> The hub repository is the naming authority
+    and IAB Tech Lab's own standards page uses the same expansion. This site uses it everywhere, and treats
+    the other two as aliases rather than as errors to correct.
+  </p>
+  <p>
+    The reason to document the disagreement at all is that it is a symptom worth knowing about. AAMP
+    is a governance label applied over separately authored projects, and an acronym that drifted
+    three ways across those projects is what that looks like from the outside.
+  </p>
+
+  <FaqBlock entries={faq} />
+
+  <h2>Related</h2>
+  <ul>
+    <li><a href="/">What AAMP actually contains</a></li>
+    <li><a href="/versions/">Why AAMP has no single version number</a></li>
+    <li><a href="/repos/">The eight repositories</a></li>
+    <li><a href={`${HUB}/protocols/adcp-vs-aamp/`} rel="noopener">AdCP compared with AAMP</a></li>
+  </ul>
+</BaseLayout>

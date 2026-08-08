@@ -1,0 +1,40 @@
+{
+  "name": "agenticbrief",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Agentic Brief website portfolio — protocol-neutral reference sites for agentic advertising",
+  "type": "module",
+  "engines": {
+    "node": ">=20.11.0"
+  },
+  "workspaces": [
+    "sites/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev --parallel",
+    "preview": "turbo run preview --parallel",
+    "typecheck": "turbo run typecheck",
+    "format": "prettier --write \"**/*.{ts,tsx,astro,js,mjs,css,md,mdx,json}\"",
+    "format:check": "prettier --check \"**/*.{ts,tsx,astro,js,mjs,css,md,mdx,json}\"",
+    "quality": "npm run format:check && npm run lint:content && npm run typecheck",
+    "quality:full": "npm run quality && npm run build",
+    "data:adcp": "node scripts/spec-parser/parse-adcp.mjs",
+    "data:aamp": "node scripts/spec-parser/parse-aamp.mjs",
+    "data:glossary": "node scripts/glossary-generator/generate.mjs",
+    "data:all": "npm run data:adcp && npm run data:aamp && npm run data:glossary",
+    "deploy": "bash scripts/deploy.sh",
+    "lint:content": "node scripts/content-lint.mjs"
+  },
+  "devDependencies": {
+    "prettier": "^3.6.2",
+    "prettier-plugin-astro": "^0.14.1",
+    "turbo": "^2.10.9"
+  },
+  "allowScripts": {
+    "esbuild@0.27.7": true,
+    "esbuild@0.25.12": true,
+    "sharp@0.34.5": true
+  }
+}

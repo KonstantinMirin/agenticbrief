@@ -1,0 +1,33 @@
+---
+import { getCollection, render } from 'astro:content'
+import DocPage from '@agenticbrief/shared-ui/DocPage.astro'
+import { publishedOnly } from '@agenticbrief/content-utils'
+import { siteUrl } from '@agenticbrief/shared-ui/sites'
+
+const BASE = siteUrl('briefgateway')
+
+export async function getStaticPaths() {
+  // The two site-structure pages in this collection are routed explicitly; the
+  // rest are worked examples. Declared inside getStaticPaths because Astro
+  // hoists this function out of the component module — a module-scope const
+  // is not in scope when it runs.
+  const notExamples = new Set(['index-generator', 'spec'])
+  const entries = publishedOnly(await getCollection('briefs')).filter((e) => !notExamples.has(e.id))
+  return entries.map((entry) => ({ params: { slug: entry.id }, props: { entry } }))
+}
+
+const { entry } = Astro.props
+const { Content } = await render(entry)
+---
+
+<DocPage
+  site="briefgateway"
+  entry={entry}
+  path={`/examples/${entry.id}/`}
+  breadcrumbs={[
+    { name: 'Brief Gateway', url: `${BASE}/` },
+    { name: 'Examples', url: `${BASE}/examples/${entry.id}/` },
+  ]}
+>
+  <Content />
+</DocPage>

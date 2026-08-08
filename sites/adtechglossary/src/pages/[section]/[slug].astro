@@ -1,0 +1,152 @@
+---
+/**
+ * One page per glossary term.
+ *
+ * DefinedTerm + inDefinedTermSet is the correct markup for a glossary. It earns
+ * no rich result, and the vendor claims about it lifting AI citations are
+ * unverified — it is here because it is cheap, correct, and hands a retrieval
+ * pipeline the term and its definition without making it parse prose.
+ */
+import { getCollection, render } from 'astro:content'
+import PageLayout from '@agenticbrief/shared-ui/PageLayout.astro'
+import { publishedOnly } from '@agenticbrief/content-utils'
+import {
+  graph,
+  organizationNode,
+  personNode,
+  webSiteNode,
+  webPageNode,
+  articleNode,
+  breadcrumbNode,
+  definedTermNode,
+  definedTermSetNode,
+} from '@agenticbrief/seo/schema'
+import { siteUrl } from '@agenticbrief/shared-ui/sites'
+import { SECTIONS, sectionFor } from '../../lib/sections'
+
+const BASE = siteUrl('adtechglossary')
+
+export async function getStaticPaths() {
+  const entries = publishedOnly(await getCollection('glossary'))
+  return entries.map((entry) => ({
+    params: { section: sectionFor(entry.id), slug: entry.id },
+    props: { entry },
+  }))
+}
+
+const { entry } = Astro.props
+const { Content } = await render(entry)
+const section = sectionFor(entry.id)
+const sectionMeta = SECTIONS[section as keyof typeof SECTIONS]
+
+const path = `/${section}/${entry.id}/`
+const url = `${BASE}${path}`
+const termsetUrl = `${BASE}/`
+
+const breadcrumbs = [
+  { name: 'Ad Tech Glossary', url: termsetUrl },
+  ...(sectionMeta ? [{ name: sectionMeta.title, url: `${BASE}/${section}/` }] : []),
+  { name: entry.data.term, url },
+]
+
+const jsonLd = graph([
+  organizationNode(),
+  personNode(),
+  webSiteNode({ siteUrl: BASE, name: 'Ad Tech Glossary', description: entry.data.description }),
+  webPageNode({
+    url,
+    siteUrl: BASE,
+    title: entry.data.title,
+    description: entry.data.description,
+    datePublished: entry.data.pubDate.toISOString(),
+    dateModified: (entry.data.updatedDate ?? entry.data.pubDate).toISOString(),
+    breadcrumb: {},
+  }),
+  breadcrumbNode(url, breadcrumbs),
+  definedTermSetNode({
+    url: termsetUrl,
+    name: 'Ad Tech Glossary — agentic advertising terms',
+    description:
+      'Definitions sourced from the AdCP and AAMP specification repositories, each version-pinned.',
+  }),
+  definedTermNode({
+    url,
+    term: entry.data.term,
+    definition: entry.data.answer,
+    termSetUrl: termsetUrl,
+    alternateNames: entry.data.alternateNames,
+  }),
+  articleNode({
+    url,
+    title: entry.data.title,
+    description: entry.data.description,
+    datePublished: entry.data.pubDate.toISOString(),
+    dateModified: (entry.data.updatedDate ?? entry.data.pubDate).toISOString(),
+    technical: true,
+    section: sectionMeta?.title,
+    keywords: entry.data.keywords,
+    citations: entry.data.citations,
+  }),
+])
+
+// related[] is authored as paths or absolute URLs. Where an entry points at
+// another term on this site, resolve its title so the anchor text is the term
+// rather than a slug — descriptive anchors are the only thing holding this
+// multi-domain cluster together as one entity.
+const all = publishedOnly(await getCollection('glossary'))
+const titleBySlug = new Map(all.map((e) => [e.id, e.data.term]))
+
+// The glossary ships in priority waves, so a shipped page can legitimately
+// reference a term scheduled for a later wave. Internal links are dropped when
+// their target does not exist yet rather than rendered as a 404 — the reference
+// stays in frontmatter and starts working the moment that term ships.
+const related = entry.data.related
+  .map((href) => {
+    const isExternal = /^https?:\/\//.test(href)
+    const slug =
+      href
+        .replace(/^https?:\/\/[^/]+/, '')
+        .split('/')
+        .filter(Boolean)
+        .pop() ?? ''
+    if (!isExternal && !titleBySlug.has(slug)) return null
+    return { href, title: titleBySlug.get(slug) ?? href.replace(/^https?:\/\//, '') }
+  })
+  .filter((l): l is { href: string; title: string } => l !== null)
+---
+
+<PageLayout
+  site="adtechglossary"
+  title={entry.data.title}
+  heading={entry.data.term}
+  description={entry.data.description}
+  path={path}
+  answer={entry.data.answer}
+  eyebrow={sectionMeta?.title}
+  breadcrumbs={breadcrumbs}
+  related={related}
+  jsonLd={jsonLd}
+  ogType="article"
+  publishDate={entry.data.pubDate}
+  modifiedDate={entry.data.updatedDate ?? entry.data.pubDate}
+  keywords={entry.data.keywords}
+>
+  <Content />
+
+  {
+    entry.data.citations.length > 0 && (
+      <>
+        <h2>Sources</h2>
+        <ul>
+          {entry.data.citations.map((c) => (
+            <li>
+              <a href={c} rel="noopener nofollow">
+                {c.replace(/^https?:\/\//, '')}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </>
+    )
+  }
+</PageLayout>

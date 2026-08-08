@@ -1,0 +1,138 @@
+---
+import BaseLayout from '@agenticbrief/shared-ui/BaseLayout.astro'
+import AnswerBox from '@agenticbrief/shared-ui/AnswerBox.astro'
+import FieldTable from '@agenticbrief/shared-ui/FieldTable.astro'
+import SpecSource from '@agenticbrief/shared-ui/SpecSource.astro'
+import FaqBlock from '@agenticbrief/shared-ui/FaqBlock.astro'
+import { adcp } from '@agenticbrief/protocol-data'
+import {
+  graph,
+  organizationNode,
+  personNode,
+  webSiteNode,
+  webPageNode,
+  articleNode,
+  breadcrumbNode,
+  faqPageNode,
+} from '@agenticbrief/seo/schema'
+import { BASE, HUB } from '../lib/site'
+
+const path = '/schemas/'
+const url = `${BASE}${path}`
+const title = `The AdCP schema registry — how AdCP ${adcp.version} is organised`
+const description = `How AdCP's JSON Schema registry works: the index that lists every operation, the reference convention that binds the files together, and the core objects shared across all areas.`
+const answer = `AdCP's schemas are JSON Schema draft-07 files published per release under dist/schemas/. A single index.json registers every operation and points at its request and response schema; the files reference each other by absolute published path.`
+
+const faq = [
+  {
+    question: 'Where are the AdCP schemas?',
+    answer:
+      'Published per release under dist/schemas/<version>/ in the protocol repository, with dist/schemas/latest.json naming the current stable release. The static/schemas/source/ tree is the unreleased working branch and carries a version stamp that is not bumped until release.',
+  },
+  {
+    question: 'How do AdCP schemas reference each other?',
+    answer:
+      'By absolute published path, such as /schemas/media-buy/get-products-request.json. These are URL paths rather than filesystem paths, so resolving them means stripping the /schemas/ prefix and any version segment before joining to the release directory.',
+  },
+  {
+    question: 'What is the version envelope?',
+    answer:
+      'A shared schema that every request composes via allOf, carrying the protocol version, context and extension fields. It is why most operations look larger than their own payload — a large part of the field count is inherited.',
+  },
+]
+
+const jsonLd = graph([
+  organizationNode(),
+  personNode(),
+  webSiteNode({ siteUrl: BASE, name: 'AdCP Explorer', description }),
+  webPageNode({ url, siteUrl: BASE, title, description, breadcrumb: {} }),
+  breadcrumbNode(url, [
+    { name: 'AdCP Explorer', url: `${BASE}/` },
+    { name: 'Schema registry', url },
+  ]),
+  articleNode({
+    url,
+    title,
+    description,
+    datePublished: '2026-08-09',
+    technical: true,
+    proficiencyLevel: 'Expert',
+    keywords: ['adcp schemas', 'adcp json schema', 'adcp schema registry'],
+    citations: [adcp.repository],
+  }),
+  faqPageNode(url, faq),
+])
+---
+
+<BaseLayout
+  site="adcpexplorer"
+  title={title}
+  description={description}
+  path={path}
+  jsonLd={jsonLd}
+  wide
+  ogType="article"
+  publishDate={new Date('2026-08-09')}
+  keywords={['adcp schemas', 'adcp json schema']}
+>
+  <nav class="breadcrumbs" aria-label="Breadcrumb">
+    <ol><li><a href="/">AdCP Explorer</a></li><li><span>Schema registry</span></li></ol>
+  </nav>
+  <h1>The AdCP schema registry</h1>
+  <AnswerBox answer={answer} />
+
+  <h2>Which tree should you read?</h2>
+  <p>
+    The protocol repository holds two schema trees, and they disagree. Published releases live under
+    <code>dist/schemas/&lt;version&gt;/</code>, with <code>dist/schemas/latest.json</code> naming the
+    current stable one. The working branch lives under <code>static/schemas/source/</code> and carries
+    a version stamp that is only bumped at release, so it is routinely stale.
+  </p>
+  <p>
+    Reading the working tree and trusting its stamp is the single easiest way to publish a wrong
+    AdCP version number. This site reads the published release: <strong>{adcp.version}</strong>.
+  </p>
+
+  <h2>What holds the registry together?</h2>
+  <p>
+    One file, <code>index.json</code>, registers every operation in the release and points at its
+    request and response schema. Schemas reference each other by absolute published path — for
+    example
+    <code>/schemas/media-buy/get-products-request.json</code> — which is a URL path, not a filesystem
+    path. Resolving one means stripping the <code>/schemas/</code> prefix and any version segment.
+  </p>
+  <p>
+    Requests compose a shared version envelope through <code>allOf</code> rather than declaring those
+    fields themselves. This is why a small operation still shows a substantial field count: much of it
+    is inherited context, extension and versioning structure common to every request.
+  </p>
+
+  <h2>The core objects</h2>
+  <p>
+    These are the domain entities the operations pass around. They are defined once and referenced
+    everywhere, so understanding them is most of understanding the protocol.
+  </p>
+  {
+    adcp.objects.map((o) => (
+      <section>
+        <h3 id={o.slug}>
+          <code>{o.name}</code>
+        </h3>
+        {o.summary && <p>{o.summary}</p>}
+        <FieldTable fields={o.fields} caption={`${o.name} fields`} collapseAfter={12} />
+        <SpecSource provenance={o.provenance} specVersion={adcp.version} />
+      </section>
+    ))
+  }
+
+  <FaqBlock entries={faq} />
+
+  <h2>Related</h2>
+  <ul>
+    <li><a href="/">All {adcp.tasks.length} AdCP operations</a></li>
+    <li><a href="/discovery/">Discovery files: adagents.json and brand.json</a></li>
+    <li><a href={`${HUB}/protocols/adcp-vs-aamp/`} rel="noopener">AdCP compared with AAMP</a></li>
+  </ul>
+
+  <SpecSource provenance={adcp.provenance} specVersion={adcp.version} />
+</BaseLayout>

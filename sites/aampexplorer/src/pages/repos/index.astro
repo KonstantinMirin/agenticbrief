@@ -1,0 +1,85 @@
+---
+import BaseLayout from '@agenticbrief/shared-ui/BaseLayout.astro'
+import AnswerBox from '@agenticbrief/shared-ui/AnswerBox.astro'
+import SpecSource from '@agenticbrief/shared-ui/SpecSource.astro'
+import { aamp } from '@agenticbrief/protocol-data'
+import {
+  graph,
+  organizationNode,
+  personNode,
+  webSiteNode,
+  webPageNode,
+  articleNode,
+  breadcrumbNode,
+} from '@agenticbrief/seo/schema'
+import { BASE, MATURITY, componentsByMaturity } from '../../lib/site'
+
+const components = componentsByMaturity()
+const path = '/repos/'
+const url = `${BASE}${path}`
+const title = 'Every AAMP component, and what each one actually defines'
+const description = `The ${components.length} repositories that make up IAB Tech Lab's AAMP, ranked by how much specification each actually contains rather than by billing order.`
+const answer = `AAMP is made of ${components.length} repositories. Three carry real specification, three carry partial or draft material, and two define nothing normative at all.`
+
+const jsonLd = graph([
+  organizationNode(),
+  personNode(),
+  webSiteNode({ siteUrl: BASE, name: 'AAMP Explorer', description }),
+  webPageNode({ url, siteUrl: BASE, title, description, breadcrumb: {} }),
+  breadcrumbNode(url, [
+    { name: 'AAMP Explorer', url: `${BASE}/` },
+    { name: 'Components', url },
+  ]),
+  articleNode({
+    url,
+    title,
+    description,
+    datePublished: '2026-08-08',
+    technical: true,
+    keywords: ['aamp components', 'aamp repositories'],
+  }),
+])
+---
+
+<BaseLayout
+  site="aampexplorer"
+  title={title}
+  description={description}
+  path={path}
+  jsonLd={jsonLd}
+  wide
+  ogType="article"
+  publishDate={new Date('2026-08-08')}
+>
+  <nav class="breadcrumbs" aria-label="Breadcrumb">
+    <ol><li><a href="/">AAMP Explorer</a></li><li><span>Components</span></li></ol>
+  </nav>
+  <h1>AAMP components</h1>
+  <AnswerBox answer={answer} />
+  <p>
+    Ordered by substance, not by the order the hub README lists them. A component that defines
+    nothing is listed last and labelled, rather than given equal billing.
+  </p>
+  <ul class="task-list">
+    {
+      components.map((c) => (
+        <li>
+          <a class="task-name" href={`/repos/${c.name}/`}>
+            {c.name}
+          </a>{' '}
+          <span class="badge">{MATURITY[c.name]?.level ?? 'unassessed'}</span>{' '}
+          <code>{c.version}</code>
+          <br />
+          {MATURITY[c.name]?.note ?? c.purpose}
+          {!c.listedInHub && (
+            <>
+              <br />
+              <span class="muted">Not listed in the AAMP hub README.</span>
+            </>
+          )}
+        </li>
+      ))
+    }
+  </ul>
+  <SpecSource provenance={aamp.provenance} />
+</BaseLayout>

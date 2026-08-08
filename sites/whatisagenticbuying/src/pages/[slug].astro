@@ -1,0 +1,33 @@
+---
+import { getCollection, render } from 'astro:content'
+import DocPage from '@agenticbrief/shared-ui/DocPage.astro'
+import { publishedOnly } from '@agenticbrief/content-utils'
+import { BASE, PREFIX, ROOT, slugFor } from '../lib/feed'
+
+// getStaticPaths runs in an isolated module scope and cannot see component-level
+// consts, so the routing constants are imported from lib/feed.ts — the same
+// module the RSS and llms.txt endpoints use, so a URL is defined exactly once.
+export async function getStaticPaths() {
+  const entries = publishedOnly(await getCollection('guides')).filter(
+    (e) => e.id.startsWith(PREFIX) && e.id !== ROOT,
+  )
+  return entries.map((entry) => ({ params: { slug: slugFor(entry.id) }, props: { entry } }))
+}
+
+const { entry } = Astro.props
+const { Content } = await render(entry)
+const slug = Astro.params.slug
+---
+
+<DocPage
+  site="whatisagenticbuying"
+  entry={entry}
+  path={`/${slug}/`}
+  technical={false}
+  breadcrumbs={[
+    { name: 'What Is Agentic Buying', url: `${BASE}/` },
+    { name: entry.data.title, url: `${BASE}/${slug}/` },
+  ]}
+>
+  <Content />
+</DocPage>

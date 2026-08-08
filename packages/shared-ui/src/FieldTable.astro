@@ -1,0 +1,104 @@
+---
+/**
+ * Schema field reference table.
+ *
+ * Rendered as a real <table> with a header row because that is what survives
+ * text extraction — the format the GEO research repeatedly identifies as the
+ * one that gets quoted intact. A definition list or a grid of divs would look
+ * similar and extract worse.
+ */
+import type { SchemaField } from '@agenticbrief/protocol-data/types'
+
+export interface Props {
+  fields: SchemaField[]
+  caption: string
+  /** hide the table behind a <details> when it is long */
+  collapseAfter?: number
+}
+
+const { fields, caption, collapseAfter = 0 } = Astro.props
+const collapsed = collapseAfter > 0 && fields.length > collapseAfter
+const required = fields.filter((f) => f.required).length
+---
+
+{
+  fields.length === 0 ? (
+    <p class="muted">
+      <em>The published schema declares no fields for this message.</em>
+    </p>
+  ) : (
+    <figure class="comparison">
+      {collapsed ? (
+        <details>
+          <summary>
+            {caption} — {fields.length} fields, {required} required
+          </summary>
+          <table class="field-table">
+            <thead>
+              <tr>
+                <th scope="col">Field</th>
+                <th scope="col">Type</th>
+                <th scope="col">Required</th>
+                <th scope="col">Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              {fields.map((f) => (
+                <tr>
+                  <td>
+                    <code>{f.name}</code>
+                  </td>
+                  <td>{f.type}</td>
+                  <td>{f.required ? <span class="badge badge-required">required</span> : ''}</td>
+                  <td>
+                    {f.description}
+                    {f.enumValues && f.enumValues.length > 0 && (
+                      <>
+                        {f.description ? ' ' : ''}
+                        <span class="muted">One of: {f.enumValues.join(', ')}.</span>
+                      </>
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </details>
+      ) : (
+        <table class="field-table">
+          <caption>
+            {caption} — {fields.length} fields, {required} required
+          </caption>
+          <thead>
+            <tr>
+              <th scope="col">Field</th>
+              <th scope="col">Type</th>
+              <th scope="col">Required</th>
+              <th scope="col">Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            {fields.map((f) => (
+              <tr>
+                <td>
+                  <code>{f.name}</code>
+                </td>
+                <td>{f.type}</td>
+                <td>{f.required ? <span class="badge badge-required">required</span> : ''}</td>
+                <td>
+                  {f.description}
+                  {f.enumValues && f.enumValues.length > 0 && (
+                    <>
+                      {f.description ? ' ' : ''}
+                      <span class="muted">One of: {f.enumValues.join(', ')}.</span>
+                    </>
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
+    </figure>
+  )
+}

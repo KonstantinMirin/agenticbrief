@@ -1,0 +1,47 @@
+---
+import { SITES, SITE_KEYS, siteUrl, type SiteKey } from './sites'
+import { org } from './org'
+
+export interface Props {
+  site: SiteKey
+}
+
+const { site } = Astro.props
+const others = SITE_KEYS.filter((k) => k !== site && SITES[k].inNav)
+const year = new Date().getFullYear()
+---
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-block">
+      <h2>Elsewhere in the lab</h2>
+      <ul class="portfolio-links">
+        {
+          others.map((key) => (
+            <li>
+              <a href={siteUrl(key)} rel="noopener">
+                {SITES[key].name}
+              </a>
+              <span class="muted"> — {SITES[key].tagline}</span>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+    <div class="footer-block">
+      <h2>Machine-readable</h2>
+      <ul class="portfolio-links">
+        <li><a href="/llms.txt">llms.txt</a><span class="muted"> — index for assistants</span></li>
+        <li>
+          <a href="/llms-full.txt">llms-full.txt</a><span class="muted"> — full corpus</span>
+        </li>
+        <li><a href="/sitemap-index.xml">sitemap</a></li>
+        <li><a href="/rss.xml">RSS</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-legal">
+    <p>© {year} {org.name}. {org.legalNote}</p>
+    <p class="muted">{org.editorialPolicy}</p>
+  </div>
+</footer>

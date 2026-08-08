@@ -1,0 +1,34 @@
+---
+import { getCollection, render } from 'astro:content'
+import DocPage from '@agenticbrief/shared-ui/DocPage.astro'
+import { publishedOnly } from '@agenticbrief/content-utils'
+import { BASE, ELSEWHERE, EXPLICIT_ROUTES } from '../../lib/feed'
+
+// Only guides that do not have an explicit route of their own, and whose
+// canonical home is this site. Both predicates are imported so the router, the
+// RSS feed and llms.txt agree on which pages exist here.
+export async function getStaticPaths() {
+  const entries = publishedOnly(await getCollection('guides')).filter(
+    (e) => !ELSEWHERE.test(e.id) && !(e.id in EXPLICIT_ROUTES),
+  )
+  return entries.map((entry) => ({ params: { slug: entry.id }, props: { entry } }))
+}
+
+const { entry } = Astro.props
+const { Content } = await render(entry)
+---
+
+<DocPage
+  site="agenticadlab"
+  entry={entry}
+  path={`/guides/${entry.id}/`}
+  technical={false}
+  section="Guides"
+  breadcrumbs={[
+    { name: 'Agentic Ad Lab', url: `${BASE}/` },
+    { name: 'Guides', url: `${BASE}/guides/` },
+    { name: entry.data.title, url: `${BASE}/guides/${entry.id}/` },
+  ]}
+>
+  <Content />
+</DocPage>

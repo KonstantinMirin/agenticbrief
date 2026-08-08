@@ -1,0 +1,104 @@
+---
+import { getCollection } from 'astro:content'
+import PageLayout from '@agenticbrief/shared-ui/PageLayout.astro'
+import { publishedOnly } from '@agenticbrief/content-utils'
+import {
+  graph,
+  organizationNode,
+  personNode,
+  webSiteNode,
+  webPageNode,
+  breadcrumbNode,
+  articleNode,
+} from '@agenticbrief/seo/schema'
+import { siteUrl } from '@agenticbrief/shared-ui/sites'
+import { SECTIONS, sectionFor } from '../../lib/sections'
+
+const BASE = siteUrl('adtechglossary')
+
+export async function getStaticPaths() {
+  const entries = publishedOnly(await getCollection('glossary'))
+  // Only sections that actually have terms get an index. A section page listing
+  // nothing is a soft 404 with a nav link pointing at it.
+  const used = new Set(entries.map((e) => sectionFor(e.id)))
+  return [...used].map((section) => ({ params: { section }, props: { section } }))
+}
+
+const { section } = Astro.props
+const meta = SECTIONS[section as keyof typeof SECTIONS]
+const entries = publishedOnly(await getCollection('glossary'))
+  .filter((e) => sectionFor(e.id) === section)
+  .sort((a, b) => a.data.term.localeCompare(b.data.term))
+
+const path = `/${section}/`
+const url = `${BASE}${path}`
+const heading = meta?.title ?? section
+const title = `${heading} — ad tech glossary`
+const description =
+  `${meta?.summary ?? ''} ${entries.length} terms, each sourced from a specification file and version-pinned.`
+    .trim()
+    .slice(0, 195)
+const answer = `${heading}: ${entries.length} defined terms. ${meta?.summary ?? ''}`.slice(0, 300)
+
+const breadcrumbs = [
+  { name: 'Ad Tech Glossary', url: `${BASE}/` },
+  { name: heading, url },
+]
+
+const jsonLd = graph([
+  organizationNode(),
+  personNode(),
+  webSiteNode({ siteUrl: BASE, name: 'Ad Tech Glossary', description }),
+  webPageNode({ url, siteUrl: BASE, title, description, breadcrumb: {} }),
+  breadcrumbNode(url, breadcrumbs),
+  articleNode({
+    url,
+    title,
+    description,
+    datePublished: '2026-08-09',
+    technical: true,
+    keywords: [section, 'ad tech glossary'],
+  }),
+])
+
+const otherSections = Object.entries(SECTIONS).filter(([k]) => k !== section)
+---
+
+<PageLayout
+  site="adtechglossary"
+  title={title}
+  heading={heading}
+  description={description}
+  path={path}
+  answer={answer}
+  breadcrumbs={breadcrumbs}
+  jsonLd={jsonLd}
+  keywords={[section, 'agentic advertising glossary']}
+>
+  <h2>Which terms are in this section?</h2>
+  <ul class="term-list">
+    {
+      entries.map((e) => (
+        <li>
+          <a class="term-name" href={`/${section}/${e.id}/`}>
+            {e.data.term}
+          </a>
+          <br />
+          {e.data.answer}
+        </li>
+      ))
+    }
+  </ul>
+
+  <h2>Other sections</h2>
+  <ul>
+    {
+      otherSections.map(([k, v]) => (
+        <li>
+          <a href={`/${k}/`}>{v.title}</a>
+          <span class="muted"> — {v.summary}</span>
+        </li>
+      ))
+    }
+  </ul>
+</PageLayout>

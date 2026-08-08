@@ -1,0 +1,23 @@
+---
+import { getEntry, render } from 'astro:content'
+import DocPage from '@agenticbrief/shared-ui/DocPage.astro'
+import { siteUrl } from '@agenticbrief/shared-ui/sites'
+
+const entry = await getEntry('guides', 'protocol-integration-services')
+if (!entry) throw new Error('content/guides/protocol-integration-services.md is missing')
+const { Content } = await render(entry)
+const BASE = siteUrl('agenticadlab')
+---
+
+<DocPage
+  site="agenticadlab"
+  entry={entry}
+  path="/services/"
+  technical={false}
+  breadcrumbs={[
+    { name: 'Agentic Ad Lab', url: `${BASE}/` },
+    { name: 'Services', url: `${BASE}/services/` },
+  ]}
+>
+  <Content />
+</DocPage>

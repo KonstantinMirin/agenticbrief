@@ -1,0 +1,34 @@
+---
+/**
+ * A worked example pulled from a spec repo.
+ *
+ * Examples are shown verbatim and attributed. An example a reader cannot trace
+ * back to the specification is indistinguishable from one we made up, which is
+ * exactly the thing a protocol reference cannot afford.
+ */
+export interface Props {
+  title: string
+  language: string
+  code: string
+  sourceUrl?: string
+}
+
+const { title, language, code, sourceUrl } = Astro.props
+---
+
+<figure class="code-sample">
+  <figcaption>
+    {title}
+    {
+      sourceUrl && (
+        <>
+          {' — '}
+          <a href={sourceUrl} rel="noopener nofollow">
+            source
+          </a>
+        </>
+      )
+    }
+  </figcaption>
+  <pre><code class={`language-${language}`}>{code}</code></pre>
+</figure>

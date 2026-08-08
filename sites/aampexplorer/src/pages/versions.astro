@@ -1,0 +1,165 @@
+---
+import BaseLayout from '@agenticbrief/shared-ui/BaseLayout.astro'
+import AnswerBox from '@agenticbrief/shared-ui/AnswerBox.astro'
+import FaqBlock from '@agenticbrief/shared-ui/FaqBlock.astro'
+import SpecSource from '@agenticbrief/shared-ui/SpecSource.astro'
+import { aamp } from '@agenticbrief/protocol-data'
+import {
+  graph,
+  organizationNode,
+  personNode,
+  webSiteNode,
+  webPageNode,
+  articleNode,
+  breadcrumbNode,
+  faqPageNode,
+} from '@agenticbrief/seo/schema'
+import { BASE, HUB, MATURITY, componentsByMaturity } from '../lib/site'
+
+const components = componentsByMaturity()
+const generated = aamp.provenance.parsedAt.slice(0, 10)
+
+// The plan forbids publishing commit-distance in a version table: a tag plus
+// "24 commits since" invites a reader to treat the distance as meaningful when
+// it just means the branch moved. Tags and manifest versions only.
+function displayVersion(v: string | undefined): string {
+  if (!v) return 'untagged'
+  const tag = /^(v[\d.]+)/.exec(v)
+  if (tag) return tag[1]
+  return v.length === 7 || v.length === 8 ? 'untagged' : v
+}
+
+const path = '/versions/'
+const url = `${BASE}${path}`
+const title = 'AAMP version matrix — there is no single AAMP version'
+const description =
+  'Each AAMP repository versions independently. This is what every one of the eight is actually at, why a single AAMP version number does not exist, and what to cite instead.'
+const answer =
+  'AAMP has no single version number. Each repository versions independently — stated policy in the hub README. Citing "AAMP 2.3" names a press release, not an artifact you can resolve to a schema.'
+
+const faq = [
+  {
+    question: 'What version of AAMP should I cite?',
+    answer:
+      'Cite the repository and its tag, not AAMP as a whole. "AAMP seller-agent v2.4.1" resolves to a specific artifact; "AAMP 2.4" does not.',
+  },
+  {
+    question: 'Why does AAMP not have one version?',
+    answer:
+      'By design. The hub README states that each repository uses independent semantic versioning and that cross-repository alignment happens through governance coordination rather than a shared release train.',
+  },
+  {
+    question: 'Do the press-release version numbers mean anything?',
+    answer:
+      'They describe a coordinated announcement, not a tagged artifact. No file in any of the eight repositories carries a version matching the umbrella numbers used in announcements.',
+  },
+]
+
+const breadcrumbs = [
+  { name: 'AAMP Explorer', url: `${BASE}/` },
+  { name: 'Versions', url },
+]
+
+const jsonLd = graph([
+  organizationNode(),
+  personNode(),
+  webSiteNode({ siteUrl: BASE, name: 'AAMP Explorer', description }),
+  webPageNode({ url, siteUrl: BASE, title, description, breadcrumb: {} }),
+  breadcrumbNode(url, breadcrumbs),
+  articleNode({
+    url,
+    title,
+    description,
+    datePublished: '2026-08-09',
+    technical: true,
+    keywords: ['aamp version', 'aamp 2.3', 'aamp release'],
+    citations: [aamp.repository, aamp.homepage],
+  }),
+  faqPageNode(url, faq),
+])
+---
+
+<BaseLayout
+  site="aampexplorer"
+  title={title}
+  description={description}
+  path={path}
+  jsonLd={jsonLd}
+  wide
+  ogType="article"
+  publishDate={new Date('2026-08-09')}
+  keywords={['aamp version', 'aamp release']}
+>
+  <nav class="breadcrumbs" aria-label="Breadcrumb">
+    <ol><li><a href="/">AAMP Explorer</a></li><li><span>Versions</span></li></ol>
+  </nav>
+  <h1>AAMP version matrix</h1>
+  <AnswerBox answer={answer} />
+
+  <p>
+    The hub README states the policy directly: <q
+      >Each repository uses independent semantic versioning.</q
+    > There is no release train, no lockstep, and no manifest that pins a set of repositories to one umbrella
+    number. Anyone writing "AAMP 2.3" is quoting an announcement.
+  </p>
+
+  <h2>What is each repository actually at?</h2>
+
+  <figure class="comparison">
+    <table>
+      <caption>AAMP repositories, as read on {generated}</caption>
+      <thead>
+        <tr>
+          <th scope="col">Repository</th>
+          <th scope="col">Version</th>
+          <th scope="col">Kind</th>
+          <th scope="col">Substance</th>
+          <th scope="col">In the hub README</th>
+        </tr>
+      </thead>
+      <tbody>
+        {
+          components.map((c) => (
+            <tr>
+              <th scope="row">
+                <a href={`/repos/${c.name}/`}>{c.name}</a>
+              </th>
+              <td>
+                <code>{displayVersion(c.version)}</code>
+              </td>
+              <td>{c.kind.replace(/-/g, ' ')}</td>
+              <td>{MATURITY[c.name]?.level ?? 'unassessed'}</td>
+              <td>{c.listedInHub ? 'Yes' : 'No'}</td>
+            </tr>
+          ))
+        }
+      </tbody>
+    </table>
+  </figure>
+
+  <h2>What should you cite instead?</h2>
+  <p>
+    Name the repository and its tag. <code>seller-agent v2.4.1</code> resolves to a commit, a set of schemas
+    and an OpenAPI document. <code>ARTF v1.0</code> resolves to a protobuf contract and a numbered specification
+    document. An umbrella version resolves to nothing.
+  </p>
+  <p>
+    The awkward case is <code>agentic-audiences</code>, which has no tag at all, describes itself as
+    "Draft v0.1" while living in a directory called <code>v1.0</code>, and still carries its
+    pre-donation project identity in its metadata. Cite it by commit or not at all.
+  </p>
+
+  <FaqBlock entries={faq} />
+
+  <h2>Related</h2>
+  <ul>
+    <li><a href="/">What AAMP actually contains</a></li>
+    <li><a href="/what-does-aamp-stand-for/">Three expansions of the same acronym</a></li>
+    <li><a href="/repos/">The eight repositories, ranked by what they ship</a></li>
+    <li>
+      <a href={`${HUB}/protocols/adcp-vs-aamp/`} rel="noopener">How AdCP versions by comparison</a>
+    </li>
+  </ul>
+
+  <SpecSource provenance={aamp.provenance} />
+</BaseLayout>

@@ -1,0 +1,237 @@
+---
+import BaseLayout from '@agenticbrief/shared-ui/BaseLayout.astro'
+import AnswerBox from '@agenticbrief/shared-ui/AnswerBox.astro'
+import SpecSource from '@agenticbrief/shared-ui/SpecSource.astro'
+import FaqBlock from '@agenticbrief/shared-ui/FaqBlock.astro'
+import { adcp } from '@agenticbrief/protocol-data'
+import {
+  graph,
+  organizationNode,
+  personNode,
+  webSiteNode,
+  webPageNode,
+  articleNode,
+  faqPageNode,
+  datasetNode,
+} from '@agenticbrief/seo/schema'
+import {
+  BASE,
+  HUB,
+  orderedAreas,
+  tasksForArea,
+  operationUrl,
+  UNRELEASED,
+  VERSION_LABEL,
+} from '../lib/site'
+
+const areas = orderedAreas()
+const totalOps = adcp.tasks.length
+
+const answer = `The Ad Context Protocol (AdCP) is an open standard that lets advertising software agents discover, buy and measure media by calling ${totalOps} defined operations over MCP or A2A. It is governed by AgenticAdvertising.org and licensed Apache 2.0.`
+
+const faq = [
+  {
+    question: 'What version of AdCP is current?',
+    answer: `The current published stable release is ${adcp.version}. The protocol repository's working branch runs ahead of it, so a version number read from the source tree is not a shipped version.`,
+  },
+  {
+    question: 'How many operations does AdCP define?',
+    answer: `${totalOps}, across ${areas.length} areas, in the ${adcp.version} release. They divide into a planning-time negotiation layer and a serve-time decisioning layer.`,
+  },
+  {
+    question: 'Is AdCP the same as MCP?',
+    answer:
+      'No. MCP is a transport, a way for a client to call tools on a server. AdCP is a domain vocabulary that runs over MCP or A2A, defining which advertising operations exist and what their payloads contain.',
+  },
+  {
+    question: 'Who governs AdCP?',
+    answer:
+      'AgenticAdvertising.org, a member organisation formed in October 2025. The specification is Apache 2.0 licensed and developed in public on GitHub.',
+  },
+]
+
+const url = `${BASE}/`
+const title = `AdCP Explorer — every Ad Context Protocol operation, ${adcp.version}`
+const description = `Reference for all ${totalOps} Ad Context Protocol operations in release ${adcp.version}, generated from the published schema registry and stamped with the commit it came from.`
+
+const jsonLd = graph([
+  organizationNode(),
+  personNode(),
+  webSiteNode({ siteUrl: BASE, name: 'AdCP Explorer', description }),
+  webPageNode({ url, siteUrl: BASE, title, description }),
+  articleNode({
+    url,
+    title,
+    description,
+    datePublished: '2026-08-08',
+    technical: true,
+    proficiencyLevel: 'Expert',
+    dependencies: 'Model Context Protocol (MCP) or A2A transport',
+    keywords: ['ad context protocol', 'adcp', 'agentic advertising', 'adcp operations'],
+    citations: [adcp.homepage, adcp.repository, adcp.docsHomepage].filter(Boolean) as string[],
+  }),
+  faqPageNode(url, faq),
+  datasetNode({
+    url,
+    name: `AdCP ${adcp.version} operation registry`,
+    description: `Machine-readable index of all ${totalOps} AdCP operations, their request and response fields, and the schema files they derive from.`,
+    version: adcp.version,
+    license: 'https://www.apache.org/licenses/LICENSE-2.0',
+  }),
+])
+---
+
+<BaseLayout
+  site="adcpexplorer"
+  title={title}
+  description={description}
+  path="/"
+  jsonLd={jsonLd}
+  wide
+  keywords={['ad context protocol', 'adcp', 'adcp operations', 'agentic advertising protocol']}
+>
+  <h1>AdCP Explorer</h1>
+
+  <AnswerBox answer={answer} term="Ad Context Protocol (AdCP)" />
+
+  <p>
+    Every operation on this site is generated from the published AdCP schema registry rather than
+    transcribed from it. Each page names the release, the commit and the schema file it came from,
+    so any claim here can be checked against the specification in one click.
+  </p>
+
+  <h2>Which release does this document?</h2>
+
+  <p>
+    <strong>{VERSION_LABEL}</strong>, last updated {adcp.lastUpdated}. AdCP publishes releases under
+    <code>dist/schemas/</code> in its repository. The working branch runs ahead of the last release and
+    carries a version stamp that is only bumped at release time, so a number read from the source tree
+    is not a shipped version. This site reads the published release.
+  </p>
+
+  {
+    UNRELEASED.length > 0 && (
+      <p>
+        The working branch adds {UNRELEASED.length} operation
+        {UNRELEASED.length === 1 ? '' : 's'} that {UNRELEASED.length === 1 ? 'has' : 'have'} not
+        shipped in any release:{' '}
+        {UNRELEASED.map((n, i) => (
+          <>
+            {i > 0 && ', '}
+            <code>{n}</code>
+          </>
+        ))}
+        . {UNRELEASED.length === 1 ? 'It is' : 'They are'} excluded from the {adcp.version}{' '}
+        reference below.
+      </p>
+    )
+  }
+
+  <h2>What are the two AdCP protocol layers?</h2>
+
+  <p>
+    AdCP separates operations that run while a campaign is being planned from the two that run while
+    an impression is being decided. The separation is structural rather than stylistic: the
+    serve-time layer is built so that content context and user identity never arrive in the same
+    request.
+  </p>
+
+  <dl>
+    {
+      adcp.layers.map((layer) => {
+        // The registry's protocol_layers list schema GROUPS, which are not
+        // always the same as the areas that carry operations: `brand` is a
+        // file-format group whose operations actually live under
+        // `brand-protocol`. Link only to areas that exist, so the layer list
+        // cannot generate a dead link.
+        const linkable = layer.areaKeys.filter((k) => areas.some((a) => a.key === k))
+        return (
+          <div class="faq-item">
+            <dt>{layer.title}</dt>
+            <dd>
+              {layer.description}{' '}
+              <span class="muted">
+                Areas:{' '}
+                {linkable.map((k, i) => (
+                  <>
+                    {i > 0 && ', '}
+                    <a href={`/areas/${k}/`}>{k}</a>
+                  </>
+                ))}
+              </span>
+            </dd>
+          </div>
+        )
+      })
+    }
+  </dl>
+
+  <h2>How are the {totalOps} operations organised?</h2>
+
+  <table>
+    <caption>AdCP {adcp.version} — operations per area</caption>
+    <thead>
+      <tr>
+        <th scope="col">Area</th>
+        <th scope="col">Operations</th>
+        <th scope="col">What it covers</th>
+      </tr>
+    </thead>
+    <tbody>
+      {
+        areas.map((area) => (
+          <tr>
+            <th scope="row">
+              <a href={`/areas/${area.key}/`}>{area.title}</a>
+            </th>
+            <td>{tasksForArea(area.key).length}</td>
+            <td>{area.summary}</td>
+          </tr>
+        ))
+      }
+    </tbody>
+  </table>
+
+  {
+    areas.map((area) => (
+      <>
+        <h3 id={`area-${area.key}`}>
+          <a href={`/areas/${area.key}/`}>{area.title}</a>
+        </h3>
+        <ul class="task-list">
+          {tasksForArea(area.key).map((task) => (
+            <li>
+              <a class="task-name" href={operationUrl(task)}>
+                <code>{task.name}</code>
+              </a>
+              <br />
+              {task.summary}
+            </li>
+          ))}
+        </ul>
+      </>
+    ))
+  }
+
+  <FaqBlock entries={faq} />
+
+  <h2>Related</h2>
+  <ul>
+    <li>
+      <a href={`${HUB}/protocols/adcp-vs-aamp/`} rel="noopener"
+        >AdCP compared with IAB Tech Lab's AAMP</a
+      > — the two stacks side by side
+    </li>
+    <li>
+      <a href="https://aampexplorer.noetis.dev/" rel="noopener">AAMP Explorer</a> — the same treatment
+      for the other camp
+    </li>
+    <li><a href="/schemas/">The AdCP schema registry</a> — how the schemas are organised</li>
+    <li>
+      <a href="/discovery/">Discovery files</a> — <code>adagents.json</code> and
+      <code>brand.json</code>
+    </li>
+  </ul>
+
+  <SpecSource provenance={adcp.provenance} specVersion={adcp.version} />
+</BaseLayout>

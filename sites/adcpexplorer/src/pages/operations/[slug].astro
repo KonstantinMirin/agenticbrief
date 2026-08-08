@@ -1,0 +1,171 @@
+---
+/**
+ * A dedicated page for the operations people search by name.
+ *
+ * Deliberately a short list. Everything else is documented under an anchor on
+ * its area page, and operationUrl() is the single function that decides which
+ * — so no link on the site can point at a page that was not generated.
+ */
+import BaseLayout from '@agenticbrief/shared-ui/BaseLayout.astro'
+import AnswerBox from '@agenticbrief/shared-ui/AnswerBox.astro'
+import FieldTable from '@agenticbrief/shared-ui/FieldTable.astro'
+import CodeSample from '@agenticbrief/shared-ui/CodeSample.astro'
+import SpecSource from '@agenticbrief/shared-ui/SpecSource.astro'
+import FaqBlock from '@agenticbrief/shared-ui/FaqBlock.astro'
+import { adcp } from '@agenticbrief/protocol-data'
+import {
+  graph,
+  organizationNode,
+  personNode,
+  webSiteNode,
+  webPageNode,
+  articleNode,
+  breadcrumbNode,
+  faqPageNode,
+} from '@agenticbrief/seo/schema'
+import { BASE, HUB, featuredTasks, areaTitle, tasksForArea, operationUrl } from '../../lib/site'
+
+export function getStaticPaths() {
+  return featuredTasks().map((task) => ({ params: { slug: task.slug }, props: { task } }))
+}
+
+const { task } = Astro.props
+const path = `/operations/${task.slug}/`
+const url = `${BASE}${path}`
+const area = areaTitle(task.area)
+
+const title = `${task.name} — AdCP ${area} operation reference`
+const description = `Field-level reference for the AdCP ${task.name} operation in release ${adcp.version}: ${task.requestFields.length} request fields, ${task.responseFields.length} response fields, generated from the published schema.`
+
+const answer = `${task.name} is an operation in the ${area} area of the Ad Context Protocol. ${task.summary}`
+
+const requiredRequest = task.requestFields.filter((f) => f.required)
+
+const faq = [
+  {
+    question: `What does ${task.name} do?`,
+    answer: task.summary,
+  },
+  {
+    question: `Which fields are required in a ${task.name} request?`,
+    answer:
+      requiredRequest.length > 0
+        ? `${requiredRequest.length} of the ${task.requestFields.length} request fields are required: ${requiredRequest.map((f) => f.name).join(', ')}.`
+        : `The published ${adcp.version} schema marks no request field as required at the top level; requirements are expressed inside the referenced sub-objects.`,
+  },
+  {
+    question: `Which AdCP version defines ${task.name}?`,
+    answer: `This reference is generated from AdCP ${adcp.version}, the current published stable release.`,
+  },
+]
+
+const breadcrumbs = [
+  { name: 'AdCP Explorer', url: `${BASE}/` },
+  { name: area, url: `${BASE}/areas/${task.area}/` },
+  { name: task.name, url },
+]
+
+const jsonLd = graph([
+  organizationNode(),
+  personNode(),
+  webSiteNode({ siteUrl: BASE, name: 'AdCP Explorer', description }),
+  webPageNode({ url, siteUrl: BASE, title, description, breadcrumb: {} }),
+  breadcrumbNode(url, breadcrumbs),
+  articleNode({
+    url,
+    title,
+    description,
+    datePublished: '2026-08-08',
+    technical: true,
+    proficiencyLevel: 'Expert',
+    section: area,
+    dependencies: 'Model Context Protocol (MCP) or A2A transport',
+    keywords: [task.name, `adcp ${task.name}`, `${task.name} adcp`, 'ad context protocol'],
+    citations: [task.provenance.sourceUrl, adcp.docsHomepage].filter(Boolean) as string[],
+  }),
+  faqPageNode(url, faq),
+])
+
+const siblings = tasksForArea(task.area).filter((t) => t.name !== task.name)
+---
+
+<BaseLayout
+  site="adcpexplorer"
+  title={title}
+  description={description}
+  path={path}
+  jsonLd={jsonLd}
+  wide
+  ogType="article"
+  publishDate={new Date('2026-08-08')}
+  keywords={[task.name, `adcp ${task.name}`, 'ad context protocol']}
+>
+  <nav class="breadcrumbs" aria-label="Breadcrumb">
+    <ol>
+      <li><a href="/">AdCP Explorer</a></li>
+      <li><a href={`/areas/${task.area}/`}>{area}</a></li>
+      <li><span>{task.name}</span></li>
+    </ol>
+  </nav>
+
+  <p class="eyebrow">AdCP {adcp.version} · {area}</p>
+  <h1><code>{task.name}</code></h1>
+
+  <AnswerBox answer={answer} />
+
+  <h2>What does <code>{task.name}</code> take?</h2>
+  <FieldTable fields={task.requestFields} caption={`${task.name} request`} />
+
+  <h2>What does <code>{task.name}</code> return?</h2>
+  <FieldTable fields={task.responseFields} caption={`${task.name} response`} />
+
+  {
+    task.examples.length > 0 && (
+      <>
+        <h2>Worked examples</h2>
+        <p>
+          Taken verbatim from the AdCP documentation for this operation. They are reproduced rather
+          than rewritten so that they stay checkable against the source.
+        </p>
+        {task.examples.map((ex) => (
+          <CodeSample
+            title={ex.title}
+            language={ex.language}
+            code={ex.code}
+            sourceUrl={task.provenance.sourceUrl}
+          />
+        ))}
+      </>
+    )
+  }
+
+  <FaqBlock entries={faq} />
+
+  <h2>Other operations in {area}</h2>
+  <ul class="task-list">
+    {
+      siblings.map((t) => (
+        <li>
+          <a href={operationUrl(t)}>
+            <code>{t.name}</code>
+          </a>
+          <br />
+          {t.summary}
+        </li>
+      ))
+    }
+  </ul>
+
+  <h2>Related</h2>
+  <ul>
+    <li><a href={`/areas/${task.area}/`}>The full {area} reference</a></li>
+    <li><a href="/">All {adcp.tasks.length} AdCP operations</a></li>
+    <li>
+      <a href={`${HUB}/protocols/adcp-vs-aamp/`} rel="noopener"
+        >Does AAMP have an equivalent operation?</a
+      >
+    </li>
+  </ul>
+
+  <SpecSource provenance={task.provenance} specVersion={adcp.version} />
+</BaseLayout>

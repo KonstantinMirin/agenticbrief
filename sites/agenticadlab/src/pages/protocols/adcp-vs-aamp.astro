@@ -1,0 +1,30 @@
+---
+import { getEntry, render } from 'astro:content'
+import DocPage from '@agenticbrief/shared-ui/DocPage.astro'
+import { siteUrl } from '@agenticbrief/shared-ui/sites'
+
+// The portfolio's single load-bearing asset. It gets its own route rather than
+// a dynamic one so the URL is guaranteed stable even if the file is renamed.
+const entry = await getEntry('comparisons', 'adcp-vs-aamp')
+if (!entry)
+  throw new Error(
+    'content/comparisons/adcp-vs-aamp.md is missing — this page cannot ship without it',
+  )
+const { Content } = await render(entry)
+const BASE = siteUrl('agenticadlab')
+---
+
+<DocPage
+  site="agenticadlab"
+  entry={entry}
+  path="/protocols/adcp-vs-aamp/"
+  technical={false}
+  section="Protocols"
+  breadcrumbs={[
+    { name: 'Agentic Ad Lab', url: `${BASE}/` },
+    { name: 'Protocols', url: `${BASE}/protocols/` },
+    { name: 'AdCP vs AAMP', url: `${BASE}/protocols/adcp-vs-aamp/` },
+  ]}
+>
+  <Content />
+</DocPage>

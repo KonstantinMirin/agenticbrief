@@ -1,0 +1,794 @@
+[
+  {
+    "site": "agenticadlab",
+    "path": "/",
+    "title": "Agentic Ad Lab",
+    "eyebrow": "",
+    "siteName": "Agentic Ad Lab",
+    "domain": "agenticadlab.com"
+  },
+  {
+    "site": "agenticadlab",
+    "path": "/about/",
+    "title": "About Agentic Ad Lab, our sources, and what we are not",
+    "eyebrow": "",
+    "siteName": "Agentic Ad Lab",
+    "domain": "agenticadlab.com"
+  },
+  {
+    "site": "agenticadlab",
+    "path": "/guides/agent-discovery-files/",
+    "title": "How Ad Agents Find Each Other — Two Trust Models",
+    "eyebrow": "",
+    "siteName": "Agentic Ad Lab",
+    "domain": "agenticadlab.com"
+  },
+  {
+    "site": "agenticadlab",
+    "path": "/guides/how-a-machine-buys-media/",
+    "title": "How a Machine Actually Buys Media, End to End",
+    "eyebrow": "",
+    "siteName": "Agentic Ad Lab",
+    "domain": "agenticadlab.com"
+  },
+  {
+    "site": "agenticadlab",
+    "path": "/guides/what-agentic-ad-protocols-dont-standardize/",
+    "title": "What Neither Stack Standardises: A Dated Risk Assessment",
+    "eyebrow": "",
+    "siteName": "Agentic Ad Lab",
+    "domain": "agenticadlab.com"
+  },
+  {
+    "site": "agenticadlab",
+    "path": "/protocols/",
+    "title": "The Agentic Advertising Standards Landscape",
+    "eyebrow": "",
+    "siteName": "Agentic Ad Lab",
+    "domain": "agenticadlab.com"
+  },
+  {
+    "site": "agenticadlab",
+    "path": "/protocols/aamp/",
+    "title": "AAMP: What IAB Tech Lab Has Actually Published",
+    "eyebrow": "",
+    "siteName": "Agentic Ad Lab",
+    "domain": "agenticadlab.com"
+  },
+  {
+    "site": "agenticadlab",
+    "path": "/protocols/adcp-vs-aamp/",
+    "title": "AdCP vs AAMP: What the Specifications Actually Say",
+    "eyebrow": "",
+    "siteName": "Agentic Ad Lab",
+    "domain": "agenticadlab.com"
+  },
+  {
+    "site": "agenticadlab",
+    "path": "/services/",
+    "title": "Protocol Integration and Agent Readiness Work",
+    "eyebrow": "",
+    "siteName": "Agentic Ad Lab",
+    "domain": "agenticadlab.com"
+  },
+  {
+    "site": "briefgateway",
+    "path": "/",
+    "title": "Generate a Protocol-Conformant Campaign Brief",
+    "eyebrow": "",
+    "siteName": "Brief Gateway",
+    "domain": "briefgateway.com"
+  },
+  {
+    "site": "briefgateway",
+    "path": "/compare/adcp-brief-vs-aamp-campaign-brief/",
+    "title": "AdCP Brief vs AAMP CampaignBrief: Two Objects, One Name",
+    "eyebrow": "",
+    "siteName": "Brief Gateway",
+    "domain": "briefgateway.com"
+  },
+  {
+    "site": "briefgateway",
+    "path": "/crosswalk/creative-brief-to-adcp/",
+    "title": "From Creative Brief to Agent Brief: A Field-by-Field Crosswalk",
+    "eyebrow": "",
+    "siteName": "Brief Gateway",
+    "domain": "briefgateway.com"
+  },
+  {
+    "site": "briefgateway",
+    "path": "/examples/ctv-guaranteed-launch/",
+    "title": "Worked Example: Guaranteed CTV Brand Launch Brief",
+    "eyebrow": "",
+    "siteName": "Brief Gateway",
+    "domain": "briefgateway.com"
+  },
+  {
+    "site": "briefgateway",
+    "path": "/spec/",
+    "title": "What a Protocol-Conformant Brief Actually Is",
+    "eyebrow": "",
+    "siteName": "Brief Gateway",
+    "domain": "briefgateway.com"
+  },
+  {
+    "site": "briefgateway",
+    "path": "/spec/brief-vs-filters/",
+    "title": "What Goes in the Brief String and What Goes in Filters",
+    "eyebrow": "",
+    "siteName": "Brief Gateway",
+    "domain": "briefgateway.com"
+  },
+  {
+    "site": "adcpexplorer",
+    "path": "/",
+    "title": "AdCP Explorer",
+    "eyebrow": "",
+    "siteName": "AdCP Explorer",
+    "domain": "adcpexplorer.com"
+  },
+  {
+    "site": "adcpexplorer",
+    "path": "/areas/account/",
+    "title": "AdCP Accounts",
+    "eyebrow": "AdCP 3.1.10 · Negotiation layer",
+    "siteName": "AdCP Explorer",
+    "domain": "adcpexplorer.com"
+  },
+  {
+    "site": "adcpexplorer",
+    "path": "/areas/brand-protocol/",
+    "title": "AdCP Brand Protocol",
+    "eyebrow": "AdCP 3.1.10 · Protocol area",
+    "siteName": "AdCP Explorer",
+    "domain": "adcpexplorer.com"
+  },
+  {
+    "site": "adcpexplorer",
+    "path": "/areas/compliance/",
+    "title": "AdCP Compliance",
+    "eyebrow": "AdCP 3.1.10 · Protocol area",
+    "siteName": "AdCP Explorer",
+    "domain": "adcpexplorer.com"
+  },
+  {
+    "site": "adcpexplorer",
+    "path": "/areas/creative/",
+    "title": "AdCP Creative",
+    "eyebrow": "AdCP 3.1.10 · Negotiation layer",
+    "siteName": "AdCP Explorer",
+    "domain": "adcpexplorer.com"
+  },
+  {
+    "site": "adcpexplorer",
+    "path": "/areas/governance/",
+    "title": "AdCP Governance",
+    "eyebrow": "AdCP 3.1.10 · Negotiation layer",
+    "siteName": "AdCP Explorer",
+    "domain": "adcpexplorer.com"
+  },
+  {
+    "site": "adcpexplorer",
+    "path": "/areas/media-buy/",
+    "title": "AdCP Media Buy",
+    "eyebrow": "AdCP 3.1.10 · Negotiation layer",
+    "siteName": "AdCP Explorer",
+    "domain": "adcpexplorer.com"
+  },
+  {
+    "site": "adcpexplorer",
+    "path": "/areas/protocol/",
+    "title": "AdCP Protocol",
+    "eyebrow": "AdCP 3.1.10 · Protocol area",
+    "siteName": "AdCP Explorer",
+    "domain": "adcpexplorer.com"
+  },
+  {
+    "site": "adcpexplorer",
+    "path": "/areas/signals/",
+    "title": "AdCP Signals",
+    "eyebrow": "AdCP 3.1.10 · Negotiation layer",
+    "siteName": "AdCP Explorer",
+    "domain": "adcpexplorer.com"
+  },
+  {
+    "site": "adcpexplorer",
+    "path": "/areas/sponsored-intelligence/",
+    "title": "AdCP Sponsored Intelligence",
+    "eyebrow": "AdCP 3.1.10 · Negotiation layer",
+    "siteName": "AdCP Explorer",
+    "domain": "adcpexplorer.com"
+  },
+  {
+    "site": "adcpexplorer",
+    "path": "/areas/trusted-match/",
+    "title": "AdCP Trusted Match",
+    "eyebrow": "AdCP 3.1.10 · Decisioning and serving la",
+    "siteName": "AdCP Explorer",
+    "domain": "adcpexplorer.com"
+  },
+  {
+    "site": "adcpexplorer",
+    "path": "/discovery/",
+    "title": "AdCP discovery files",
+    "eyebrow": "",
+    "siteName": "AdCP Explorer",
+    "domain": "adcpexplorer.com"
+  },
+  {
+    "site": "adcpexplorer",
+    "path": "/operations/activate-signal/",
+    "title": "activate_signal",
+    "eyebrow": "AdCP 3.1.10 · Signals",
+    "siteName": "AdCP Explorer",
+    "domain": "adcpexplorer.com"
+  },
+  {
+    "site": "adcpexplorer",
+    "path": "/operations/build-creative/",
+    "title": "build_creative",
+    "eyebrow": "AdCP 3.1.10 · Creative",
+    "siteName": "AdCP Explorer",
+    "domain": "adcpexplorer.com"
+  },
+  {
+    "site": "adcpexplorer",
+    "path": "/operations/context-match/",
+    "title": "context_match",
+    "eyebrow": "AdCP 3.1.10 · Trusted Match",
+    "siteName": "AdCP Explorer",
+    "domain": "adcpexplorer.com"
+  },
+  {
+    "site": "adcpexplorer",
+    "path": "/operations/create-media-buy/",
+    "title": "create_media_buy",
+    "eyebrow": "AdCP 3.1.10 · Media Buy",
+    "siteName": "AdCP Explorer",
+    "domain": "adcpexplorer.com"
+  },
+  {
+    "site": "adcpexplorer",
+    "path": "/operations/get-adcp-capabilities/",
+    "title": "get_adcp_capabilities",
+    "eyebrow": "AdCP 3.1.10 · Protocol",
+    "siteName": "AdCP Explorer",
+    "domain": "adcpexplorer.com"
+  },
+  {
+    "site": "adcpexplorer",
+    "path": "/operations/get-products/",
+    "title": "get_products",
+    "eyebrow": "AdCP 3.1.10 · Media Buy",
+    "siteName": "AdCP Explorer",
+    "domain": "adcpexplorer.com"
+  },
+  {
+    "site": "adcpexplorer",
+    "path": "/operations/get-signals/",
+    "title": "get_signals",
+    "eyebrow": "AdCP 3.1.10 · Signals",
+    "siteName": "AdCP Explorer",
+    "domain": "adcpexplorer.com"
+  },
+  {
+    "site": "adcpexplorer",
+    "path": "/operations/identity-match/",
+    "title": "identity_match",
+    "eyebrow": "AdCP 3.1.10 · Trusted Match",
+    "siteName": "AdCP Explorer",
+    "domain": "adcpexplorer.com"
+  },
+  {
+    "site": "adcpexplorer",
+    "path": "/schemas/",
+    "title": "The AdCP schema registry",
+    "eyebrow": "",
+    "siteName": "AdCP Explorer",
+    "domain": "adcpexplorer.com"
+  },
+  {
+    "site": "aampexplorer",
+    "path": "/",
+    "title": "AAMP Explorer",
+    "eyebrow": "",
+    "siteName": "AAMP Explorer",
+    "domain": "aampexplorer.com"
+  },
+  {
+    "site": "aampexplorer",
+    "path": "/negotiation/",
+    "title": "Price negotiation in AAMP",
+    "eyebrow": "",
+    "siteName": "AAMP Explorer",
+    "domain": "aampexplorer.com"
+  },
+  {
+    "site": "aampexplorer",
+    "path": "/repos/",
+    "title": "AAMP components",
+    "eyebrow": "",
+    "siteName": "AAMP Explorer",
+    "domain": "aampexplorer.com"
+  },
+  {
+    "site": "aampexplorer",
+    "path": "/repos/AAMP/",
+    "title": "AAMP",
+    "eyebrow": "AAMP component · hub",
+    "siteName": "AAMP Explorer",
+    "domain": "aampexplorer.com"
+  },
+  {
+    "site": "aampexplorer",
+    "path": "/repos/agentic-audiences/",
+    "title": "agentic-audiences",
+    "eyebrow": "AAMP component · specification",
+    "siteName": "AAMP Explorer",
+    "domain": "aampexplorer.com"
+  },
+  {
+    "site": "aampexplorer",
+    "path": "/repos/agentic-direct/",
+    "title": "agentic-direct",
+    "eyebrow": "AAMP component · reference implementatio",
+    "siteName": "AAMP Explorer",
+    "domain": "aampexplorer.com"
+  },
+  {
+    "site": "aampexplorer",
+    "path": "/repos/agentic-rtb-framework/",
+    "title": "agentic-rtb-framework",
+    "eyebrow": "AAMP component · specification",
+    "siteName": "AAMP Explorer",
+    "domain": "aampexplorer.com"
+  },
+  {
+    "site": "aampexplorer",
+    "path": "/repos/buyer-agent/",
+    "title": "buyer-agent",
+    "eyebrow": "AAMP component · reference implementatio",
+    "siteName": "AAMP Explorer",
+    "domain": "aampexplorer.com"
+  },
+  {
+    "site": "aampexplorer",
+    "path": "/repos/iab-agentic-primitives/",
+    "title": "iab-agentic-primitives",
+    "eyebrow": "AAMP component · specification",
+    "siteName": "AAMP Explorer",
+    "domain": "aampexplorer.com"
+  },
+  {
+    "site": "aampexplorer",
+    "path": "/repos/registry-agent-example/",
+    "title": "registry-agent-example",
+    "eyebrow": "AAMP component · example",
+    "siteName": "AAMP Explorer",
+    "domain": "aampexplorer.com"
+  },
+  {
+    "site": "aampexplorer",
+    "path": "/repos/seller-agent/",
+    "title": "seller-agent",
+    "eyebrow": "AAMP component · reference implementatio",
+    "siteName": "AAMP Explorer",
+    "domain": "aampexplorer.com"
+  },
+  {
+    "site": "aampexplorer",
+    "path": "/versions/",
+    "title": "AAMP version matrix",
+    "eyebrow": "",
+    "siteName": "AAMP Explorer",
+    "domain": "aampexplorer.com"
+  },
+  {
+    "site": "aampexplorer",
+    "path": "/what-does-aamp-stand-for/",
+    "title": "What does AAMP stand for?",
+    "eyebrow": "",
+    "siteName": "AAMP Explorer",
+    "domain": "aampexplorer.com"
+  },
+  {
+    "site": "whatisagenticbuying",
+    "path": "/",
+    "title": "What Is Agentic Buying?",
+    "eyebrow": "",
+    "siteName": "What Is Agentic Buying",
+    "domain": "whatisagenticbuying.com"
+  },
+  {
+    "site": "whatisagenticbuying",
+    "path": "/about/",
+    "title": "About, Method and Non-Affiliation",
+    "eyebrow": "",
+    "siteName": "What Is Agentic Buying",
+    "domain": "whatisagenticbuying.com"
+  },
+  {
+    "site": "whatisagenticbuying",
+    "path": "/agentic-buying-vs-programmatic/",
+    "title": "Agentic Buying vs Programmatic Buying",
+    "eyebrow": "",
+    "siteName": "What Is Agentic Buying",
+    "domain": "whatisagenticbuying.com"
+  },
+  {
+    "site": "whatisagenticbuying",
+    "path": "/how-it-works/",
+    "title": "How Agentic Buying Works, Call by Call",
+    "eyebrow": "",
+    "siteName": "What Is Agentic Buying",
+    "domain": "whatisagenticbuying.com"
+  },
+  {
+    "site": "whatisagenticbuying",
+    "path": "/maturity/",
+    "title": "State of the AdCP and AAMP Repositories",
+    "eyebrow": "",
+    "siteName": "What Is Agentic Buying",
+    "domain": "whatisagenticbuying.com"
+  },
+  {
+    "site": "adtechglossary",
+    "path": "/",
+    "title": "Ad Tech Glossary",
+    "eyebrow": "",
+    "siteName": "Ad Tech Glossary",
+    "domain": "adtechglossary.com"
+  },
+  {
+    "site": "adtechglossary",
+    "path": "/about/",
+    "title": "About",
+    "eyebrow": "",
+    "siteName": "Ad Tech Glossary",
+    "domain": "adtechglossary.com"
+  },
+  {
+    "site": "adtechglossary",
+    "path": "/about/sources-and-versions/",
+    "title": "Sources and Versions",
+    "eyebrow": "About",
+    "siteName": "Ad Tech Glossary",
+    "domain": "adtechglossary.com"
+  },
+  {
+    "site": "adtechglossary",
+    "path": "/agents/",
+    "title": "Agent roles, identity and discovery",
+    "eyebrow": "",
+    "siteName": "Ad Tech Glossary",
+    "domain": "adtechglossary.com"
+  },
+  {
+    "site": "adtechglossary",
+    "path": "/agents/agent-card/",
+    "title": "Agent Card",
+    "eyebrow": "Agent roles, identity and discovery",
+    "siteName": "Ad Tech Glossary",
+    "domain": "adtechglossary.com"
+  },
+  {
+    "site": "adtechglossary",
+    "path": "/agents/agent-registry/",
+    "title": "Agent Registry",
+    "eyebrow": "Agent roles, identity and discovery",
+    "siteName": "Ad Tech Glossary",
+    "domain": "adtechglossary.com"
+  },
+  {
+    "site": "adtechglossary",
+    "path": "/agents/agent/",
+    "title": "Agent",
+    "eyebrow": "Agent roles, identity and discovery",
+    "siteName": "Ad Tech Glossary",
+    "domain": "adtechglossary.com"
+  },
+  {
+    "site": "adtechglossary",
+    "path": "/agents/brand-agent/",
+    "title": "Brand Agent",
+    "eyebrow": "Agent roles, identity and discovery",
+    "siteName": "Ad Tech Glossary",
+    "domain": "adtechglossary.com"
+  },
+  {
+    "site": "adtechglossary",
+    "path": "/agents/buyer-agent/",
+    "title": "Buyer Agent",
+    "eyebrow": "Agent roles, identity and discovery",
+    "siteName": "Ad Tech Glossary",
+    "domain": "adtechglossary.com"
+  },
+  {
+    "site": "adtechglossary",
+    "path": "/agents/discovery-files/",
+    "title": "Discovery Files",
+    "eyebrow": "Agent roles, identity and discovery",
+    "siteName": "Ad Tech Glossary",
+    "domain": "adtechglossary.com"
+  },
+  {
+    "site": "adtechglossary",
+    "path": "/agents/governance-agent/",
+    "title": "Governance Agent",
+    "eyebrow": "Agent roles, identity and discovery",
+    "siteName": "Ad Tech Glossary",
+    "domain": "adtechglossary.com"
+  },
+  {
+    "site": "adtechglossary",
+    "path": "/agents/sales-agent/",
+    "title": "Sales Agent",
+    "eyebrow": "Agent roles, identity and discovery",
+    "siteName": "Ad Tech Glossary",
+    "domain": "adtechglossary.com"
+  },
+  {
+    "site": "adtechglossary",
+    "path": "/agents/seller-agent/",
+    "title": "Seller Agent",
+    "eyebrow": "Agent roles, identity and discovery",
+    "siteName": "Ad Tech Glossary",
+    "domain": "adtechglossary.com"
+  },
+  {
+    "site": "adtechglossary",
+    "path": "/agents/signal-agent/",
+    "title": "Signal Agent",
+    "eyebrow": "Agent roles, identity and discovery",
+    "siteName": "Ad Tech Glossary",
+    "domain": "adtechglossary.com"
+  },
+  {
+    "site": "adtechglossary",
+    "path": "/concepts/",
+    "title": "Concepts and standards",
+    "eyebrow": "",
+    "siteName": "Ad Tech Glossary",
+    "domain": "adtechglossary.com"
+  },
+  {
+    "site": "adtechglossary",
+    "path": "/concepts/aamp/",
+    "title": "AAMP",
+    "eyebrow": "Concepts and standards",
+    "siteName": "Ad Tech Glossary",
+    "domain": "adtechglossary.com"
+  },
+  {
+    "site": "adtechglossary",
+    "path": "/concepts/adcp-vs-aamp-terminology/",
+    "title": "AdCP to AAMP terminology map",
+    "eyebrow": "Concepts and standards",
+    "siteName": "Ad Tech Glossary",
+    "domain": "adtechglossary.com"
+  },
+  {
+    "site": "adtechglossary",
+    "path": "/concepts/adcp/",
+    "title": "Ad Context Protocol",
+    "eyebrow": "Concepts and standards",
+    "siteName": "Ad Tech Glossary",
+    "domain": "adtechglossary.com"
+  },
+  {
+    "site": "adtechglossary",
+    "path": "/concepts/agentic-advertising/",
+    "title": "Agentic Advertising",
+    "eyebrow": "Concepts and standards",
+    "siteName": "Ad Tech Glossary",
+    "domain": "adtechglossary.com"
+  },
+  {
+    "site": "adtechglossary",
+    "path": "/concepts/agentic-buying/",
+    "title": "Agentic Buying",
+    "eyebrow": "Concepts and standards",
+    "siteName": "Ad Tech Glossary",
+    "domain": "adtechglossary.com"
+  },
+  {
+    "site": "adtechglossary",
+    "path": "/concepts/mcp-and-a2a/",
+    "title": "MCP and A2A",
+    "eyebrow": "Concepts and standards",
+    "siteName": "Ad Tech Glossary",
+    "domain": "adtechglossary.com"
+  },
+  {
+    "site": "adtechglossary",
+    "path": "/concepts/opendirect/",
+    "title": "OpenDirect 2.1",
+    "eyebrow": "Concepts and standards",
+    "siteName": "Ad Tech Glossary",
+    "domain": "adtechglossary.com"
+  },
+  {
+    "site": "adtechglossary",
+    "path": "/concepts/sponsored-intelligence/",
+    "title": "Sponsored Intelligence",
+    "eyebrow": "Concepts and standards",
+    "siteName": "Ad Tech Glossary",
+    "domain": "adtechglossary.com"
+  },
+  {
+    "site": "adtechglossary",
+    "path": "/governance/",
+    "title": "Governance, privacy and compliance",
+    "eyebrow": "",
+    "siteName": "Ad Tech Glossary",
+    "domain": "adtechglossary.com"
+  },
+  {
+    "site": "adtechglossary",
+    "path": "/governance/audience-constraints/",
+    "title": "Audience Constraints",
+    "eyebrow": "Governance, privacy and compliance",
+    "siteName": "Ad Tech Glossary",
+    "domain": "adtechglossary.com"
+  },
+  {
+    "site": "adtechglossary",
+    "path": "/governance/policy-category/",
+    "title": "Policy Category",
+    "eyebrow": "Governance, privacy and compliance",
+    "siteName": "Ad Tech Glossary",
+    "domain": "adtechglossary.com"
+  },
+  {
+    "site": "adtechglossary",
+    "path": "/media-buying/",
+    "title": "Buying objects and campaign lifecycle",
+    "eyebrow": "",
+    "siteName": "Ad Tech Glossary",
+    "domain": "adtechglossary.com"
+  },
+  {
+    "site": "adtechglossary",
+    "path": "/media-buying/media-buy/",
+    "title": "Media Buy",
+    "eyebrow": "Buying objects and campaign lifecycle",
+    "siteName": "Ad Tech Glossary",
+    "domain": "adtechglossary.com"
+  },
+  {
+    "site": "adtechglossary",
+    "path": "/media-buying/package/",
+    "title": "Package",
+    "eyebrow": "Buying objects and campaign lifecycle",
+    "siteName": "Ad Tech Glossary",
+    "domain": "adtechglossary.com"
+  },
+  {
+    "site": "adtechglossary",
+    "path": "/media-buying/product/",
+    "title": "Product",
+    "eyebrow": "Buying objects and campaign lifecycle",
+    "siteName": "Ad Tech Glossary",
+    "domain": "adtechglossary.com"
+  },
+  {
+    "site": "adtechglossary",
+    "path": "/negotiation/",
+    "title": "Deals, pricing and negotiation",
+    "eyebrow": "",
+    "siteName": "Ad Tech Glossary",
+    "domain": "adtechglossary.com"
+  },
+  {
+    "site": "adtechglossary",
+    "path": "/negotiation/access-tier/",
+    "title": "Access Tier",
+    "eyebrow": "Deals, pricing and negotiation",
+    "siteName": "Ad Tech Glossary",
+    "domain": "adtechglossary.com"
+  },
+  {
+    "site": "adtechglossary",
+    "path": "/negotiation/deal/",
+    "title": "Deal",
+    "eyebrow": "Deals, pricing and negotiation",
+    "siteName": "Ad Tech Glossary",
+    "domain": "adtechglossary.com"
+  },
+  {
+    "site": "adtechglossary",
+    "path": "/negotiation/negotiation-round/",
+    "title": "Negotiation Round",
+    "eyebrow": "Deals, pricing and negotiation",
+    "siteName": "Ad Tech Glossary",
+    "domain": "adtechglossary.com"
+  },
+  {
+    "site": "adtechglossary",
+    "path": "/negotiation/quote/",
+    "title": "Quote",
+    "eyebrow": "Deals, pricing and negotiation",
+    "siteName": "Ad Tech Glossary",
+    "domain": "adtechglossary.com"
+  },
+  {
+    "site": "adtechglossary",
+    "path": "/negotiation/trust-status/",
+    "title": "Trust Status",
+    "eyebrow": "Deals, pricing and negotiation",
+    "siteName": "Ad Tech Glossary",
+    "domain": "adtechglossary.com"
+  },
+  {
+    "site": "adtechglossary",
+    "path": "/realtime/",
+    "title": "Real-time execution and bidstream agents",
+    "eyebrow": "",
+    "siteName": "Ad Tech Glossary",
+    "domain": "adtechglossary.com"
+  },
+  {
+    "site": "adtechglossary",
+    "path": "/realtime/artf-intent/",
+    "title": "Intent (ARTF)",
+    "eyebrow": "Real-time execution and bidstream agents",
+    "siteName": "Ad Tech Glossary",
+    "domain": "adtechglossary.com"
+  },
+  {
+    "site": "adtechglossary",
+    "path": "/realtime/rtb-mutation/",
+    "title": "Mutation (ARTF)",
+    "eyebrow": "Real-time execution and bidstream agents",
+    "siteName": "Ad Tech Glossary",
+    "domain": "adtechglossary.com"
+  },
+  {
+    "site": "adtechglossary",
+    "path": "/realtime/trusted-match-protocol/",
+    "title": "Trusted Match Protocol (TMP)",
+    "eyebrow": "Real-time execution and bidstream agents",
+    "siteName": "Ad Tech Glossary",
+    "domain": "adtechglossary.com"
+  },
+  {
+    "site": "adtechglossary",
+    "path": "/signals/",
+    "title": "Signals, audiences and identity",
+    "eyebrow": "",
+    "siteName": "Ad Tech Glossary",
+    "domain": "adtechglossary.com"
+  },
+  {
+    "site": "adtechglossary",
+    "path": "/signals/activation/",
+    "title": "Signal Activation",
+    "eyebrow": "Signals, audiences and identity",
+    "siteName": "Ad Tech Glossary",
+    "domain": "adtechglossary.com"
+  },
+  {
+    "site": "adtechglossary",
+    "path": "/signals/audience-vs-signal/",
+    "title": "Audience vs Signal",
+    "eyebrow": "Signals, audiences and identity",
+    "siteName": "Ad Tech Glossary",
+    "domain": "adtechglossary.com"
+  },
+  {
+    "site": "adtechglossary",
+    "path": "/signals/hashed-identifier/",
+    "title": "Hashed Identifier",
+    "eyebrow": "Signals, audiences and identity",
+    "siteName": "Ad Tech Glossary",
+    "domain": "adtechglossary.com"
+  },
+  {
+    "site": "adtechglossary",
+    "path": "/signals/signal-definition/",
+    "title": "Signal Definition",
+    "eyebrow": "Signals, audiences and identity",
+    "siteName": "Ad Tech Glossary",
+    "domain": "adtechglossary.com"
+  }
+]

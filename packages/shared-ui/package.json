@@ -1,0 +1,28 @@
+{
+  "name": "@agenticbrief/shared-ui",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./sites": "./src/sites.ts",
+    "./org": "./src/org.ts",
+    "./BaseLayout.astro": "./src/BaseLayout.astro",
+    "./PageLayout.astro": "./src/PageLayout.astro",
+    "./Header.astro": "./src/Header.astro",
+    "./Footer.astro": "./src/Footer.astro",
+    "./PortfolioNav.astro": "./src/PortfolioNav.astro",
+    "./AnswerBox.astro": "./src/AnswerBox.astro",
+    "./SpecSource.astro": "./src/SpecSource.astro",
+    "./ComparisonTable.astro": "./src/ComparisonTable.astro",
+    "./FaqBlock.astro": "./src/FaqBlock.astro",
+    "./RelatedLinks.astro": "./src/RelatedLinks.astro",
+    "./styles/global.css": "./src/styles/global.css",
+    "./FieldTable.astro": "./src/FieldTable.astro",
+    "./CodeSample.astro": "./src/CodeSample.astro",
+    "./DocPage.astro": "./src/DocPage.astro"
+  },
+  "dependencies": {
+    "@agenticbrief/seo": "*",
+    "@agenticbrief/protocol-data": "*"
+  }
+}

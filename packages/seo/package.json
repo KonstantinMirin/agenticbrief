@@ -1,0 +1,16 @@
+{
+  "name": "@agenticbrief/seo",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./schema": "./src/schema.ts",
+    "./llms": "./src/llms.ts",
+    "./sitemap": "./src/sitemap.ts",
+    "./Seo.astro": "./src/Seo.astro",
+    "./og": "./src/og.ts"
+  },
+  "dependencies": {
+    "@agenticbrief/shared-ui": "*"
+  }
+}

@@ -1,0 +1,145 @@
+---
+import { getCollection } from 'astro:content'
+import BaseLayout from '@agenticbrief/shared-ui/BaseLayout.astro'
+import AnswerBox from '@agenticbrief/shared-ui/AnswerBox.astro'
+import PortfolioNav from '@agenticbrief/shared-ui/PortfolioNav.astro'
+import FaqBlock from '@agenticbrief/shared-ui/FaqBlock.astro'
+import { publishedOnly } from '@agenticbrief/content-utils'
+import { adcp, aamp } from '@agenticbrief/protocol-data'
+import {
+  graph,
+  organizationNode,
+  personNode,
+  webSiteNode,
+  webPageNode,
+  articleNode,
+  faqPageNode,
+} from '@agenticbrief/seo/schema'
+import { siteUrl } from '@agenticbrief/shared-ui/sites'
+import { EXPLICIT_ROUTES, ELSEWHERE } from '../lib/feed'
+
+const BASE = siteUrl('agenticadlab')
+// Same predicate the router uses, so the index cannot list a page that was not built.
+const guides = publishedOnly(await getCollection('guides')).filter((e) => !ELSEWHERE.test(e.id))
+// Only the comparison whose canonical home is the hub. The brief-related
+// comparisons live on briefgateway and are linked, not republished.
+const comparisons = publishedOnly(await getCollection('comparisons')).filter(
+  (e) => e.id === 'adcp-vs-aamp',
+)
+
+const answer =
+  'Agentic Ad Lab is an independent, protocol-neutral reference for agentic advertising. It documents both competing stacks — the Ad Context Protocol and IAB Tech Lab’s AAMP — from their specification repositories rather than from either camp’s marketing.'
+
+const faq = [
+  {
+    question: 'Are AdCP and AAMP competing standards?',
+    answer:
+      'They have separate governance, separate licences and no cross-references. Nothing in the AAMP repositories mentions AdCP. Whether they compete or occupy different layers is genuinely unsettled, and both readings have serious advocates.',
+  },
+  {
+    question: 'Which one should I build against today?',
+    answer: `It depends on what you are building. AdCP ships one versioned registry of ${adcp.tasks.length} operations at release ${adcp.version}. AAMP is eight repositories at eight versions, strongest where it has a real specification and weakest where it has an empty file.`,
+  },
+  {
+    question: 'Is this site affiliated with either standards body?',
+    answer:
+      'No. It is an independent editorial project, not affiliated with or endorsed by AgenticAdvertising.org or IAB Tech Lab.',
+  },
+]
+
+const url = `${BASE}/`
+const title = 'Agentic Ad Lab — protocol-neutral reference for agentic advertising'
+const description =
+  'Independent reference for agentic advertising: how AdCP and IAB Tech Lab’s AAMP actually work, compared from their specification repositories rather than their press releases.'
+
+const jsonLd = graph([
+  organizationNode(),
+  personNode(),
+  webSiteNode({ siteUrl: BASE, name: 'Agentic Ad Lab', description }),
+  webPageNode({ url, siteUrl: BASE, title, description }),
+  articleNode({
+    url,
+    title,
+    description,
+    datePublished: '2026-08-09',
+    technical: false,
+    keywords: ['agentic advertising protocols', 'adcp vs aamp', 'agentic advertising'],
+    citations: [adcp.homepage, aamp.homepage],
+  }),
+  faqPageNode(url, faq),
+])
+---
+
+<BaseLayout
+  site="agenticadlab"
+  title={title}
+  description={description}
+  path="/"
+  jsonLd={jsonLd}
+  wide
+  keywords={['agentic advertising protocols', 'agentic advertising', 'adcp vs aamp']}
+>
+  <h1>Agentic Ad Lab</h1>
+  <AnswerBox answer={answer} />
+
+  <p>
+    Two stacks are being built to let software agents buy and sell advertising, and they do not
+    reference each other. This site documents both from their source repositories, records the
+    commit every claim came from, and says plainly where a specification is thin, contradictory or
+    empty.
+  </p>
+
+  <h2>Where should you start?</h2>
+  <ul class="task-list">
+    {
+      comparisons.map((c) => (
+        <li>
+          <a class="task-name" href={`/protocols/${c.id}/`}>
+            {c.data.title}
+          </a>
+          <br />
+          {c.data.description}
+        </li>
+      ))
+    }
+    {
+      guides.map((g) => (
+        <li>
+          <a class="task-name" href={EXPLICIT_ROUTES[g.id] ?? `/guides/${g.id}/`}>
+            {g.data.title}
+          </a>
+          <br />
+          {g.data.description}
+        </li>
+      ))
+    }
+  </ul>
+
+  <h2>What is in each stack right now?</h2>
+  <table>
+    <caption>The two stacks at the commits this site was generated from</caption>
+    <thead><tr><th scope="col"></th><th scope="col">AdCP</th><th scope="col">AAMP</th></tr></thead>
+    <tbody>
+      <tr><th scope="row">Governance</th><td>{adcp.governance}</td><td>{aamp.governance}</td></tr>
+      <tr
+        ><th scope="row">Version</th><td>{adcp.version} (published stable)</td><td
+          >No single version — per repository</td
+        ></tr
+      >
+      <tr
+        ><th scope="row">Shape</th><td
+          >One registry, {adcp.tasks.length} operations, {adcp.areas.length} areas</td
+        ><td>{aamp.components.length} repositories, 3 planes, no shared type</td></tr
+      >
+      <tr><th scope="row">Licence</th><td>{adcp.license}</td><td>{aamp.license}</td></tr>
+      <tr
+        ><th scope="row">Reference</th><td
+          ><a href="https://adcpexplorer.noetis.dev/" rel="noopener">AdCP Explorer</a></td
+        ><td><a href="https://aampexplorer.noetis.dev/" rel="noopener">AAMP Explorer</a></td></tr
+      >
+    </tbody>
+  </table>
+
+  <FaqBlock entries={faq} />
+  <PortfolioNav exclude="agenticadlab" heading="The rest of the lab" />
+</BaseLayout>

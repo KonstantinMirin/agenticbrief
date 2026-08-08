@@ -1,0 +1,38 @@
+---
+/**
+ * Hub-and-spoke internal linking.
+ *
+ * Takes the `related` frontmatter array and renders it. Links may be
+ * site-relative (same site) or absolute (cross-site); both are rendered the
+ * same way, but cross-site links carry rel="noopener" and are labelled with
+ * their destination site so a reader knows they are leaving.
+ */
+
+export interface Props {
+  heading?: string
+  links: { href: string; title: string; note?: string }[]
+}
+
+const { heading = 'Related', links } = Astro.props
+---
+
+{
+  links.length > 0 && (
+    <nav class="related" aria-labelledby="related-heading">
+      <h2 id="related-heading">{heading}</h2>
+      <ul>
+        {links.map((l) => {
+          const external = l.href.startsWith('http')
+          return (
+            <li>
+              <a href={l.href} rel={external ? 'noopener' : undefined}>
+                {l.title}
+              </a>
+              {l.note && <span class="muted"> — {l.note}</span>}
+            </li>
+          )
+        })}
+      </ul>
+    </nav>
+  )
+}

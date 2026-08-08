@@ -1,0 +1,33 @@
+---
+/**
+ * Visible FAQ.
+ *
+ * Paired with faqPageNode() in @agenticbrief/seo/schema — the same entries go
+ * into the JSON-LD and onto the page. Emitting FAQ schema for questions that
+ * are not visible in the rendered HTML is a structured-data violation, so the
+ * two always come from one source array.
+ */
+
+export interface Props {
+  heading?: string
+  entries: { question: string; answer: string }[]
+}
+
+const { heading = 'Frequently asked', entries } = Astro.props
+---
+
+{
+  entries.length > 0 && (
+    <section class="faq" aria-labelledby="faq-heading">
+      <h2 id="faq-heading">{heading}</h2>
+      <dl>
+        {entries.map((e) => (
+          <div class="faq-item">
+            <dt>{e.question}</dt>
+            <dd>{e.answer}</dd>
+          </div>
+        ))}
+      </dl>
+    </section>
+  )
+}

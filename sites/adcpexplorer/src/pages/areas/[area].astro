@@ -1,0 +1,192 @@
+---
+/**
+ * One page per AdCP area, carrying the full reference for every operation in it.
+ *
+ * This is where the substance of the site lives. The alternative — 64 pages,
+ * one per operation — was measured and rejected: the median operation carries
+ * 25 request and response fields, much of it the shared envelope, so most of
+ * those pages would differ only by a filter object.
+ */
+import BaseLayout from '@agenticbrief/shared-ui/BaseLayout.astro'
+import AnswerBox from '@agenticbrief/shared-ui/AnswerBox.astro'
+import FieldTable from '@agenticbrief/shared-ui/FieldTable.astro'
+import CodeSample from '@agenticbrief/shared-ui/CodeSample.astro'
+import SpecSource from '@agenticbrief/shared-ui/SpecSource.astro'
+import { adcp } from '@agenticbrief/protocol-data'
+import {
+  graph,
+  organizationNode,
+  personNode,
+  webSiteNode,
+  webPageNode,
+  articleNode,
+  breadcrumbNode,
+} from '@agenticbrief/seo/schema'
+import {
+  BASE,
+  HUB,
+  orderedAreas,
+  tasksForArea,
+  operationUrl,
+  FEATURED_OPERATIONS,
+} from '../../lib/site'
+
+export function getStaticPaths() {
+  return adcp.areas.map((area) => ({ params: { area: area.key } }))
+}
+
+const { area: areaKey } = Astro.params
+const area = adcp.areas.find((a) => a.key === areaKey)!
+const tasks = tasksForArea(areaKey!)
+const layer = adcp.layers.find((l) => l.areaKeys.includes(areaKey!))
+
+const path = `/areas/${areaKey}/`
+const url = `${BASE}${path}`
+const title = `AdCP ${area.title} — all ${tasks.length} operations, ${adcp.version}`
+const description = `Complete field-level reference for the ${tasks.length} operations in the AdCP ${area.title} area, generated from the ${adcp.version} schema registry.`
+
+const answer = `The AdCP ${area.title} area defines ${tasks.length} operation${tasks.length === 1 ? '' : 's'} in release ${adcp.version}. ${area.summary}`
+
+const breadcrumbs = [
+  { name: 'AdCP Explorer', url: `${BASE}/` },
+  { name: area.title, url },
+]
+
+const jsonLd = graph([
+  organizationNode(),
+  personNode(),
+  webSiteNode({ siteUrl: BASE, name: 'AdCP Explorer', description }),
+  webPageNode({ url, siteUrl: BASE, title, description, breadcrumb: {} }),
+  breadcrumbNode(url, breadcrumbs),
+  articleNode({
+    url,
+    title,
+    description,
+    datePublished: '2026-08-08',
+    technical: true,
+    proficiencyLevel: 'Expert',
+    section: area.title,
+    keywords: [`adcp ${area.key}`, ...tasks.slice(0, 6).map((t) => t.name)],
+    citations: [adcp.repository, adcp.docsHomepage].filter(Boolean) as string[],
+  }),
+])
+
+const otherAreas = orderedAreas().filter((a) => a.key !== areaKey)
+---
+
+<BaseLayout
+  site="adcpexplorer"
+  title={title}
+  description={description}
+  path={path}
+  jsonLd={jsonLd}
+  wide
+  ogType="article"
+  publishDate={new Date('2026-08-08')}
+  keywords={[`adcp ${area.key}`, `${area.title.toLowerCase()} protocol`, 'ad context protocol']}
+>
+  <nav class="breadcrumbs" aria-label="Breadcrumb">
+    <ol>
+      <li><a href="/">AdCP Explorer</a></li>
+      <li><span>{area.title}</span></li>
+    </ol>
+  </nav>
+
+  <p class="eyebrow">AdCP {adcp.version} · {layer?.title ?? 'Protocol area'}</p>
+  <h1>AdCP {area.title}</h1>
+
+  <AnswerBox answer={answer} />
+
+  <h2>Operations in this area</h2>
+
+  <table>
+    <caption>{area.title} — {tasks.length} operations</caption>
+    <thead>
+      <tr>
+        <th scope="col">Operation</th>
+        <th scope="col">Request fields</th>
+        <th scope="col">Response fields</th>
+        <th scope="col">What it does</th>
+      </tr>
+    </thead>
+    <tbody>
+      {
+        tasks.map((task) => (
+          <tr>
+            <th scope="row">
+              <a href={`#${task.slug}`}>
+                <code>{task.name}</code>
+              </a>
+            </th>
+            <td>{task.requestFields.length}</td>
+            <td>{task.responseFields.length}</td>
+            <td>{task.summary}</td>
+          </tr>
+        ))
+      }
+    </tbody>
+  </table>
+
+  {
+    tasks.map((task) => (
+      <section aria-labelledby={`${task.slug}-heading`}>
+        <h2 id={task.slug}>
+          <span id={`${task.slug}-heading`}>
+            <code>{task.name}</code>
+          </span>
+        </h2>
+        <p>{task.summary}</p>
+        {(FEATURED_OPERATIONS as readonly string[]).includes(task.name) && (
+          <p>
+            <a href={operationUrl(task)}>
+              Full page for <code>{task.name}</code>
+            </a>
+          </p>
+        )}
+
+        <FieldTable
+          fields={task.requestFields}
+          caption={`${task.name} request`}
+          collapseAfter={18}
+        />
+        <FieldTable
+          fields={task.responseFields}
+          caption={`${task.name} response`}
+          collapseAfter={18}
+        />
+
+        {task.examples.slice(0, 1).map((ex) => (
+          <CodeSample
+            title={`${task.name} — ${ex.title}`}
+            language={ex.language}
+            code={ex.code}
+            sourceUrl={task.provenance.sourceUrl}
+          />
+        ))}
+
+        <SpecSource provenance={task.provenance} specVersion={adcp.version} />
+      </section>
+    ))
+  }
+
+  <h2>Other AdCP areas</h2>
+  <ul>
+    {
+      otherAreas.map((a) => (
+        <li>
+          <a href={`/areas/${a.key}/`}>{a.title}</a>
+          <span class="muted"> — {tasksForArea(a.key).length} operations</span>
+        </li>
+      ))
+    }
+  </ul>
+
+  <h2>Related</h2>
+  <ul>
+    <li><a href="/">All {adcp.tasks.length} AdCP operations</a></li>
+    <li><a href="/schemas/">How the AdCP schema registry is organised</a></li>
+    <li>
+      <a href={`${HUB}/protocols/adcp-vs-aamp/`} rel="noopener">AdCP compared with AAMP</a>
+    </li>
+  </ul>
+</BaseLayout>

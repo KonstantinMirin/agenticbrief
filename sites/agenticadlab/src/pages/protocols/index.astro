@@ -1,0 +1,27 @@
+---
+import { getCollection, render } from 'astro:content'
+import DocPage from '@agenticbrief/shared-ui/DocPage.astro'
+import { publishedOnly } from '@agenticbrief/content-utils'
+import { siteUrl } from '@agenticbrief/shared-ui/sites'
+
+// The landscape page is authored content; if it has not been written yet the
+// build fails loudly rather than shipping an empty section index.
+const BASE = siteUrl('agenticadlab')
+const guides = publishedOnly(await getCollection('guides'))
+const entry = guides.find((g) => g.id === 'agentic-advertising-standards-landscape')
+if (!entry) throw new Error('content/guides/agentic-advertising-standards-landscape.md is missing')
+const { Content } = await render(entry)
+---
+
+<DocPage
+  site="agenticadlab"
+  entry={entry}
+  path="/protocols/"
+  technical={false}
+  breadcrumbs={[
+    { name: 'Agentic Ad Lab', url: `${BASE}/` },
+    { name: 'Protocols', url: `${BASE}/protocols/` },
+  ]}
+>
+  <Content />
+</DocPage>

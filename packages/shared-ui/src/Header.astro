@@ -1,0 +1,82 @@
+---
+import { SITES, type SiteKey } from './sites'
+
+export interface Props {
+  site: SiteKey
+  current?: string
+}
+
+const { site, current } = Astro.props
+const def = SITES[site]
+
+/**
+ * Per-site primary nav. Kept here rather than in each site so the header
+ * markup is identical everywhere and only the link set varies.
+ */
+const NAV: Record<SiteKey, { label: string; href: string }[]> = {
+  // The hub has no /glossary/ or /changelog/ of its own. The glossary lives on
+  // its own domain, and the cross-protocol changelog is gated on a scheduled
+  // upstream refresh job — shipping a release tracker that silently stops
+  // tracking is worse than not shipping one.
+  agenticadlab: [
+    { label: 'Protocols', href: '/protocols/' },
+    { label: 'AdCP vs AAMP', href: '/protocols/adcp-vs-aamp/' },
+    { label: 'How a machine buys', href: '/guides/how-a-machine-buys-media/' },
+    { label: 'About', href: '/about/' },
+  ],
+  briefgateway: [
+    { label: 'The spec', href: '/spec/' },
+    { label: 'Brief vs filters', href: '/spec/brief-vs-filters/' },
+    { label: 'Crosswalk', href: '/crosswalk/creative-brief-to-adcp/' },
+    { label: 'Examples', href: '/examples/ctv-guaranteed-launch/' },
+  ],
+  adcpexplorer: [
+    { label: 'Areas', href: '/#area-media-buy' },
+    { label: 'Operations', href: '/operations/get-products/' },
+    { label: 'Schemas', href: '/schemas/' },
+    { label: 'Discovery', href: '/discovery/' },
+  ],
+  aampexplorer: [
+    { label: 'Repositories', href: '/repos/' },
+    { label: 'Versions', href: '/versions/' },
+    { label: 'Negotiation', href: '/negotiation/' },
+    { label: 'The acronym', href: '/what-does-aamp-stand-for/' },
+  ],
+  whatisagenticbuying: [
+    { label: 'The answer', href: '/' },
+    { label: 'vs programmatic', href: '/agentic-buying-vs-programmatic/' },
+    { label: 'How it works', href: '/how-it-works/' },
+    { label: 'Maturity', href: '/maturity/' },
+  ],
+  adtechglossary: [
+    { label: 'Concepts', href: '/concepts/' },
+    { label: 'Agents', href: '/agents/' },
+    { label: 'Signals', href: '/signals/' },
+    { label: 'Negotiation', href: '/negotiation/' },
+  ],
+}
+
+const items = NAV[site]
+---
+
+<header class="site-header">
+  <div class="header-inner">
+    <a class="brand" href="/">
+      <span class="brand-mark" aria-hidden="true"></span>
+      <span class="brand-name">{def.name}</span>
+    </a>
+    <nav aria-label="Primary">
+      <ul>
+        {
+          items.map((item) => (
+            <li>
+              <a href={item.href} aria-current={current === item.href ? 'page' : undefined}>
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+  </div>
+</header>

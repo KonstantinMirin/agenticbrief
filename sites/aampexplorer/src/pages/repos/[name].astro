@@ -1,0 +1,207 @@
+---
+import BaseLayout from '@agenticbrief/shared-ui/BaseLayout.astro'
+import AnswerBox from '@agenticbrief/shared-ui/AnswerBox.astro'
+import FieldTable from '@agenticbrief/shared-ui/FieldTable.astro'
+import SpecSource from '@agenticbrief/shared-ui/SpecSource.astro'
+import { aamp } from '@agenticbrief/protocol-data'
+import {
+  graph,
+  organizationNode,
+  personNode,
+  webSiteNode,
+  webPageNode,
+  articleNode,
+  breadcrumbNode,
+} from '@agenticbrief/seo/schema'
+import { BASE, HUB, MATURITY, tasksForArea } from '../../lib/site'
+
+export function getStaticPaths() {
+  return aamp.components.map((c) => ({ params: { name: c.name }, props: { component: c } }))
+}
+
+const { component } = Astro.props
+const maturity = MATURITY[component.name]
+
+// Areas and objects are attributed to a component by matching the repo URL in
+// their provenance, so a page can never claim material from a repo it is not about.
+const areas = aamp.areas.filter((a) => a.provenance?.repo === component.repo)
+const objects = aamp.objects.filter((o) => o.provenance?.repo === component.repo)
+const tasks = areas.flatMap((a) => tasksForArea(a.key))
+
+const path = `/repos/${component.name}/`
+const url = `${BASE}${path}`
+const title = `${component.name} — what this AAMP component defines`
+const description = `${component.name} at ${component.version}: ${tasks.length} operations and ${objects.length} object definitions, read directly from the repository at commit ${String(component.commit).slice(0, 8)}.`
+const answer = `${component.name} is ${component.kind.replace(/-/g, ' ')} in IAB Tech Lab's AAMP. ${component.purpose}`
+
+const jsonLd = graph([
+  organizationNode(),
+  personNode(),
+  webSiteNode({ siteUrl: BASE, name: 'AAMP Explorer', description }),
+  webPageNode({ url, siteUrl: BASE, title, description, breadcrumb: {} }),
+  breadcrumbNode(url, [
+    { name: 'AAMP Explorer', url: `${BASE}/` },
+    { name: 'Components', url: `${BASE}/repos/` },
+    { name: component.name, url },
+  ]),
+  articleNode({
+    url,
+    title,
+    description,
+    datePublished: '2026-08-08',
+    technical: true,
+    proficiencyLevel: 'Expert',
+    keywords: [component.name, `aamp ${component.name}`],
+    citations: [component.repo],
+  }),
+])
+---
+
+<BaseLayout
+  site="aampexplorer"
+  title={title}
+  description={description}
+  path={path}
+  jsonLd={jsonLd}
+  wide
+  ogType="article"
+  publishDate={new Date('2026-08-08')}
+  keywords={[component.name, `aamp ${component.name}`]}
+>
+  <nav class="breadcrumbs" aria-label="Breadcrumb">
+    <ol>
+      <li><a href="/">AAMP Explorer</a></li><li><a href="/repos/">Components</a></li><li>
+        <span>{component.name}</span>
+      </li>
+    </ol>
+  </nav>
+
+  <p class="eyebrow">AAMP component · {component.kind.replace(/-/g, ' ')}</p>
+  <h1>{component.name}</h1>
+
+  <AnswerBox
+    answer={answer}
+    source={{ label: component.repo.replace('https://github.com/', ''), url: component.repo }}
+  />
+
+  <table>
+    <caption>{component.name} at the commit this page was generated from</caption>
+    <thead><tr><th scope="col">Property</th><th scope="col">Value</th></tr></thead>
+    <tbody>
+      <tr><th scope="row">Version</th><td><code>{component.version}</code></td></tr>
+      <tr
+        ><th scope="row">Commit</th><td><code>{String(component.commit).slice(0, 12)}</code></td
+        ></tr
+      >
+      <tr><th scope="row">Kind</th><td>{component.kind.replace(/-/g, ' ')}</td></tr>
+      <tr><th scope="row">Substance</th><td>{maturity?.level ?? 'unassessed'}</td></tr>
+      <tr
+        ><th scope="row">Listed in the hub README</th><td>{component.listedInHub ? 'Yes' : 'No'}</td
+        ></tr
+      >
+    </tbody>
+  </table>
+
+  {
+    maturity && (
+      <>
+        <>
+          <h2>How much specification is here?</h2>
+          <p>{maturity.note}</p>
+        </>
+      </>
+    )
+  }
+
+  {
+    tasks.length > 0 && (
+      <>
+        <h2>Operations defined here</h2>
+        <table>
+          <caption>
+            {component.name} — {tasks.length} operations
+          </caption>
+          <thead>
+            <tr>
+              <>
+                <th scope="col">Operation</th>
+                <th scope="col">Request</th>
+                <th scope="col">Response</th>
+                <th scope="col">What it does</th>
+              </>
+            </tr>
+          </thead>
+          <tbody>
+            {tasks.map((t) => (
+              <tr>
+                <th scope="row">
+                  <code>{t.httpMethod ? `${t.httpMethod} ${t.httpPath}` : t.name}</code>
+                </th>
+                <td>{t.requestFields.length}</td>
+                <td>{t.responseFields.length}</td>
+                <td>{t.summary}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </>
+    )
+  }
+
+  {
+    objects.length > 0 && (
+      <>
+        <h2>Objects defined here</h2>
+        <p>
+          {objects.length} object definition{objects.length === 1 ? '' : 's'}, read from the
+          repository's own schema files.
+        </p>
+        {objects.slice(0, 24).map((o) => (
+          <section>
+            <h3 id={o.slug}>
+              <code>{o.name}</code>
+            </h3>
+            {o.summary && <p>{o.summary}</p>}
+            <FieldTable fields={o.fields} caption={`${o.name} fields`} collapseAfter={12} />
+          </section>
+        ))}
+        {objects.length > 24 && (
+          <p class="muted">
+            {objects.length - 24} further object definitions are not shown here. This page documents
+            the ones a reader is likely to need; the rest are in the repository.
+          </p>
+        )}
+      </>
+    )
+  }
+
+  {
+    tasks.length === 0 && objects.length === 0 && (
+      <>
+        <h2>What this component defines</h2>
+        <p>
+          Nothing machine-readable. {maturity?.note ?? ''} This page exists to record that, because
+          a reader arriving from the hub README has no way to tell this repository apart from one
+          that carries a specification.
+        </p>
+      </>
+    )
+  }
+
+  <h2>Related</h2>
+  <ul>
+    <li><a href="/repos/">Every AAMP component</a></li>
+    <li><a href="/">What AAMP actually contains</a></li>
+    <li><a href={`${HUB}/protocols/adcp-vs-aamp/`} rel="noopener">AdCP compared with AAMP</a></li>
+    <li><a href={component.repo} rel="noopener nofollow">The repository itself</a></li>
+  </ul>
+
+  <SpecSource
+    provenance={{
+      repo: component.repo,
+      commit: component.commit ?? '',
+      parsedAt: aamp.provenance.parsedAt,
+      sourceUrl: component.repo,
+    }}
+  />
+</BaseLayout>

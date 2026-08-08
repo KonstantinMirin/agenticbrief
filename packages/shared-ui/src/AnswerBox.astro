@@ -1,0 +1,40 @@
+---
+/**
+ * The answer-first block.
+ *
+ * Every reference page opens with this. It exists because the GEO research is
+ * unambiguous on one point: a short, self-contained definition near the top of
+ * the document is what retrieval systems extract and quote. Prose that builds
+ * to a definition three paragraphs down does not get cited.
+ *
+ * Rendered as a <p> inside a semantic container rather than a callout div so
+ * that a text-extraction pipeline sees it as the first paragraph of the page.
+ */
+
+export interface Props {
+  /** the definition or direct answer, ideally under 40 words */
+  answer: string
+  /** optional label, e.g. the term being defined */
+  term?: string
+  /** where the definition came from, if spec-derived */
+  source?: { label: string; url: string }
+}
+
+const { answer, term, source } = Astro.props
+const wordCount = answer.trim().split(/\s+/).length
+---
+
+<div class="answer-box" data-word-count={wordCount}>
+  {term && <p class="answer-term">{term}</p>}
+  <p class="answer-text">{answer}</p>
+  {
+    source && (
+      <p class="answer-source">
+        Source:{' '}
+        <a href={source.url} rel="noopener">
+          {source.label}
+        </a>
+      </p>
+    )
+  }
+</div>

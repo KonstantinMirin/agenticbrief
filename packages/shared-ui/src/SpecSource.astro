@@ -1,0 +1,31 @@
+---
+/**
+ * Provenance stamp for generated pages.
+ *
+ * A protocol reference site is only worth citing if a reader can check it
+ * against the spec. Every auto-generated page prints the repo, the commit it
+ * was derived from, and when the parse ran — so a stale page is visibly stale
+ * rather than quietly wrong.
+ */
+import type { SpecProvenance } from '@agenticbrief/protocol-data/types'
+
+export interface Props {
+  provenance: SpecProvenance
+  specVersion?: string
+}
+
+const { provenance, specVersion } = Astro.props
+const shortSha = provenance.commit?.slice(0, 8) ?? 'unknown'
+const parsed = provenance.parsedAt?.slice(0, 10) ?? 'unknown'
+---
+
+<aside class="spec-source" aria-label="Source provenance">
+  <p>
+    Generated from <a href={provenance.sourceUrl ?? provenance.repo} rel="noopener nofollow">
+      {provenance.sourcePath ?? provenance.repo}</a
+    >
+    at commit <code>{shortSha}</code>{specVersion ? `, spec version ${specVersion}` : ''}. Parsed {
+      parsed
+    }.
+  </p>
+</aside>

@@ -1,0 +1,23 @@
+---
+import { getEntry, render } from 'astro:content'
+import DocPage from '@agenticbrief/shared-ui/DocPage.astro'
+import { siteUrl } from '@agenticbrief/shared-ui/sites'
+
+const entry = await getEntry('guides', 'brief-vs-filters')
+if (!entry) throw new Error('content/guides/brief-vs-filters.md is missing')
+const { Content } = await render(entry)
+const BASE = siteUrl('briefgateway')
+---
+
+<DocPage
+  site="briefgateway"
+  entry={entry}
+  path="/spec/brief-vs-filters/"
+  breadcrumbs={[
+    { name: 'Brief Gateway', url: `${BASE}/` },
+    { name: 'The spec', url: `${BASE}/spec/` },
+    { name: 'Brief vs filters', url: `${BASE}/spec/brief-vs-filters/` },
+  ]}
+>
+  <Content />
+</DocPage>

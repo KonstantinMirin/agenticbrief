@@ -1,0 +1,39 @@
+---
+/**
+ * Cross-site navigation card grid, used on hub pages.
+ *
+ * The portfolio is deliberately multi-domain, which splits link equity. The
+ * mitigation is that every site links every other site with descriptive
+ * anchor text, so the cluster reads as one editorial entity rather than a
+ * set of unrelated microsites.
+ */
+import { SITES, SITE_KEYS, siteUrl, type SiteKey } from './sites'
+
+export interface Props {
+  /** omit the current site from the grid */
+  exclude?: SiteKey
+  heading?: string
+}
+
+const { exclude, heading = 'The portfolio' } = Astro.props
+const keys = SITE_KEYS.filter((k) => k !== exclude && SITES[k].inNav)
+---
+
+<section class="portfolio-nav" aria-labelledby="portfolio-heading">
+  <h2 id="portfolio-heading">{heading}</h2>
+  <ul class="card-grid">
+    {
+      keys.map((key) => (
+        <li class="card">
+          <h3>
+            <a href={siteUrl(key)} rel="noopener">
+              {SITES[key].name}
+            </a>
+          </h3>
+          <p>{SITES[key].tagline}</p>
+          <p class="card-domain">{SITES[key].deployDomain}</p>
+        </li>
+      ))
+    }
+  </ul>
+</section>

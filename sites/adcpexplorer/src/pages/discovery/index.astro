@@ -1,0 +1,152 @@
+---
+import BaseLayout from '@agenticbrief/shared-ui/BaseLayout.astro'
+import AnswerBox from '@agenticbrief/shared-ui/AnswerBox.astro'
+import FieldTable from '@agenticbrief/shared-ui/FieldTable.astro'
+import CodeSample from '@agenticbrief/shared-ui/CodeSample.astro'
+import SpecSource from '@agenticbrief/shared-ui/SpecSource.astro'
+import FaqBlock from '@agenticbrief/shared-ui/FaqBlock.astro'
+import { adcp } from '@agenticbrief/protocol-data'
+import {
+  graph,
+  organizationNode,
+  personNode,
+  webSiteNode,
+  webPageNode,
+  articleNode,
+  breadcrumbNode,
+  faqPageNode,
+} from '@agenticbrief/seo/schema'
+import { BASE, HUB } from '../../lib/site'
+
+const files = adcp.discoveryFiles
+const path = '/discovery/'
+const url = `${BASE}${path}`
+const title = 'adagents.json and brand.json — the AdCP discovery files'
+const description = `Field reference for AdCP's two discovery files: adagents.json, which declares who may sell a property's inventory, and brand.json, which declares a brand's identity and agents.`
+const answer =
+  'AdCP has two discovery files. adagents.json is hosted by a publisher to declare which sales agents may sell its inventory; brand.json is hosted by a brand to declare its identity, agents and rights. Both are fetched from a well-known path on the domain that owns them.'
+
+const faq = [
+  {
+    question: 'What is adagents.json?',
+    answer:
+      'A file a publisher hosts on its own domain that declares which sales agents are authorised to sell that property’s inventory. A buyer fetches it to confirm that an agent offering inventory is actually allowed to.',
+  },
+  {
+    question: 'What is brand.json?',
+    answer:
+      'A file a brand hosts to declare its identity, the agents that represent it, and the rights available for licensing. It is the buy-side counterpart to adagents.json.',
+  },
+  {
+    question: 'Why does each file have several shapes?',
+    answer:
+      'Both are defined as a union of variants rather than one object. A host can publish the full document inline, or point at an authoritative copy elsewhere. The variants are alternatives — the fields of one do not appear alongside the fields of another.',
+  },
+]
+
+const jsonLd = graph([
+  organizationNode(),
+  personNode(),
+  webSiteNode({ siteUrl: BASE, name: 'AdCP Explorer', description }),
+  webPageNode({ url, siteUrl: BASE, title, description, breadcrumb: {} }),
+  breadcrumbNode(url, [
+    { name: 'AdCP Explorer', url: `${BASE}/` },
+    { name: 'Discovery files', url },
+  ]),
+  articleNode({
+    url,
+    title,
+    description,
+    datePublished: '2026-08-09',
+    technical: true,
+    proficiencyLevel: 'Expert',
+    keywords: ['adagents.json', 'brand.json', 'adcp discovery'],
+    citations: [adcp.repository],
+  }),
+  faqPageNode(url, faq),
+])
+---
+
+<BaseLayout
+  site="adcpexplorer"
+  title={title}
+  description={description}
+  path={path}
+  jsonLd={jsonLd}
+  wide
+  ogType="article"
+  publishDate={new Date('2026-08-09')}
+  keywords={['adagents.json', 'brand.json', 'adcp discovery file']}
+>
+  <nav class="breadcrumbs" aria-label="Breadcrumb">
+    <ol><li><a href="/">AdCP Explorer</a></li><li><span>Discovery files</span></li></ol>
+  </nav>
+  <h1>AdCP discovery files</h1>
+  <AnswerBox answer={answer} />
+
+  <p>
+    Both files are unions of several alternative shapes rather than one fixed object. That matters
+    for anyone writing a parser: the variants are mutually exclusive, so merging their fields into a
+    single table would describe a document that cannot exist. They are listed separately below.
+  </p>
+
+  {
+    files.map((file) => (
+      <section>
+        <h2 id={file.name.replace('.', '-')}>
+          <code>{file.name}</code>
+        </h2>
+        <p>{file.purpose}</p>
+        <p class="muted">
+          Fetched from <code>{file.location}</code>
+        </p>
+
+        {file.variants && file.variants.length > 0 ? (
+          <>
+            <h3>
+              The {file.variants.length} variants of <code>{file.name}</code>
+            </h3>
+            {file.variants.map((v) => (
+              <>
+                <h4>{v.name}</h4>
+                {v.summary && <p>{v.summary}</p>}
+                <FieldTable
+                  fields={v.fields}
+                  caption={`${file.name} — ${v.name}`}
+                  collapseAfter={12}
+                />
+              </>
+            ))}
+          </>
+        ) : (
+          <FieldTable fields={file.fields} caption={`${file.name} fields`} />
+        )}
+
+        {file.examples &&
+          file.examples
+            .slice(0, 1)
+            .map((ex) => (
+              <CodeSample
+                title={ex.title}
+                language={ex.language}
+                code={ex.code}
+                sourceUrl={file.provenance.sourceUrl}
+              />
+            ))}
+
+        <SpecSource provenance={file.provenance} specVersion={adcp.version} />
+      </section>
+    ))
+  }
+
+  <FaqBlock entries={faq} />
+
+  <h2>Related</h2>
+  <ul>
+    <li><a href="/schemas/">How the AdCP schema registry is organised</a></li>
+    <li><a href="/">All {adcp.tasks.length} AdCP operations</a></li>
+    <li>
+      <a href={`${HUB}/protocols/adcp-vs-aamp/`} rel="noopener">How AAMP handles agent discovery</a>
+    </li>
+  </ul>
+</BaseLayout>

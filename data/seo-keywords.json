@@ -1,0 +1,3578 @@
+{
+  "$schema": "internal://agenticbrief/seo-keywords/v1",
+  "generatedAt": "2026-08-08",
+  "method": "Derived from competitive SERP inspection and spec-source analysis. NO keyword volume or difficulty API was available for this build -- every volume/difficulty field is null and must be filled from DataForSEO or Google Ads before being used for prioritisation. Page set is the post-adversarial-review survivor set documented in /srv/ws/out/semantic-core-reviewed.md (148 planned pages -> 110 surviving; 19 killed, 20 merged, 1 added). AdCP facts must be re-derived from dist/schemas/<latest_stable>/ using dist/schemas/latest.json as the version oracle, NOT from static/schemas/source/ which carries a stale 3.1.1 stamp on unreleased main.",
+  "sites": {
+    "agenticadlab": {
+      "domain": "agenticadlab.noetis.dev",
+      "productionDomain": "agenticadlab.com",
+      "role": "hub",
+      "clusters": [
+        {
+          "id": "hub-comparison",
+          "label": "AdCP vs AAMP",
+          "primary": {
+            "keyword": "adcp vs aamp",
+            "intent": "commercial",
+            "volume": null,
+            "difficulty": null,
+            "ownedBy": "/protocols/adcp-vs-aamp/",
+            "competitors": [
+              "perform.digital",
+              "star.global",
+              "docs.adcontextprotocol.org/docs/faq",
+              "iabtechlab.com"
+            ]
+          },
+          "supporting": [
+            {
+              "keyword": "adcp aamp difference",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/protocols/adcp-vs-aamp/"
+            },
+            {
+              "keyword": "iab tech lab vs agenticadvertising.org",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/protocols/adcp-vs-aamp/"
+            },
+            {
+              "keyword": "should i implement adcp or aamp",
+              "intent": "commercial",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/protocols/adcp-vs-aamp/"
+            },
+            {
+              "keyword": "agentic advertising standards comparison",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/protocols/adcp-vs-aamp/"
+            }
+          ],
+          "pillarPath": "/protocols/adcp-vs-aamp/",
+          "note": "Portfolio's single highest-value asset. Absorbs the killed /guides/which-protocol-do-i-need/. /protocols/compare/ 301s here. AdCP's own FAQ is a high-authority but partisan incumbent stamped 'As of April 2026' claiming '3.0 GA'; that staleness is the wedge. Satellites cede this head term."
+        },
+        {
+          "id": "hub-workflow",
+          "label": "How machines buy media",
+          "primary": {
+            "keyword": "agentic media buying workflow",
+            "intent": "informational",
+            "volume": null,
+            "difficulty": null,
+            "ownedBy": "/guides/how-a-machine-buys-media/",
+            "competitors": ["scope3.com", "indexexchange.com", "adgentek.ai"]
+          },
+          "supporting": [
+            {
+              "keyword": "how do ai agents buy ads",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/guides/how-a-machine-buys-media/"
+            },
+            {
+              "keyword": "machine readable media buy",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/guides/how-a-machine-buys-media/"
+            },
+            {
+              "keyword": "buyer agent seller agent flow",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/guides/how-a-machine-buys-media/"
+            },
+            {
+              "keyword": "adcp create_media_buy example",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/guides/how-a-machine-buys-media/"
+            }
+          ],
+          "pillarPath": "/guides/how-a-machine-buys-media/",
+          "note": "WATCH: overlaps whatisagenticbuying /how-it-works/. Hub publishes the two-stack side-by-side with real payloads; the answer site narrates one buy from the buyer's seat. Review query overlap in GSC at 90 days."
+        },
+        {
+          "id": "hub-releases",
+          "label": "Cross-protocol release tracking",
+          "primary": {
+            "keyword": "agentic advertising protocol releases",
+            "intent": "informational",
+            "volume": null,
+            "difficulty": null,
+            "ownedBy": "/changelog/",
+            "competitors": ["docs.adcontextprotocol.org/docs/reference/versions", "iabtechlab.com"]
+          },
+          "supporting": [
+            {
+              "keyword": "adcp version history",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/changelog/"
+            },
+            {
+              "keyword": "adcp 3.1.3 withdrawn",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/changelog/"
+            },
+            {
+              "keyword": "adcp latest stable version",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/changelog/"
+            },
+            {
+              "keyword": "cross protocol advertising changelog",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/changelog/"
+            }
+          ],
+          "pillarPath": "/changelog/",
+          "note": "The one durable moat named in the phase-2 research: nobody tracks both stacks in one place. Conditional on a scheduled upstream refresh job -- a stale changelog is worse than none. Do not target 'adcp changelog' as a head term; upstream ships four version surfaces."
+        },
+        {
+          "id": "hub-limits",
+          "label": "What the protocols do not cover",
+          "primary": {
+            "keyword": "agentic advertising protocol limitations",
+            "intent": "informational",
+            "volume": null,
+            "difficulty": null,
+            "ownedBy": "/guides/what-agentic-ad-protocols-dont-standardize/",
+            "competitors": ["docs.adcontextprotocol.org/docs/reference/known-limitations"]
+          },
+          "supporting": [
+            {
+              "keyword": "adcp non-goals",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/guides/what-agentic-ad-protocols-dont-standardize/"
+            },
+            {
+              "keyword": "aamp gaps",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/guides/what-agentic-ad-protocols-dont-standardize/"
+            },
+            {
+              "keyword": "agentic advertising procurement risk",
+              "intent": "commercial",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/guides/what-agentic-ad-protocols-dont-standardize/"
+            }
+          ],
+          "pillarPath": "/guides/what-agentic-ad-protocols-dont-standardize/",
+          "note": "Rescoped: cite AdCP's own 20KB known-limitations page rather than restating it; the unique half is the AAMP structural argument. Short half-life -- the four zero-byte agentic-audiences files could be filled at any commit. Ship with a visible verified-on date and a rebuild guard."
+        },
+        {
+          "id": "hub-aamp-status",
+          "label": "AAMP maturity verdict",
+          "primary": {
+            "keyword": "is aamp a specification",
+            "intent": "informational",
+            "volume": null,
+            "difficulty": null,
+            "ownedBy": "/protocols/aamp/",
+            "competitors": ["iabtechlab.com/standards/aamp", "github.com/IABTechLab/AAMP"]
+          },
+          "supporting": [
+            {
+              "keyword": "aamp maturity",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/protocols/aamp/"
+            },
+            {
+              "keyword": "aamp protocol status",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/protocols/aamp/"
+            },
+            {
+              "keyword": "aamp repository assessment",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/protocols/aamp/"
+            }
+          ],
+          "pillarPath": "/protocols/aamp/",
+          "note": "WATCH: must not extend into AdCP maturity, which whatisagenticbuying /maturity/ owns cross-stack. Boundary with aampexplorer is soft -- this is the maturity verdict, the satellite is the browser."
+        },
+        {
+          "id": "hub-discovery-trust",
+          "label": "Agent discovery and trust models",
+          "primary": {
+            "keyword": "agent discovery and trust models",
+            "intent": "informational",
+            "volume": null,
+            "difficulty": null,
+            "ownedBy": "/guides/agent-discovery-files/",
+            "competitors": [
+              "agenticadvertising.org (builders)",
+              "docs.adcontextprotocol.org/docs/governance/property/adagents"
+            ]
+          },
+          "supporting": [
+            {
+              "keyword": "do adcp and aamp agent discovery interoperate",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/guides/agent-discovery-files/"
+            },
+            {
+              "keyword": "domain hosted vs registry agent discovery",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/guides/agent-discovery-files/"
+            }
+          ],
+          "pillarPath": "/guides/agent-discovery-files/",
+          "note": "Rescoped away from field-level reference, which sites.ts assigns to adcpexplorer, and away from tooling, which AAO owns. Only the comparison intent is unoccupied."
+        },
+        {
+          "id": "hub-landscape",
+          "label": "Standards landscape index",
+          "primary": {
+            "keyword": "agentic advertising standards landscape",
+            "intent": "informational",
+            "volume": null,
+            "difficulty": null,
+            "ownedBy": "/protocols/",
+            "competitors": [
+              "scope3.com/agentic-advertising",
+              "docs.adcontextprotocol.org/docs/building/concepts/industry-landscape"
+            ]
+          },
+          "supporting": [
+            {
+              "keyword": "agentic advertising artifact status table",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/protocols/"
+            }
+          ],
+          "pillarPath": "/protocols/",
+          "note": "Internal plumbing, no head-term ambition. The layer taxonomy AdCP publishes itself in industry-landscape.mdx is not a differentiator. Kill if it drops below two children."
+        },
+        {
+          "id": "hub-services",
+          "label": "Protocol integration services",
+          "primary": {
+            "keyword": "agentic advertising consulting",
+            "intent": "transactional",
+            "volume": null,
+            "difficulty": null,
+            "ownedBy": "/services/",
+            "competitors": ["holding companies", "AAO-certified practitioners"]
+          },
+          "supporting": [
+            {
+              "keyword": "adcp implementation partner",
+              "intent": "transactional",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/services/"
+            },
+            {
+              "keyword": "buyer agent development",
+              "intent": "transactional",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/services/"
+            },
+            {
+              "keyword": "agentic readiness audit",
+              "intent": "transactional",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/services/"
+            }
+          ],
+          "pillarPath": "/services/",
+          "note": "Judge on assisted conversions from /protocols/adcp-vs-aamp/ and the limitations guide, never on impressions. We are not a certification body and cannot confer AAO or IAB status."
+        },
+        {
+          "id": "hub-entity",
+          "label": "Brand and trust surface",
+          "primary": {
+            "keyword": "agentic ad lab",
+            "intent": "navigational",
+            "volume": null,
+            "difficulty": null,
+            "ownedBy": "/about/",
+            "competitors": []
+          },
+          "supporting": [
+            {
+              "keyword": "agentic advertising protocols",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/"
+            },
+            {
+              "keyword": "independent adcp aamp analysis",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/about/"
+            }
+          ],
+          "pillarPath": "/about/",
+          "note": "Canonical Organization and Person nodes live here and are reused by @id across all six sites. Organization.sameAs must point at Wikidata, LinkedIn, GitHub and Crunchbase BEFORE any noetis.dev sibling -- a closed loop of self-owned domains is a network footprint, not entity corroboration."
+        }
+      ]
+    },
+    "adcpexplorer": {
+      "domain": "adcpexplorer.noetis.dev",
+      "productionDomain": "adcpexplorer.com",
+      "role": "explorer",
+      "clusters": [
+        {
+          "id": "adcp-operations",
+          "label": "Operation index",
+          "primary": {
+            "keyword": "adcp operations",
+            "intent": "informational",
+            "volume": null,
+            "difficulty": null,
+            "ownedBy": "/",
+            "competitors": ["docs.adcontextprotocol.org/docs/protocol/required-tasks"]
+          },
+          "supporting": [
+            {
+              "keyword": "adcp task reference",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/"
+            },
+            {
+              "keyword": "adcp tasks list",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/"
+            },
+            {
+              "keyword": "adcp required tasks",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/"
+            },
+            {
+              "keyword": "adcp operation matrix",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/"
+            }
+          ],
+          "pillarPath": "/",
+          "note": "Rescoped. required-tasks.mdx splits by role across 11 sections and gives no counts, field sizes or async flags -- the complete matrix is a genuine format win. Pin to published latest_stable (dist/schemas/latest.json); put sync_agent_notification_configs, validate_property_delivery and search_brands in a visually distinct 'unreleased / on main only' section rather than the headline count."
+        },
+        {
+          "id": "adcp-schemas",
+          "label": "Schema registry and object model",
+          "primary": {
+            "keyword": "adcp json schema",
+            "intent": "informational",
+            "volume": null,
+            "difficulty": null,
+            "ownedBy": "/schemas/",
+            "competitors": ["raw GitHub blob views", "adcontextprotocol.org/schemas/"]
+          },
+          "supporting": [
+            {
+              "keyword": "adcp schema registry",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/schemas/"
+            },
+            {
+              "keyword": "adcp core objects",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/schemas/"
+            },
+            {
+              "keyword": "adcp $ref resolution",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/schemas/"
+            },
+            {
+              "keyword": "adcp unregistered schemas",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/schemas/"
+            }
+          ],
+          "pillarPath": "/schemas/",
+          "note": "PROMOTED to P1. Best link-bait on the site: the only page carrying a measured reachability gap between schema files on disk and files the registry index references, including all 13 canonical creative format schemas. Non-negotiable condition: recompute against dist/schemas/<latest_stable>/, not the working tree."
+        },
+        {
+          "id": "adcp-media-buy",
+          "label": "Media Buy operations",
+          "primary": {
+            "keyword": "get_products adcp",
+            "intent": "informational",
+            "volume": null,
+            "difficulty": null,
+            "ownedBy": "/operations/get-products/",
+            "competitors": [
+              "docs.adcontextprotocol.org/docs/media-buy/task-reference/get_products",
+              "github.com/prebid/salesagent"
+            ]
+          },
+          "supporting": [
+            {
+              "keyword": "create_media_buy",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/operations/create-media-buy/"
+            },
+            {
+              "keyword": "adcp media buy protocol",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/areas/media-buy/"
+            },
+            {
+              "keyword": "adcp product schema",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/operations/get-products/"
+            },
+            {
+              "keyword": "adcp conversion tracking",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/areas/media-buy/"
+            },
+            {
+              "keyword": "adcp pause campaign",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/areas/media-buy/"
+            }
+          ],
+          "pillarPath": "/operations/get-products/",
+          "note": "PROMOTED. Ship /operations/get-products/ before the index page: 15 canonical example payloads, three async arms plus a rejected arm, 11.3k words of upstream doc. The differentiator is all 15 examples rendered side by side as a comparison set -- upstream scatters them as fixture files nobody browses. /areas/media-buy/ absorbs the merged update_media_buy."
+        },
+        {
+          "id": "adcp-discovery",
+          "label": "Discovery files",
+          "primary": {
+            "keyword": "adagents.json",
+            "intent": "informational",
+            "volume": null,
+            "difficulty": null,
+            "ownedBy": "/discovery/adagents-json/",
+            "competitors": [
+              "docs.adcontextprotocol.org/docs/governance/property/adagents",
+              "agenticadvertising.org builders",
+              "adagents.com/.io/.ai (registered by third parties)"
+            ]
+          },
+          "supporting": [
+            {
+              "keyword": "adagents.json schema",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/discovery/adagents-json/"
+            },
+            {
+              "keyword": "adagents.json example",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/discovery/adagents-json/"
+            },
+            {
+              "keyword": "well-known adagents",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/discovery/adagents-json/"
+            },
+            {
+              "keyword": "adcp authorized agents",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/discovery/adagents-json/"
+            }
+          ],
+          "pillarPath": "/discovery/adagents-json/",
+          "note": "The only page on this site with a query a non-implementer actually types: a /.well-known/ file every AdCP publisher and data provider must physically host. Reference, not builder -- AAO owns the tool slot. brand.json was killed here and reassigned to adtechglossary /agents/discovery-files/."
+        },
+        {
+          "id": "adcp-envelope",
+          "label": "Shared protocol layer",
+          "primary": {
+            "keyword": "adcp protocol envelope",
+            "intent": "informational",
+            "volume": null,
+            "difficulty": null,
+            "ownedBy": "/areas/protocol/",
+            "competitors": ["docs.adcontextprotocol.org/docs/building/by-layer/L3/async-operations"]
+          },
+          "supporting": [
+            {
+              "keyword": "adcp async response",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/areas/protocol/"
+            },
+            {
+              "keyword": "adcp error codes",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/areas/protocol/"
+            },
+            {
+              "keyword": "adcp task lifecycle",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/areas/protocol/"
+            },
+            {
+              "keyword": "get_adcp_capabilities",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/operations/get-adcp-capabilities/"
+            },
+            {
+              "keyword": "adcp version negotiation",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/operations/get-adcp-capabilities/"
+            }
+          ],
+          "pillarPath": "/areas/protocol/",
+          "note": "Load-bearing: it is what lets every other page omit envelope fields without lying. The quotable fact is that only 7 operations have async arms. sync_agent_notification_configs must be labelled unreleased or dropped to three shared operations. /operations/get-adcp-capabilities/ is rescoped to the handshake failure surface because docs/protocol/capabilities-explorer.mdx already publishes the response-tree browser upstream."
+        },
+        {
+          "id": "adcp-creative",
+          "label": "Creative protocol and canonical formats",
+          "primary": {
+            "keyword": "adcp canonical formats",
+            "intent": "informational",
+            "volume": null,
+            "difficulty": null,
+            "ownedBy": "/areas/creative/",
+            "competitors": ["docs.adcontextprotocol.org/docs/creative/canonical-formats"]
+          },
+          "supporting": [
+            {
+              "keyword": "adcp creative protocol",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/areas/creative/"
+            },
+            {
+              "keyword": "list_creative_formats",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/areas/creative/"
+            },
+            {
+              "keyword": "build_creative adcp",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/operations/build-creative/"
+            },
+            {
+              "keyword": "adcp creative manifest schema",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/operations/build-creative/"
+            }
+          ],
+          "pillarPath": "/areas/creative/",
+          "note": "'Canonical formats' is the only term here that maps to an existing job (trafficking specs) rather than protocol implementation. The sharper hook: all 13 format schemas are unreachable from index.json. /operations/build-creative/ rescoped to lead on the generate/transform/retrieve model; the media-buy/ directory quirk is a parenthetical."
+        },
+        {
+          "id": "adcp-governance",
+          "label": "Governance surface",
+          "primary": {
+            "keyword": "adcp governance protocol",
+            "intent": "informational",
+            "volume": null,
+            "difficulty": null,
+            "ownedBy": "/areas/governance/",
+            "competitors": ["docs.adcontextprotocol.org/docs/governance/overview"]
+          },
+          "supporting": [
+            {
+              "keyword": "check_governance",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/areas/governance/"
+            },
+            {
+              "keyword": "sync_plans adcp",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/areas/governance/"
+            },
+            {
+              "keyword": "adcp policy registry",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/areas/governance/"
+            },
+            {
+              "keyword": "adcp property list",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/areas/governance/lists-and-standards/"
+            },
+            {
+              "keyword": "adcp list crud contract",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/areas/governance/lists-and-standards/"
+            }
+          ],
+          "pillarPath": "/areas/governance/",
+          "note": "Governance is roughly a third of the protocol surface with almost no third-party coverage, and the registry data (policies, policy-categories, restricted attributes) exists upstream only as unrendered JSON. Compliance-shaped queries qualify consultancy leads better than reference queries. /areas/governance/lists-and-standards/ rescoped from an overflow page to 'The AdCP List CRUD Contract' -- sell the three-way delta, not the operation count."
+        },
+        {
+          "id": "adcp-signals",
+          "label": "Signals",
+          "primary": {
+            "keyword": "adcp signals protocol",
+            "intent": "informational",
+            "volume": null,
+            "difficulty": null,
+            "ownedBy": "/areas/signals/",
+            "competitors": ["docs.adcontextprotocol.org/docs/signals/specification"]
+          },
+          "supporting": [
+            {
+              "keyword": "get_signals adcp",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/areas/signals/"
+            },
+            {
+              "keyword": "activate_signal",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/areas/signals/"
+            },
+            {
+              "keyword": "adcp wholesale feed",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/areas/signals/"
+            }
+          ],
+          "pillarPath": "/areas/signals/",
+          "note": "Two operations, one page -- correct restraint. The quotable fact: get_signals has only two async arms (submitted, working) and no input-required, unlike every media-buy operation. Stay on protocol-qualified terms; 'signal discovery' and 'audience discovery' are owned by Bombora-powered intent vendors and Eyeota."
+        },
+        {
+          "id": "adcp-si",
+          "label": "Sponsored Intelligence vs assistant commerce",
+          "primary": {
+            "keyword": "sponsored intelligence vs acp",
+            "intent": "informational",
+            "volume": null,
+            "difficulty": null,
+            "ownedBy": "/areas/sponsored-intelligence/",
+            "competitors": ["docs.adcontextprotocol.org/docs/sponsored-intelligence/specification"]
+          },
+          "supporting": [
+            {
+              "keyword": "si_initiate_session",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/areas/sponsored-intelligence/"
+            },
+            {
+              "keyword": "adcp assistant commerce",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/areas/sponsored-intelligence/"
+            },
+            {
+              "keyword": "sponsored intelligence protocol operations",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/areas/sponsored-intelligence/"
+            }
+          ],
+          "pillarPath": "/areas/sponsored-intelligence/",
+          "note": "NEW page, split off /areas/brand/. SI is the one AdCP surface with cross-category search interest and trade-press pull; burying si_initiate_session under a brand-protocol title wastes it. The SI-vs-ACP division of labour (SI handles engagement, ACP handles the transaction) exists nowhere as a comparison."
+        },
+        {
+          "id": "adcp-brand-rights",
+          "label": "Brand protocol and rights",
+          "primary": {
+            "keyword": "adcp brand protocol",
+            "intent": "informational",
+            "volume": null,
+            "difficulty": null,
+            "ownedBy": "/areas/brand/",
+            "competitors": ["docs.adcontextprotocol.org/docs/brand-protocol/"]
+          },
+          "supporting": [
+            {
+              "keyword": "get_brand_identity",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/areas/brand/"
+            },
+            {
+              "keyword": "acquire_rights adcp",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/areas/brand/"
+            },
+            {
+              "keyword": "verify_brand_claim",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/areas/brand/"
+            }
+          ],
+          "pillarPath": "/areas/brand/",
+          "note": "Scoped to the six rights-and-identity operations after the SI split. Drop search_brands from the copy entirely: no registry entry, no doc page, x-status experimental -- presenting it as a seventh operation presents an unfinished file as spec."
+        },
+        {
+          "id": "adcp-decisioning",
+          "label": "Trusted Match operations",
+          "primary": {
+            "keyword": "context_match identity_match",
+            "intent": "informational",
+            "volume": null,
+            "difficulty": null,
+            "ownedBy": "/areas/trusted-match/",
+            "competitors": ["docs.adcontextprotocol.org/docs/trusted-match/specification"]
+          },
+          "supporting": [
+            {
+              "keyword": "adcp trusted match field reference",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/areas/trusted-match/"
+            }
+          ],
+          "pillarPath": "/areas/trusted-match/",
+          "note": "Rescoped and de-ambitioned. The original plan's 'effectively no incumbent' and 'AXE deprecation covered nowhere' claims are FALSE: docs/trusted-match/ ships 12 pages totalling ~37.6k words including a dedicated migration-from-axe.mdx. What survives verification: neither operation has a per-operation task page, so the two field tables genuinely do not exist upstream. The concept term 'trusted match protocol' belongs to adtechglossary."
+        },
+        {
+          "id": "adcp-accounts",
+          "label": "Accounts",
+          "primary": {
+            "keyword": "adcp accounts protocol",
+            "intent": "informational",
+            "volume": null,
+            "difficulty": null,
+            "ownedBy": "/areas/accounts/",
+            "competitors": ["docs.adcontextprotocol.org/docs/accounts/overview"]
+          },
+          "supporting": [
+            {
+              "keyword": "sync_accounts adcp",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/areas/accounts/"
+            },
+            {
+              "keyword": "get_account_financials",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/areas/accounts/"
+            }
+          ],
+          "pillarPath": "/areas/accounts/",
+          "note": "Thin, correctly P3. Survives as the migration-confusion landing page: the Principal-to-Account-plus-Agent split is the single most common source of confusion for anyone reading 2.x-era material, which is most of the material that exists."
+        }
+      ]
+    },
+    "aampexplorer": {
+      "domain": "aampexplorer.noetis.dev",
+      "productionDomain": "aampexplorer.com",
+      "role": "explorer",
+      "clusters": [
+        {
+          "id": "aamp-naming",
+          "label": "AAMP acronym contradiction",
+          "primary": {
+            "keyword": "what does aamp stand for",
+            "intent": "informational",
+            "volume": null,
+            "difficulty": null,
+            "ownedBy": "/what-does-aamp-stand-for/",
+            "competitors": ["iabtechlab.com", "PR Newswire Jul 2026 release"]
+          },
+          "supporting": [
+            {
+              "keyword": "aamp acronym",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/what-does-aamp-stand-for/"
+            },
+            {
+              "keyword": "aamp meaning advertising",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/what-does-aamp-stand-for/"
+            },
+            {
+              "keyword": "agent-to-agent marketplace protocol",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/what-does-aamp-stand-for/"
+            },
+            {
+              "keyword": "iab agent api management protocol",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/what-does-aamp-stand-for/"
+            }
+          ],
+          "pillarPath": "/what-does-aamp-stand-for/",
+          "note": "PROMOTED to the site's number-one asset. Four expansions verified by grep across all eight repos, with file:line. Every published source asserts one answer because every published source quotes the press release -- the normative source is structurally disqualified from documenting its own contradiction. Highest citation-per-word ratio in the portfolio."
+        },
+        {
+          "id": "aamp-negotiation",
+          "label": "Agent price negotiation",
+          "primary": {
+            "keyword": "agent to agent deal negotiation",
+            "intent": "informational",
+            "volume": null,
+            "difficulty": null,
+            "ownedBy": "/negotiation/",
+            "competitors": ["scope3.com", "pubmatic.com", "holding-company thought leadership"]
+          },
+          "supporting": [
+            {
+              "keyword": "concession cap advertising agent",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/negotiation/"
+            },
+            {
+              "keyword": "quote then book",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/negotiation/"
+            },
+            {
+              "keyword": "final_offer counter accept reject",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/negotiation/"
+            },
+            {
+              "keyword": "automated media buying negotiation",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/negotiation/"
+            }
+          ],
+          "pillarPath": "/negotiation/",
+          "note": "PROMOTED and moved from /concepts/negotiation/ after /concepts/ was killed. Absorbs the merged trust-and-access-tiers page. MUST print the FOUR-row tier table -- the original plan listed three and its own note admitted the seat row was missing from the grep. seat/standard is 4 rounds, 4% per-round, 12% cumulative. Canonical home of the concession table; every other page cites rather than reproduces it."
+        },
+        {
+          "id": "aamp-artf",
+          "label": "Agentic Real-Time Framework",
+          "primary": {
+            "keyword": "agentic real-time framework",
+            "intent": "informational",
+            "volume": null,
+            "difficulty": null,
+            "ownedBy": "/repos/agentic-rtb-framework/",
+            "competitors": [
+              "iabtechlab.com public-comment announcement",
+              "github.com/IABTechLab/agentic-rtb-framework README"
+            ]
+          },
+          "supporting": [
+            {
+              "keyword": "artf iab tech lab",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/repos/agentic-rtb-framework/"
+            },
+            {
+              "keyword": "extend_rtb",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/repos/agentic-rtb-framework/"
+            },
+            {
+              "keyword": "bidstream mutation protobuf",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/repos/agentic-rtb-framework/"
+            },
+            {
+              "keyword": "artf v1.0",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/repos/agentic-rtb-framework/"
+            }
+          ],
+          "pillarPath": "/repos/agentic-rtb-framework/",
+          "note": "PROMOTED. The only AAMP artifact that is a published specification with a public-comment cycle, and GitHub renders its 534-line markdown as one undifferentiated page with no anchors. Two original hazards: root proto is edition=2023 while rust/ is proto3 (parse the rust copy), and the Agent Manifest 'intents' vocabulary does not overlap the proto Intent enum at all."
+        },
+        {
+          "id": "aamp-versions",
+          "label": "Version matrix",
+          "primary": {
+            "keyword": "aamp version",
+            "intent": "informational",
+            "volume": null,
+            "difficulty": null,
+            "ownedBy": "/versions/",
+            "competitors": ["PR Newswire AAMP 2.3 release", "iabtechlab.com/standards/aamp"]
+          },
+          "supporting": [
+            {
+              "keyword": "aamp 2.3",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/versions/"
+            },
+            {
+              "keyword": "seller-agent v2.4.1",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/versions/"
+            },
+            {
+              "keyword": "aamp release notes",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/versions/"
+            }
+          ],
+          "pillarPath": "/versions/",
+          "note": "Real demand from the July 2026 press cycle; the corrective thesis (the number maps to no artifact) is what an assistant quotes. HARD CONSTRAINT: strip commit-distance from the published matrix -- 'HEAD 24 commits ahead' describes our clone on the day we fetched it, not a property of AAMP. Publish tag + manifest version + CHANGELOG agreement, stamped with a generation date and commit hash."
+        },
+        {
+          "id": "aamp-identity",
+          "label": "What AAMP is",
+          "primary": {
+            "keyword": "what is aamp",
+            "intent": "informational",
+            "volume": null,
+            "difficulty": null,
+            "ownedBy": "/",
+            "competitors": ["iabtechlab.com/standards/aamp", "perform.digital", "star.global"]
+          },
+          "supporting": [
+            {
+              "keyword": "aamp iab tech lab",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/"
+            },
+            {
+              "keyword": "agentic advertising management protocols",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/"
+            },
+            {
+              "keyword": "is aamp one protocol",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/"
+            }
+          ],
+          "pillarPath": "/",
+          "note": "Rescoped: lead with the capability answer (IAB Tech Lab's agentic buying stack over OpenDirect 2.1 and OpenRTB) and only then the artifact count. The root page carries the three-plane thesis inherited from the killed /concepts/: control plane, ARTF mutation plane, embedding data plane -- and no file in the corpus maps a type across them."
+        },
+        {
+          "id": "aamp-repos",
+          "label": "Repository triage",
+          "primary": {
+            "keyword": "aamp repositories",
+            "intent": "informational",
+            "volume": null,
+            "difficulty": null,
+            "ownedBy": "/repos/",
+            "competitors": ["github.com/IABTechLab"]
+          },
+          "supporting": [
+            {
+              "keyword": "iabtechlab github aamp",
+              "intent": "navigational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/repos/"
+            },
+            {
+              "keyword": "aamp repo list",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/repos/"
+            },
+            {
+              "keyword": "aamp source code",
+              "intent": "navigational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/repos/"
+            }
+          ],
+          "pillarPath": "/repos/",
+          "note": "The one page GitHub structurally cannot render: a comparative maturity verdict. Two conditions -- drop the version column entirely (it duplicates /versions/), and do not publish commit counts as repo facts."
+        },
+        {
+          "id": "aamp-wire",
+          "label": "Shared wire contract",
+          "primary": {
+            "keyword": "aamp wire contract",
+            "intent": "informational",
+            "volume": null,
+            "difficulty": null,
+            "ownedBy": "/repos/iab-agentic-primitives/",
+            "competitors": []
+          },
+          "supporting": [
+            {
+              "keyword": "iab-agentic-primitives",
+              "intent": "navigational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/repos/iab-agentic-primitives/"
+            },
+            {
+              "keyword": "aamp conformance kit",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/repos/iab-agentic-primitives/"
+            },
+            {
+              "keyword": "aamp standards gap report",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/repos/iab-agentic-primitives/"
+            }
+          ],
+          "pillarPath": "/repos/iab-agentic-primitives/",
+          "note": "Rescoped from an index to a finding: both agent repos hard-pin a dependency the hub README omits, its README says the spec dirs are 'scaffolded but empty' while 40+ schemas sit on disk, and it self-declares WORK IN PROGRESS - NOT YET RELEASED. Do NOT publish a full enumeration -- being the public index of an organisation's explicitly-unreleased artifact, on a domain using that organisation's mark, is a materially worse nominative-fair-use posture than editorial commentary on published work."
+        },
+        {
+          "id": "aamp-agents",
+          "label": "Reference agent pair",
+          "primary": {
+            "keyword": "iab seller agent",
+            "intent": "informational",
+            "volume": null,
+            "difficulty": null,
+            "ownedBy": "/repos/reference-agents/",
+            "competitors": ["github.com/IABTechLab/seller-agent", "published MkDocs sites"]
+          },
+          "supporting": [
+            {
+              "keyword": "iab buyer agent",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/repos/reference-agents/"
+            },
+            {
+              "keyword": "aamp reference implementation",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/repos/reference-agents/"
+            },
+            {
+              "keyword": "aamp event type vocabulary",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/repos/reference-agents/"
+            }
+          ],
+          "pillarPath": "/repos/reference-agents/",
+          "note": "Merged buyer + seller into one comparative page. Both repos' docs/reference/*.md are machine-generated with DO-NOT-EDIT headers -- a solo mirror of an auto-generated inventory is strictly inferior to the source. The real story is comparative and invisible from either repo alone: 22 vs 40 event types reconciled to 51 canonical values in an unlisted third repo."
+        },
+        {
+          "id": "aamp-opendirect",
+          "label": "OpenDirect object model",
+          "primary": {
+            "keyword": "opendirect.json",
+            "intent": "informational",
+            "volume": null,
+            "difficulty": null,
+            "ownedBy": "/repos/agentic-direct/",
+            "competitors": [
+              "github.com/IABTechLab/agentic-direct",
+              "iabtechlab.com OpenDirect 2.1 spec"
+            ]
+          },
+          "supporting": [
+            {
+              "keyword": "opendirect 2.1 mcp",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/repos/agentic-direct/"
+            },
+            {
+              "keyword": "opendirect tools schema",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/repos/agentic-direct/"
+            }
+          ],
+          "pillarPath": "/repos/agentic-direct/",
+          "note": "Survives on one strong argument: a 71KB JSON blob GitHub will not render usefully, containing the richest described object model in the corpus. The README-misdescription correction (calls it 'OpenAPI 3.0 Schema' when it is an MCP manifest with no paths object) is real and checkable. This file is the single source for three pages -- this one owns the 40 schemas; the others cite."
+        },
+        {
+          "id": "aamp-audiences",
+          "label": "Embedding data plane",
+          "primary": {
+            "keyword": "iab agentic audiences",
+            "intent": "informational",
+            "volume": null,
+            "difficulty": null,
+            "ownedBy": "/repos/agentic-audiences/",
+            "competitors": ["LiveRamp (user context protocol branding)", "iabtechlab.com"]
+          },
+          "supporting": [
+            {
+              "keyword": "embedding exchange specification",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/repos/agentic-audiences/"
+            },
+            {
+              "keyword": "liveramp user context protocol",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/repos/agentic-audiences/"
+            }
+          ],
+          "pillarPath": "/repos/agentic-audiences/",
+          "note": "Framing INVERTED: lead with the 444-line six-class taxonomy and the JSON Schema 2020-12 envelope, which are genuine and unpublished elsewhere; land the four zero-byte spec files as the closing twist. The original title made the page's headline the fact that its subject does not exist -- a good citation hook and a bad reference page. Untagged, 11 commits, self-described as LiveRamp's initial proposal: may be superseded before it earns anything."
+        }
+      ]
+    },
+    "adtechglossary": {
+      "domain": "adtechglossary.noetis.dev",
+      "productionDomain": "adtechglossary.com",
+      "role": "glossary",
+      "clusters": [
+        {
+          "id": "gl-terminology",
+          "label": "AdCP to AAMP term map",
+          "primary": {
+            "keyword": "adcp vs aamp terminology",
+            "intent": "informational",
+            "volume": null,
+            "difficulty": null,
+            "ownedBy": "/concepts/adcp-vs-aamp-terminology/",
+            "competitors": ["perform.digital", "star.global"]
+          },
+          "supporting": [
+            {
+              "keyword": "adcp aamp mapping",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/concepts/adcp-vs-aamp-terminology/"
+            },
+            {
+              "keyword": "adcp product vs aamp product",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/concepts/adcp-vs-aamp-terminology/"
+            },
+            {
+              "keyword": "adcp media buy vs opendirect order",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/concepts/adcp-vs-aamp-terminology/"
+            }
+          ],
+          "pillarPath": "/concepts/adcp-vs-aamp-terminology/",
+          "note": "Rescoped to a pure term-to-term lookup table, cross-canonical with the hub's architectural comparison. Absorbs the merged aampexplorer /adcp-crosswalk/. The head term 'adcp vs aamp' belongs to the hub. Must disclose in the first screen that the AAMP corpus contains zero references to AdCP, so every mapping row is our inference -- that admission is what makes it citable rather than another vendor table."
+        },
+        {
+          "id": "gl-stacks",
+          "label": "Protocol and category anchors",
+          "primary": {
+            "keyword": "ad context protocol",
+            "intent": "informational",
+            "volume": null,
+            "difficulty": null,
+            "ownedBy": "/concepts/adcp/",
+            "competitors": [
+              "adcontextprotocol.org",
+              "docs.adcontextprotocol.org",
+              "scope3.com/agentic-advertising/adcp/",
+              "equativ.com",
+              "digiday.com"
+            ]
+          },
+          "supporting": [
+            {
+              "keyword": "aamp protocol",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/concepts/aamp/"
+            },
+            {
+              "keyword": "agentic advertising",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/concepts/agentic-advertising/"
+            },
+            {
+              "keyword": "what do the specs call agentic buying",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/concepts/agentic-buying/"
+            },
+            {
+              "keyword": "adcp transport",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/concepts/mcp-and-a2a/"
+            },
+            {
+              "keyword": "why is aamp built on opendirect",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/concepts/opendirect/"
+            },
+            {
+              "keyword": "sponsored intelligence advertising",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/concepts/sponsored-intelligence/"
+            },
+            {
+              "keyword": "ucp protocol advertising",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/concepts/ucp/"
+            },
+            {
+              "keyword": "which standard defines this term",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/concepts/"
+            }
+          ],
+          "pillarPath": "/concepts/",
+          "note": "We lose 'ad context protocol' and 'agentic advertising' to the standards body and Scope3 and should not pretend otherwise; these are definitional anchors for internal linking and entity typing. The one defensible angle on agentic advertising is the verified absence: neither AdCP's 123-term glossary nor any file in the AAMP corpus defines the phrase. /concepts/ rescoped from a protocol landscape hub (the hub's job) to a three-tier index: words a spec defines normatively, words it mentions in passing, words only vendors use. /concepts/agentic-buying/ rescoped so it does not cannibalise the exact-match domain. /concepts/artf/ was KILLED as a cross-site duplicate of aampexplorer's promoted ARTF page."
+        },
+        {
+          "id": "gl-roles",
+          "label": "Agent roles, identity and discovery",
+          "primary": {
+            "keyword": "sales agent vs seller agent",
+            "intent": "informational",
+            "volume": null,
+            "difficulty": null,
+            "ownedBy": "/agents/sales-agent/",
+            "competitors": ["scope3.com (agent taxonomy)", "prebid.org"]
+          },
+          "supporting": [
+            {
+              "keyword": "seller agent advertising",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/agents/seller-agent/"
+            },
+            {
+              "keyword": "buyer agent advertising",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/agents/buyer-agent/"
+            },
+            {
+              "keyword": "agent definition advertising",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/agents/agent/"
+            },
+            {
+              "keyword": "signal agent advertising",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/agents/signal-agent/"
+            },
+            {
+              "keyword": "brand agent advertising",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/agents/brand-agent/"
+            },
+            {
+              "keyword": "advertising governance agent",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/agents/governance-agent/"
+            },
+            {
+              "keyword": "agent card advertising",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/agents/agent-card/"
+            },
+            {
+              "keyword": "ad agent registry",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/agents/agent-registry/"
+            },
+            {
+              "keyword": "brand.json",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/agents/discovery-files/"
+            },
+            {
+              "keyword": "adcp specialism",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/agents/specialism/"
+            },
+            {
+              "keyword": "advertising agent roles",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/agents/"
+            }
+          ],
+          "pillarPath": "/agents/",
+          "note": "The section's whole defensibility rests on one verified grep: 'sales agent' returns zero hits across all eight IAB repos including iab-agentic-primitives. /agents/discovery-files/ is the renamed and merged adagents.json + brand.json page; it takes 'brand.json' because adcpexplorer killed its brand.json page and keeps 'adagents.json'. /agents/agent/ absorbs the deprecated Principal term; /agents/specialism/ absorbs storyboard. Do not build a rival registry -- both AAO and IAB Tech Lab are shipping one."
+        },
+        {
+          "id": "gl-objects",
+          "label": "Buying objects",
+          "primary": {
+            "keyword": "agentic media buying objects",
+            "intent": "informational",
+            "volume": null,
+            "difficulty": null,
+            "ownedBy": "/media-buying/",
+            "competitors": ["docs.adcontextprotocol.org", "iabtechlab.com OpenDirect"]
+          },
+          "supporting": [
+            {
+              "keyword": "media buy definition adcp",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/media-buying/media-buy/"
+            },
+            {
+              "keyword": "adcp package vs line item",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/media-buying/package/"
+            },
+            {
+              "keyword": "adcp product",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/media-buying/product/"
+            },
+            {
+              "keyword": "adcp account",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/media-buying/account/"
+            },
+            {
+              "keyword": "creative manifest advertising",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/media-buying/creative-manifest/"
+            }
+          ],
+          "pillarPath": "/media-buying/",
+          "note": "Now strengthened: iab-agentic-primitives ships Product.json, Order.json, Line.json and Package.json as first-class schemas, so the AAMP column can carry real schema text instead of one-line MCP manifest descriptions. /media-buying/account/ survives on a genuine false-friend: AdCP and OpenDirect use the same word for different concepts. Merged in: principal, canonical-format, idempotency-key."
+        },
+        {
+          "id": "gl-signals",
+          "label": "Signals, audiences and identity",
+          "primary": {
+            "keyword": "signal vs audience advertising",
+            "intent": "informational",
+            "volume": null,
+            "difficulty": null,
+            "ownedBy": "/signals/audience-vs-signal/",
+            "competitors": ["Bombora-powered intent vendors", "Eyeota Audience Discovery Tool"]
+          },
+          "supporting": [
+            {
+              "keyword": "signal definition advertising",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/signals/signal-definition/"
+            },
+            {
+              "keyword": "signal ref adcp",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/signals/signal-ref/"
+            },
+            {
+              "keyword": "adcp signal type",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/signals/signal-type/"
+            },
+            {
+              "keyword": "signal activation advertising",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/signals/activation/"
+            },
+            {
+              "keyword": "hashed identifier advertising",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/signals/hashed-identifier/"
+            },
+            {
+              "keyword": "embedding space id",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/signals/embedding-space-id/"
+            },
+            {
+              "keyword": "agentic audiences taxonomy",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/signals/embedding-taxonomy/"
+            },
+            {
+              "keyword": "advertising signals and audiences",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/signals/"
+            }
+          ],
+          "pillarPath": "/signals/audience-vs-signal/",
+          "note": "PROMOTED: audience-vs-signal is the second-best asset on the site. The distinction has a hard, checkable consequence -- an audience_id is account-scoped and cannot cross sellers, while a signal_ref is a portable reference. It absorbs the merged /signals/audience/. TWO CORRECTIONS carried from review: Signal Type is a six-value enum (marketplace, owned, destination, contextual, geographical, temporal) and third-party IS marketplace, so the original three-category page presented synonyms as distinct categories; and Signal Ref's interesting content is its three scopes (data_provider verifiable, signal_source trust-based, product), not a signal_id contrast. /signals/decisioning-platform/ was KILLED as a commodity term."
+        },
+        {
+          "id": "gl-realtime",
+          "label": "Real-time execution layer",
+          "primary": {
+            "keyword": "trusted match protocol",
+            "intent": "informational",
+            "volume": null,
+            "difficulty": null,
+            "ownedBy": "/realtime/trusted-match-protocol/",
+            "competitors": ["docs.adcontextprotocol.org/docs/trusted-match/"]
+          },
+          "supporting": [
+            {
+              "keyword": "artf mutation",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/realtime/rtb-mutation/"
+            },
+            {
+              "keyword": "artf intent enum",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/realtime/artf-intent/"
+            },
+            {
+              "keyword": "real time agentic advertising",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/realtime/"
+            }
+          ],
+          "pillarPath": "/realtime/trusted-match-protocol/",
+          "note": "PROMOTED and consolidated: structural privacy separation is the most quotable design decision in either standard and was diluted across four thin pages. TMP absorbs context_match, identity_match, tmp_router and axe; DefinedTerm supports fragment @ids so per-term machine-readability survives the merge. artf-intent absorbs the agent-manifest page because the manifest's intent vocabulary IS the other half of the two-vocabularies finding. The section's thesis: both camps have a real-time layer, they are architecturally opposite, and neither references the other."
+        },
+        {
+          "id": "gl-negotiation",
+          "label": "Deals, pricing and negotiation vocabulary",
+          "primary": {
+            "keyword": "agentic negotiation vocabulary",
+            "intent": "informational",
+            "volume": null,
+            "difficulty": null,
+            "ownedBy": "/negotiation/",
+            "competitors": ["SSP education hubs", "iabtechlab.com"]
+          },
+          "supporting": [
+            {
+              "keyword": "advertising quote agent",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/negotiation/quote/"
+            },
+            {
+              "keyword": "deal id agentic advertising",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/negotiation/deal/"
+            },
+            {
+              "keyword": "agentic negotiation round",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/negotiation/negotiation-round/"
+            },
+            {
+              "keyword": "access tier advertising agent",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/negotiation/access-tier/"
+            },
+            {
+              "keyword": "buyer agent trust status",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/negotiation/trust-status/"
+            },
+            {
+              "keyword": "aamp media kit",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/negotiation/media-kit/"
+            },
+            {
+              "keyword": "avails wire contract",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/negotiation/avails/"
+            },
+            {
+              "keyword": "change request advertising order",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/negotiation/change-request/"
+            },
+            {
+              "keyword": "adcp pricing option",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/negotiation/pricing-option/"
+            }
+          ],
+          "pillarPath": "/negotiation/",
+          "note": "Index rescoped to 'agentic negotiation vocabulary' so it does not collide with aampexplorer /negotiation/, which owns the head term and the canonical concession table. Term pages carry the four-action vocabulary and round-record fields and CITE the tier table rather than reproducing it. Sourcing correction: iab-agentic-primitives is now cloned and ships Quote.json, Deal.json, AvailsRequest/Response and DealLifecycle -- drop every 'derived from re-exports' banner and replace it with the WORK-IN-PROGRESS quotation. /negotiation/deal-type/ was KILLED: PG/PD/PA is commodity education owned by IAB and every SSP."
+        },
+        {
+          "id": "gl-governance",
+          "label": "Governance, privacy and compliance vocabulary",
+          "primary": {
+            "keyword": "advertising governance protocol",
+            "intent": "informational",
+            "volume": null,
+            "difficulty": null,
+            "ownedBy": "/governance/",
+            "competitors": ["docs.adcontextprotocol.org/docs/governance/"]
+          },
+          "supporting": [
+            {
+              "keyword": "policy category advertising",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/governance/policy-category/"
+            },
+            {
+              "keyword": "audience constraints advertising",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/governance/audience-constraints/"
+            },
+            {
+              "keyword": "property list advertising",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/governance/property-list/"
+            },
+            {
+              "keyword": "content standards advertising",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/governance/content-standards/"
+            }
+          ],
+          "pillarPath": "/governance/",
+          "note": "Uncontested and structurally undervalued; publishing before volume arrives is the whole strategy and this is the section where that argument is unambiguously correct. Restricted attributes merged into policy-category: eight of the ten registry values are GDPR Article 9 special categories verbatim, so the novelty is the registry encoding, not the list. Collection lists merged into property-list. Storyboard moved to /agents/specialism/. Stay protocol-specific on content standards -- brand suitability generally is DoubleVerify and IAS territory."
+        },
+        {
+          "id": "gl-sources",
+          "label": "Provenance and version pinning",
+          "primary": {
+            "keyword": "agentic advertising glossary sources",
+            "intent": "informational",
+            "volume": null,
+            "difficulty": null,
+            "ownedBy": "/about/sources-and-versions/",
+            "competitors": []
+          },
+          "supporting": [
+            {
+              "keyword": "agentic advertising glossary",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/"
+            },
+            {
+              "keyword": "glossary spec citation policy",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/about/sources-and-versions/"
+            }
+          ],
+          "pillarPath": "/about/sources-and-versions/",
+          "note": "PROMOTED from 77th to first. This is the page that makes every other page citable. TWO MANDATORY CORRECTIONS before it ships: iab-agentic-primitives IS present locally (v0.5.0-1-g2fc7029, 24+ JSON Schemas, an OpenAPI file, state exports) so the claimed gap does not exist; and its README declares WORK IN PROGRESS - NOT YET RELEASED while both shipping agents pin it, which is the gap that does. A sourcing page listing a gap that is not there while missing the one that is, is worse than none."
+        }
+      ]
+    },
+    "whatisagenticbuying": {
+      "domain": "whatisagenticbuying.noetis.dev",
+      "productionDomain": "whatisagenticbuying.com",
+      "role": "answer",
+      "clusters": [
+        {
+          "id": "wiab-term",
+          "label": "The term itself",
+          "primary": {
+            "keyword": "agentic buying",
+            "intent": "informational",
+            "volume": null,
+            "difficulty": null,
+            "ownedBy": "/",
+            "competitors": ["scope3.com/agentic-advertising/", "adgentek.ai", "indexexchange.com"]
+          },
+          "supporting": [
+            {
+              "keyword": "what is agentic buying",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/"
+            },
+            {
+              "keyword": "agentic buying definition",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/"
+            },
+            {
+              "keyword": "agentic media buying",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/"
+            },
+            {
+              "keyword": "ai agent media buying",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/"
+            }
+          ],
+          "pillarPath": "/",
+          "note": "Exact-match domain wins the term portfolio-wide. HONESTY CORRECTION that changes the page's thesis: AdCP DOES define the term, at docs/faq.mdx:141 ('AAMP is agentic bidding; AdCP is agentic buying'), as a partisan positioning line stamped 'As of April 2026' that still calls AdCP 3.0 GA. Its 123-term glossary declines to formalise it and the AAMP corpus never uses it. That three-way state is a more interesting and more defensible framing than 'nobody defined it'. Absorbs the two-sentence agentic-commerce disambiguation from the killed comparison page."
+        },
+        {
+          "id": "wiab-vs-prog",
+          "label": "Not programmatic",
+          "primary": {
+            "keyword": "agentic buying vs programmatic",
+            "intent": "commercial",
+            "volume": null,
+            "difficulty": null,
+            "ownedBy": "/agentic-buying-vs-programmatic/",
+            "competitors": ["vendor explainers (assertive, not evidenced)"]
+          },
+          "supporting": [
+            {
+              "keyword": "is agentic buying just programmatic",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/agentic-buying-vs-programmatic/"
+            },
+            {
+              "keyword": "agentic vs rtb",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/agentic-buying-vs-programmatic/"
+            },
+            {
+              "keyword": "programmatic media buying automation",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/agentic-buying-vs-programmatic/"
+            }
+          ],
+          "pillarPath": "/agentic-buying-vs-programmatic/",
+          "note": "PROMOTED to P1 and to the disambiguation pillar. The most common real-world objection to the category, asked in that exact form by skeptics. Strongest primary evidence on the site: design-principles.mdx:42 and get_products.mdx:11 both document that AdCP deliberately rejected a get_price_quote step because it 'splits one expert decision into two underspecified ones'. The normative source structurally cannot write the skeptic's page."
+        },
+        {
+          "id": "wiab-maturity",
+          "label": "Adoption and maturity",
+          "primary": {
+            "keyword": "is agentic buying real",
+            "intent": "commercial",
+            "volume": null,
+            "difficulty": null,
+            "ownedBy": "/maturity/",
+            "competitors": ["adgentek.ai statistics roundups", "IAB survey PR"]
+          },
+          "supporting": [
+            {
+              "keyword": "agentic buying adoption",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/maturity/"
+            },
+            {
+              "keyword": "agentic advertising hype",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/maturity/"
+            },
+            {
+              "keyword": "agentic buying production ready",
+              "intent": "commercial",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/maturity/"
+            }
+          ],
+          "pillarPath": "/maturity/",
+          "note": "PROMOTED to the site's second entry point. The only page no competitor can write, because it requires reading eight repos rather than a press release. Frame and title as a timestamped observation ('State of the AdCP and AAMP repositories, read on YYYY-MM-DD'), not a verdict, or the first fixed zero-byte file makes it look like sniping. Needs a CI checker that fails the build when the table stops matching the repos. Accept the named cost: this undercuts the neutrality that aampexplorer exists to signal. WATCH against hub /protocols/aamp/."
+        },
+        {
+          "id": "wiab-mechanics",
+          "label": "The sequence",
+          "primary": {
+            "keyword": "how does agentic buying work",
+            "intent": "informational",
+            "volume": null,
+            "difficulty": null,
+            "ownedBy": "/how-it-works/",
+            "competitors": ["docs.adcontextprotocol.org", "scope3.com"]
+          },
+          "supporting": [
+            {
+              "keyword": "agentic buying process",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/how-it-works/"
+            },
+            {
+              "keyword": "agentic buying step by step",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/how-it-works/"
+            },
+            {
+              "keyword": "sales agent seller agent naming mismatch",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/how-it-works/"
+            }
+          ],
+          "pillarPath": "/how-it-works/",
+          "note": "Absorbs the merged /agents/ page as a naming-divergence table encountered at the moment it blocks a reader. HARD LINE at draft time: one buy narrated end to end from the buyer's seat, AAMP present as a contrast paragraph and a link, never a co-equal column with its own operation table. The moment it becomes a matrix it is the hub's page on the wrong domain. WATCH against hub /guides/how-a-machine-buys-media/ at 90 days."
+        },
+        {
+          "id": "wiab-trust",
+          "label": "Provenance and disclaimer",
+          "primary": {
+            "keyword": "whatisagenticbuying sources",
+            "intent": "navigational",
+            "volume": null,
+            "difficulty": null,
+            "ownedBy": "/about/",
+            "competitors": []
+          },
+          "supporting": [],
+          "pillarPath": "/about/",
+          "note": "Rescoped: disclaimer, byline with sameAs, and a short method statement. The per-assertion file:line source ledger is DELETED -- line numbers in two actively developed repos rot within a release cycle, and a stale ledger converts the site's central credibility claim into a demonstrable falsehood at a single URL. Provenance moves inline, next to each claim. This domain uses no protocol name and is the safest trademark posture in the portfolio."
+        }
+      ]
+    },
+    "briefgateway": {
+      "domain": "briefgateway.noetis.dev",
+      "productionDomain": "briefgateway.com",
+      "role": "tool",
+      "clusters": [
+        {
+          "id": "bg-generator",
+          "label": "Brief generator",
+          "primary": {
+            "keyword": "adcp brief generator",
+            "intent": "transactional",
+            "volume": null,
+            "difficulty": null,
+            "ownedBy": "/",
+            "competitors": ["adcp Python SDK", "adcp-go", "agenticadvertising.org builders"]
+          },
+          "supporting": [
+            {
+              "keyword": "get_products request builder",
+              "intent": "transactional",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/"
+            },
+            {
+              "keyword": "agentic campaign brief generator",
+              "intent": "transactional",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/"
+            },
+            {
+              "keyword": "protocol-conformant brief",
+              "intent": "transactional",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/"
+            }
+          ],
+          "pillarPath": "/",
+          "note": "The only page that justifies a separate domain. Real competitor is not the SERP but the official adcp Python SDK and adcp-go, which are free, from the standards body, and strictly stricter (Pydantic rejects extra fields). Our edge is zero-install and shareable-by-URL. CORRECTION: product-filters.json has 33 properties, not 34. The brief-required-in-brief-mode / forbidden-in-wholesale rule exists ONLY in a description string -- no if/then, no not/required -- so the generator must implement it in hand-written code and say so on the page."
+        },
+        {
+          "id": "bg-format",
+          "label": "The brief format",
+          "primary": {
+            "keyword": "protocol-conformant campaign brief",
+            "intent": "informational",
+            "volume": null,
+            "difficulty": null,
+            "ownedBy": "/spec/",
+            "competitors": [
+              "docs.adcontextprotocol.org/docs/media-buy/product-discovery/brief-expectations"
+            ]
+          },
+          "supporting": [
+            {
+              "keyword": "adcp brief format",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/spec/"
+            },
+            {
+              "keyword": "machine-readable campaign brief",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/spec/"
+            },
+            {
+              "keyword": "what is an adcp brief",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/spec/"
+            }
+          ],
+          "pillarPath": "/spec/",
+          "note": "Survives on one sentence upstream never states in one place: the brief lives on get_products and nowhere else, and create_media_buy carries a commitment (idempotency_key, account, brand, start_time, end_time) rather than an ask. Absorbs the merged get_products field tables as a reference block backing the generator. Keep it short and answer-first -- past ~800 words of prose it becomes the how-to-write-a-brief page the plan's own notes forbid, competing with a 396-line normative doc."
+        },
+        {
+          "id": "bg-placement",
+          "label": "Brief string vs filters",
+          "primary": {
+            "keyword": "adcp brief vs filters",
+            "intent": "informational",
+            "volume": null,
+            "difficulty": null,
+            "ownedBy": "/spec/brief-vs-filters/",
+            "competitors": []
+          },
+          "supporting": [
+            {
+              "keyword": "what to put in an adcp brief",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/spec/brief-vs-filters/"
+            },
+            {
+              "keyword": "adcp structured filters",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/spec/brief-vs-filters/"
+            },
+            {
+              "keyword": "adcp buying_mode",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/spec/brief-vs-filters/"
+            },
+            {
+              "keyword": "hard constraints campaign brief",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/spec/brief-vs-filters/"
+            }
+          ],
+          "pillarPath": "/spec/brief-vs-filters/",
+          "note": "PROMOTED. The strongest editorial page on the site: it resolves a tension between two AdCP docs that AdCP never reconciles -- brief-expectations.mdx tells buyers to state budget, markets and brand safety as prose in the brief string, while core/product-filters.json ships budget_range, countries, regions, metros, format_kinds and trusted_match as structured hard constraints. A normative doc cannot editorialise about its own ambiguity. Absorbs the one-paragraph wholesale-mode point from the killed wholesale example page."
+        },
+        {
+          "id": "bg-crosswalk",
+          "label": "Human brief to agent brief",
+          "primary": {
+            "keyword": "creative brief to adcp",
+            "intent": "informational",
+            "volume": null,
+            "difficulty": null,
+            "ownedBy": "/crosswalk/creative-brief-to-adcp/",
+            "competitors": ["hubspot.com", "asana.com", "milanote.com", "typeform.com"]
+          },
+          "supporting": [
+            {
+              "keyword": "convert brief for ai agent",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/crosswalk/creative-brief-to-adcp/"
+            },
+            {
+              "keyword": "brief fields agents can read",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/crosswalk/creative-brief-to-adcp/"
+            },
+            {
+              "keyword": "campaign brief fields machine readable",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/crosswalk/creative-brief-to-adcp/"
+            }
+          ],
+          "pillarPath": "/crosswalk/creative-brief-to-adcp/",
+          "note": "PROMOTED. The most citable page on the site and the only one whose value does not decay as AdCP publishes more docs. No incumbent connects the two vocabularies: HubSpot and Asana define the agency brief and never mention a protocol; AdCP defines the protocol and never mentions the agency vocabulary. The honest third bucket -- tone, mandatories and deliverables have no home on get_products -- is what makes it quotable. Must be edited against /spec/brief-vs-filters/ or the two read as duplicates. Measure on citations, never on rank."
+        },
+        {
+          "id": "bg-aamp",
+          "label": "The other brief object",
+          "primary": {
+            "keyword": "aamp campaign brief",
+            "intent": "informational",
+            "volume": null,
+            "difficulty": null,
+            "ownedBy": "/compare/adcp-brief-vs-aamp-campaign-brief/",
+            "competitors": ["github.com/IABTechLab/buyer-agent"]
+          },
+          "supporting": [
+            {
+              "keyword": "iab buyer agent campaign brief",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/compare/adcp-brief-vs-aamp-campaign-brief/"
+            },
+            {
+              "keyword": "campaign brief json schema",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/compare/adcp-brief-vs-aamp-campaign-brief/"
+            },
+            {
+              "keyword": "adcp brief vs aamp brief",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/compare/adcp-brief-vs-aamp-campaign-brief/"
+            }
+          ],
+          "pillarPath": "/compare/adcp-brief-vs-aamp-campaign-brief/",
+          "note": "PROMOTED on content, but the head term 'adcp vs aamp' is ceded to the hub -- do not target it here. Two hard caveats. The CampaignBrief is a Pydantic model in a reference implementation, not a ratified IAB spec, and there is no JSON Schema for it anywhere; say so or it is inventing a protocol fact. And the claim that the two shipped example files would fail the model is INSPECTION-ONLY until executed -- iab-agentic-primitives is now cloned, so run it before publishing."
+        },
+        {
+          "id": "bg-lint",
+          "label": "Payload linting",
+          "primary": {
+            "keyword": "adcp brief linter",
+            "intent": "transactional",
+            "volume": null,
+            "difficulty": null,
+            "ownedBy": "/validate/",
+            "competitors": ["adcp Python SDK (Pydantic, stricter)", "a five-line ajv script"]
+          },
+          "supporting": [
+            {
+              "keyword": "validate get_products request",
+              "intent": "transactional",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/validate/"
+            },
+            {
+              "keyword": "adcp deprecated fields",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/validate/"
+            },
+            {
+              "keyword": "adcp payload validation",
+              "intent": "transactional",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/validate/"
+            }
+          ],
+          "pillarPath": "/validate/",
+          "note": "Rescoped from JSON Schema validator to LINTER, because both request schemas set additionalProperties:true and the brief/buying_mode rule lives only in a description string -- a plain ajv pass catches neither of the two most likely errors, while the official SDK already rejects extra fields for free. The linter encodes the prose-only rules no schema validator can see, flags format_ids / bid_price / plan_id / adcp_major_version / required_axe_integrations, and normalises adcp_version to release precision (pattern is ^\\d+\\.\\d+, so '3.1.1' is invalid on the wire). Nobody ships that."
+        },
+        {
+          "id": "bg-examples",
+          "label": "Worked payloads",
+          "primary": {
+            "keyword": "adcp request payload examples",
+            "intent": "informational",
+            "volume": null,
+            "difficulty": null,
+            "ownedBy": "/examples/",
+            "competitors": ["docs.adcontextprotocol.org code snippets"]
+          },
+          "supporting": [
+            {
+              "keyword": "ctv campaign brief example",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/examples/ctv-guaranteed-launch/"
+            },
+            {
+              "keyword": "retail media brief example",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/examples/retail-media-catalog/"
+            },
+            {
+              "keyword": "filled media brief example",
+              "intent": "informational",
+              "volume": null,
+              "difficulty": null,
+              "ownedBy": "/examples/"
+            }
+          ],
+          "pillarPath": "/examples/",
+          "note": "Index rescoped from a routing page to a downloadable, linter-checked payload library -- a Dataset-shaped asset an assistant can cite and a developer can curl. AdCP ships 34 fixture JSONs but none are request payloads. Two examples survive of four: CTV (the only page a non-protocol human would search for, and the intersection of the two openings the SERP analysis named) and retail media (rebuilt around a filled brief-mode payload, since AdCP's own catalog example is wholesale mode and its mechanics are documented twice upstream)."
+        },
+        {
+          "id": "bg-trust",
+          "label": "Provenance and disclaimer",
+          "primary": {
+            "keyword": "brief gateway",
+            "intent": "navigational",
+            "volume": null,
+            "difficulty": null,
+            "ownedBy": "/about/",
+            "competitors": []
+          },
+          "supporting": [],
+          "pillarPath": "/about/",
+          "note": "Structural page: Organization @id node, provenance stamp (which AdCP release, which snapshot date), non-affiliation disclaimer, and the deprecation list salvaged from the killed changelog."
+        }
+      ]
+    }
+  },
+  "entities": [
+    {
+      "name": "Agentic advertising",
+      "aliases": [],
+      "canonicalUrl": "https://adtechglossary.noetis.dev/concepts/agentic-advertising/",
+      "definedBy": "adtechglossary",
+      "relatedTo": ["Agentic buying", "Ad Context Protocol", "AAMP"]
+    },
+    {
+      "name": "Agentic buying",
+      "aliases": ["agentic media buying"],
+      "canonicalUrl": "https://whatisagenticbuying.noetis.dev/",
+      "definedBy": "whatisagenticbuying",
+      "relatedTo": ["Agentic advertising", "Ad Context Protocol", "AAMP", "Buyer agent"]
+    },
+    {
+      "name": "Ad Context Protocol",
+      "aliases": ["AdCP"],
+      "canonicalUrl": "https://adtechglossary.noetis.dev/concepts/adcp/",
+      "definedBy": "adtechglossary",
+      "relatedTo": ["AgenticAdvertising.org", "MCP", "A2A", "Media buy", "Trusted Match Protocol"]
+    },
+    {
+      "name": "AAMP",
+      "aliases": [
+        "Agentic Advertising Management Protocols",
+        "Agent-to-Agent Marketplace Protocol",
+        "IAB Agent & API Management Protocol",
+        "Agentic Advertising Marketplace Protocol"
+      ],
+      "canonicalUrl": "https://adtechglossary.noetis.dev/concepts/aamp/",
+      "definedBy": "adtechglossary",
+      "relatedTo": ["IAB Tech Lab", "OpenDirect 2.1", "ARTF", "Seller agent", "Buyer agent"]
+    },
+    {
+      "name": "AAMP acronym expansions",
+      "aliases": [],
+      "canonicalUrl": "https://aampexplorer.noetis.dev/what-does-aamp-stand-for/",
+      "definedBy": "aampexplorer",
+      "relatedTo": ["AAMP"]
+    },
+    {
+      "name": "AgenticAdvertising.org",
+      "aliases": ["AAO"],
+      "canonicalUrl": "https://agenticadlab.noetis.dev/protocols/adcp-vs-aamp/",
+      "definedBy": "agenticadlab",
+      "relatedTo": ["Ad Context Protocol", "Specialism"]
+    },
+    {
+      "name": "IAB Tech Lab",
+      "aliases": [],
+      "canonicalUrl": "https://agenticadlab.noetis.dev/protocols/adcp-vs-aamp/",
+      "definedBy": "agenticadlab",
+      "relatedTo": ["AAMP", "OpenDirect 2.1", "ARTF"]
+    },
+    {
+      "name": "MCP",
+      "aliases": ["Model Context Protocol"],
+      "canonicalUrl": "https://adtechglossary.noetis.dev/concepts/mcp-and-a2a/",
+      "definedBy": "adtechglossary",
+      "relatedTo": ["A2A", "Ad Context Protocol", "AAMP"]
+    },
+    {
+      "name": "A2A",
+      "aliases": ["Agent2Agent"],
+      "canonicalUrl": "https://adtechglossary.noetis.dev/concepts/mcp-and-a2a/",
+      "definedBy": "adtechglossary",
+      "relatedTo": ["MCP", "Agent card"]
+    },
+    {
+      "name": "OpenDirect 2.1",
+      "aliases": [],
+      "canonicalUrl": "https://adtechglossary.noetis.dev/concepts/opendirect/",
+      "definedBy": "adtechglossary",
+      "relatedTo": ["AAMP", "opendirect.json", "Media buy"]
+    },
+    {
+      "name": "opendirect.json",
+      "aliases": [],
+      "canonicalUrl": "https://aampexplorer.noetis.dev/repos/agentic-direct/",
+      "definedBy": "aampexplorer",
+      "relatedTo": ["OpenDirect 2.1", "MCP"]
+    },
+    {
+      "name": "Sales agent",
+      "aliases": [],
+      "canonicalUrl": "https://adtechglossary.noetis.dev/agents/sales-agent/",
+      "definedBy": "adtechglossary",
+      "relatedTo": ["Seller agent", "Ad Context Protocol", "adagents.json"]
+    },
+    {
+      "name": "Seller agent",
+      "aliases": [],
+      "canonicalUrl": "https://adtechglossary.noetis.dev/agents/seller-agent/",
+      "definedBy": "adtechglossary",
+      "relatedTo": ["Sales agent", "AAMP", "Agent card", "Quote"]
+    },
+    {
+      "name": "Buyer agent",
+      "aliases": ["orchestrator"],
+      "canonicalUrl": "https://adtechglossary.noetis.dev/agents/buyer-agent/",
+      "definedBy": "adtechglossary",
+      "relatedTo": ["Seller agent", "AAMP CampaignBrief", "Media kit"]
+    },
+    {
+      "name": "Agent",
+      "aliases": ["authenticated caller", "principal"],
+      "canonicalUrl": "https://adtechglossary.noetis.dev/agents/agent/",
+      "definedBy": "adtechglossary",
+      "relatedTo": ["Account", "Sales agent"]
+    },
+    {
+      "name": "Signal agent",
+      "aliases": [],
+      "canonicalUrl": "https://adtechglossary.noetis.dev/agents/signal-agent/",
+      "definedBy": "adtechglossary",
+      "relatedTo": ["Signal definition", "Signal activation"]
+    },
+    {
+      "name": "Brand agent",
+      "aliases": [],
+      "canonicalUrl": "https://adtechglossary.noetis.dev/agents/brand-agent/",
+      "definedBy": "adtechglossary",
+      "relatedTo": ["brand.json", "Sponsored Intelligence"]
+    },
+    {
+      "name": "Governance agent",
+      "aliases": [],
+      "canonicalUrl": "https://adtechglossary.noetis.dev/agents/governance-agent/",
+      "definedBy": "adtechglossary",
+      "relatedTo": ["Policy category", "Audience constraints", "Account"]
+    },
+    {
+      "name": "Agent card",
+      "aliases": ["/.well-known/agent.json"],
+      "canonicalUrl": "https://adtechglossary.noetis.dev/agents/agent-card/",
+      "definedBy": "adtechglossary",
+      "relatedTo": ["Agent registry", "A2A", "Seller agent"]
+    },
+    {
+      "name": "Agent registry",
+      "aliases": ["AAMP registry"],
+      "canonicalUrl": "https://adtechglossary.noetis.dev/agents/agent-registry/",
+      "definedBy": "adtechglossary",
+      "relatedTo": ["Trust status", "Agent card"]
+    },
+    {
+      "name": "Specialism",
+      "aliases": ["capability claim"],
+      "canonicalUrl": "https://adtechglossary.noetis.dev/agents/specialism/",
+      "definedBy": "adtechglossary",
+      "relatedTo": ["Storyboard", "get_adcp_capabilities"]
+    },
+    {
+      "name": "Storyboard",
+      "aliases": ["conformance bundle"],
+      "canonicalUrl": "https://adtechglossary.noetis.dev/agents/specialism/#storyboard",
+      "definedBy": "adtechglossary",
+      "relatedTo": ["Specialism"]
+    },
+    {
+      "name": "adagents.json",
+      "aliases": [],
+      "canonicalUrl": "https://adcpexplorer.noetis.dev/discovery/adagents-json/",
+      "definedBy": "adcpexplorer",
+      "relatedTo": ["brand.json", "Property", "Signal definition", "Sales agent"]
+    },
+    {
+      "name": "brand.json",
+      "aliases": [],
+      "canonicalUrl": "https://adtechglossary.noetis.dev/agents/discovery-files/",
+      "definedBy": "adtechglossary",
+      "relatedTo": ["adagents.json", "Brand agent"]
+    },
+    {
+      "name": "Media buy",
+      "aliases": [],
+      "canonicalUrl": "https://adtechglossary.noetis.dev/media-buying/media-buy/",
+      "definedBy": "adtechglossary",
+      "relatedTo": ["Package", "Account", "create_media_buy", "Idempotency key"]
+    },
+    {
+      "name": "Package",
+      "aliases": ["line item"],
+      "canonicalUrl": "https://adtechglossary.noetis.dev/media-buying/package/",
+      "definedBy": "adtechglossary",
+      "relatedTo": ["Media buy", "Product", "Pricing option"]
+    },
+    {
+      "name": "Product",
+      "aliases": [],
+      "canonicalUrl": "https://adtechglossary.noetis.dev/media-buying/product/",
+      "definedBy": "adtechglossary",
+      "relatedTo": ["get_products", "Package", "Media kit"]
+    },
+    {
+      "name": "Account",
+      "aliases": [],
+      "canonicalUrl": "https://adtechglossary.noetis.dev/media-buying/account/",
+      "definedBy": "adtechglossary",
+      "relatedTo": ["Agent", "Governance agent"]
+    },
+    {
+      "name": "Creative manifest",
+      "aliases": ["canonical format"],
+      "canonicalUrl": "https://adtechglossary.noetis.dev/media-buying/creative-manifest/",
+      "definedBy": "adtechglossary",
+      "relatedTo": ["build_creative", "Content standards"]
+    },
+    {
+      "name": "Idempotency key",
+      "aliases": [],
+      "canonicalUrl": "https://adtechglossary.noetis.dev/media-buying/media-buy/#idempotency-key",
+      "definedBy": "adtechglossary",
+      "relatedTo": ["Media buy", "create_media_buy"]
+    },
+    {
+      "name": "Signal definition",
+      "aliases": ["signal"],
+      "canonicalUrl": "https://adtechglossary.noetis.dev/signals/signal-definition/",
+      "definedBy": "adtechglossary",
+      "relatedTo": ["Signal ref", "Signal type", "adagents.json"]
+    },
+    {
+      "name": "Signal ref",
+      "aliases": [],
+      "canonicalUrl": "https://adtechglossary.noetis.dev/signals/signal-ref/",
+      "definedBy": "adtechglossary",
+      "relatedTo": ["Signal definition", "Audience constraints"]
+    },
+    {
+      "name": "Signal type",
+      "aliases": ["owned signal", "marketplace signal", "third-party signal"],
+      "canonicalUrl": "https://adtechglossary.noetis.dev/signals/signal-type/",
+      "definedBy": "adtechglossary",
+      "relatedTo": ["Signal definition"]
+    },
+    {
+      "name": "Audience",
+      "aliases": ["first-party audience"],
+      "canonicalUrl": "https://adtechglossary.noetis.dev/signals/audience-vs-signal/",
+      "definedBy": "adtechglossary",
+      "relatedTo": ["Hashed identifier", "Signal definition"]
+    },
+    {
+      "name": "Hashed identifier",
+      "aliases": ["UID"],
+      "canonicalUrl": "https://adtechglossary.noetis.dev/signals/hashed-identifier/",
+      "definedBy": "adtechglossary",
+      "relatedTo": ["Audience", "Restricted attribute"]
+    },
+    {
+      "name": "Signal activation",
+      "aliases": ["deployment", "seat"],
+      "canonicalUrl": "https://adtechglossary.noetis.dev/signals/activation/",
+      "definedBy": "adtechglossary",
+      "relatedTo": ["Signal definition", "Signal agent"]
+    },
+    {
+      "name": "Embedding space ID",
+      "aliases": [],
+      "canonicalUrl": "https://adtechglossary.noetis.dev/signals/embedding-space-id/",
+      "definedBy": "adtechglossary",
+      "relatedTo": ["Embedding taxonomy", "UCP"]
+    },
+    {
+      "name": "Embedding taxonomy",
+      "aliases": ["signal classes"],
+      "canonicalUrl": "https://adtechglossary.noetis.dev/signals/embedding-taxonomy/",
+      "definedBy": "adtechglossary",
+      "relatedTo": ["Embedding space ID", "AAMP"]
+    },
+    {
+      "name": "Trusted Match Protocol",
+      "aliases": ["TMP", "AXE"],
+      "canonicalUrl": "https://adtechglossary.noetis.dev/realtime/trusted-match-protocol/",
+      "definedBy": "adtechglossary",
+      "relatedTo": ["context_match", "ARTF", "Ad Context Protocol"]
+    },
+    {
+      "name": "context_match / identity_match",
+      "aliases": [],
+      "canonicalUrl": "https://adcpexplorer.noetis.dev/areas/trusted-match/",
+      "definedBy": "adcpexplorer",
+      "relatedTo": ["Trusted Match Protocol"]
+    },
+    {
+      "name": "ARTF",
+      "aliases": ["Agentic Real-Time Framework", "agentic rtb framework"],
+      "canonicalUrl": "https://aampexplorer.noetis.dev/repos/agentic-rtb-framework/",
+      "definedBy": "aampexplorer",
+      "relatedTo": ["Mutation", "Intent enum", "AAMP", "Trusted Match Protocol"]
+    },
+    {
+      "name": "Mutation",
+      "aliases": ["RTB mutation"],
+      "canonicalUrl": "https://adtechglossary.noetis.dev/realtime/rtb-mutation/",
+      "definedBy": "adtechglossary",
+      "relatedTo": ["ARTF", "Intent enum"]
+    },
+    {
+      "name": "Intent enum",
+      "aliases": ["ARTF intent"],
+      "canonicalUrl": "https://adtechglossary.noetis.dev/realtime/artf-intent/",
+      "definedBy": "adtechglossary",
+      "relatedTo": ["ARTF", "Mutation"]
+    },
+    {
+      "name": "Quote",
+      "aliases": [],
+      "canonicalUrl": "https://adtechglossary.noetis.dev/negotiation/quote/",
+      "definedBy": "adtechglossary",
+      "relatedTo": ["Deal", "Negotiation round", "Access tier", "Avails"]
+    },
+    {
+      "name": "Negotiation round",
+      "aliases": ["negotiation action"],
+      "canonicalUrl": "https://adtechglossary.noetis.dev/negotiation/negotiation-round/",
+      "definedBy": "adtechglossary",
+      "relatedTo": ["Quote", "Access tier"]
+    },
+    {
+      "name": "Deal",
+      "aliases": ["deal ID"],
+      "canonicalUrl": "https://adtechglossary.noetis.dev/negotiation/deal/",
+      "definedBy": "adtechglossary",
+      "relatedTo": ["Quote", "Change request"]
+    },
+    {
+      "name": "Access tier",
+      "aliases": [],
+      "canonicalUrl": "https://adtechglossary.noetis.dev/negotiation/access-tier/",
+      "definedBy": "adtechglossary",
+      "relatedTo": ["Trust status", "Quote"]
+    },
+    {
+      "name": "Trust status",
+      "aliases": ["trust lattice"],
+      "canonicalUrl": "https://adtechglossary.noetis.dev/negotiation/trust-status/",
+      "definedBy": "adtechglossary",
+      "relatedTo": ["Access tier", "Agent registry"]
+    },
+    {
+      "name": "Media kit",
+      "aliases": [],
+      "canonicalUrl": "https://adtechglossary.noetis.dev/negotiation/media-kit/",
+      "definedBy": "adtechglossary",
+      "relatedTo": ["Product", "Avails", "Buyer agent"]
+    },
+    {
+      "name": "Avails",
+      "aliases": [],
+      "canonicalUrl": "https://adtechglossary.noetis.dev/negotiation/avails/",
+      "definedBy": "adtechglossary",
+      "relatedTo": ["Media kit", "Quote", "iab-agentic-primitives"]
+    },
+    {
+      "name": "Change request",
+      "aliases": [],
+      "canonicalUrl": "https://adtechglossary.noetis.dev/negotiation/change-request/",
+      "definedBy": "adtechglossary",
+      "relatedTo": ["Deal", "OpenDirect 2.1"]
+    },
+    {
+      "name": "Pricing option",
+      "aliases": ["pricing model"],
+      "canonicalUrl": "https://adtechglossary.noetis.dev/negotiation/pricing-option/",
+      "definedBy": "adtechglossary",
+      "relatedTo": ["Product", "Package", "Quote"]
+    },
+    {
+      "name": "Policy category",
+      "aliases": ["restricted attribute"],
+      "canonicalUrl": "https://adtechglossary.noetis.dev/governance/policy-category/",
+      "definedBy": "adtechglossary",
+      "relatedTo": ["Audience constraints", "Governance agent"]
+    },
+    {
+      "name": "Audience constraints",
+      "aliases": ["audience selector"],
+      "canonicalUrl": "https://adtechglossary.noetis.dev/governance/audience-constraints/",
+      "definedBy": "adtechglossary",
+      "relatedTo": ["Signal ref", "Policy category"]
+    },
+    {
+      "name": "Property",
+      "aliases": ["property list", "collection list"],
+      "canonicalUrl": "https://adtechglossary.noetis.dev/governance/property-list/",
+      "definedBy": "adtechglossary",
+      "relatedTo": ["adagents.json", "Content standards"]
+    },
+    {
+      "name": "Content standards",
+      "aliases": ["brand suitability criteria"],
+      "canonicalUrl": "https://adtechglossary.noetis.dev/governance/content-standards/",
+      "definedBy": "adtechglossary",
+      "relatedTo": ["Property", "Creative manifest"]
+    },
+    {
+      "name": "Sponsored Intelligence",
+      "aliases": ["SI"],
+      "canonicalUrl": "https://adtechglossary.noetis.dev/concepts/sponsored-intelligence/",
+      "definedBy": "adtechglossary",
+      "relatedTo": ["Brand agent", "Ad Context Protocol"]
+    },
+    {
+      "name": "UCP",
+      "aliases": ["Universal Commerce Protocol", "User Context Protocol"],
+      "canonicalUrl": "https://adtechglossary.noetis.dev/concepts/ucp/",
+      "definedBy": "adtechglossary",
+      "relatedTo": ["Embedding space ID", "Sponsored Intelligence"]
+    },
+    {
+      "name": "AdCP schema registry",
+      "aliases": ["index.json"],
+      "canonicalUrl": "https://adcpexplorer.noetis.dev/schemas/",
+      "definedBy": "adcpexplorer",
+      "relatedTo": ["Ad Context Protocol", "get_products"]
+    },
+    {
+      "name": "get_products",
+      "aliases": [],
+      "canonicalUrl": "https://adcpexplorer.noetis.dev/operations/get-products/",
+      "definedBy": "adcpexplorer",
+      "relatedTo": ["Product", "AdCP brief", "create_media_buy"]
+    },
+    {
+      "name": "create_media_buy",
+      "aliases": [],
+      "canonicalUrl": "https://adcpexplorer.noetis.dev/operations/create-media-buy/",
+      "definedBy": "adcpexplorer",
+      "relatedTo": ["Media buy", "Package", "Idempotency key"]
+    },
+    {
+      "name": "get_adcp_capabilities",
+      "aliases": [],
+      "canonicalUrl": "https://adcpexplorer.noetis.dev/operations/get-adcp-capabilities/",
+      "definedBy": "adcpexplorer",
+      "relatedTo": ["Specialism", "Agent card"]
+    },
+    {
+      "name": "build_creative",
+      "aliases": [],
+      "canonicalUrl": "https://adcpexplorer.noetis.dev/operations/build-creative/",
+      "definedBy": "adcpexplorer",
+      "relatedTo": ["Creative manifest"]
+    },
+    {
+      "name": "AdCP brief",
+      "aliases": ["brief string"],
+      "canonicalUrl": "https://briefgateway.noetis.dev/spec/",
+      "definedBy": "briefgateway",
+      "relatedTo": ["get_products", "AAMP CampaignBrief"]
+    },
+    {
+      "name": "AAMP CampaignBrief",
+      "aliases": [],
+      "canonicalUrl": "https://briefgateway.noetis.dev/compare/adcp-brief-vs-aamp-campaign-brief/",
+      "definedBy": "briefgateway",
+      "relatedTo": ["AdCP brief", "Buyer agent"]
+    },
+    {
+      "name": "iab-agentic-primitives",
+      "aliases": ["AAMP wire contract"],
+      "canonicalUrl": "https://aampexplorer.noetis.dev/repos/iab-agentic-primitives/",
+      "definedBy": "aampexplorer",
+      "relatedTo": ["Seller agent", "Buyer agent", "Avails", "Quote", "Deal"]
+    }
+  ],
+  "ownership": [
+    { "keyword": "adcp operations", "site": "adcpexplorer", "path": "/" },
+    { "keyword": "adcp task reference", "site": "adcpexplorer", "path": "/" },
+    { "keyword": "adcp tasks list", "site": "adcpexplorer", "path": "/" },
+    { "keyword": "adcp required tasks", "site": "adcpexplorer", "path": "/" },
+    { "keyword": "adcp operation matrix", "site": "adcpexplorer", "path": "/" },
+    { "keyword": "adcp json schema", "site": "adcpexplorer", "path": "/schemas/" },
+    { "keyword": "adcp schema registry", "site": "adcpexplorer", "path": "/schemas/" },
+    { "keyword": "adcp core objects", "site": "adcpexplorer", "path": "/schemas/" },
+    { "keyword": "adcp $ref resolution", "site": "adcpexplorer", "path": "/schemas/" },
+    { "keyword": "adcp unregistered schemas", "site": "adcpexplorer", "path": "/schemas/" },
+    { "keyword": "get_products adcp", "site": "adcpexplorer", "path": "/operations/get-products/" },
+    {
+      "keyword": "adcp product schema",
+      "site": "adcpexplorer",
+      "path": "/operations/get-products/"
+    },
+    {
+      "keyword": "create_media_buy",
+      "site": "adcpexplorer",
+      "path": "/operations/create-media-buy/"
+    },
+    { "keyword": "adcp media buy protocol", "site": "adcpexplorer", "path": "/areas/media-buy/" },
+    { "keyword": "adcp conversion tracking", "site": "adcpexplorer", "path": "/areas/media-buy/" },
+    { "keyword": "adcp pause campaign", "site": "adcpexplorer", "path": "/areas/media-buy/" },
+    { "keyword": "adcp protocol envelope", "site": "adcpexplorer", "path": "/areas/protocol/" },
+    { "keyword": "adcp async response", "site": "adcpexplorer", "path": "/areas/protocol/" },
+    { "keyword": "adcp error codes", "site": "adcpexplorer", "path": "/areas/protocol/" },
+    { "keyword": "adcp task lifecycle", "site": "adcpexplorer", "path": "/areas/protocol/" },
+    {
+      "keyword": "get_adcp_capabilities",
+      "site": "adcpexplorer",
+      "path": "/operations/get-adcp-capabilities/"
+    },
+    {
+      "keyword": "adcp version negotiation",
+      "site": "adcpexplorer",
+      "path": "/operations/get-adcp-capabilities/"
+    },
+    {
+      "keyword": "build_creative adcp",
+      "site": "adcpexplorer",
+      "path": "/operations/build-creative/"
+    },
+    {
+      "keyword": "adcp creative manifest schema",
+      "site": "adcpexplorer",
+      "path": "/operations/build-creative/"
+    },
+    { "keyword": "adcp canonical formats", "site": "adcpexplorer", "path": "/areas/creative/" },
+    { "keyword": "adcp creative protocol", "site": "adcpexplorer", "path": "/areas/creative/" },
+    { "keyword": "list_creative_formats", "site": "adcpexplorer", "path": "/areas/creative/" },
+    { "keyword": "adcp governance protocol", "site": "adcpexplorer", "path": "/areas/governance/" },
+    { "keyword": "check_governance", "site": "adcpexplorer", "path": "/areas/governance/" },
+    { "keyword": "sync_plans adcp", "site": "adcpexplorer", "path": "/areas/governance/" },
+    { "keyword": "adcp policy registry", "site": "adcpexplorer", "path": "/areas/governance/" },
+    {
+      "keyword": "adcp property list",
+      "site": "adcpexplorer",
+      "path": "/areas/governance/lists-and-standards/"
+    },
+    {
+      "keyword": "adcp list crud contract",
+      "site": "adcpexplorer",
+      "path": "/areas/governance/lists-and-standards/"
+    },
+    { "keyword": "adcp signals protocol", "site": "adcpexplorer", "path": "/areas/signals/" },
+    { "keyword": "get_signals adcp", "site": "adcpexplorer", "path": "/areas/signals/" },
+    { "keyword": "activate_signal", "site": "adcpexplorer", "path": "/areas/signals/" },
+    { "keyword": "adcp wholesale feed", "site": "adcpexplorer", "path": "/areas/signals/" },
+    {
+      "keyword": "sponsored intelligence vs acp",
+      "site": "adcpexplorer",
+      "path": "/areas/sponsored-intelligence/"
+    },
+    {
+      "keyword": "si_initiate_session",
+      "site": "adcpexplorer",
+      "path": "/areas/sponsored-intelligence/"
+    },
+    {
+      "keyword": "adcp assistant commerce",
+      "site": "adcpexplorer",
+      "path": "/areas/sponsored-intelligence/"
+    },
+    {
+      "keyword": "sponsored intelligence protocol operations",
+      "site": "adcpexplorer",
+      "path": "/areas/sponsored-intelligence/"
+    },
+    { "keyword": "adcp brand protocol", "site": "adcpexplorer", "path": "/areas/brand/" },
+    { "keyword": "get_brand_identity", "site": "adcpexplorer", "path": "/areas/brand/" },
+    { "keyword": "acquire_rights adcp", "site": "adcpexplorer", "path": "/areas/brand/" },
+    { "keyword": "verify_brand_claim", "site": "adcpexplorer", "path": "/areas/brand/" },
+    {
+      "keyword": "context_match identity_match",
+      "site": "adcpexplorer",
+      "path": "/areas/trusted-match/"
+    },
+    {
+      "keyword": "adcp trusted match field reference",
+      "site": "adcpexplorer",
+      "path": "/areas/trusted-match/"
+    },
+    { "keyword": "adcp accounts protocol", "site": "adcpexplorer", "path": "/areas/accounts/" },
+    { "keyword": "sync_accounts adcp", "site": "adcpexplorer", "path": "/areas/accounts/" },
+    { "keyword": "get_account_financials", "site": "adcpexplorer", "path": "/areas/accounts/" },
+    { "keyword": "adagents.json", "site": "adcpexplorer", "path": "/discovery/adagents-json/" },
+    {
+      "keyword": "adagents.json schema",
+      "site": "adcpexplorer",
+      "path": "/discovery/adagents-json/"
+    },
+    {
+      "keyword": "adagents.json example",
+      "site": "adcpexplorer",
+      "path": "/discovery/adagents-json/"
+    },
+    {
+      "keyword": "well-known adagents",
+      "site": "adcpexplorer",
+      "path": "/discovery/adagents-json/"
+    },
+    {
+      "keyword": "adcp authorized agents",
+      "site": "adcpexplorer",
+      "path": "/discovery/adagents-json/"
+    },
+    { "keyword": "what is aamp", "site": "aampexplorer", "path": "/" },
+    { "keyword": "aamp iab tech lab", "site": "aampexplorer", "path": "/" },
+    { "keyword": "agentic advertising management protocols", "site": "aampexplorer", "path": "/" },
+    { "keyword": "is aamp one protocol", "site": "aampexplorer", "path": "/" },
+    {
+      "keyword": "what does aamp stand for",
+      "site": "aampexplorer",
+      "path": "/what-does-aamp-stand-for/"
+    },
+    { "keyword": "aamp acronym", "site": "aampexplorer", "path": "/what-does-aamp-stand-for/" },
+    {
+      "keyword": "aamp meaning advertising",
+      "site": "aampexplorer",
+      "path": "/what-does-aamp-stand-for/"
+    },
+    {
+      "keyword": "agent-to-agent marketplace protocol",
+      "site": "aampexplorer",
+      "path": "/what-does-aamp-stand-for/"
+    },
+    {
+      "keyword": "iab agent api management protocol",
+      "site": "aampexplorer",
+      "path": "/what-does-aamp-stand-for/"
+    },
+    {
+      "keyword": "agent to agent deal negotiation",
+      "site": "aampexplorer",
+      "path": "/negotiation/"
+    },
+    {
+      "keyword": "concession cap advertising agent",
+      "site": "aampexplorer",
+      "path": "/negotiation/"
+    },
+    { "keyword": "quote then book", "site": "aampexplorer", "path": "/negotiation/" },
+    {
+      "keyword": "final_offer counter accept reject",
+      "site": "aampexplorer",
+      "path": "/negotiation/"
+    },
+    {
+      "keyword": "automated media buying negotiation",
+      "site": "aampexplorer",
+      "path": "/negotiation/"
+    },
+    {
+      "keyword": "agentic real-time framework",
+      "site": "aampexplorer",
+      "path": "/repos/agentic-rtb-framework/"
+    },
+    {
+      "keyword": "artf iab tech lab",
+      "site": "aampexplorer",
+      "path": "/repos/agentic-rtb-framework/"
+    },
+    { "keyword": "extend_rtb", "site": "aampexplorer", "path": "/repos/agentic-rtb-framework/" },
+    {
+      "keyword": "bidstream mutation protobuf",
+      "site": "aampexplorer",
+      "path": "/repos/agentic-rtb-framework/"
+    },
+    { "keyword": "artf v1.0", "site": "aampexplorer", "path": "/repos/agentic-rtb-framework/" },
+    { "keyword": "aamp version", "site": "aampexplorer", "path": "/versions/" },
+    { "keyword": "aamp 2.3", "site": "aampexplorer", "path": "/versions/" },
+    { "keyword": "seller-agent v2.4.1", "site": "aampexplorer", "path": "/versions/" },
+    { "keyword": "aamp release notes", "site": "aampexplorer", "path": "/versions/" },
+    { "keyword": "aamp repositories", "site": "aampexplorer", "path": "/repos/" },
+    { "keyword": "iabtechlab github aamp", "site": "aampexplorer", "path": "/repos/" },
+    { "keyword": "aamp repo list", "site": "aampexplorer", "path": "/repos/" },
+    { "keyword": "aamp source code", "site": "aampexplorer", "path": "/repos/" },
+    {
+      "keyword": "aamp wire contract",
+      "site": "aampexplorer",
+      "path": "/repos/iab-agentic-primitives/"
+    },
+    {
+      "keyword": "iab-agentic-primitives",
+      "site": "aampexplorer",
+      "path": "/repos/iab-agentic-primitives/"
+    },
+    {
+      "keyword": "aamp conformance kit",
+      "site": "aampexplorer",
+      "path": "/repos/iab-agentic-primitives/"
+    },
+    {
+      "keyword": "aamp standards gap report",
+      "site": "aampexplorer",
+      "path": "/repos/iab-agentic-primitives/"
+    },
+    { "keyword": "iab seller agent", "site": "aampexplorer", "path": "/repos/reference-agents/" },
+    { "keyword": "iab buyer agent", "site": "aampexplorer", "path": "/repos/reference-agents/" },
+    {
+      "keyword": "aamp reference implementation",
+      "site": "aampexplorer",
+      "path": "/repos/reference-agents/"
+    },
+    {
+      "keyword": "aamp event type vocabulary",
+      "site": "aampexplorer",
+      "path": "/repos/reference-agents/"
+    },
+    { "keyword": "opendirect.json", "site": "aampexplorer", "path": "/repos/agentic-direct/" },
+    { "keyword": "opendirect 2.1 mcp", "site": "aampexplorer", "path": "/repos/agentic-direct/" },
+    {
+      "keyword": "opendirect tools schema",
+      "site": "aampexplorer",
+      "path": "/repos/agentic-direct/"
+    },
+    {
+      "keyword": "iab agentic audiences",
+      "site": "aampexplorer",
+      "path": "/repos/agentic-audiences/"
+    },
+    {
+      "keyword": "embedding exchange specification",
+      "site": "aampexplorer",
+      "path": "/repos/agentic-audiences/"
+    },
+    {
+      "keyword": "liveramp user context protocol",
+      "site": "aampexplorer",
+      "path": "/repos/agentic-audiences/"
+    },
+    { "keyword": "agentic advertising protocols", "site": "agenticadlab", "path": "/" },
+    { "keyword": "adcp vs aamp", "site": "agenticadlab", "path": "/protocols/adcp-vs-aamp/" },
+    {
+      "keyword": "adcp aamp difference",
+      "site": "agenticadlab",
+      "path": "/protocols/adcp-vs-aamp/"
+    },
+    {
+      "keyword": "iab tech lab vs agenticadvertising.org",
+      "site": "agenticadlab",
+      "path": "/protocols/adcp-vs-aamp/"
+    },
+    {
+      "keyword": "should i implement adcp or aamp",
+      "site": "agenticadlab",
+      "path": "/protocols/adcp-vs-aamp/"
+    },
+    {
+      "keyword": "agentic advertising standards comparison",
+      "site": "agenticadlab",
+      "path": "/protocols/adcp-vs-aamp/"
+    },
+    {
+      "keyword": "agentic media buying workflow",
+      "site": "agenticadlab",
+      "path": "/guides/how-a-machine-buys-media/"
+    },
+    {
+      "keyword": "how do ai agents buy ads",
+      "site": "agenticadlab",
+      "path": "/guides/how-a-machine-buys-media/"
+    },
+    {
+      "keyword": "machine readable media buy",
+      "site": "agenticadlab",
+      "path": "/guides/how-a-machine-buys-media/"
+    },
+    {
+      "keyword": "buyer agent seller agent flow",
+      "site": "agenticadlab",
+      "path": "/guides/how-a-machine-buys-media/"
+    },
+    {
+      "keyword": "adcp create_media_buy example",
+      "site": "agenticadlab",
+      "path": "/guides/how-a-machine-buys-media/"
+    },
+    {
+      "keyword": "agentic advertising protocol releases",
+      "site": "agenticadlab",
+      "path": "/changelog/"
+    },
+    { "keyword": "adcp version history", "site": "agenticadlab", "path": "/changelog/" },
+    { "keyword": "adcp 3.1.3 withdrawn", "site": "agenticadlab", "path": "/changelog/" },
+    { "keyword": "adcp latest stable version", "site": "agenticadlab", "path": "/changelog/" },
+    {
+      "keyword": "cross protocol advertising changelog",
+      "site": "agenticadlab",
+      "path": "/changelog/"
+    },
+    {
+      "keyword": "agentic advertising protocol limitations",
+      "site": "agenticadlab",
+      "path": "/guides/what-agentic-ad-protocols-dont-standardize/"
+    },
+    {
+      "keyword": "adcp non-goals",
+      "site": "agenticadlab",
+      "path": "/guides/what-agentic-ad-protocols-dont-standardize/"
+    },
+    {
+      "keyword": "aamp gaps",
+      "site": "agenticadlab",
+      "path": "/guides/what-agentic-ad-protocols-dont-standardize/"
+    },
+    {
+      "keyword": "agentic advertising procurement risk",
+      "site": "agenticadlab",
+      "path": "/guides/what-agentic-ad-protocols-dont-standardize/"
+    },
+    { "keyword": "is aamp a specification", "site": "agenticadlab", "path": "/protocols/aamp/" },
+    { "keyword": "aamp maturity", "site": "agenticadlab", "path": "/protocols/aamp/" },
+    { "keyword": "aamp protocol status", "site": "agenticadlab", "path": "/protocols/aamp/" },
+    { "keyword": "aamp repository assessment", "site": "agenticadlab", "path": "/protocols/aamp/" },
+    {
+      "keyword": "agent discovery and trust models",
+      "site": "agenticadlab",
+      "path": "/guides/agent-discovery-files/"
+    },
+    {
+      "keyword": "do adcp and aamp agent discovery interoperate",
+      "site": "agenticadlab",
+      "path": "/guides/agent-discovery-files/"
+    },
+    {
+      "keyword": "domain hosted vs registry agent discovery",
+      "site": "agenticadlab",
+      "path": "/guides/agent-discovery-files/"
+    },
+    {
+      "keyword": "agentic advertising standards landscape",
+      "site": "agenticadlab",
+      "path": "/protocols/"
+    },
+    {
+      "keyword": "agentic advertising artifact status table",
+      "site": "agenticadlab",
+      "path": "/protocols/"
+    },
+    { "keyword": "agentic advertising consulting", "site": "agenticadlab", "path": "/services/" },
+    { "keyword": "adcp implementation partner", "site": "agenticadlab", "path": "/services/" },
+    { "keyword": "buyer agent development", "site": "agenticadlab", "path": "/services/" },
+    { "keyword": "agentic readiness audit", "site": "agenticadlab", "path": "/services/" },
+    { "keyword": "agentic ad lab", "site": "agenticadlab", "path": "/about/" },
+    { "keyword": "independent adcp aamp analysis", "site": "agenticadlab", "path": "/about/" },
+    { "keyword": "agentic advertising glossary", "site": "adtechglossary", "path": "/" },
+    {
+      "keyword": "which standard defines this term",
+      "site": "adtechglossary",
+      "path": "/concepts/"
+    },
+    {
+      "keyword": "adcp vs aamp terminology",
+      "site": "adtechglossary",
+      "path": "/concepts/adcp-vs-aamp-terminology/"
+    },
+    {
+      "keyword": "adcp aamp mapping",
+      "site": "adtechglossary",
+      "path": "/concepts/adcp-vs-aamp-terminology/"
+    },
+    {
+      "keyword": "adcp product vs aamp product",
+      "site": "adtechglossary",
+      "path": "/concepts/adcp-vs-aamp-terminology/"
+    },
+    {
+      "keyword": "adcp media buy vs opendirect order",
+      "site": "adtechglossary",
+      "path": "/concepts/adcp-vs-aamp-terminology/"
+    },
+    { "keyword": "ad context protocol", "site": "adtechglossary", "path": "/concepts/adcp/" },
+    { "keyword": "aamp protocol", "site": "adtechglossary", "path": "/concepts/aamp/" },
+    {
+      "keyword": "agentic advertising",
+      "site": "adtechglossary",
+      "path": "/concepts/agentic-advertising/"
+    },
+    {
+      "keyword": "what do the specs call agentic buying",
+      "site": "adtechglossary",
+      "path": "/concepts/agentic-buying/"
+    },
+    { "keyword": "adcp transport", "site": "adtechglossary", "path": "/concepts/mcp-and-a2a/" },
+    {
+      "keyword": "why is aamp built on opendirect",
+      "site": "adtechglossary",
+      "path": "/concepts/opendirect/"
+    },
+    {
+      "keyword": "sponsored intelligence advertising",
+      "site": "adtechglossary",
+      "path": "/concepts/sponsored-intelligence/"
+    },
+    { "keyword": "ucp protocol advertising", "site": "adtechglossary", "path": "/concepts/ucp/" },
+    { "keyword": "advertising agent roles", "site": "adtechglossary", "path": "/agents/" },
+    {
+      "keyword": "sales agent vs seller agent",
+      "site": "adtechglossary",
+      "path": "/agents/sales-agent/"
+    },
+    {
+      "keyword": "seller agent advertising",
+      "site": "adtechglossary",
+      "path": "/agents/seller-agent/"
+    },
+    {
+      "keyword": "buyer agent advertising",
+      "site": "adtechglossary",
+      "path": "/agents/buyer-agent/"
+    },
+    {
+      "keyword": "agent definition advertising",
+      "site": "adtechglossary",
+      "path": "/agents/agent/"
+    },
+    {
+      "keyword": "signal agent advertising",
+      "site": "adtechglossary",
+      "path": "/agents/signal-agent/"
+    },
+    {
+      "keyword": "brand agent advertising",
+      "site": "adtechglossary",
+      "path": "/agents/brand-agent/"
+    },
+    {
+      "keyword": "advertising governance agent",
+      "site": "adtechglossary",
+      "path": "/agents/governance-agent/"
+    },
+    {
+      "keyword": "agent card advertising",
+      "site": "adtechglossary",
+      "path": "/agents/agent-card/"
+    },
+    { "keyword": "ad agent registry", "site": "adtechglossary", "path": "/agents/agent-registry/" },
+    { "keyword": "brand.json", "site": "adtechglossary", "path": "/agents/discovery-files/" },
+    { "keyword": "adcp specialism", "site": "adtechglossary", "path": "/agents/specialism/" },
+    {
+      "keyword": "agentic media buying objects",
+      "site": "adtechglossary",
+      "path": "/media-buying/"
+    },
+    {
+      "keyword": "media buy definition adcp",
+      "site": "adtechglossary",
+      "path": "/media-buying/media-buy/"
+    },
+    {
+      "keyword": "adcp package vs line item",
+      "site": "adtechglossary",
+      "path": "/media-buying/package/"
+    },
+    { "keyword": "adcp product", "site": "adtechglossary", "path": "/media-buying/product/" },
+    { "keyword": "adcp account", "site": "adtechglossary", "path": "/media-buying/account/" },
+    {
+      "keyword": "creative manifest advertising",
+      "site": "adtechglossary",
+      "path": "/media-buying/creative-manifest/"
+    },
+    {
+      "keyword": "advertising signals and audiences",
+      "site": "adtechglossary",
+      "path": "/signals/"
+    },
+    {
+      "keyword": "signal vs audience advertising",
+      "site": "adtechglossary",
+      "path": "/signals/audience-vs-signal/"
+    },
+    {
+      "keyword": "signal definition advertising",
+      "site": "adtechglossary",
+      "path": "/signals/signal-definition/"
+    },
+    { "keyword": "signal ref adcp", "site": "adtechglossary", "path": "/signals/signal-ref/" },
+    { "keyword": "adcp signal type", "site": "adtechglossary", "path": "/signals/signal-type/" },
+    {
+      "keyword": "signal activation advertising",
+      "site": "adtechglossary",
+      "path": "/signals/activation/"
+    },
+    {
+      "keyword": "hashed identifier advertising",
+      "site": "adtechglossary",
+      "path": "/signals/hashed-identifier/"
+    },
+    {
+      "keyword": "embedding space id",
+      "site": "adtechglossary",
+      "path": "/signals/embedding-space-id/"
+    },
+    {
+      "keyword": "agentic audiences taxonomy",
+      "site": "adtechglossary",
+      "path": "/signals/embedding-taxonomy/"
+    },
+    { "keyword": "real time agentic advertising", "site": "adtechglossary", "path": "/realtime/" },
+    {
+      "keyword": "trusted match protocol",
+      "site": "adtechglossary",
+      "path": "/realtime/trusted-match-protocol/"
+    },
+    { "keyword": "artf mutation", "site": "adtechglossary", "path": "/realtime/rtb-mutation/" },
+    { "keyword": "artf intent enum", "site": "adtechglossary", "path": "/realtime/artf-intent/" },
+    {
+      "keyword": "agentic negotiation vocabulary",
+      "site": "adtechglossary",
+      "path": "/negotiation/"
+    },
+    {
+      "keyword": "advertising quote agent",
+      "site": "adtechglossary",
+      "path": "/negotiation/quote/"
+    },
+    {
+      "keyword": "deal id agentic advertising",
+      "site": "adtechglossary",
+      "path": "/negotiation/deal/"
+    },
+    {
+      "keyword": "agentic negotiation round",
+      "site": "adtechglossary",
+      "path": "/negotiation/negotiation-round/"
+    },
+    {
+      "keyword": "access tier advertising agent",
+      "site": "adtechglossary",
+      "path": "/negotiation/access-tier/"
+    },
+    {
+      "keyword": "buyer agent trust status",
+      "site": "adtechglossary",
+      "path": "/negotiation/trust-status/"
+    },
+    { "keyword": "aamp media kit", "site": "adtechglossary", "path": "/negotiation/media-kit/" },
+    { "keyword": "avails wire contract", "site": "adtechglossary", "path": "/negotiation/avails/" },
+    {
+      "keyword": "change request advertising order",
+      "site": "adtechglossary",
+      "path": "/negotiation/change-request/"
+    },
+    {
+      "keyword": "adcp pricing option",
+      "site": "adtechglossary",
+      "path": "/negotiation/pricing-option/"
+    },
+    {
+      "keyword": "advertising governance protocol",
+      "site": "adtechglossary",
+      "path": "/governance/"
+    },
+    {
+      "keyword": "policy category advertising",
+      "site": "adtechglossary",
+      "path": "/governance/policy-category/"
+    },
+    {
+      "keyword": "audience constraints advertising",
+      "site": "adtechglossary",
+      "path": "/governance/audience-constraints/"
+    },
+    {
+      "keyword": "property list advertising",
+      "site": "adtechglossary",
+      "path": "/governance/property-list/"
+    },
+    {
+      "keyword": "content standards advertising",
+      "site": "adtechglossary",
+      "path": "/governance/content-standards/"
+    },
+    {
+      "keyword": "agentic advertising glossary sources",
+      "site": "adtechglossary",
+      "path": "/about/sources-and-versions/"
+    },
+    {
+      "keyword": "glossary spec citation policy",
+      "site": "adtechglossary",
+      "path": "/about/sources-and-versions/"
+    },
+    { "keyword": "agentic buying", "site": "whatisagenticbuying", "path": "/" },
+    { "keyword": "what is agentic buying", "site": "whatisagenticbuying", "path": "/" },
+    { "keyword": "agentic buying definition", "site": "whatisagenticbuying", "path": "/" },
+    { "keyword": "agentic media buying", "site": "whatisagenticbuying", "path": "/" },
+    { "keyword": "ai agent media buying", "site": "whatisagenticbuying", "path": "/" },
+    {
+      "keyword": "agentic buying vs programmatic",
+      "site": "whatisagenticbuying",
+      "path": "/agentic-buying-vs-programmatic/"
+    },
+    {
+      "keyword": "is agentic buying just programmatic",
+      "site": "whatisagenticbuying",
+      "path": "/agentic-buying-vs-programmatic/"
+    },
+    {
+      "keyword": "agentic vs rtb",
+      "site": "whatisagenticbuying",
+      "path": "/agentic-buying-vs-programmatic/"
+    },
+    {
+      "keyword": "programmatic media buying automation",
+      "site": "whatisagenticbuying",
+      "path": "/agentic-buying-vs-programmatic/"
+    },
+    { "keyword": "is agentic buying real", "site": "whatisagenticbuying", "path": "/maturity/" },
+    { "keyword": "agentic buying adoption", "site": "whatisagenticbuying", "path": "/maturity/" },
+    { "keyword": "agentic advertising hype", "site": "whatisagenticbuying", "path": "/maturity/" },
+    {
+      "keyword": "agentic buying production ready",
+      "site": "whatisagenticbuying",
+      "path": "/maturity/"
+    },
+    {
+      "keyword": "how does agentic buying work",
+      "site": "whatisagenticbuying",
+      "path": "/how-it-works/"
+    },
+    {
+      "keyword": "agentic buying process",
+      "site": "whatisagenticbuying",
+      "path": "/how-it-works/"
+    },
+    {
+      "keyword": "agentic buying step by step",
+      "site": "whatisagenticbuying",
+      "path": "/how-it-works/"
+    },
+    {
+      "keyword": "sales agent seller agent naming mismatch",
+      "site": "whatisagenticbuying",
+      "path": "/how-it-works/"
+    },
+    { "keyword": "whatisagenticbuying sources", "site": "whatisagenticbuying", "path": "/about/" },
+    { "keyword": "adcp brief generator", "site": "briefgateway", "path": "/" },
+    { "keyword": "get_products request builder", "site": "briefgateway", "path": "/" },
+    { "keyword": "agentic campaign brief generator", "site": "briefgateway", "path": "/" },
+    { "keyword": "protocol-conformant brief", "site": "briefgateway", "path": "/" },
+    { "keyword": "protocol-conformant campaign brief", "site": "briefgateway", "path": "/spec/" },
+    { "keyword": "adcp brief format", "site": "briefgateway", "path": "/spec/" },
+    { "keyword": "machine-readable campaign brief", "site": "briefgateway", "path": "/spec/" },
+    { "keyword": "what is an adcp brief", "site": "briefgateway", "path": "/spec/" },
+    {
+      "keyword": "adcp brief vs filters",
+      "site": "briefgateway",
+      "path": "/spec/brief-vs-filters/"
+    },
+    {
+      "keyword": "what to put in an adcp brief",
+      "site": "briefgateway",
+      "path": "/spec/brief-vs-filters/"
+    },
+    {
+      "keyword": "adcp structured filters",
+      "site": "briefgateway",
+      "path": "/spec/brief-vs-filters/"
+    },
+    { "keyword": "adcp buying_mode", "site": "briefgateway", "path": "/spec/brief-vs-filters/" },
+    {
+      "keyword": "hard constraints campaign brief",
+      "site": "briefgateway",
+      "path": "/spec/brief-vs-filters/"
+    },
+    {
+      "keyword": "creative brief to adcp",
+      "site": "briefgateway",
+      "path": "/crosswalk/creative-brief-to-adcp/"
+    },
+    {
+      "keyword": "convert brief for ai agent",
+      "site": "briefgateway",
+      "path": "/crosswalk/creative-brief-to-adcp/"
+    },
+    {
+      "keyword": "brief fields agents can read",
+      "site": "briefgateway",
+      "path": "/crosswalk/creative-brief-to-adcp/"
+    },
+    {
+      "keyword": "campaign brief fields machine readable",
+      "site": "briefgateway",
+      "path": "/crosswalk/creative-brief-to-adcp/"
+    },
+    {
+      "keyword": "aamp campaign brief",
+      "site": "briefgateway",
+      "path": "/compare/adcp-brief-vs-aamp-campaign-brief/"
+    },
+    {
+      "keyword": "iab buyer agent campaign brief",
+      "site": "briefgateway",
+      "path": "/compare/adcp-brief-vs-aamp-campaign-brief/"
+    },
+    {
+      "keyword": "campaign brief json schema",
+      "site": "briefgateway",
+      "path": "/compare/adcp-brief-vs-aamp-campaign-brief/"
+    },
+    {
+      "keyword": "adcp brief vs aamp brief",
+      "site": "briefgateway",
+      "path": "/compare/adcp-brief-vs-aamp-campaign-brief/"
+    },
+    { "keyword": "adcp brief linter", "site": "briefgateway", "path": "/validate/" },
+    { "keyword": "validate get_products request", "site": "briefgateway", "path": "/validate/" },
+    { "keyword": "adcp deprecated fields", "site": "briefgateway", "path": "/validate/" },
+    { "keyword": "adcp payload validation", "site": "briefgateway", "path": "/validate/" },
+    { "keyword": "adcp request payload examples", "site": "briefgateway", "path": "/examples/" },
+    { "keyword": "filled media brief example", "site": "briefgateway", "path": "/examples/" },
+    {
+      "keyword": "ctv campaign brief example",
+      "site": "briefgateway",
+      "path": "/examples/ctv-guaranteed-launch/"
+    },
+    {
+      "keyword": "retail media brief example",
+      "site": "briefgateway",
+      "path": "/examples/retail-media-catalog/"
+    },
+    { "keyword": "brief gateway", "site": "briefgateway", "path": "/about/" }
+  ],
+  "excluded": [
+    {
+      "keyword": "creative brief template",
+      "reason": "HubSpot (gated offer + blog hub) and Asana have a decade of compounding authority. Unwinnable head term; the winnable slice is filled worked examples by channel, which briefgateway /examples/ targets instead."
+    },
+    {
+      "keyword": "campaign brief template",
+      "reason": "Same incumbents as creative brief template, plus Milanote, Typeform and Smartsheet. Blank templates are the exact category we are differentiating away from."
+    },
+    {
+      "keyword": "campaign brief generator",
+      "reason": "QuillBot, Storyflow, Mailmodo, Uplifted and Template.net all rank with free tools and real domain authority. Every one outputs a document for a human; we target the qualified 'adcp brief generator' variant only."
+    },
+    {
+      "keyword": "creative brief generator",
+      "reason": "As above. The phrase is taken; the wedge is 'the brief that machines can buy from', not 'free AI brief generator'."
+    },
+    {
+      "keyword": "cpm calculator",
+      "reason": "Saturated red ocean: Upwork, Plerdy, DashThis, ClickZ plus at least three exact-match domains built solely for this term. Commodity math with no defensible angle."
+    },
+    {
+      "keyword": "cpc calculator",
+      "reason": "Same red ocean as CPM. Generic ad-tech calculators are a dead end per the phase-2 research."
+    },
+    {
+      "keyword": "roas calculator",
+      "reason": "Same red ocean. Specialist calculators (weighted eCPM blenders, UTM builders) are the only pattern that works here, and neither is in scope for these six sites."
+    },
+    {
+      "keyword": "mcp vs a2a",
+      "reason": "Owned by modelcontextprotocol.io, the a2aproject/Google docs, Anthropic and every AI-engineering blog. adtechglossary targets 'adcp transport' instead -- what AdCP and AAMP actually run over, which is uncontested."
+    },
+    {
+      "keyword": "agentic commerce",
+      "reason": "Criteo's glossary and the payments trade press are entrenched, and it is a different protocol family. We disambiguate in three sentences on whatisagenticbuying / rather than build a page."
+    },
+    {
+      "keyword": "agentic commerce protocol",
+      "reason": "OpenAI and Stripe own the ACP docs; wrong protocol family for an advertising portfolio. The killed adtechglossary /concepts/acp/ sourced its whole content from one AdCP glossary paragraph."
+    },
+    {
+      "keyword": "agentic marketing",
+      "reason": "CDP.com nests agentic advertising under it. Broader category with no protocol-level hook we can defend."
+    },
+    {
+      "keyword": "agent-to-agent media buying",
+      "reason": "Scope3 owns the exact-match query with a dedicated blog post, years of authority and founding-member status. The hub mentions the concept but does not target the term."
+    },
+    {
+      "keyword": "programmatic guaranteed",
+      "reason": "Commodity education owned by Google Ad Manager help, every SSP learning hub and IAB itself. The claimed edge (at=1/at=3) is IAB's own OpenRTB 2.6 spec -- we would be restating IAB to compete with IAB."
+    },
+    {
+      "keyword": "preferred deal",
+      "reason": "As above. Killed with adtechglossary /negotiation/deal-type/."
+    },
+    {
+      "keyword": "private auction",
+      "reason": "As above. Killed with adtechglossary /negotiation/deal-type/."
+    },
+    {
+      "keyword": "idempotency key",
+      "reason": "Stripe's docs are the canonical explainer for this concept on the entire internet; AdCP's glossary answers the protocol-specific detail in one line. Absorbed as an anchor on /media-buying/media-buy/."
+    },
+    {
+      "keyword": "opendirect 2.1",
+      "reason": "IAB Tech Lab's own spec, landing page and GitHub. We cannot outrank the body that publishes it; we target 'why is aamp built on opendirect' instead."
+    },
+    {
+      "keyword": "media kit",
+      "reason": "Heavily-owned publisher-marketing term. Only the qualified 'aamp media kit' and the discovery-model contrast are targeted."
+    },
+    {
+      "keyword": "avails",
+      "reason": "Decades-old broadcast-TV term owned by FreeWheel, Operative and every TV ad-tech vendor. Only 'avails wire contract' and the anti-drift design rationale are targeted."
+    },
+    {
+      "keyword": "audience discovery",
+      "reason": "Held by B2B intent-data vendors (mostly Bombora-powered) and Eyeota's free Audience Discovery Tool. None are protocol-native but all have authority; stay on protocol-qualified terms."
+    },
+    {
+      "keyword": "signal discovery",
+      "reason": "Same incumbents. The phase-2 research also found signalsfinder.com, signalexplorer.com and adsignals.io already registered -- someone informed is working the namespace."
+    },
+    {
+      "keyword": "brand safety",
+      "reason": "DoubleVerify and IAS territory. adtechglossary /governance/content-standards/ stays strictly protocol-specific."
+    },
+    {
+      "keyword": "brand suitability",
+      "reason": "As above. Only the AdCP content-standards mechanism is in scope."
+    },
+    {
+      "keyword": "agent registry",
+      "reason": "Both AgenticAdvertising.org and IAB Tech Lab are building actual registries and will own every registry-shaped query. We document the state of play (AAMP's registry client is explicitly not finalised) and do not compete on being one."
+    },
+    {
+      "keyword": "adcp changelog",
+      "reason": "docs.adcontextprotocol.org ships versions.mdx, release-notes.mdx, changelog.mdx and an 892 KB CHANGELOG.md on the normative domain. The hub targets the cross-protocol framing and long-tail version strings instead."
+    },
+    {
+      "keyword": "decisioning platform",
+      "reason": "AdCP defines it as 'DSPs, SSPs, ad servers' -- a commodity term the glossary's own exclusion policy bans alongside CPM, DSP and SSP."
+    },
+    {
+      "keyword": "agentic bidding",
+      "reason": "The term exists only inside one sentence of AdCP's own partisan FAQ and appears nowhere in the AAMP corpus. Optimising for a phrase whose only author is the party quoting it."
+    },
+    {
+      "keyword": "dsp",
+      "reason": "Commodity ad-tech term. Criteo and IAB own it; the glossary excludes all commodity terms by policy so that one exception does not reopen the argument for the rest."
+    },
+    { "keyword": "ssp", "reason": "As above." },
+    {
+      "keyword": "cpm",
+      "reason": "As above -- the glossary covers the AdCP pricing-option structure, never the metric explainers."
+    }
+  ]
+}
