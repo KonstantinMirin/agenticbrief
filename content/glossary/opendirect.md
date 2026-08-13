@@ -1,90 +1,89 @@
 ---
-title: 'OpenDirect 2.1: Why AAMP Is Built On It'
-description: "OpenDirect 2.1 is the IAB standard for automated direct ad buying, and it is the spine of AAMP's control plane. What it supplies, what it does not, and why AdCP never mentions it."
-answer: "OpenDirect 2.1 is the IAB Tech Lab standard for automating direct ad buying. AAMP's control plane is built on it: Account, Order, Line and Product come from OpenDirect rather than from anything AAMP invented."
+title: 'OpenDirect 2.1: the direct-booking standard under AAMP'
+description: "OpenDirect 2.1 is IAB Tech Lab's REST standard for booking guaranteed inventory. AAMP's control plane inherits it in three different subsets, and AdCP references it nowhere."
+answer: "OpenDirect 2.1 is IAB Tech Lab's REST standard for booking guaranteed ad inventory, and AAMP's control plane inherits its Account, Order, Line and Product objects, though no AAMP repository implements more than 13 of the standard's 23 objects."
 pubDate: 2026-08-09
+updatedDate: 2026-08-09
 term: 'OpenDirect 2.1'
-alternateNames: ['OpenDirect', 'IAB OpenDirect']
+alternateNames: ['OpenDirect', 'IAB OpenDirect', 'OpenDirect v2.1 Final']
 category: programmatic
-cluster: gl-aamp
+cluster: gl-stacks
 keywords:
   - 'why is aamp built on opendirect'
-  - 'opendirect 2.1'
-  - 'opendirect order line product'
-  - 'iab opendirect agentic'
+  - 'is aamp opendirect compliant'
+  - 'opendirect vs adcp'
 citations:
   - 'https://iabtechlab.com/standards/opendirect/'
-  - 'https://github.com/IABTechLab/agentic-direct'
-  - 'https://github.com/IABTechLab/seller-agent'
-  - 'https://github.com/IABTechLab/buyer-agent'
-  - 'https://github.com/IABTechLab/iab-agentic-primitives'
-  - 'https://github.com/IABTechLab/AAMP'
-  - 'https://github.com/adcontextprotocol/adcp/blob/f1a35aba734befa809e1fa780ad77c7edd614e96/dist/schemas/3.1.10/index.json'
+  - 'https://github.com/InteractiveAdvertisingBureau/OpenDirect/blob/82bc294314aba017fc639ba634aecc53adfd675f/OpenDirect.v2.1.final.md'
+  - 'https://github.com/InteractiveAdvertisingBureau/OpenDirect/commits/82bc294314aba017fc639ba634aecc53adfd675f/OpenDirect.v2.1.final.md'
+  - 'https://github.com/IABTechLab/agentic-direct/blob/915bda98f4de986aa0bbafe1d64df52fae974e62/opendirect.json'
+  - 'https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/tests/unit/test_opendirect_wire_conformance.py'
+  - 'https://github.com/IABTechLab/buyer-agent/blob/0c3a1545e334a0dc6acf0a6722b554cc4a4503d6/docs/api/protocols.md'
+  - 'https://github.com/IABTechLab/iab-agentic-primitives/blob/2fc7029fb9eca801bc94586aec398906aa6af6c0/src/iab_agentic_primitives/conformance/standards.py'
+  - 'https://github.com/IABTechLab/iab-agentic-primitives/blob/2fc7029fb9eca801bc94586aec398906aa6af6c0/spec/jsonschema/protocol/Avails.json'
+  - 'https://github.com/IABTechLab/AAMP/blob/3b20e67b568235d86c4025bec7c1301edd7466a0/README.md'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/schemas/3.1.13/core/media-buy.json'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/schemas/3.1.13/core/package.json'
 related:
   - '/concepts/aamp/'
   - '/concepts/adcp/'
   - '/concepts/adcp-vs-aamp-terminology/'
   - '/concepts/mcp-and-a2a/'
-  - 'https://aampexplorer.noetis.dev/repos/agentic-direct/'
-  - 'https://agenticadlab.noetis.dev/protocols/adcp-vs-aamp/'
-seeAlso: ['AAMP', 'Ad Context Protocol', 'Media Buy', 'Package']
+  - '/media-buying/media-buy/'
+  - '/media-buying/package/'
+  - '/negotiation/quote/'
+  - '/about/sources-and-versions/'
+  - 'https://aampexplorer.com/repos/agentic-direct/'
+  - 'https://agenticadlab.com/protocols/adcp-vs-aamp/'
+seeAlso: ['AAMP', 'Ad Context Protocol', 'Media Buy', 'Package', 'Quote']
 reviewState: cto-reviewed
 ---
 
-## What is OpenDirect 2.1?
+OpenDirect 2.1 is IAB Tech Lab's REST standard for booking guaranteed and reserved advertising inventory: the direct deals that used to move by email and spreadsheet. It defines 23 objects covering accounts, orders, inventory, creative and reporting. It predates agentic buying and defines no agent behaviour.
 
-OpenDirect is IAB Tech Lab's standard for automating direct ad buying: the guaranteed and reserved inventory that used to move by email and insertion order. It predates the agentic work by years and is licensed separately. The copy vendored into AAMP declares its own provenance in a metadata block:
+[AAMP](/concepts/aamp/) is built on it because IAB Tech Lab already owned a ratified object model for the transaction AAMP's control plane automates, so the agent repositories started from Account, Order, Line and Product rather than inventing four nouns of their own.
 
-```json
-"metadata": {
-  "specification": "OpenDirect v2.1 Final",
-  "organization": "IAB Technology Laboratory",
-  "license": "Creative Commons Attribution 3.0",
-  "website": "https://iabtechlab.com/opendirect",
-  "referencedSpecifications": ["AdCOM", "OpenRTB", "DP-AA DOOH Extension"]
-}
-```
+The object graph is a booking workflow. Accounts own Orders, Orders hold Lines, Lines book Products. An Assignment attaches a Creative to a Line, and a ChangeRequest amends one already booked. The nesting is in the path: `/accounts/{id}/orders/{id}/lines`.
 
-OpenDirect 2.1 supplies a workflow vocabulary rather than an auction vocabulary. Its objects are commercial: an Account is a buyer-to-advertiser relationship, an Order carries dates and budget, a Line books a specific product, an Assignment binds a Creative to a Line, and a ChangeRequest modifies a booked Order.
+Version 1.0 shipped in January 2015 and 2.1 in April 2024. The [standard's page on iabtechlab.com](https://iabtechlab.com/standards/opendirect/) is stamped "last updated 8 July 2024", lists no implementers and runs no conformance programme, and it does not mention agentic work or AAMP.
 
-## Why does AAMP run on OpenDirect 2.1 rather than inventing a model?
+## AAMP's inheritance from OpenDirect
 
-Because AAMP's control plane is direct and programmatic-direct buying, and IAB Tech Lab already owned a ratified object model for exactly that. Reusing it meant the agent repositories could start from Account, Order, Line and Product instead of arguing about them.
+seller-agent's README claims it books "using IAB Tech Lab standards (OpenDirect 2.1, Deals API v1.0, sellers.json)". buyer-agent lists "REST (OpenDirect 2.1)" as one of [three transports](/concepts/mcp-and-a2a/), the one for "operator dashboards and legacy integrations", with MCP as the default. The AAMP hub repository, a README index and a licence file, makes no reference to OpenDirect, OpenRTB or AdCOM.
 
-The reuse is visible in four places, at four different depths:
+The copy vendored into `agentic-direct` keeps the standard's own metadata block, naming OpenDirect v2.1 Final under Creative Commons Attribution 3.0 and referencing AdCOM, OpenRTB and the DP-AA DOOH Extension, with the example base URL `https://opendirect.example.com/v2.1` still in place.
 
-| Where                                     | Evidence                                                                                                                                                                                                                                                 | Depth                   |
-| ----------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------- |
-| `agentic-direct/opendirect.json`          | 40 schemas, 33 tools and 13 resources, 71,811 bytes, version `2.1.0`. Thirteen `OpenDirect.*` schemas plus 23 `AdCOM.*` and four `OpenRTB.*`                                                                                                             | The object model itself |
-| `seller-agent` README                     | Declares the agent automates deal negotiation and booking "using IAB Tech Lab standards (OpenDirect 2.1, Deals API v1.0, sellers.json)"                                                                                                                  | A conformance claim     |
-| `buyer-agent/docs/api/protocols.md`       | Lists REST over OpenDirect as one of three supported transports, for "operator dashboards and legacy integrations"                                                                                                                                       | A transport             |
-| `iab-agentic-primitives/spec/jsonschema/` | `Line` is "Individual product booking within an order (OpenDirect Line)"; `Order` "merges the buyer's OpenDirect Order with the seller's ExecutionOrder"; `AvailsRequest` notes that "spec-named fields use the OpenDirect 2.1 all-lowercase wire names" | The wire contract       |
+## Three implementation subsets
 
-That last row is the important one. The shared library both AAMP reference agents pin does not merely reference OpenDirect, it inherits OpenDirect's field-naming dialect and its decimal convention. `Avails` keeps `price` as a float "per the OpenDirect 2.1 decimal dialect", called out as a deliberate exception to the library's own money-in-micros rule.
+`agentic-direct/opendirect.json` defines 13 `OpenDirect.*` schemas, and its `2.1.0` is OpenDirect's version number rather than its own. (The file is an MCP server manifest, keyed on `schemas`, `tools` and `resources`; the repository's README describes it as an OpenAPI 3.0 schema and it has no `paths` key.) `iab-agentic-primitives` is the schema library both reference agents import, v0.5.0 and unreleased, and it inherits more than the shapes: its `Order` "merges the buyer's OpenDirect Order with the seller's ExecutionOrder", and its `AvailsRequest` notes that "spec-named fields use the OpenDirect 2.1 all-lowercase wire names". seller-agent is the running reference server, 74 OpenAPI paths, and the only one that answers a request. All three are IAB Tech Lab repositories, and none is designated as the one to build against.
 
-## What does OpenDirect 2.1 not supply to AAMP?
+| OpenDirect 2.1 object group                                                                     | `opendirect.json` manifest | `iab-agentic-primitives`    | seller-agent REST             |
+| ----------------------------------------------------------------------------------------------- | -------------------------- | --------------------------- | ----------------------------- |
+| Booking chain: Account, Order, Line, Product, Creative, Assignment, Organization, ChangeRequest | all 8                      | all 8                       | Product, Order, ChangeRequest |
+| Avails and search: Avails, AvailsStatus, ProductAvailsSearch, ProductSearch, ProductTargeting   | none                       | Avails, ProductAvailsSearch | `POST /products/avails`       |
+| Inventory detail: Placement, AdUnit                                                             | both                       | neither                     | neither                       |
+| Party detail: Address, Contact, AdvertiserBrand                                                 | Address, Contact           | none                        | none                          |
+| Comms and reporting: Message, Stats, ProviderData, EID, UID                                     | Message                    | none                        | none                          |
+| Objects present                                                                                 | 13 of 23                   | 10 of 23                    | 4 of 23                       |
 
-Everything the agentic layer added. OpenDirect gives AAMP the nouns of a booking system; it does not give it agent behaviour.
+The first two columns count schema definitions; the third counts entities with a REST path. AdvertiserBrand, ProductSearch, AvailsStatus, ProductTargeting, ProviderData, Stats, EID and UID appear in none of the three, which is the reporting and identity half of the standard.
 
-- No agent identity, agent card or registry.
-- No access tier, trust status, or tier-gated pricing.
-- No multi-round negotiation. Quote, NegotiationMessage and NegotiationRound are AAMP-side additions in `iab-agentic-primitives`, not OpenDirect objects.
-- No embeddings, no bid-request mutation. Those are the other two AAMP planes and share no type with this one.
+The manifest carries Address and Contact but no Avails or search objects; `iab-agentic-primitives` carries Avails and ProductAvailsSearch but no party-detail objects. Neither body publishes a crosswalk of what survived.
 
-So OpenDirect is the floor, not the building. When someone says AAMP is "based on IAB standards", this is the accurate version of that claim: the control plane's object model is inherited, the agentic parts on top of it are new, and the new parts come from reference implementations rather than from a ratified specification.
+Conformance testing runs to one file. `seller-agent/tests/unit/test_opendirect_wire_conformance.py` covers a single endpoint, `POST /products/avails`, and what it pins is spelling: `productid`, `startdate` and `enddate` have to parse under their lowercase spec names, and the camelCase aliases must not be accepted or emitted. It pins lowercase because the source document ships both: OpenDirect's Account attribute table is all lowercase, while the normative `/accounts` example returns "Accounts", "AdvertiserId" and "Id" in PascalCase, plus an `AgencyId` the table never defines. Three of that endpoint's six request fields are spec-named; `requestedImpressions`, `budget` and `targeting` have, the docstring says, "no spec name to converge to".
 
-## What is OpenDirect's counterpart in AdCP?
+## What OpenDirect does not define
 
-**No counterpart. AdCP does not reference OpenDirect at all.** I grepped the published `dist/docs/3.1.6/` documentation snapshot and the entire `dist/schemas/3.1.10/` registry for the string. Zero hits in either.
+Negotiation, quote, access tier, trust status, agent card and embedding appear nowhere in the standard, which is why 14 of the 22 core primitives in `iab-agentic-primitives` have no OpenDirect ancestor by name, Agent, [Quote](/negotiation/quote/), Negotiation and MediaKit among them.
 
-AdCP built its buying objects from scratch. Where OpenDirect gives AAMP Order and Line, AdCP defines `core/media-buy.json` ("Represents a purchased advertising campaign") and `core/package.json` ("A specific product within a media buy (line item)"). The parenthetical in AdCP's own package description is the only nod to the older vocabulary anywhere in the registry.
+Inheriting the standard also carried a cost on money typing. OpenDirect 2.1 carries price as a decimal float. `iab-agentic-primitives` numbers its contested design calls in the schema descriptions, and FD-11 bans float money on the wire, because binary floating point cannot hold decimal money exactly; the ban is an executable check in `src/iab_agentic_primitives/conformance/standards.py`. Across four Avails schemas, `price` "stays a float per the OpenDirect 2.1 decimal dialect".
 
-The two stacks therefore differ at the root, not at the edges. One inherits a decade-old IAB booking model and wraps agents around it. The other designed a new object model for agent-to-agent work and never looked at the booking model. The consequences, object by object, are on the [AdCP and AAMP terminology lookup](/concepts/adcp-vs-aamp-terminology/).
+## OpenDirect and AdCP
 
-## What is OpenDirect 2.1 confused with?
+[AdCP](/concepts/adcp/)'s published docs and schema registry never mention OpenDirect, while naming IAB Tech Lab in dozens of files and referencing OpenRTB, AdCOM and VAST throughout. Its documentation tooling does index the OpenDirect repository, alongside roughly 28 others; the objects AdCP publishes are defined independently of it.
 
-**`opendirect.json` is not an OpenAPI document.** The `agentic-direct` README labels it "OpenAPI 3.0 Schema" in its architecture diagram (line 10) and "OpenAPI 3.0 spec" in its parser section (line 316). It is neither. Its top-level keys are `name`, `version`, `description`, `metadata`, `schemas`, `tools` and `resources`, which is an MCP server manifest. The repository's own parser confirms this by checking `schema.tools` first and only falling back to `schema.paths`, and there are no `paths` in the file. AAMP Explorer renders [the manifest itself](https://aampexplorer.noetis.dev/repos/agentic-direct/).
+[Media Buy](/media-buying/media-buy/) and [Package](/media-buying/package/) are where Order and Line went, and the two stacks line up object by object on the [terminology lookup](/concepts/adcp-vs-aamp-terminology/).
 
-**`2.1.0` in that file is the OpenDirect version, not an AAMP version.** `agentic-direct` carries no git tag at all. Quoting "2.1" as AAMP's version number is a common and wrong reading.
+## Common confusions
 
-**OpenDirect is not OpenRTB.** OpenRTB is the real-time auction protocol. OpenDirect is the direct-buying workflow standard. AAMP uses both, in different planes: OpenDirect in the control plane, OpenRTB 2.6 inside ARTF at serve time.
+OpenDirect and OpenRTB do not sit in the same plane. OpenDirect belongs to AAMP's control plane, where a human would once have signed an insertion order; OpenRTB 2.6 belongs to the agentic RTB framework at serve time, imported as `com/iabtechlab/openrtb/v2.6/openrtb.proto`. AAMP is credited to "OpenRTB, AdCOM and OpenDirect", three inheritances in three different planes, and the [full stack comparison](https://agenticadlab.com/protocols/adcp-vs-aamp/) separates them.

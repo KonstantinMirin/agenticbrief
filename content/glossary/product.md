@@ -1,107 +1,98 @@
 ---
-title: 'Product (AdCP) — 49 Fields, and Why It Is Not a Catalog Row'
-description: "Product is AdCP's unit of sellable inventory: 49 fields, 7 required, discovered by natural language through get_products. Definition from the 3.1.10 schema."
-answer: 'A product is a unit of advertising inventory a seller offers, discovered through get_products. AdCP 3.1.10 defines 49 fields on it, 7 required, including delivery type, pricing options and reporting capabilities.'
+title: 'Product (AdCP): the unit of sellable inventory'
+description: 'In AdCP a product is a unit of sellable inventory returned by get_products, carrying its publisher properties, delivery type, pricing options and reporting capabilities.'
+answer: 'In AdCP, a product is a unit of sellable advertising inventory offered by a seller and returned by get_products, describing the properties it runs on, how it delivers, what it costs and what the seller can report on.'
 pubDate: 2026-08-09
+updatedDate: 2026-08-09
 term: 'Product'
 category: 'programmatic'
 cluster: 'gl-objects'
-alternateNames: ['AdCP product', 'inventory product']
+alternateNames: ['AdCP product', 'inventory product', 'media product']
 keywords:
   - 'adcp product'
   - 'adcp product schema'
-  - 'product definition advertising'
+  - 'adcp product required fields'
   - 'get_products product object'
+  - 'product definition advertising'
 citations:
-  - 'https://github.com/adcontextprotocol/adcp/blob/f1a35aba734befa809e1fa780ad77c7edd614e96/dist/schemas/3.1.10/core/product.json'
-  - 'https://github.com/adcontextprotocol/adcp/blob/f1a35aba734befa809e1fa780ad77c7edd614e96/dist/schemas/3.1.10/enums/delivery-type.json'
-  - 'https://github.com/adcontextprotocol/adcp/blob/f1a35aba734befa809e1fa780ad77c7edd614e96/dist/schemas/3.1.10/enums/exclusivity.json'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/schemas/3.1.13/core/product.json'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/schemas/3.1.13/enums/delivery-type.json'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/schemas/3.1.13/enums/exclusivity.json'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/schemas/3.1.13/enums/error-code.json'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/schemas/3.1.13/core/reporting-capabilities.json'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/docs/media-buy/product-discovery/media-products.mdx'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/docs/reference/versioning.mdx'
+  - 'https://github.com/adcontextprotocol/adcp/tree/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/static/examples/products/canonical'
   - 'https://docs.adcontextprotocol.org/docs/reference/glossary'
   - 'https://github.com/IABTechLab/iab-agentic-primitives/blob/2fc7029fb9eca801bc94586aec398906aa6af6c0/spec/jsonschema/Product.json'
+  - 'https://github.com/IABTechLab/iab-agentic-primitives/blob/2fc7029fb9eca801bc94586aec398906aa6af6c0/spec/jsonschema/RateCard.json'
   - 'https://github.com/IABTechLab/agentic-direct/blob/915bda98f4de986aa0bbafe1d64df52fae974e62/opendirect.json'
+  - 'https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/src/ad_seller/interfaces/api/routers/products.py'
 related:
+  - '/media-buying/'
   - '/media-buying/package/'
   - '/media-buying/media-buy/'
+  - '/concepts/opendirect/'
   - '/signals/audience-vs-signal/'
-  - 'https://adcpexplorer.noetis.dev/operations/get-products/'
-seeAlso: ['package', 'media-buy', 'signal-definition']
+  - '/about/sources-and-versions/'
+  - 'https://adcpexplorer.com/operations/get-products/'
+seeAlso: ['package', 'media-buy', 'opendirect', 'signal-definition']
 reviewState: cto-reviewed
 ---
 
-## What is a product in AdCP?
+A product in AdCP is a unit of inventory a seller is willing to sell. It is returned by [`get_products`](https://adcpexplorer.com/operations/get-products/) and turned into [packages](/media-buying/package/) inside a [media buy](/media-buying/media-buy/). The schema at `dist/schemas/3.1.13/core/product.json` describes it in four words: "Represents available advertising inventory". AdCP's [glossary](https://docs.adcontextprotocol.org/docs/reference/glossary) adds the part that separates it from a rate card line: inventory "discovered through natural language queries".
 
-A product is a unit of advertising inventory a seller is willing to sell. The schema at `/schemas/3.1.10/core/product.json` describes it in four words: "Represents available advertising inventory". AdCP's glossary adds the part that actually distinguishes it: inventory "discovered through natural language queries".
+Commercially, a product is the seller's own definition of what it sells: which publisher properties it runs on, whether delivery is guaranteed, which pricing models are available on it, and what the seller undertakes to report. A buyer does not browse a catalog to find it; it describes a campaign and the seller returns the products it considers a match.
 
-Products are the output of `get_products`. A buyer agent sends a brief, structured filters, or both, and the seller returns products. Packages are then created against those products inside a media buy.
+## How many fields a valid product needs
 
-The product object is the largest core object in the protocol: 49 properties, 7 required.
+`core/product.json` carries 49 properties, more than any other object in the release, and its `required` array lists seven. An `anyOf` adds a format field, so eight are needed to validate, and every shipped fixture also carries `channels`.
 
-## Which product fields are required?
+| Field                    | Status                          | What it holds                                         |
+| ------------------------ | ------------------------------- | ----------------------------------------------------- |
+| `product_id`             | required                        | Unique identifier for the product                     |
+| `name`                   | required                        | Human-readable product name                           |
+| `description`            | required                        | Detailed description of the product and its inventory |
+| `publisher_properties`   | required, `minItems: 1`         | The properties the product runs on                    |
+| `delivery_type`          | required                        | `guaranteed` or `non_guaranteed`                      |
+| `pricing_options`        | required, `minItems: 1`         | Available pricing models for this product             |
+| `reporting_capabilities` | required                        | What the seller can report on                         |
+| `format_options`         | `anyOf`, absent from `required` | Inline format declarations, the 3.1+ path             |
+| `channels`               | optional, in every fixture      | The channels the product is sold as                   |
+| `format_ids`             | `anyOf`, legacy                 | Named-format references                               |
 
-| Field                    | Type                   | What it holds                                         |
-| ------------------------ | ---------------------- | ----------------------------------------------------- |
-| `product_id`             | string                 | Unique identifier for the product                     |
-| `name`                   | string                 | Human-readable product name                           |
-| `description`            | string                 | Detailed description of the product and its inventory |
-| `publisher_properties`   | array                  | The properties the product runs on                    |
-| `delivery_type`          | enum                   | `guaranteed` or `non_guaranteed`                      |
-| `pricing_options`        | pricing-option[]       | Available pricing models for this product             |
-| `reporting_capabilities` | reporting-capabilities | What the seller can report on                         |
+An object carrying only the seven required fields fails validation, because an `anyOf` demands `format_ids` or `format_options` as well. The rule that governs the eighth is prose inside the `format_ids` description: "Products MUST carry `format_ids`, `format_options`, or BOTH; at least one is required." Either field satisfies it. The two paths are not equal: `format_ids` is legacy, on a published deprecation calendar, and when both are present the schema says "prefer `format_options`".
 
-Two of those are worth pausing on.
+Eight is a count of top-level keys. `reporting_capabilities` is an object with six required sub-fields of its own, so thirteen named values are needed before a single publisher property or pricing option is filled in.
 
-`delivery_type` is a two-value enum and it is required, which means every AdCP product declares up front whether it is guaranteed. There is no "it depends" branch. `exclusivity` sits next to it as an optional three-value enum (`none`, `category`, `exclusive`).
+`publisher_properties` carries a normative instruction addressed to SDK implementers: "SDK implementers MUST enforce singular-only at runtime: each entry uses the singular `publisher_domain` form; the compact `publisher_domains[]` form is rejected on products". It names four toolchains that often drop the restriction silently and emit an unrestricted type, so a generated client will accept the compact form and a conformant seller will reject it.
 
-`publisher_properties` carries a warning aimed directly at code generators: "SDK implementers MUST enforce singular-only at runtime: each entry uses the singular `publisher_domain` form; the compact `publisher_domains[]` form is rejected on products." The schema then says that common codegen toolchains flatten the constraint away silently. That is a specification telling implementers not to trust their own tooling.
+## Where the schema and the documentation differ
 
-## Is an AdCP product a fixed catalog row?
+Both declare seven required fields, and they name different sevens. The docs page lists 39 fields against the schema's 49: `reporting_capabilities` is required in the schema and absent from the docs, `format_options` is an `anyOf` branch in the schema and required in the docs, `collections` and `installments` are documented under the names `shows` and `episodes`, and five documented fields do not exist in the release at all. The live docs site carries the same omissions.
 
-No, and three optional fields say so.
+Because `additionalProperties` is true, a product written from the documentation validates clean, its invented `shows` key riding along as an ignored extra, and nothing tells the author that the targeting they wrote was dropped.
 
-- `is_custom` — "Whether this is a custom product".
-- `expires_at` — "Expiration timestamp. After this time, the product may no longer be available for purchase and create_media_buy may reject packages referencing it."
-- `brief_relevance` — "Explanation of why this product matches the brief (only included when brief is provided)".
+## Custom and expiring products
 
-Put together, a seller agent may synthesise a product in response to a specific brief, attach a natural-language justification for why it fits, and stamp it with an expiry. The buyer agent then has a limited window to convert it into a package before the offer goes stale.
+Three optional fields say a product need not be a fixed catalog row. `is_custom` is "Whether this is a custom product". `expires_at` is an "Expiration timestamp. After this time, the product may no longer be available for purchase and create_media_buy may reject packages referencing it." `brief_relevance` carries an "Explanation of why this product matches the brief (only included when brief is provided)". Nothing pushes a notice when the window closes, and the firmest statement of what happens next is the `PRODUCT_EXPIRED` error, correctable by re-running `get_products`.
 
-This is the structural difference between AdCP's product and a traditional rate-card row. The rate card is a catalog you browse. An AdCP product can be an answer to a question you asked.
+None of the three appears in any example payload in the repository. The canonical product fixtures under `static/examples/products/canonical/` are static catalog rows carrying the same small set of keys, and `nytimes_homepage_takeover_custom.json` is named custom without setting `is_custom`.
 
-## How do signals attach to a product?
+## Targeting permissions
 
-Five separate fields govern that, and the defaults are restrictive:
+Three booleans default to `false`: `signal_targeting_allowed`, `property_targeting_allowed`, `collection_targeting_allowed`. Each bundles something a buyer might have assumed they could filter on. With `signal_targeting_allowed` false, signals "are bundled into the product terms". With `collection_targeting_allowed` false, "the product is a bundle — buyers get all listed collections". With `property_targeting_allowed` false, the product goes "all or nothing".
 
-| Field                      | Meaning                                                 |
-| -------------------------- | ------------------------------------------------------- |
-| `included_signals`         | Non-selectable signal metadata bundled into the product |
-| `data_provider_signals`    | Third-party provider signals the product can apply      |
-| `signal_targeting_options` | Inline signal options a buyer may select                |
-| `signal_targeting_rules`   | How selected signals are applied                        |
-| `signal_targeting_allowed` | Whether the package-level signal surface exists at all  |
+Only `signal_targeting_allowed` has a schema conditional behind it: an `allOf` rejects any product that declares `signal_targeting_options` without `signal_targeting_allowed: true`. The other two read `false` whether or not the seller set them. What the surviving signal fields address is on [audience vs signal](/signals/audience-vs-signal/).
 
-`signal_targeting_allowed` defaults to false. The schema spells out the consequence: when false, "signals are bundled into the product terms and cannot be selected or explicitly echoed as package signal groups". `property_targeting_allowed` behaves the same way, defaulting to false and making the product "all or nothing" for property filtering.
+## Three protocols define an object called Product
 
-A buyer agent that assumes it can narrow any product will be wrong by default on both axes.
+A field-name crosswalk breaks at `delivery_type`, the first field anyone would map: the three enums hold two, three and seven values. AdCP keeps delivery and exclusivity in separate enums, the second holding `none`, `category` and `exclusive`. AAMP folds exclusivity into `DeliveryType`, and OpenDirect folds deal type in on top of that. AdCP's FAQ names AAMP but publishes no mapping to it, saying "AAMP is still defining its normative surface."
 
-## What is the AAMP counterpart to a product?
-
-Both AAMP layers define a Product, and neither is close to AdCP's in size.
-
-|                            | AdCP Product                                       | AAMP Product (primitives)                                       | OpenDirect Product (agentic-direct)                        |
-| -------------------------- | -------------------------------------------------- | --------------------------------------------------------------- | ---------------------------------------------------------- |
-| Source                     | `dist/schemas/3.1.10/core/product.json`            | `spec/jsonschema/Product.json`                                  | `opendirect.json` schemas block                            |
-| Summary                    | "Represents available advertising inventory"       | "Sellable unit of publisher inventory"                          | "Product catalog item from ad placement to Run of Network" |
-| Properties                 | 49                                                 | 16                                                              | OpenDirect 2.1 shape                                       |
-| Required                   | 7                                                  | 3 (`product_id`, `seller_organization_id`, `name`)              | —                                                          |
-| Discovery mode             | Natural-language brief plus structured filters     | Media kit and avails search                                     | CRUD plus `search_products` tool                           |
-| Can be generated per brief | yes (`is_custom`, `brief_relevance`, `expires_at`) | not modelled                                                    | not modelled                                               |
-| Taxonomy hooks             | none on the object itself                          | IAB Content, Audience and Ad Product taxonomy targeting intents | AdCOM and OpenRTB references                               |
-
-The gap in field count is not padding on AdCP's side. It is measurement, governance and signal machinery that AAMP's control plane puts somewhere else or does not have. AAMP's Product, in exchange, binds directly to IAB's own taxonomies, which AdCP's does not.
-
-Note the source status difference as well. AdCP's product schema ships in a versioned stable release. AAMP's ships in a library whose README says "WORK IN PROGRESS — NOT YET RELEASED", and the `agentic-direct` copy lives in a file the repository's own README calls an "OpenAPI 3.0 Schema" when it is in fact an MCP tool manifest.
-
-## How is this term sourced?
-
-AdCP side: `dist/schemas/3.1.10/core/product.json` plus the `delivery-type` and `exclusivity` enums, from `adcontextprotocol/adcp` at commit `f1a35ab`, release 3.1.10 as reported by `dist/schemas/latest.json`. Prose quoted from `docs/reference/glossary.mdx`.
-
-AAMP side: `spec/jsonschema/Product.json` from `IABTechLab/iab-agentic-primitives` at commit `2fc7029`, and `opendirect.json` from `IABTechLab/agentic-direct` at commit `915bda9`. Both are reference implementations rather than ratified specifications, and neither repository references AdCP anywhere.
+|                       | AdCP Product                                 | AAMP primitives Product                                          | [OpenDirect](/concepts/opendirect/) Product                                   |
+| --------------------- | -------------------------------------------- | ---------------------------------------------------------------- | ----------------------------------------------------------------------------- |
+| Properties / required | 49 / 7 listed, 8 to validate                 | 16 / 3: `product_id`, `seller_organization_id`, `name`           | 31 / 7                                                                        |
+| `delivery_type`       | `guaranteed`, `non_guaranteed`               | `Exclusive`, `Guaranteed`, `PMP`                                 | 7 values, including three PMP flavours and two OpenRTB deal types             |
+| Where price lives     | `pricing_options`, required on the object    | `base_price` optional list price; negotiated rate on `RateCard`  | `baseprice` required, "Base retail price (not rate card)"                     |
+| Per-brief minting     | `is_custom`, `brief_relevance`, `expires_at` | not modelled                                                     | `activedate` and `retirementdate`, catalog lifecycle rather than offer expiry |
+| Artifact and status   | published release 3.1.13                     | [unreleased library](https://aampexplorer.com/versions/), v0.5.0 | MCP tool manifest, `version` 2.1.0                                            |

@@ -1,84 +1,112 @@
 ---
-title: 'Sponsored Intelligence (SI)'
-description: "Sponsored Intelligence is AdCP's protocol for advertising inside AI assistant conversations. Four operations, every schema marked experimental, and no counterpart anywhere in AAMP."
-answer: "Sponsored Intelligence (SI) is AdCP's standard for conversational brand experiences inside AI assistants. AdCP 3.1.10 registers four SI operations, and every SI schema carries x-status experimental, so the surface can change inside the 3.x line."
+title: 'Sponsored Intelligence (SI): a stable channel and an experimental chat protocol'
+description: 'Sponsored Intelligence is two things in AdCP 3.1.13: a stable media channel bought with get_products, and a four-operation chat protocol whose 14 schemas are all experimental.'
+answer: "Sponsored Intelligence (SI) is AdCP's name for advertising on AI surfaces, and it covers two things: a stable media channel bought through get_products, and an experimental four-operation chat protocol for brand-agent sessions."
 pubDate: 2026-08-09
+updatedDate: 2026-08-09
 term: 'Sponsored Intelligence'
-alternateNames: ['SI']
+alternateNames: ['SI', 'SI Chat Protocol', 'sponsored_intelligence']
 category: 'agentic'
-cluster: gl-adcp
+cluster: 'gl-stacks'
 keywords:
   - 'sponsored intelligence advertising'
   - 'sponsored intelligence definition'
-  - 'si_initiate_session'
   - 'adcp sponsored intelligence'
+  - 'sponsored_intelligence channel'
+  - 'si_initiate_session'
 citations:
-  - 'https://docs.adcontextprotocol.org/'
-  - 'https://github.com/adcontextprotocol/adcp/blob/f1a35aba734befa809e1fa780ad77c7edd614e96/dist/schemas/3.1.10/index.json'
-  - 'https://github.com/adcontextprotocol/adcp/blob/f1a35aba734befa809e1fa780ad77c7edd614e96/dist/docs/3.1.6/reference/experimental-status.mdx'
-  - 'https://github.com/adcontextprotocol/adcp/blob/f1a35aba734befa809e1fa780ad77c7edd614e96/dist/docs/3.1.6/reference/glossary.mdx'
-  - 'https://github.com/adcontextprotocol/adcp/blob/f1a35aba734befa809e1fa780ad77c7edd614e96/docs/sponsored-intelligence/overview.mdx'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/schemas/3.1.13/index.json'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/schemas/3.1.13/enums/channels.json'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/schemas/3.1.13/sponsored-intelligence/si-ui-element.json'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/schemas/3.1.13/sponsored-intelligence/si-capabilities.json'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/schemas/3.1.13/sponsored-intelligence/si-sponsored-context.json'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/schemas/3.1.13/sponsored-intelligence/si-context-use.json'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/schemas/3.1.13/sponsored-intelligence/si-sponsored-context-receipt.json'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/docs/sponsored-intelligence/overview.mdx'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/docs/sponsored-intelligence/product-spectrum.mdx'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/docs/sponsored-intelligence/specification.mdx'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/docs/3.1.6/reference/experimental-status.mdx'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/docs/3.1.6/reference/glossary.mdx'
   - 'https://github.com/IABTechLab/AAMP'
+  - 'https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/docs/index.md'
 related:
   - '/concepts/adcp/'
-  - '/concepts/agentic-advertising/'
   - '/concepts/aamp/'
+  - '/concepts/agentic-advertising/'
   - '/concepts/adcp-vs-aamp-terminology/'
-  - 'https://adcpexplorer.noetis.dev/areas/sponsored-intelligence/'
-  - 'https://agenticadlab.noetis.dev/protocols/adcp-vs-aamp/'
-seeAlso: ['Ad Context Protocol', 'Agentic Advertising', 'Brand Agent', 'Agent Card']
+  - '/agents/brand-agent/'
+  - '/media-buying/product/'
+  - '/about/sources-and-versions/'
+  - 'https://adcpexplorer.com/areas/sponsored-intelligence/'
+  - 'https://agenticadlab.com/protocols/adcp-vs-aamp/'
+seeAlso: ['Ad Context Protocol', 'Agentic Advertising', 'Brand Agent', 'Product', 'Agent Card']
 reviewState: cto-reviewed
 ---
 
-## What is Sponsored Intelligence in AdCP?
+Sponsored Intelligence (SI) is [AdCP](/concepts/adcp/)'s name for advertising on AI assistant surfaces. AdCP's glossary puts it by analogy: "Like VAST defines video ad serving, SI defines how to serve and interact with brand agent endpoints. SI handles the engagement; the Agentic Commerce Protocol (ACP) handles transactions."
 
-AdCP's published glossary defines it in three sentences:
+The name covers two things: a media channel bought with the ordinary media-buy calls, and a four-operation chat protocol whose 14 schemas are all marked experimental.
 
-> An open standard for conversational brand experiences in AI assistants. Like VAST defines video ad serving, SI defines how to serve and interact with brand agent endpoints. SI handles the engagement; the Agentic Commerce Protocol (ACP) handles transactions.
+In programmatic, a thin bid request describes an opportunity to a bidder that holds no context about the user. Under SI the party holding the user context selects the advertising: the brand publishes an offering and the assistant host pulls it, and `si_get_offering` returns "offering details, matching products, and an offering token for session continuity" with no user PII in the request.
 
-Concretely: an AI assistant holding a user conversation opens a consented session with a brand's agent, exchanges messages, and renders the brand's structured response using a fixed component vocabulary. There is no creative file, no bid request and no ad server in the path. The brand supplies catalogue, identity and rules in advance; the assistant generates the surface.
+Brian O'Kelley, Scope3's CEO, published ["Sponsored Intelligence and the Trillion Dollar Sentence"](https://bokonads.com/p/sponsored-intelligence-and-the-trillion) on 19 January 2026, and AdCP adopted the phrase in its SI chat protocol document.
 
-The overview page calls this the reversed data flow: in programmatic the platform sends a thin request out to a bidder that lacks context, and in Sponsored Intelligence the buyer pushes rich context in to the platform that already holds the conversation.
+## One name, two stability levels
 
-## Where is Sponsored Intelligence defined, and what does it register?
+|                   | The channel                                                                                                                                      | The chat protocol                                                                                             |
+| ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------- |
+| Where it lives    | `enums/channels.json`, 1 of 20 values                                                                                                            | the [`sponsored-intelligence`](https://adcpexplorer.com/areas/sponsored-intelligence/) schema group, 14 files |
+| How it is used    | `channels: ["sponsored_intelligence"]` on a [product](/media-buying/product/), then `get_products`, `create_media_buy`, `get_media_buy_delivery` | `si_get_offering`, `si_initiate_session`, `si_send_message`, `si_terminate_session`                           |
+| Stability marking | no `x-status`; ordinary 3.x guarantee                                                                                                            | `x-status: experimental` on all 14                                                                            |
+| Runtime gate      | none                                                                                                                                             | seller MUST declare `sponsored_intelligence.core` in `experimental_features`                                  |
+| What it carries   | sponsored responses, AI search results, generative display and video                                                                             | brand experience handoffs                                                                                     |
 
-`dist/schemas/3.1.10/index.json`, schema group `sponsored-intelligence`, described as the "Sponsored Intelligence Protocol for conversational brand experiences in AI assistants". It registers four of AdCP's 64 operations:
+AdCP publishes this split once, in `overview.mdx`: "SI uses two protocol layers... Most SI products... only involve the buying layer." Most SI inventory is bought with the ordinary media-buy calls and never touches the chat protocol: only one of the four SI product types AdCP lists calls an `si_*` operation.
 
-| Operation              | What it does                                      |
-| ---------------------- | ------------------------------------------------- |
-| `si_get_offering`      | Pre-session offering lookup against a brand agent |
-| `si_initiate_session`  | Open a consented conversational session           |
-| `si_send_message`      | Exchange messages within that session             |
-| `si_terminate_session` | Tear the session down                             |
+## What the experimental stamp permits
 
-The group also registers supporting schemas that carry most of the design: `si-capabilities` (modality, component and commerce categories each side supports), `si-identity` (user identity with explicit consent), `si-ui-element` (the component vocabulary: text, link, image, product card, carousel, action button, app handoff), plus `si-context-use`, `si-sponsored-context` and `si-sponsored-context-receipt`, which declare the paying principal and the disclosure obligation attached to sponsored context entering an SI boundary.
+An experimental marking permits breaking changes inside a minor release. Inside 3.x an experimental surface can rename or remove fields, change types, drop enum values and rename tasks, on six weeks of notice; a stable surface gets six months and cannot break inside the major line. AdCP requires two markers for one: `x-status` in the schema, and a runtime declaration by the seller. `experimental-status.mdx` is blunt about the second:
 
-That disclosure chain is the part worth reading if you only read one thing. SI treats "this was paid for" as a typed object with a receipt, not as a rendering convention.
+> A seller that implements any experimental surface MUST list it in `experimental_features`... there is no "silently experimental" mode.
 
-## Is Sponsored Intelligence stable?
+Buying the channel is ordinary 3.x work, because `x-status` does not inherit through `$ref` by explicit rule and neither `core/product.json` nor the `media-buy` group carries one. Implementing the chat protocol means pinning a schema version, re-validating on each minor release, and budgeting for a rename nobody on the implementer's side chose.
 
-No, and AdCP says so twice over.
+No SI schema has changed since 3.1.0, so the experimental marking has not yet been exercised. The experimental note appears on 11 documentation files; `product-spectrum.mdx`, which distinguishes the two layers, does not carry it.
 
-Every schema I checked in `dist/schemas/3.1.10/sponsored-intelligence/` carries `x-status: experimental` at the schema root. AdCP's experimental contract requires two markers, not one: the schema annotation, plus a runtime declaration by the seller of the feature id `sponsored_intelligence.core` in `experimental_features` on its `get_adcp_capabilities` response. The specification is blunt about the second:
+## Sponsored context and disclosure
 
-> A seller that implements any experimental surface MUST list it in `experimental_features`. Sellers that do not list an experimental surface MUST NOT implement it — there is no "silently experimental" mode.
+Three schemas landed in 3.1.0 and turned paid context into a typed object. `si-sponsored-context` names the `paying_principal`, the `context_use` and a `disclosure_obligation` with label text and timing. `si-context-use` is a three-value enum, `presentation_only`, `comparison_set`, `reasoning_context`, and it sets how far into the assistant's own reasoning the paid material may travel.
 
-What that buys the surface is permission to break. Inside 3.x, an experimental surface may rename or remove fields, change types, remove enum values and rename tasks, with at least 6 weeks of published notice. Stable surfaces get a 6-month deprecation notice and cannot break inside a major line at all.
+`si-sponsored-context-receipt` is the host's recorded answer, and the one link where the schema constrains behaviour. The host answers `accepted` or `rejected`, and an acceptance has to echo back the same `context_use` it was handed and carry a `disclosure_commitment` that promises to satisfy the disclosure obligation. There is no room to negotiate downward: "a host that cannot honor the declared use mode rejects the sponsored context instead of down-scoping it."
 
-So Sponsored Intelligence ships in a stable release without inheriting that release's stability guarantee. If you are budgeting an SI integration, budget for the shape changing.
+The receipt is an audit artifact. AdCP names no enforcement body and leaves the obligation to the parties, and `si-context-use` says as much, calling itself "a boundary declaration, not a claim that AdCP can inspect hidden model reasoning..."
 
-## What is Sponsored Intelligence's counterpart in AAMP?
+## UI components
 
-**No counterpart exists.** Searching all eight IAB Tech Lab repositories in the AAMP corpus for "sponsored intelligence" returns zero occurrences.
+Six components are MUST-render — text, link, image, product_card, carousel and action_button — and `app_handoff` and `integration_actions` are MAY. `specification.mdx` sets the split: six "Standard components", then "Hosts MAY support additional components". Only the six are safe on a core path, because `specification.mdx` makes a core dependency on the other two a MUST NOT.
 
-The gap is structural rather than terminological. AAMP's three planes are a control plane for booking direct inventory, a bidstream mutation framework and an embedding exchange. None of them models a conversation, a consented session, a UI component vocabulary, or a paid-context disclosure receipt. There is no AAMP object to map `si_initiate_session` onto, and no AAMP repository whose scope would contain one.
+Three files in the same release list different component sets.
 
-This is one of the clearest asymmetries between the two stacks, and it runs the other way from most of them. On negotiation vocabulary AAMP is far ahead of AdCP; on advertising inside an AI assistant, AdCP is the only stack with anything at all.
+| File                                          | Count | What it lists                                                                              |
+| --------------------------------------------- | ----- | ------------------------------------------------------------------------------------------ |
+| `sponsored-intelligence/si-ui-element.json`   | 8     | text, link, image, product_card, carousel, action_button, app_handoff, integration_actions |
+| `si-capabilities.json`, `components.standard` | 6     | the same list minus `app_handoff` and `integration_actions`                                |
+| `index.json`, supporting-schemas description  | 7     | drops `integration_actions`, calls `app_handoff` standard                                  |
 
-## What is Sponsored Intelligence confused with?
+The registry index is wrong under either reading, and where the index and a schema disagree the schema wins.
 
-**SI is not ACP.** The Agentic Commerce Protocol, from OpenAI and Stripe, handles checkout and payment delegation. SI handles the engagement that precedes it. AdCP's glossary lists the two as separate entries and describes the split in one line. AdCP Explorer publishes the [operation-level comparison](https://adcpexplorer.noetis.dev/areas/sponsored-intelligence/).
+## Sponsored Intelligence in AAMP
 
-**SI is not sponsored search or an answer-engine ad unit.** It defines a session between an assistant and a brand agent, with declared capabilities on both sides. A sponsored link injected into a generated answer is not SI unless it went through that handshake and carries the sponsored-context declaration.
+[AAMP](/concepts/aamp/) defines no counterpart. Its repositories treat AI assistants as operator consoles for media professionals rather than as surfaces that carry an ad: seller-agent's documentation offers 46 MCP tools driven "from Claude, ChatGPT, or any MCP-compatible AI assistant".
 
-**SI is not the brand protocol.** They are adjacent and often confused because both involve a brand agent. AdCP's Brand Protocol registers six separate operations covering identity, claim verification and rights licensing. Sponsored Intelligence registers four covering the conversational session. Different schema groups, different feature ids.
+AAMP's planes are direct booking, bidstream mutation and an embedding exchange. None models a session or a disclosure receipt, so there is nothing to map `si_initiate_session` onto, and the [AdCP-versus-AAMP comparison](https://agenticadlab.com/protocols/adcp-vs-aamp/) covers the rest of the divergence.
+
+## Common confusions
+
+The generic sense of the phrase owns no artifacts. A Sponsored Intelligence Summit was announced 21 July 2026, and the phrase is widely used for all advertising inside AI with no reference to AdCP; Scope3's own AdCP explainer does not mention Sponsored Intelligence.
+
+[Compute Sponsoring v1.0](https://compute-sponsoring.org/), published by wavebird in February 2026, is a separate proposal for advertising inside generative AI, priced on compute units. It states that its technical specifications and audit mechanisms remain to be introduced.
+
+ACP is a different protocol. OpenAI and Stripe's Agentic Commerce Protocol handles checkout and payment delegation after the engagement, which is the other half of the same transaction rather than a rival.
+
+Inside SI itself, the channel and the chat protocol get conflated. A sponsored link in a generated answer may be the channel without being the chat protocol: the chat protocol applies only when the placement went through the session handshake and carries the sponsored-context declaration.

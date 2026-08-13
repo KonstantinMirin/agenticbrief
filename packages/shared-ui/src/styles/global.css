@@ -61,6 +61,16 @@ body {
   font-size: 18px;
   line-height: 1.65;
   text-rendering: optimizeLegibility;
+  /*
+   * This corpus writes repository paths into running prose, not only into
+   * `code`, and a path is one unbreakable word to a line breaker. On the AAMP
+   * Explorer homepage a bare list item reading
+   * `agentic-audiences/specs/v1.0/examples/seller_agent_response.json` was
+   * enough on its own to widen the document to 510px inside a 390px viewport.
+   * `break-word` breaks only what cannot otherwise fit, so ordinary prose wraps
+   * exactly as before.
+   */
+  overflow-wrap: break-word;
 }
 
 .layout {
@@ -210,6 +220,21 @@ code {
   background: var(--bg-inset);
   padding: 0.12em 0.35em;
   border-radius: 4px;
+}
+
+/*
+ * Inline code carries schema paths, and a path has no space in it to break at.
+ * `agentic-audiences/specs/v1.0/schema/agent_interface.schema.json` measured
+ * 500px inside a 390px viewport and pushed the document sideways on its own,
+ * after the table overflow below had already been contained. `anywhere` rather
+ * than `break-word` because the token is one unbroken run and only the former
+ * will break mid-token when nothing else fits.
+ *
+ * Scoped off `pre`, which scrolls instead: a code block that rewraps loses the
+ * line structure that makes a payload readable.
+ */
+:not(pre) > code {
+  overflow-wrap: anywhere;
 }
 
 pre {
@@ -470,6 +495,40 @@ tbody th[scope='row'] {
   border-color: var(--accent);
 }
 
+/* ---------- end-of-page engagement block ---------- */
+
+/*
+ * Deliberately quiet: a left rule and a tint, no border box, no button-shaped
+ * button, no colour that competes with the body. It reads as the last section
+ * of the page rather than as an advertisement pasted under it, which is the
+ * only register the persona study left available.
+ */
+.engagement {
+  margin: 3.5rem 0 0;
+  padding: 1.25rem 0 0.25rem 1.25rem;
+  border-left: 3px solid var(--accent-soft);
+  font-size: 0.95rem;
+}
+
+.engagement h2 {
+  font-size: 1.1rem;
+  margin: 0 0 0.6rem;
+  font-family: var(--font-sans);
+}
+
+.engagement p {
+  margin: 0 0 0.7rem;
+  max-width: var(--measure);
+}
+
+.engagement .cta-primary {
+  font-weight: 600;
+}
+
+.engagement .muted {
+  font-size: 0.88rem;
+}
+
 /* ---------- footer ---------- */
 
 .site-footer {
@@ -534,5 +593,24 @@ tbody th[scope='row'] {
 
   table {
     font-size: 0.86rem;
+  }
+
+  /*
+   * Markdown tables are emitted bare, outside the .comparison wrapper that
+   * carries overflow-x, so nothing contained them on a narrow screen. Measured
+   * at 390px: the AdCP-vs-AAMP comparison laid out 829px wide and dragged the
+   * whole document sideways with it, and a glossary entry 449px. This corpus
+   * argues in tables, so that hit the pages that matter most.
+   *
+   * display:block makes the table its own scroll container. width:auto is
+   * required with it — the base rule sets width:100%, which on a block box
+   * clamps the table to the column and crushes the cells instead of letting
+   * them scroll. The overflow moves inside the table and the page stops moving.
+   */
+  main table {
+    display: block;
+    width: auto;
+    max-width: 100%;
+    overflow-x: auto;
   }
 }

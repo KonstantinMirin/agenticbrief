@@ -1,80 +1,105 @@
-# Agentic Brief — website portfolio
+# Agentic Brief
 
-Six static Astro sites documenting agentic advertising protocols from their source repositories.
-Built on the patterns of the mirin.pro blog (see `/srv/ws/out/blog-process-summary.md` §13), with the
-gaps that blog leaves open filled in: JSON-LD, per-page OG cards, `llms.txt`, and a content linter that
-enforces the blog's voice rules in CI.
+Six static Astro sites documenting agentic advertising protocols, generated from and checked against
+the specification repositories themselves rather than the announcements about them.
 
-| Site                   | Staging                          | Role                                                           | Pages |
-| ---------------------- | -------------------------------- | -------------------------------------------------------------- | ----- |
-| Agentic Ad Lab         | `agenticadlab.noetis.dev`        | Hub. Protocol-neutral. Owns the AdCP-vs-AAMP comparison.       | 10    |
-| Brief Gateway          | `briefgateway.noetis.dev`        | What an agent-readable campaign brief is.                      | 7     |
-| AdCP Explorer          | `adcpexplorer.noetis.dev`        | All 64 AdCP operations, generated from the published registry. | 22    |
-| AAMP Explorer          | `aampexplorer.noetis.dev`        | What IAB Tech Lab has actually published, including the holes. | 14    |
-| What Is Agentic Buying | `whatisagenticbuying.noetis.dev` | One question, answered honestly.                               | 6     |
-| Ad Tech Glossary       | `adtechglossary.noetis.dev`      | 36 terms, each traced to a spec file and version-pinned.       | 46    |
+| Site                                                       | Role                                                                              | Pages |
+| ---------------------------------------------------------- | --------------------------------------------------------------------------------- | ----- |
+| [agenticadlab.com](https://agenticadlab.com)               | Hub. Which standard to implement, who is transacting, and what it costs.          | 14    |
+| [briefgateway.com](https://briefgateway.com)               | A free brief scorer, plus the spec for what an agent-readable brief contains.      | 10    |
+| [adcpexplorer.com](https://adcpexplorer.com)               | Every Ad Context Protocol operation, generated from the published registry.        | 23    |
+| [aampexplorer.com](https://aampexplorer.com)               | What IAB Tech Lab has published under AAMP, including the gaps.                    | 14    |
+| [whatisagenticbuying.com](https://whatisagenticbuying.com) | One question, answered for someone who heard the phrase yesterday.                 | 6     |
+| [adtechglossary.com](https://adtechglossary.com)           | 36 terms, each traced to a specification file at a pinned commit.                  | 46    |
+
+## The brief scorer
+
+The one executable artefact here is [`packages/brief-engine`](packages/brief-engine), which powers
+[briefgateway.com/generate](https://briefgateway.com/generate/). Paste a campaign brief as prose and
+it emits the AdCP `get_products` request and the IAB Tech Lab `CampaignBrief` that fall out of it,
+with every field labelled **stated**, **derived**, **assumed** or **missing**.
+
+Three properties are the point of it:
+
+- **Deterministic and rule-based.** No model, no network call, no account, no email. The same words
+  and the same reference date always produce byte-identical JSON, and all of it runs in the browser.
+  Open the network tab and watch it stay empty.
+- **It refuses to invent.** Every emitted value traces to a span of text somebody wrote. It will not
+  guess a channel split or an attribution window, because a brief is a document somebody signs.
+  `assumed` values are off by default and need an explicit accept.
+- **It scores its own worked example 5 out of 10.** The scores measure how much of your intent
+  survives the wire, not how good the tool is.
+
+`npm run test:engine` runs 354 tests, including an adversary suite for the invented-value failures
+that matter most: a transposed flight range, a month name hiding inside an accented word, a content
+rating read as a deal type.
 
 ## Layout
 
 ```
-sites/<site>/          one Astro app per site; content comes from ../../content
-packages/shared-ui/    layouts, nav, answer box, field tables, the site registry
-packages/seo/          JSON-LD builders, <head>, sitemap config, llms.txt, OG cards
-packages/content-utils/ collection schemas, the publish gate, feed helpers
-packages/protocol-data/ typed accessors over data/*.json
-content/               markdown, shared across sites — one page, one home
-data/                  parsed spec data + the semantic core
-scripts/               spec parsers, OG generator, content linter, deploy
+content/             markdown, one file per page, shared across sites
+sites/<site>/        one Astro app per site, reading from ../../content
+packages/
+  brief-engine/      the deterministic brief decomposer and scorer
+  shared-ui/         layout, header, footer, portfolio nav, the site registry
+  seo/               head tags, JSON-LD builders, llms.txt, robots.txt, OG cards
+  protocol-data/     typed accessors over data/*.json
+  content-utils/     content-collection schemas and the publish gate
+data/                parsed protocol facts, regenerated by scripts/spec-parser
+scripts/             spec parsers, glossary generator, OG cards, content linter
 ```
 
-## Commands
+## Working on it
 
 ```bash
 npm install
-npm run data:all        # re-parse AdCP + AAMP into data/*.json
-npm run build           # turbo, all six sites
-npm run lint:content    # the voice + GEO linter
-npm run quality         # format check + content lint + typecheck
-npm run deploy          # build, generate OG cards, publish, reload Caddy
+npm run dev            # all six sites in parallel
+npm run build          # build every site
+npm run quality        # format check, content lint, typecheck
+npm run test:engine    # brief-engine test suite
+npm run data:all       # regenerate data/ from the specification repositories
 ```
 
-## Three things that will bite you
+`npm run data:all` reads local clones of the specification repositories. Every script takes its
+location from an environment variable (`ADCP_REPO`, `ADCP_SCHEMAS`) and falls back to the author's
+checkout path, so point those at your own clones.
 
-**1. Parse the published AdCP release, not the working tree.** `/srv/ws/salesagent/adcp` has two schema
-trees. `dist/schemas/latest.json` names the current stable release (3.1.10, 64 operations).
-`static/schemas/source/` is the branch, and its `index.json` still says 3.1.1 because changesets only
-bumps it at release. Reading the branch and trusting its stamp produces a site that confidently states
-the wrong version and documents an operation that has never shipped. `parse-adcp.mjs` reads the
-release by default and reports the branch delta separately; `ADCP_TREE=source` overrides.
+## Two things that will bite you
 
-**2. AAMP has no version.** Eight repositories, eight version schemes, three expansions of the acronym,
-and four zero-byte files in its specification tree. Any page stating an umbrella AAMP version is wrong.
-`parse-aamp.mjs` records every gap it finds in `gaps[]`, and the sites render them.
+**Parse the published AdCP release, not the working tree.** The AdCP repository carries two schema
+trees. `dist/schemas/latest.json` names the current stable release. `static/schemas/source/` is the
+branch, and its `index.json` lags because changesets only bumps it at release time. Reading the
+branch and trusting its stamp produces a site that confidently states the wrong version and documents
+an operation that never shipped. `parse-adcp.mjs` reads the release by default and reports the branch
+delta separately.
 
-**3. Caddy on this box is 2.6.2.** The `{args[N]}` snippet placeholder does not exist before 2.7. Under
-2.6 it is not substituted, `caddy validate` passes, and `root` silently becomes a literal path that
-serves nothing. The Caddyfile therefore uses explicit per-host blocks. If you refactor it into a
-snippet, verify with `curl -s http://127.0.0.1:2019/config/ | jq '..|objects|select(.root?)|.root'`
-rather than trusting `validate`.
+**AAMP has no umbrella version.** Eight repositories, eight versioning schemes, several expansions of
+the acronym, and zero-byte files in its specification tree. Any page stating an AAMP version number
+is wrong. `parse-aamp.mjs` records every gap it finds in `gaps[]`, and the sites render them.
 
-## The publication workflow
+## The content linter
 
-Mirrors the blog's, with the mechanical half automated:
+`scripts/content-lint.mjs` gates the build. It enforces what a style guide usually only asks for: a
+banned-word list, banned constructions, spaced em dashes, straight quotes, a frontmatter contract,
+and a rule that a page making numeric claims carries citations. It is the mechanical half of an
+editorial process, and it cannot tell whether a paragraph is worth reading.
 
-1. **Draft** into `content/<collection>/<slug>.md` with `reviewState: draft`.
-2. **Language correction** — `npm run lint:content` enforces the blog's banned words, banned phrases,
-   em-dash spacing, description length and the 40-word answer rule. Errors fail the build.
-3. **CTO review** — the rubric in `/srv/ws/out/blog-process-summary.md` §7, run with fresh context.
-   Set `reviewState: cto-reviewed`.
-4. **Publish** — only `cto-reviewed` and `published` entries render in production. Same predicate as
-   the blog's `draft: true`, in one place (`packages/content-utils/src/index.ts`) rather than four.
+## Publication workflow
+
+1. Draft into `content/<collection>/<slug>.md` with `reviewState: draft`.
+2. `npm run lint:content` — banned words, em-dash spacing, description length, the 40-word answer
+   rule. Errors fail the build.
+3. Review with fresh context, then set `reviewState: cto-reviewed`.
+4. Only `cto-reviewed` and `published` entries render, gated in one place
+   (`packages/content-utils/src/index.ts`).
 
 ## Deployment
 
-Static files served from `/srv/www/<site>` by Caddy, behind Authelia (`one_factor`), with
-`X-Robots-Tag: noindex` — these are staging previews of sites intended for their own `.com` domains,
-and an indexed staging host would compete with the production domain later.
+Static builds hosted on AWS Amplify, one app per domain, fronted by CloudFront with certificates from
+ACM. DNS is Route 53. Every canonical URL, cross-site link and JSON-LD node names the production
+`.com` domain.
 
-Related documents: `/srv/ws/out/content-framework.md` (the plan), `/srv/ws/out/semantic-core-reviewed.md`
-(the plan after adversarial review, plus the kill list), `/srv/ws/inbox/e2e-testing-brief.md` (how to
-test this).
+## Licence and affiliation
+
+An independent editorial project, published by [Postindustria](https://postindustria.com/services/).
+Not affiliated with, or endorsed by, AgenticAdvertising.org or IAB Tech Lab.

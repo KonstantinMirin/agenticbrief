@@ -4,7 +4,8 @@ import DocPage from '@agenticbrief/shared-ui/DocPage.astro'
 import { siteUrl } from '@agenticbrief/shared-ui/sites'
 
 const entry = await getEntry('guides', 'agentic-buying-answer')
-if (!entry) throw new Error('content/guides/agentic-buying-answer.md is missing — it is this site')
+if (!entry)
+  throw new Error('The homepage renders content/guides/agentic-buying-answer.md, which is missing')
 const { Content } = await render(entry)
 const BASE = siteUrl('whatisagenticbuying')
 ---
@@ -15,6 +16,63 @@ const BASE = siteUrl('whatisagenticbuying')
   path="/"
   technical={false}
   breadcrumbs={[{ name: 'What Is Agentic Buying', url: `${BASE}/` }]}
+  relatedLinks={[
+    {
+      href: '/how-it-works/',
+      title: 'How agentic buying works, step by step',
+      note: 'One buy traced from the brief to the booking, and where the sequence trips clients up.',
+    },
+    {
+      href: '/agentic-buying-vs-programmatic/',
+      title: 'Agentic buying vs programmatic buying',
+      note: 'One impression per auction against a whole campaign, and the two standards bodies that disagree about whether that is a difference.',
+    },
+    {
+      href: '/maturity/',
+      title: 'Is agentic buying real yet?',
+      note: 'Eight named deployments, one named advertiser, and which layers are safe to build on.',
+    },
+    {
+      href: '/about/',
+      title: 'About this site and who pays for it',
+      note: 'Who writes it, what he sells, and why neither standards body has any say over it.',
+    },
+    {
+      href: 'https://agenticadlab.com/guides/autonomy-ladder/',
+      title: 'The autonomy ladder for agentic media buying',
+      note: 'The rungs between an agent that reads your delivery data and one that moves money unattended.',
+    },
+    {
+      href: 'https://agenticadlab.com/guides/who-is-running-agentic-buys/',
+      title: 'Who is actually running agentic buys',
+      note: 'The dated ledger, with a column separating vendor claims from independent measurement.',
+    },
+    {
+      href: 'https://agenticadlab.com/guides/questions-to-ask-an-agentic-vendor/',
+      title: 'Questions to ask an agentic advertising vendor',
+      note: 'The longer list, with the answers that should end the meeting.',
+    },
+    {
+      href: 'https://agenticadlab.com/guides/will-agents-replace-media-buyers/',
+      title: 'Will agents replace media buyers?',
+      note: 'Role by role, including what happens to a retainer priced on executing buys.',
+    },
+    {
+      href: 'https://agenticadlab.com/protocols/adcp-vs-aamp/',
+      title: 'AdCP vs AAMP: which standard to implement',
+      note: 'The two stacks side by side, payload by payload.',
+    },
+    {
+      href: 'https://adcpexplorer.com/guides/adcp-registry-measured/',
+      title: 'The AdCP agent registry, measured',
+      note: 'What each of the 23 listed agents answered to a caller with no credentials.',
+    },
+    {
+      href: 'https://adtechglossary.com/concepts/agentic-buying/',
+      title: 'Agentic buying, in the glossary',
+      note: 'The short definition, with the neighbouring terms it gets confused with.',
+    },
+  ]}
 >
   <Content />
 </DocPage>

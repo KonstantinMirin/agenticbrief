@@ -13,7 +13,31 @@ import {
   articleNode,
   breadcrumbNode,
 } from '@agenticbrief/seo/schema'
-import { BASE, HUB, MATURITY, tasksForArea } from '../../lib/site'
+import { BASE, MATURITY, tasksForArea } from '../../lib/site'
+
+/** The one link that is specific to each repository. */
+const RELATED: Record<string, { href: string; label: string }> = {
+  'seller-agent': {
+    href: '/negotiation/',
+    label: 'Price negotiation, where this repository publishes its concession table',
+  },
+  'iab-agentic-primitives': {
+    href: '/negotiation/',
+    label: 'Price negotiation, whose message schemas this repository defines',
+  },
+  'buyer-agent': {
+    href: '/negotiation/',
+    label: 'The negotiation sequence this agent books against',
+  },
+  'agentic-rtb-framework': {
+    href: '/versions/',
+    label: 'The ARTF protobuf, shipped twice under one tag',
+  },
+  'agentic-audiences': { href: '/', label: 'The empty files in this repository, in context' },
+  'agentic-direct': { href: '/repos/#ranking-test', label: 'What counts as a contract here' },
+  AAMP: { href: '/', label: 'What the hub README leaves out' },
+  'registry-agent-example': { href: '/', label: 'The two registry hosts the corpus disagrees on' },
+}
 
 export function getStaticPaths() {
   return aamp.components.map((c) => ({ params: { name: c.name }, props: { component: c } }))
@@ -23,16 +47,58 @@ const { component } = Astro.props
 const maturity = MATURITY[component.name]
 
 // Areas and objects are attributed to a component by matching the repo URL in
-// their provenance, so a page can never claim material from a repo it is not about.
+// their provenance.
 const areas = aamp.areas.filter((a) => a.provenance?.repo === component.repo)
 const objects = aamp.objects.filter((o) => o.provenance?.repo === component.repo)
-const tasks = areas.flatMap((a) => tasksForArea(a.key))
+const allTasks = areas.flatMap((a) => tasksForArea(a.key))
+
+// Two things are rendered here under one word in the source data. A task with
+// an httpMethod is an operation a caller can invoke; a task without one is a
+// request/response pair named after its schema. And some entries carry a
+// positional index for a name (agentic-direct's OpenDirect manifest), which is
+// not a name a reader can use — those are not published at all.
+const named = allTasks.filter((t) => !/^\d+$/.test(t.name))
+const invocable = named.filter((t) => t.httpMethod)
+const tasks = invocable.length > 0 ? invocable : named
+const invocableOps = invocable.length > 0
+const pathCount = new Set(invocable.map((t) => t.httpPath)).size
+
+const opCount = invocableOps
+  ? `${tasks.length} operation${tasks.length === 1 ? '' : 's'} across ${pathCount} path${pathCount === 1 ? '' : 's'}`
+  : `${tasks.length} request and response pair${tasks.length === 1 ? '' : 's'}`
+const objCount = `${objects.length} object definition${objects.length === 1 ? '' : 's'}`
+const empty = tasks.length === 0 && objects.length === 0
+const inventory = empty
+  ? 'no machine-readable definitions'
+  : tasks.length === 0
+    ? objCount
+    : objects.length > 0
+      ? `${opCount} and ${objCount}`
+      : opCount
+const inventoryLine = empty ? '' : `${inventory[0].toUpperCase()}${inventory.slice(1)}.`
+
+const displayVersion = (() => {
+  const v = component.version
+  if (!v) return 'untagged'
+  const tag = /^(v[\d.]+)/.exec(v)
+  if (tag && tag[1] === v) return v
+  if (tag) {
+    const behind = /-(\d+)-g[0-9a-f]+$/.exec(v)
+    return behind ? `${tag[1]} (${behind[1]} commits past the tag)` : `${tag[1]} (${v})`
+  }
+  return `untagged (${v})`
+})()
 
 const path = `/repos/${component.name}/`
 const url = `${BASE}${path}`
-const title = `${component.name} — what this AAMP component defines`
-const description = `${component.name} at ${component.version}: ${tasks.length} operations and ${objects.length} object definitions, read directly from the repository at commit ${String(component.commit).slice(0, 8)}.`
-const answer = `${component.name} is ${component.kind.replace(/-/g, ' ')} in IAB Tech Lab's AAMP. ${component.purpose}`
+const title = `${component.name} — what this AAMP repository ships`
+const listing = component.listedInHub
+  ? 'It is listed in the AAMP hub README'
+  : 'The AAMP hub README does not list it'
+const kindLabel = component.kind.replace(/-/g, ' ')
+const kindArticle = /^[aeiou]/i.test(kindLabel) ? 'an' : 'a'
+const description = `${component.name}, ${kindArticle} ${kindLabel} repository in IAB Tech Lab's AAMP: ${inventory}. ${listing}.`
+const answer = `${component.name} is an AAMP ${component.kind.replace(/-/g, ' ')} repository from IAB Tech Lab. ${component.purpose}`
 
 const jsonLd = graph([
   organizationNode(),
@@ -85,14 +151,23 @@ const jsonLd = graph([
   />
 
   <table>
-    <caption>{component.name} at the commit this page was generated from</caption>
+    <caption
+      >{component.name} on 12 August 2026: version, kind, substance grade and hub listing. Substance is
+      an editorial grade rather than a measurement, on <a href="/repos/#ranking-test"
+        >the ranking test</a
+      >.</caption
+    >
     <thead><tr><th scope="col">Property</th><th scope="col">Value</th></tr></thead>
     <tbody>
-      <tr><th scope="row">Version</th><td><code>{component.version}</code></td></tr>
-      <tr
-        ><th scope="row">Commit</th><td><code>{String(component.commit).slice(0, 12)}</code></td
-        ></tr
-      >
+      <tr><th scope="row">Version</th><td><code>{displayVersion}</code></td></tr>
+      <tr>
+        <th scope="row">Commit</th>
+        <td>
+          <a href={`${component.repo}/commit/${component.commit}`} rel="noopener nofollow">
+            <code>{String(component.commit).slice(0, 8)}</code>
+          </a>
+        </td>
+      </tr>
       <tr><th scope="row">Kind</th><td>{component.kind.replace(/-/g, ' ')}</td></tr>
       <tr><th scope="row">Substance</th><td>{maturity?.level ?? 'unassessed'}</td></tr>
       <tr
@@ -105,10 +180,10 @@ const jsonLd = graph([
   {
     maturity && (
       <>
-        <>
-          <h2>How much specification is here?</h2>
-          <p>{maturity.note}</p>
-        </>
+        <h2>What this repository defines</h2>
+        <p>
+          {inventoryLine} {maturity.note}
+        </p>
       </>
     )
   }
@@ -116,19 +191,17 @@ const jsonLd = graph([
   {
     tasks.length > 0 && (
       <>
-        <h2>Operations defined here</h2>
+        <h2>{invocableOps ? 'Operations a caller can invoke' : 'Request and response pairs'}</h2>
         <table>
           <caption>
-            {component.name} — {tasks.length} operations
+            {component.name} — {opCount}. The Required column counts top-level required fields on
+            the request, and does not recurse into nested objects.
           </caption>
           <thead>
             <tr>
-              <>
-                <th scope="col">Operation</th>
-                <th scope="col">Request</th>
-                <th scope="col">Response</th>
-                <th scope="col">What it does</th>
-              </>
+              <th scope="col">{invocableOps ? 'Operation' : 'Message pair'}</th>
+              <th scope="col">Required</th>
+              <th scope="col">Summary</th>
             </tr>
           </thead>
           <tbody>
@@ -137,8 +210,7 @@ const jsonLd = graph([
                 <th scope="row">
                   <code>{t.httpMethod ? `${t.httpMethod} ${t.httpPath}` : t.name}</code>
                 </th>
-                <td>{t.requestFields.length}</td>
-                <td>{t.responseFields.length}</td>
+                <td>{t.requestFields.filter((f) => f.required).length}</td>
                 <td>{t.summary}</td>
               </tr>
             ))}
@@ -151,10 +223,10 @@ const jsonLd = graph([
   {
     objects.length > 0 && (
       <>
-        <h2>Objects defined here</h2>
+        <h2>The objects, field by field</h2>
         <p>
-          {objects.length} object definition{objects.length === 1 ? '' : 's'}, read from the
-          repository's own schema files.
+          These come from the schema and interface files this repository checks in, under the names
+          the source files use.
         </p>
         {objects.slice(0, 24).map((o) => (
           <section>
@@ -167,8 +239,13 @@ const jsonLd = graph([
         ))}
         {objects.length > 24 && (
           <p class="muted">
-            {objects.length - 24} further object definitions are not shown here. This page documents
-            the ones a reader is likely to need; the rest are in the repository.
+            Those are the first 24, in source order. The remaining {objects.length - 24} definitions
+            in the repository are{' '}
+            {objects
+              .slice(24)
+              .map((o) => o.name)
+              .join(', ')}
+            .
           </p>
         )}
       </>
@@ -176,23 +253,25 @@ const jsonLd = graph([
   }
 
   {
-    tasks.length === 0 && objects.length === 0 && (
+    empty && (
       <>
-        <h2>What this component defines</h2>
-        <p>
-          Nothing machine-readable. {maturity?.note ?? ''} This page exists to record that, because
-          a reader arriving from the hub README has no way to tell this repository apart from one
-          that carries a specification.
-        </p>
+        <h2>No machine-readable definitions</h2>
+        <p>This repository checks in no schema, OpenAPI or protobuf file.</p>
       </>
     )
   }
 
   <h2>Related</h2>
   <ul>
-    <li><a href="/repos/">Every AAMP component</a></li>
-    <li><a href="/">What AAMP actually contains</a></li>
-    <li><a href={`${HUB}/protocols/adcp-vs-aamp/`} rel="noopener">AdCP compared with AAMP</a></li>
+    {
+      RELATED[component.name] && (
+        <li>
+          <a href={RELATED[component.name].href}>{RELATED[component.name].label}</a>
+        </li>
+      )
+    }
+    <li><a href="/repos/">Every AAMP repository, ranked by what it defines</a></li>
+    <li><a href="/versions/">What each AAMP repository is tagged at</a></li>
     <li><a href={component.repo} rel="noopener nofollow">The repository itself</a></li>
   </ul>
 

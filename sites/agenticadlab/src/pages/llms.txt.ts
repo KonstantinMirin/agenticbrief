@@ -11,7 +11,7 @@ export const GET: APIRoute = async () => {
     siteName: SITES['agenticadlab'].name,
     summary: SITES['agenticadlab'].tagline,
     details: [
-      'Every page names the specification file and commit its claims are derived from. Where a specification is silent, contradictory or empty, the page says so rather than filling the gap.',
+      'Opinionated analysis of the two agentic advertising standards, written for people with budget authority. Every page takes a position on what to build, what to defer and what to put in a contract, and says where a standard is silent rather than filling the gap.',
     ],
     sections: [
       { title: 'Pages', links: items.map((i) => ({ title: i.title, url: i.url, note: i.note })) },

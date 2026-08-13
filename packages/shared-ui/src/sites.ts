@@ -4,10 +4,15 @@
  * Every site in the monorepo reads its identity from here so that nav,
  * cross-site links, JSON-LD `sameAs`, llms.txt and the deploy script all agree.
  *
- * `productionDomain` is the domain the portfolio will eventually own.
- * `deployDomain` is where it is served today (a noetis.dev subdomain).
- * Canonical URLs use `deployDomain` until the .com domains are live, so that
- * we never emit a canonical pointing at a host that does not resolve.
+ * `productionDomain` is the domain the portfolio owns and publishes on.
+ * `deployDomain` is the noetis.dev host the same build is also served from.
+ *
+ * Canonical URLs, cross-site links and JSON-LD all use `productionDomain` as of
+ * the August 2026 launch. Until then they used `deployDomain`, on the rule that
+ * a canonical must never name a host that does not resolve; the .com domains
+ * are registered and delegated, so that rule now points the other way. Both
+ * hostnames serve the same files, and naming the .com in the canonical is what
+ * stops the two from competing for the same page.
  */
 
 export type SiteRole = 'hub' | 'tool' | 'explorer' | 'answer' | 'glossary'
@@ -20,9 +25,9 @@ export interface SiteDefinition {
   /** one-line positioning, used for meta description fallback and llms.txt */
   tagline: string
   role: SiteRole
-  /** the domain we intend to own */
+  /** the domain this site publishes on, and the one every canonical names */
   productionDomain: string
-  /** the domain we serve from today */
+  /** the noetis.dev host the same build is mirrored to for development */
   deployDomain: string
   /** whether this site appears in the shared cross-portfolio nav */
   inNav: boolean
@@ -100,8 +105,13 @@ export type SiteKey = keyof typeof SITES
 
 export const SITE_KEYS = Object.keys(SITES) as SiteKey[]
 
-/** Base URL a site is currently served from, e.g. https://adcpexplorer.noetis.dev */
+/** Canonical base URL for a site, e.g. https://adcpexplorer.com */
 export function siteUrl(key: SiteKey): string {
+  return `https://${SITES[key].productionDomain}`
+}
+
+/** The noetis.dev host the same build is also reachable at. Staging and diffing only. */
+export function stagingUrl(key: SiteKey): string {
   return `https://${SITES[key].deployDomain}`
 }
 

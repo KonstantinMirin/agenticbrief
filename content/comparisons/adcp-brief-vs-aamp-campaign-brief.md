@@ -1,9 +1,9 @@
 ---
 title: 'AdCP Brief vs AAMP CampaignBrief: Two Objects, One Name'
-description: "AdCP's brief is a string field on get_products. AAMP's CampaignBrief is a Python class in a reference implementation, defined four incompatible ways, and absent from the wire contract."
-answer: "AdCP's brief is a natural-language string field on the get_products request. AAMP's CampaignBrief is a Pydantic model in IAB Tech Lab's buyer-agent reference implementation. They share no fields, and CampaignBrief appears in no AAMP wire schema."
+description: "AdCP's brief is a string on get_products. AAMP's CampaignBrief is a Pydantic class defined five ways across two repos, published on the buyer agent's API, absent from the wire."
+answer: "AdCP's brief is a natural-language string on the get_products request. AAMP's CampaignBrief is a Pydantic class with five declarations across two repositories, four of them in IAB Tech Lab's buyer-agent, and it is absent from the AAMP wire contract."
 pubDate: 2026-08-09
-cluster: 'bg-aamp'
+updatedDate: 2026-08-09
 subjects:
   - 'AdCP brief'
   - 'AAMP CampaignBrief'
@@ -12,168 +12,177 @@ keywords:
   - 'iab buyer agent campaign brief'
   - 'campaign brief json schema'
   - 'adcp brief vs aamp brief'
-  - 'campaign_brief.json'
 citations:
-  - 'https://github.com/adcontextprotocol/adcp/blob/f1a35aba734befa809e1fa780ad77c7edd614e96/dist/schemas/3.1.10/media-buy/get-products-request.json'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/schemas/3.1.13/media-buy/get-products-request.json'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/schemas/3.1.13/core/creative-brief.json'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/schemas/3.1.13/core/assets/brief-asset.json'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/schemas/3.1.13/core/product-filters.json'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/schemas/3.1.13/creative/list-transformers-request.json'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/schemas/3.1.13/governance/policy-entry.json'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/schemas/3.1.13/enums/channels.json'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/schemas/3.1.13/enums/available-metric.json'
   - 'https://github.com/IABTechLab/buyer-agent/blob/0c3a1545e334a0dc6acf0a6722b554cc4a4503d6/src/ad_buyer/models/campaign_brief.py'
+  - 'https://github.com/IABTechLab/buyer-agent/blob/0c3a1545e334a0dc6acf0a6722b554cc4a4503d6/src/ad_buyer/models/flow_state.py'
+  - 'https://github.com/IABTechLab/buyer-agent/blob/0c3a1545e334a0dc6acf0a6722b554cc4a4503d6/src/ad_buyer/interfaces/api/main.py'
+  - 'https://github.com/IABTechLab/buyer-agent/blob/0c3a1545e334a0dc6acf0a6722b554cc4a4503d6/src/ad_buyer/interfaces/cli/main.py'
+  - 'https://github.com/IABTechLab/buyer-agent/blob/0c3a1545e334a0dc6acf0a6722b554cc4a4503d6/src/ad_buyer/flows/deal_booking_flow.py'
+  - 'https://github.com/IABTechLab/buyer-agent/blob/0c3a1545e334a0dc6acf0a6722b554cc4a4503d6/examples/buyer_demo.py'
   - 'https://github.com/IABTechLab/buyer-agent/blob/0c3a1545e334a0dc6acf0a6722b554cc4a4503d6/campaign_brief.json'
   - 'https://github.com/IABTechLab/buyer-agent/blob/0c3a1545e334a0dc6acf0a6722b554cc4a4503d6/examples/campaign_brief.json'
   - 'https://github.com/IABTechLab/buyer-agent/blob/0c3a1545e334a0dc6acf0a6722b554cc4a4503d6/data/campaign_briefs.json'
-  - 'https://github.com/IABTechLab/buyer-agent/blob/0c3a1545e334a0dc6acf0a6722b554cc4a4503d6/src/ad_buyer/interfaces/cli/main.py'
-  - 'https://github.com/IABTechLab/buyer-agent/blob/0c3a1545e334a0dc6acf0a6722b554cc4a4503d6/src/ad_buyer/models/flow_state.py'
-  - 'https://github.com/IABTechLab/buyer-agent/blob/0c3a1545e334a0dc6acf0a6722b554cc4a4503d6/src/ad_buyer/interfaces/api/main.py'
-  - 'https://github.com/IABTechLab/iab-agentic-primitives/blob/2fc7029fb9eca801bc94586aec398906aa6af6c0/spec/openapi/iab-agentic-api.yaml'
+  - 'https://github.com/IABTechLab/buyer-agent/blob/0c3a1545e334a0dc6acf0a6722b554cc4a4503d6/docs/api/openapi.json'
+  - 'https://github.com/IABTechLab/buyer-agent/blob/0c3a1545e334a0dc6acf0a6722b554cc4a4503d6/docs/architecture/models.md'
+  - 'https://github.com/IABTechLab/iab-agentic-primitives/blob/2fc7029fb9eca801bc94586aec398906aa6af6c0/src/iab_agentic_primitives/harness/roles.py'
   - 'https://github.com/IABTechLab/iab-agentic-primitives/blob/2fc7029fb9eca801bc94586aec398906aa6af6c0/spec/jsonschema/protocol/ProductListRequest.json'
   - 'https://github.com/IABTechLab/iab-agentic-primitives/blob/2fc7029fb9eca801bc94586aec398906aa6af6c0/spec/jsonschema/protocol/QuoteRequest.json'
-  - 'https://github.com/IABTechLab/iab-agentic-primitives/blob/2fc7029fb9eca801bc94586aec398906aa6af6c0/src/iab_agentic_primitives/harness/roles.py'
-  - 'https://github.com/IABTechLab/iab-agentic-primitives'
+  - 'https://github.com/IABTechLab/iab-agentic-primitives/blob/2fc7029fb9eca801bc94586aec398906aa6af6c0/spec/jsonschema/protocol/ProductAvailsSearch.json'
+  - 'https://github.com/IABTechLab/iab-agentic-primitives/blob/2fc7029fb9eca801bc94586aec398906aa6af6c0/spec/openapi/iab-agentic-api.yaml'
+  - 'https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/docs/api/openapi.json'
+  - 'https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/src/ad_seller/models/ucp.py'
+  - 'https://github.com/IABTechLab/seller-agent/tree/2bb7ebce45891e3bdddd7a43198cb81d710b0916'
 related:
   - '/spec/'
   - '/spec/brief-vs-filters/'
   - '/crosswalk/creative-brief-to-adcp/'
-  - 'https://agenticadlab.noetis.dev/protocols/adcp-vs-aamp/'
-  - 'https://aampexplorer.noetis.dev/repos/iab-agentic-primitives/'
-  - 'https://aampexplorer.noetis.dev/what-does-aamp-stand-for/'
+  - '/examples/ctv-guaranteed-launch/'
+  - 'https://agenticadlab.com/protocols/adcp-vs-aamp/'
+  - 'https://aampexplorer.com/repos/buyer-agent/'
+  - 'https://aampexplorer.com/repos/iab-agentic-primitives/'
+  - 'https://aampexplorer.com/what-does-aamp-stand-for/'
+  - 'https://adtechglossary.com/agents/buyer-agent/'
 reviewState: cto-reviewed
 ---
 
-## Are the AdCP brief and the AAMP CampaignBrief the same thing?
+## Only one of these two briefs is on a wire
 
-No, and they are not even the same kind of thing.
+AdCP's `brief` is a string on a released schema. AAMP's `CampaignBrief` is a Python class inside a reference implementation, with five declarations across two repositories, four of them in the buyer agent, field names that disagree, and no presence in the wire contract those same repositories publish. AdCP's brief is the smaller object and the only one with a released schema behind it. Put your own campaign object on the AdCP side of that line and emit whatever AAMP shape you need out of it.
 
-AdCP's brief is a `string` property on a request object. The campaign brief appears on exactly one operation, `get_products`, and its content is unstructured prose that a seller agent interprets. (A second `brief` string exists on `list_transformers`, but it ranks creative transformers rather than inventory.) Published, versioned, released as part of AdCP 3.1.10.
+AdCP is the Ad Context Protocol, and it ships as versioned JSON Schema releases; 3.1.13 is the current stable one. AAMP is IAB Tech Lab's Agentic Advertising Management Protocols: eight repositories, versioned independently, no protocol-wide number anywhere, and a [shared wire contract that is unreleased](https://aampexplorer.com/versions/).
 
-AAMP's `CampaignBrief` is a Pydantic class in the Python source of IAB Tech Lab's buyer-agent reference implementation. It has typed required fields, cross-field validators, and an enum for the campaign objective. It is a richer object by a wide margin. It is also not in any AAMP wire schema, it is defined three different ways inside the buyer agent and a fourth inside the wire library that agent depends on, and the example files the repository ships against it do not validate.
+One property, on one operation. `get_products` carries `brief` as a `string`, and the schema tells you exactly how much structure to expect: "Natural language description of campaign requirements. Required when buying_mode is 'brief'. Must not be provided when buying_mode is 'wholesale' or 'refine'." A seller agent reads the prose and decides what it means. Both halves of that coupling live in the description text and nothing validates either one, so a brief sent in wholesale mode passes any validator you point at it and arrives at a seller that was told not to expect it. Check the pairing in your own code, because [nothing downstream does](/spec/).
 
-One framing note before the comparison. AdCP's brief comes from a released specification. Every AAMP term on this page comes from a reference implementation, not a ratified specification. There is no AAMP document that defines a campaign brief normatively, so I am describing code.
+`CampaignBrief` is a Pydantic class with eight enforced required fields in IAB Tech Lab's [buyer agent](https://adtechglossary.com/agents/buyer-agent/), an objective enum, cross-field validators, a typed brand-safety block and four human approval gates. As a model of what a planner hands over it is the better object, and AdCP has nothing close to it.
 
-## How do the two objects compare field by field?
+No brief schema exists in the normative spec. `iab-agentic-primitives` names the artifact that ought to sit above the code, in its own README:
 
-|                     | AdCP `brief`                                                           | AAMP `CampaignBrief`                                                                                                                                                                                                              |
-| ------------------- | ---------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| What it is          | A `string` property                                                    | A Pydantic `BaseModel` class                                                                                                                                                                                                      |
-| Where it is defined | `dist/schemas/3.1.10/media-buy/get-products-request.json`              | `buyer-agent/src/ad_buyer/models/campaign_brief.py`                                                                                                                                                                               |
-| Artifact type       | Published JSON Schema, released version                                | Python source in a reference implementation                                                                                                                                                                                       |
-| On the wire?        | Yes. It is a request field.                                            | No. No `CampaignBrief` schema exists in the AAMP wire contract.                                                                                                                                                                   |
-| Required fields     | None inside it. The parent request requires only `buying_mode`.        | Eight, enforced: `advertiser_id`, `campaign_name`, `objective`, `total_budget`, `currency`, `flight_start`, `flight_end`, `channels[]`. The module docstring claims a ninth, `target_audience`, but the field defaults to `None`. |
-| Objective           | Free text inside the string. No enum.                                  | `CampaignObjective` enum: `AWARENESS`, `CONSIDERATION`, `CONVERSION`, `REACH`                                                                                                                                                     |
-| Budget              | Sibling field `filters.budget_range` `{min, max, currency}`            | `total_budget: float` plus `currency` as ISO 4217, validated by pattern                                                                                                                                                           |
-| Channels            | Sibling field `filters.channels`, a 20-value enum                      | `list[ChannelAllocation]`, each `{channel, budget_pct, format_prefs[]}`, `budget_pct` values must sum to 100                                                                                                                      |
-| Channel vocabulary  | 20 values including `retail_media`, `dooh`, `sponsored_intelligence`   | 6 values: `CTV`, `DISPLAY`, `AUDIO`, `NATIVE`, `DOOH`, `LINEAR_TV`                                                                                                                                                                |
-| Flight              | Sibling fields `filters.start_date` / `end_date`                       | `flight_start` / `flight_end` as `date`, with a validator that `flight_end > flight_start`                                                                                                                                        |
-| KPIs                | Sibling field `filters.required_metrics`, a 36-value capability filter | `list[KPI]` of `{metric, target_value}`, metric from a 7-value enum                                                                                                                                                               |
-| Brand safety        | No field anywhere                                                      | `BrandSafety` object: `excluded_categories[]` (IAB Content Taxonomy 3.0), `excluded_keywords[]`                                                                                                                                   |
-| Frequency cap       | Buy time only, `packages[].targeting_overlay.frequency_cap`            | In the brief: `FrequencyCap {max_impressions, period_hours}`                                                                                                                                                                      |
-| Pacing              | Buy time only, `packages[].pacing`                                     | In the brief: `PacingModel` enum                                                                                                                                                                                                  |
-| Human approval      | Not modelled. Seller-side HITL only.                                   | `ApprovalConfig` with four gates: `plan_review`, `booking`, `creative`, `pacing_adjustment`                                                                                                                                       |
-| Version             | AdCP 3.1.10, published stable                                          | No AAMP-wide version. `buyer-agent` is at `v2.3.0-24-g0c3a154`.                                                                                                                                                                   |
+> "The spec is the normative artifact; this package is its reference implementation."
 
-Read down the AAMP column and it looks like the better object. It has the enums AdCP lacks, it models approval gates AdCP leaves outside the protocol, and it puts brand safety in a typed field where AdCP has nothing at all. If you were designing a campaign brief object from scratch you would probably design this one.
+Its `spec/` directory holds 48 JSON Schemas and an OpenAPI document, and none of them is a brief. The buyer agent's only upstream pointer is to a "Campaign Automation Strategic Plan, Sections 6.1 and 7.1" that appears in none of the eight public repositories. So whichever `CampaignBrief` you build against is an implementation detail with no versioning promise attached, and this one has no version to bump.
 
-Then you go looking for it on the wire.
+The integration cost is inside one Python package: five incompatible declarations of one class name.
 
-## Is CampaignBrief part of the AAMP wire contract?
+## Which one to build against: AdCP, with AAMP's model vendored internally
 
-It is not.
+AdCP, and take the non-determinism with it knowing that you are taking it. The same brief string sent to two seller agents comes back as two different product sets, and AdCP promises nothing about that: 3.1.13 released the field, not the interpretation.
 
-`iab-agentic-primitives` is the shared contract library both IAB agent repositories pin as their canonical wire contract. Its own README states the relationship: "The spec is the normative artifact; this package is its reference implementation." Its `spec/jsonschema/` directory holds 22 primitive schemas (Account, Agent, Deal, Line, MediaKit, Order, Package, Product, Proposal, Quote, RateCard and so on) and `spec/jsonschema/protocol/` holds 20 message schemas.
+What makes the trade worth it is where the determinism sits. The parts you can hold a counterparty to travel in `filters` as typed properties: a 20-value channel enum, a 36-value metric enum, a budget range with a required currency. Diff those against what came back. The prose carries the residue, the part no enum was ever going to hold. AAMP moves that problem instead of solving it, because the matching runs inside your own process where no counterparty can see it, and the only brief-derived field on its wire is an open object. [The worked CTV payload](/examples/ctv-guaranteed-launch/) is a real request you can send today.
 
-There is no `CampaignBrief.json` in either directory.
+Two conditions still make AAMP the right call: a counterparty you need has picked it, or what you want is a planning object and not a wire contract. Since `CampaignBrief` never touches the wire, vendoring it as your internal planning model costs you nothing on the AdCP side. If you do vendor it, pin the commit, write down which of the five definitions you mean, and own the drift, because [the wire contract is unreleased](https://aampexplorer.com/versions/) and nobody is versioning the model for you. AAMP Explorer tracks [the buyer agent](https://aampexplorer.com/repos/buyer-agent/) and [the wire contract](https://aampexplorer.com/repos/iab-agentic-primitives/) commit by commit if you want to watch it move.
 
-The one `CampaignBrief` inside `iab-agentic-primitives` is a frozen dataclass in `src/iab_agentic_primitives/harness/roles.py`, and its own docstring says what it is:
+Supporting both is two integrations. They share no type and no endpoint, and [neither corpus references the other](https://agenticadlab.com/protocols/adcp-vs-aamp/). [The generator](/generate/) will emit both objects from a paragraph of prose, with every field marked as stated in your text, derived from it, or assumed, and [the front page](/) writes out the seven rules the official Python SDK leaves you to check by hand.
+
+## AAMP deleted server-side product search on purpose
+
+AdCP sends an 18-property request. AAMP sends `limit` and `offset`.
+
+`ProductListRequest` in `iab-agentic-primitives` has exactly two properties, and its description states the decision instead of hiding it:
+
+> "Deliberately carries no filter fields: filtering is client-side over the returned Product records"
+
+The OpenAPI document repeats it in a header comment: "There is deliberately NO POST /products/search (plan §7 amendment 3): the buyer filters client-side over the ProductListResponse fields."
+
+`POST /products/avails` is not a way around this. It requires `productids`, `accountid`, `advertiserbrandid`, `startdate` and `enddate`. You name the products first. `QuoteRequest` requires `idempotency_key`, `product_id` and `deal_type` before it will look at `flight_start`, `impressions` or `target_cpm`. And the single piece of brief-derived structure that does cross the AAMP wire is `audience_plan` on `QuoteRequest`, typed as `anyOf[{object, additionalProperties: true}, null]` with the description "Audience plan slot (open object; the typed model lands with the audience-plan bead)", and it attaches after product selection.
+
+The seller side confirms it. No file in the AAMP seller agent names `CampaignBrief`. The phrase "campaign brief" survives there only as a comment inside `AudiencePlan`, above its targeting fields: "Requirements from campaign brief."
+
+|                                | AdCP                                                 | AAMP                                                |
+| ------------------------------ | ---------------------------------------------------- | --------------------------------------------------- |
+| Who filters inventory          | The seller, from a prose brief and 30 typed filters  | The buyer, client-side, over a paginated catalog    |
+| Server-side product search     | `get_products`, the protocol's first operation       | Deliberately absent                                 |
+| Discovery request shape        | 18 top-level properties                              | `limit`, `offset`                                   |
+| Where campaign intent enters   | Discovery                                            | Quote, per product, after selection                 |
+| Brief-derived data on the wire | The `brief` string, `filters`, `required_policies[]` | An untyped `audience_plan` object on `QuoteRequest` |
+
+AdCP runs curation on the seller. AAMP leaves it to the client. `limit` defaults to 50 and caps at 500, so filtering client-side means paging the whole catalog, holding it somewhere, deciding how stale you will let it get, and writing the matching logic that AdCP's seller runs on its own inventory. Nothing in the eight repositories says how large that catalog gets or how often it changes. On AdCP's side the same choice sets [what belongs in the brief string versus the typed filters](/spec/brief-vs-filters/).
+
+On the sell side the question inverts. AdCP puts the brief on your doorstep: `get_products` arrives carrying prose, 30 typed filters and `required_policies[]`, and turning all of that into a product list against your own inventory is your implementation, the harder build and also the surface you compete on. AAMP asks for nothing of the kind. The seller agent's `GET /products` takes `limit` and `offset`, the string "brief" doesn't appear anywhere in its 74-path OpenAPI document, and quoting happens per product after the buyer has already chosen. Serving a paginated catalog is a smaller job than reading intent.
+
+## Where each object lives
+
+|                     | AdCP `brief`                                                                                            | AAMP `CampaignBrief`                                                                                                                                                                                                                                   |
+| ------------------- | ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| What it is          | A `string` property                                                                                     | A Pydantic `BaseModel` class                                                                                                                                                                                                                           |
+| Where it is defined | `dist/schemas/3.1.13/media-buy/get-products-request.json`                                               | `buyer-agent/src/ad_buyer/models/campaign_brief.py`                                                                                                                                                                                                    |
+| Artifact type       | Published JSON Schema, released version                                                                 | Python source in a reference implementation                                                                                                                                                                                                            |
+| On the wire?        | Yes. It is a request field.                                                                             | No. No `CampaignBrief` schema exists in the AAMP wire contract.                                                                                                                                                                                        |
+| Required fields     | None inside it. The parent request requires only `buying_mode`.                                         | Eight, enforced: `advertiser_id`, `campaign_name`, `objective`, `total_budget`, `currency`, `flight_start`, `flight_end`, `channels[]`. A ninth value, `budget_pct`, is required on every `ChannelAllocation` by a validator rather than by the brief. |
+| Objective           | Free text inside the string. The 5-value enum lives on a different object, `core/creative-brief.json`.  | `CampaignObjective` enum: `AWARENESS`, `CONSIDERATION`, `CONVERSION`, `REACH`                                                                                                                                                                          |
+| Budget              | Sibling field `filters.budget_range` `{min, max, currency}`, `currency` required inside it              | `total_budget: float` plus `currency` as ISO 4217, validated by pattern                                                                                                                                                                                |
+| Channels            | Sibling field `filters.channels`, a 20-value enum                                                       | `list[ChannelAllocation]`, each `{channel, budget_pct, format_prefs[]}`, `budget_pct` values must sum to 100                                                                                                                                           |
+| Channel vocabulary  | 20 values including `retail_media`, `dooh`, `sponsored_intelligence`                                    | 6 values: `CTV`, `DISPLAY`, `AUDIO`, `NATIVE`, `DOOH`, `LINEAR_TV`                                                                                                                                                                                     |
+| Flight              | Sibling fields `filters.start_date` / `end_date`                                                        | `flight_start` / `flight_end` as `date`, with a validator that `flight_end > flight_start`                                                                                                                                                             |
+| KPIs                | Sibling field `filters.required_metrics`, a 36-value capability filter                                  | `list[KPI]` of `{metric, target_value}`, metric from a 7-value enum                                                                                                                                                                                    |
+| Brand safety        | `required_policies[]` on the request: registry policy IDs, resolving to prose a governance agent judges | `BrandSafety` object: `excluded_categories[]` as IAB Content Taxonomy 3.0 IDs, `excluded_keywords[]` as strings                                                                                                                                        |
+| Frequency cap       | Buy time only, `packages[].targeting_overlay.frequency_cap`                                             | In the brief: `FrequencyCap {max_impressions, period_hours}`                                                                                                                                                                                           |
+| Pacing              | Buy time only, `packages[].pacing`                                                                      | In the brief: `PacingModel` enum                                                                                                                                                                                                                       |
+| Human approval      | Not modelled. Seller-side HITL only.                                                                    | `ApprovalConfig` with four gates: `plan_review`, `booking`, `creative`, `pacing_adjustment`                                                                                                                                                            |
+| Version             | AdCP 3.1.13, published stable                                                                           | No AAMP-wide version. `buyer-agent` is at `v2.3.0-24-g0c3a154`.                                                                                                                                                                                        |
+
+The brand-safety row holds two different mechanisms. AAMP's `BrandSafety` is category IDs and keyword strings: machine-checkable, and only as complete as the list. AdCP hands over registry policy IDs, and a governance agent reads the policy text and judges, which is the only one of the two routes that can carry a rule like "nothing adjacent to conflict reporting."
+
+Buyer-side approval is the row with an operational cost behind it. AdCP doesn't model it, so plan sign-off, booking sign-off and creative sign-off are workflow you build, run and audit outside the protocol. AAMP names four gates in `ApprovalConfig` and defaults two of them on, `plan_review` and `booking`, on the model that only the demo script and the test suite ever construct. The approval pipeline imports the `ApprovalConfig` type and then reads its configuration off a stored campaign record, not off a typed brief. The one pipeline module that does annotate `brief: CampaignBrief` is the audience planner, and the only function reaching it says in its own docstring that it is the path "used by tests and demos that don't go through the canonical flow (DealBookingFlow)". Neither protocol exposes your sign-off chain to the counterparty. Budget for it as headcount.
+
+Both protocols name frequency cap and pacing. AAMP takes them in the brief; AdCP only at buy time, on packages. If your planning system decides pacing, you carry that decision yourself from brief to buy, because AdCP's discovery call has nowhere to put it.
+
+## Five objects, one name
+
+| Definition        | Where                                         | Kind                                                    | What anchors it                                                                              | Does the shipped `campaign_brief.json` validate? |
+| ----------------- | --------------------------------------------- | ------------------------------------------------------- | -------------------------------------------------------------------------------------------- | ------------------------------------------------ |
+| Pipeline model    | `models/campaign_brief.py`                    | Pydantic `BaseModel`, 8 required                        | `campaign_name`, `total_budget`, `flight_start`, `flight_end`, `channels[ChannelAllocation]` | **No.**                                          |
+| Flow-state model  | `models/flow_state.py`                        | Pydantic `BaseModel`, camelCase aliases                 | `name`, `budget`, `start_date`, `end_date`, `channels[str]`                                  | Yes                                              |
+| HTTP API model    | `interfaces/api/main.py`                      | Pydantic `BaseModel`, the published one                 | `name`, `objectives[]`, `budget`, `start_date`, `end_date`, `target_audience{}`              | Yes                                              |
+| Demo dataclass    | `examples/buyer_demo.py`                      | `dataclass`, docstring "Parsed campaign brief from PDF" | its own key set                                                                              | Not JSON-fed                                     |
+| Harness dataclass | `iab-agentic-primitives/.../harness/roles.py` | frozen `dataclass`, 15 fields                           | `campaign_name`, `deal_type`, `impressions`, `max_cpm`, `budget` as `Money`                  | Different repo, not JSON-fed                     |
+
+The five share no field name. The sharpest collision is the pair sitting in one package: `models/campaign_brief.py` and `models/flow_state.py` both declare a class called `CampaignBrief`, and they agree on almost nothing — `campaign_name` against `name`, `total_budget` against `budget`, `flight_start` / `flight_end` against `start_date` / `end_date`, `objective` as an enum against `objectives` as a list of bare strings, `channels` as typed allocations against `channels` as a list of strings. No adapter converts between them, and `models/__init__.py` re-exports only the first, so which class you get depends on which import path you typed.
+
+Only the harness dataclass documents its own scope, in its docstring:
 
 > "Not a wire primitive: it is the buyer agent's internal objective."
 
-So the AAMP campaign brief is an input to a test harness and to a buyer agent's internal pipeline. It never crosses the boundary between two agents.
+Both `campaign_brief.json` files the repository ships fail the model that defines them, and they fail it identically: 12 validation errors each. Seven required fields absent, all three `channels` entries as bare strings where the model wants `ChannelAllocation` objects, `target_audience` missing its `primary` key, `kpis` a dict where the model wants a list. The shipped `channels: ["branding", "ctv", "performance"]` goes up against a six-value enum containing neither `branding` nor `performance`. A third file, `data/campaign_briefs.json`, carries three more demo briefs on a fourth key set, with `flight_dates` as the string `"2026-09-01 to 2026-12-31"`, and those validate against none of the buyer agent's three JSON-fed models.
 
-## What does AAMP send at discovery time instead?
-
-Two things, and neither carries campaign intent.
-
-`ProductListRequest`, the query object for `GET /products`, has exactly two properties: `limit` and `offset`. Its description is explicit about why:
-
-> "Deliberately carries no filter fields: filtering is client-side over the returned Product records."
-
-The OpenAPI document repeats it as a design decision in a header comment: "There is deliberately NO POST /products/search (plan §7 amendment 3): the buyer filters client-side over the ProductListResponse fields."
-
-The closest AAMP analogue to a brief is `QuoteRequest`, which does carry `flight_start`, `flight_end`, `impressions`, `target_cpm`, `audience_plan` and `deal_type`. But its required fields are `idempotency_key`, `product_id` and `deal_type` — you must already know which product you want. Intent enters the conversation after product selection, not before it.
-
-That is the architectural difference underneath the object comparison:
-
-|                                     | AdCP                                           | AAMP                                                  |
-| ----------------------------------- | ---------------------------------------------- | ----------------------------------------------------- |
-| Who filters inventory               | The seller, from a brief and 30 typed filters  | The buyer, client-side, over a paginated catalog dump |
-| Server-side product search          | `get_products`, the protocol's first operation | Deliberately absent                                   |
-| Where campaign intent enters        | Discovery                                      | Quote, per product, after selection                   |
-| What the buyer's campaign object is | A field in a request                           | A structure inside the buyer agent                    |
-
-AdCP made curation a protocol surface. AAMP made it a client concern. Everything about where a brief lives follows from that one choice.
-
-## Do the shipped campaign_brief.json examples validate?
-
-No. I executed the model rather than eyeballing it, because this is the sort of claim that is embarrassing to get wrong.
-
-`buyer-agent` ships two brief files: `campaign_brief.json` at the repository root and `examples/campaign_brief.json`. Both fail `CampaignBrief` with **12 validation errors each**.
-
-Reproduction, against `buyer-agent` at `0c3a154` and `iab-agentic-primitives` at `2fc7029` with pydantic 2.13.4:
-
-```bash
-git clone https://github.com/IABTechLab/buyer-agent
-git clone https://github.com/IABTechLab/iab-agentic-primitives
-
-PYTHONPATH=buyer-agent/src:iab-agentic-primitives/src python3 - <<'PY'
-import json
-from ad_buyer.models.campaign_brief import parse_campaign_brief
-for p in ["buyer-agent/campaign_brief.json",
-          "buyer-agent/examples/campaign_brief.json"]:
-    try:
-        parse_campaign_brief(json.load(open(p)))
-        print(p, "VALID")
-    except Exception as e:
-        print(p, type(e).__name__, str(e).splitlines()[0])
-PY
-```
-
-Output:
-
-```
-buyer-agent/campaign_brief.json ValidationError 12 validation errors for CampaignBrief
-buyer-agent/examples/campaign_brief.json ValidationError 12 validation errors for CampaignBrief
-```
-
-The errors are not near-misses. Seven required fields are absent (`advertiser_id`, `campaign_name`, `objective`, `total_budget`, `currency`, `flight_start`, `flight_end`), all three `channels` entries are bare strings where the model wants `ChannelAllocation` objects, `target_audience` is missing its `primary` key, and `kpis` is a dict where the model wants a list.
-
-The shipped file uses `name`, `budget`, `start_date`, `end_date`. The model wants `campaign_name`, `total_budget`, `flight_start`, `flight_end`. Three names do survive the mismatch — `channels`, `target_audience` and `kpis` — and the file and the model disagree on the type of all three. `channels: ["branding", "ctv", "performance"]` in the file, against a six-value enum in the model that has no `branding` and no `performance`.
-
-## Why does the repository ship a brief its own model rejects?
-
-Because `CampaignBrief` is defined three times inside `buyer-agent`, a fourth time in the wire library it depends on, and the failing files validate cleanly against two of the other three.
-
-| Definition            | File                                              | Shape                                                                                        | Does `campaign_brief.json` validate?         |
-| --------------------- | ------------------------------------------------- | -------------------------------------------------------------------------------------------- | -------------------------------------------- |
-| The pipeline model    | `src/ad_buyer/models/campaign_brief.py`           | `campaign_name`, `total_budget`, `flight_start`, `flight_end`, `channels[ChannelAllocation]` | **No.** 12 errors.                           |
-| The flow-state model  | `src/ad_buyer/models/flow_state.py`               | `name`, `budget`, `start_date`, `end_date`, `channels[str]`, camelCase aliases               | Yes                                          |
-| The HTTP API model    | `src/ad_buyer/interfaces/api/main.py`             | `name`, `objectives[]`, `budget`, `start_date`, `end_date`, `channels[str]`                  | Yes                                          |
-| The harness dataclass | `iab-agentic-primitives/src/.../harness/roles.py` | `campaign_name`, `deal_type`, `impressions`, `max_cpm`, `budget` as `Money`                  | Not applicable, different repo, not JSON-fed |
-
-The CLI closes the loop. `ad-buyer init` writes a template file, and the template is hard-coded in `src/ad_buyer/interfaces/cli/main.py` as exactly the shape that fails the pipeline model. It then prints:
+None of it stops anything, because the model that validates and the model that runs are different objects. `ad-buyer init` writes that failing template, hard-coded in the CLI, then prints:
 
 > "Edit this file with your campaign details, then run: `ad-buyer book campaign_brief.json`"
 
-And `book` never calls `parse_campaign_brief`. It does `json.load`, then reads `brief.get('name')`, `brief.get('budget')`, `brief.get('start_date')` straight off the dict. So the CLI path is internally consistent and never touches the typed model at all. The two never meet, which is why nobody noticed.
+And `book` never calls the parser. It loads the JSON, reads `name`, `budget` and `start_date` straight off the dict, and hands the raw dict to `DealBookingFlow`, which keeps treating it as a dict all the way down. The documentation describes a third shape again: the CampaignBrief field table under `docs/` is the API model, and the string `campaign_name` never appears as a brief field anywhere in the documentation. The module docstring of `campaign_brief.py` adds a discrepancy of its own, listing a ninth required field, `target_audience`, which the class defines with a default of `None`.
 
-A fifth shape exists for completeness: `data/campaign_briefs.json` holds three demo briefs with their own key set, including `id`, `vertical`, `brand`, `target_cpm`, `max_cpm`, `preferred_package` and a `flight_dates` string like `"2026-09-01 to 2026-12-31"`. All three also fail the pipeline model, with 10, 11 and 10 errors.
+No code path in the repository connects the two. The strictest of the five, the one carrying the enums and the approval gates, is documented nowhere and reached from a single test-and-demo path. The documented shape and the annotated shape are different classes, and neither route leads to the strict one.
 
-## What does this mean if I have to pick one?
+## There is exactly one published CampaignBrief schema and it is the loosest one
 
-Practical guidance, stated as opinion because the evidence only supports so much.
+`buyer-agent/docs/api/openapi.json` carries `components.schemas.CampaignBrief`, `info.version` 1.0.0, contact "IAB Tech Lab", description "Campaign brief for booking." The committed document is served live from IAB Tech Lab's GitHub Pages site. It documents the buyer agent's own inbound HTTP API, not anything that crosses the buyer-to-seller wire, and it is not the Pydantic class in `campaign_brief.py`. If you searched for a campaign brief JSON Schema and found nothing, this is what you were looking for.
 
-If you are building against a seller today, AdCP's brief is the one that exists as a published, versioned, released contract you can validate a payload against. The object is thinner than you want, and [where its own docs contradict each other](/spec/brief-vs-filters/) is a real problem, but the artifact is real.
+Six required fields: `name`, `objectives`, `budget`, `start_date`, `end_date`, `target_audience`. Two optional: `kpis`, `channels`. It carries no objective enum at all — `objectives` is an array of bare strings with `minItems: 1` — no channel allocation, no sum-to-100 rule, no approval gates, no brand safety. `target_audience` is `{"type": "object", "additionalProperties": true}`, an open bag, and it is required, where the pipeline model makes it optional and typed.
 
-AAMP's `CampaignBrief` is the better model of a campaign brief and the worse contract. If you adopt it, you are adopting a Python class from a reference implementation whose canonical wire library still carries "WORK IN PROGRESS — NOT YET RELEASED" at the top of its README, at tag `v0.5.0`. Pin the commit, vendor the model, and expect to own the drift yourself.
+So the only fetchable `CampaignBrief` schema is the loosest of the five, and it describes what you POST to a buyer agent you are running yourself. Nothing travelling the other way carries a brief at all.
 
-There is no cross-walk to inherit, either. Nothing in the AAMP corpus references AdCP anywhere: a grep for "adcp" and "ad context protocol" across all eight IAB Tech Lab agentic repositories returns zero files. Any mapping between these two objects, including the table on this page, is made from outside both projects. The full architectural comparison lives on [Agentic Ad Lab](https://agenticadlab.noetis.dev/protocols/adcp-vs-aamp/).
+## AdCP has a structured brief too, and it's for creative
 
-One naming caution before you go looking. "AAMP" is expanded more than one way inside its own corpus, and the repositories do not agree on which expansion is correct. That is documented in full at [AAMP Explorer](https://aampexplorer.noetis.dev/what-does-aamp-stand-for/). There is also no single AAMP version number: each repository versions independently, so "AAMP 2.3" names no artifact.
+`dist/schemas/3.1.13/core/creative-brief.json` ships inside the release and you can validate a payload against it today. It cannot reach discovery. Title "Creative Brief", eight properties, only `name` required, `objective` a five-value enum, `tone` and `audience` and `territory` as prose, `messaging` holding `headline`, `tagline`, `cta` and an ordered `key_messages[]`, plus a `compliance` block of `required_disclosures[]` and `prohibited_claims[]` that AAMP's brand-safety object has no equivalent for.
 
-Checked 2026-08-09 against `adcontextprotocol/adcp` at `f1a35ab` (schema release 3.1.10), `IABTechLab/buyer-agent` at `0c3a154` (`v2.3.0-24-g0c3a154`), and `IABTechLab/iab-agentic-primitives` at `2fc7029` (`v0.5.0-1-g2fc7029`).
+Its only route to the wire is `core/assets/brief-asset.json`, `{"asset_type": {"const": "brief"}}` plus an `allOf` on the creative brief, wrapped in a creative manifest. The manifest is referenced by `build_creative`, `preview_creative`, `get_creative_features` and `validate_input`, and by neither `get-products-request` nor `create-media-buy-request`. Discovery still gets a string. The release carries one more `brief` string, on `list_transformers`, ranking creative transformers by intent: prose again, creative side again.
+
+AdCP and AAMP share three objective values and diverge on three.
+
+| AdCP `core/creative-brief.json` | AAMP `CampaignObjective` |
+| ------------------------------- | ------------------------ |
+| `awareness`                     | `AWARENESS`              |
+| `consideration`                 | `CONSIDERATION`          |
+| `conversion`                    | `CONVERSION`             |
+| `retention`                     | no counterpart           |
+| `engagement`                    | no counterpart           |
+| no counterpart                  | `REACH`                  |
+
+AAMP kept `REACH`; AdCP kept `retention` and `engagement`. The [creative-brief crosswalk](/crosswalk/creative-brief-to-adcp/) maps the agency-brief rows onto AdCP media-buy fields, and that mapping is where the loss happens.

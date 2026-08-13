@@ -1,104 +1,136 @@
 ---
 title: 'Brand Agent'
-description: "A brand agent serves brand identity and licensable rights in AdCP. It is one of five brand.json variants and a role in two protocols, but it is not an entry in AdCP's own glossary."
-answer: 'A brand agent is the AdCP agent that serves brand identity and licensable rights. It is a brand.json variant and a role in the Brand and Sponsored Intelligence protocols. AAMP has no brand agent.'
+description: 'A brand agent answers identity questions and licenses rights in AdCP. In 3.1.13 the brand_agent field is deprecated in favour of an agents[] entry with type brand. AAMP has none.'
+answer: 'A brand agent is the AdCP agent that answers questions about a brand identity and licenses its rights. In AdCP 3.1.13 it is declared as an agents[] entry with type "brand" in brand.json. AAMP has no equivalent.'
 pubDate: 2026-08-09
+updatedDate: 2026-08-09
 term: 'Brand Agent'
-alternateNames: ['brand identity agent', 'rights agent']
+alternateNames: ['brand identity agent', 'rights agent', 'brand.json agent']
 category: 'agentic'
 cluster: 'gl-roles'
 keywords:
   - 'brand agent advertising'
   - 'what is a brand agent'
   - 'adcp brand protocol agent'
-  - 'brand.json brand agent'
+  - 'brand agent vs buying agent'
 citations:
+  - 'https://docs.adcontextprotocol.org/docs/brand-protocol/brand-json'
   - 'https://docs.adcontextprotocol.org/docs/brand-protocol/key-concepts'
   - 'https://docs.adcontextprotocol.org/docs/protocol/required-tasks'
-  - 'https://github.com/adcontextprotocol/adcp/blob/f1a35aba734befa809e1fa780ad77c7edd614e96/docs/brand-protocol/key-concepts.mdx'
-  - 'https://github.com/adcontextprotocol/adcp/blob/f1a35aba734befa809e1fa780ad77c7edd614e96/docs/protocol/required-tasks.mdx'
-  - 'https://github.com/adcontextprotocol/adcp/blob/f1a35aba734befa809e1fa780ad77c7edd614e96/dist/schemas/3.1.10/brand.json'
-  - 'https://github.com/adcontextprotocol/adcp/blob/f1a35aba734befa809e1fa780ad77c7edd614e96/dist/schemas/3.1.10/index.json'
-  - 'https://github.com/adcontextprotocol/adcp/blob/f1a35aba734befa809e1fa780ad77c7edd614e96/docs/reference/glossary.mdx'
-  - 'https://github.com/adcontextprotocol/adcp/blob/f1a35aba734befa809e1fa780ad77c7edd614e96/docs/learning/specialist/brand.mdx'
+  - 'https://docs.adcontextprotocol.org/docs/reference/experimental-status'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/schemas/3.1.13/brand.json'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/schemas/3.1.13/enums/brand-agent-type.json'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/schemas/3.1.13/index.json'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/docs/brand-protocol/brand-json.mdx'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/docs/brand-protocol/tasks/get_brand_identity.mdx'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/docs/brand-protocol/walkthrough-rights-licensing.mdx'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/docs/protocol/required-tasks.mdx'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/docs/reference/glossary.mdx'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/docs/reference/experimental-status.mdx'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/docs/intro.mdx'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/docs/learning/foundations/a2-protocol-architecture.mdx'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/docs/learning/specialist/brand.mdx'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/docs/learning/decision-makers/explaining-agentic-advertising.mdx'
+  - 'https://github.com/IABTechLab/buyer-agent/blob/0c3a1545e334a0dc6acf0a6722b554cc4a4503d6/src/ad_buyer/config/agents.yaml'
+  - 'https://github.com/IABTechLab/agentic-audiences/blob/106ebd645668677ff8be458877a5684a5d229961/specs/v1.0/schema/embedding_format.schema.json'
+  - 'https://github.com/IABTechLab/iab-agentic-primitives/blob/2fc7029fb9eca801bc94586aec398906aa6af6c0/src/iab_agentic_primitives/protocol/avails.py'
+  - 'https://scope3.com/agentic-advertising/brands/'
+  - 'https://brandcontextprotocol.dev/spec/v0.7/'
 related:
   - '/agents/agent/'
   - '/agents/discovery-files/'
+  - '/agents/sales-agent/'
   - '/agents/governance-agent/'
   - '/concepts/sponsored-intelligence/'
-  - 'https://adcpexplorer.noetis.dev/areas/brand/'
-  - 'https://adcpexplorer.noetis.dev/areas/sponsored-intelligence/'
-seeAlso: ['brand.json', 'Agent', 'Sponsored Intelligence', 'Governance Agent']
+  - '/about/sources-and-versions/'
+  - 'https://adcpexplorer.com/areas/brand-protocol/'
+  - 'https://adcpexplorer.com/areas/sponsored-intelligence/'
+  - 'https://aampexplorer.com/repos/buyer-agent/'
+seeAlso: ['Agent', 'Discovery Files', 'Sales Agent', 'Sponsored Intelligence', 'Governance Agent']
 reviewState: cto-reviewed
 ---
 
-## What is a brand agent?
+A brand agent is the AdCP agent that answers questions about a brand: who owns it, what it looks like, and whose likeness or voice may be generated on its behalf. AdCP's architecture module describes the role as: "Manages brand identity and guidelines via `brand.json`".
 
-A brand agent is the AdCP agent that answers questions about a brand: who it is, what it looks like, what may be said about it, and what talent likeness or voice may be generated on its behalf.
+Four different things go by the name. This entry covers the first.
 
-AdCP's own architecture table puts it in one line: "Brand agent — manages brand identity and guidelines via `brand.json`."
+| Sense                                                                   | What it is                                                       | Where it is specified                                                                   |
+| ----------------------------------------------------------------------- | ---------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
+| Brand identity agent                                                    | Answers identity questions about a brand and licenses its rights | AdCP `brand.json`, as an `agents[]` entry with `type: "brand"`                          |
+| [Sponsored Intelligence](/concepts/sponsored-intelligence/) brand agent | Sits inside an AI assistant and talks to a user                  | AdCP's Sponsored Intelligence tasks, registered separately from the identity operations |
+| Buy-side brand agent                                                    | Executes media buying on the brand's behalf                      | Scope3's published taxonomy; `type: "buying"` in the same AdCP enum                     |
+| Branded assistant                                                       | An assistant with a company logo in the chat window              | Nothing                                                                                 |
 
-Worth knowing before you cite it: **brand agent is not an entry in AdCP's glossary**. `docs/reference/glossary.mdx` has bolded entries for Agent, Sales Agent and Signal Agent, and none for Brand Agent. The term is defined by the Brand Protocol documentation, by the `brand.json` schema, and by the role headings in `docs/protocol/required-tasks.mdx`. If you need a citable definition, cite those, not the glossary.
+The term is not in AdCP's own glossary, which defines `Agent`, `Sales Agent` and `Signal Agent`, and uses "brand agent" only inside other terms' definitions.
 
-Version pin: AdCP **3.1.10**, per `dist/schemas/latest.json`, repository at commit `f1a35ab`.
+## What a brand agent answers
 
-## How does a brand agent get discovered?
+Creative agents are the main callers, and they call before generation rather than during a buy. From AdCP's brand specialist guide: "A creative agent fetches `brand.json` (or calls `get_brand_identity` authorized), then pulls the wordmark, applies the exact palette and type scale, adopts the tone of voice, and obeys the restrictions." The rights-licensing walkthrough has a buyer agent calling it too.
 
-Through `brand.json`, hosted at `https://example.com/.well-known/brand.json` under RFC 8615. The 3.1.10 schema (`$id: /schemas/3.1.10/brand.json`, title "Brand Discovery") defines five variants, and one of them is the brand agent:
+Answers come in two tiers. Any caller gets the public baseline unauthenticated: house, names, description, industries, `keller_type` (the brand-architecture classification), basic logos, tagline. Assets, voice synthesis, tone, restrictions and rights availability need a linked account, set up once by calling `sync_accounts`. Until then the response lists the withheld sections in `available_fields`, so a caller can tell an unauthorised response from an incomplete file.
 
-| #   | Variant                         | What it means                                                 |
-| --- | ------------------------------- | ------------------------------------------------------------- |
-| 1   | Authoritative Location Redirect | The canonical document is at another URL                      |
-| 2   | House Redirect                  | This brand domain rolls up to a larger house                  |
-| 3   | **Brand Agent**                 | "Brand represented by agents that provide brand info via MCP" |
-| 4   | House Portfolio                 | A house publishes its brands, inline or by pointer            |
-| 5   | Brand Canonical Document        | A brand self-publishes its own identity                       |
+## How a brand agent is declared
 
-The Brand Agent variant carries `agents`, `brand_agent`, `contact`, `data_subject_contestation`, `version` and `last_updated`. Variants 1 to 3 are mutually exclusive with each other and with 4 and 5. Variants 4 and 5 compose: a house portfolio can point at brand-owned canonical documents through `brand_refs[]`, and a brand document can point back up through `house_domain`.
+A brand agent is declared in one file, `brand.json`, fetched from `https://example.com/.well-known/brand.json` under RFC 8615. There is no registry to join. Two shapes declare one: a standalone brand agent document, or a `type: "brand"` entry in the `agents[]` array of a fuller file, either a house portfolio or a brand's canonical document. AdCP's brand.json reference treats the two routes as equivalent, and all five file variants are laid out on [discovery files](/agents/discovery-files/).
 
-The design reason is stated in the specification itself. Putting every subsidiary in the parent's file means "if Converse wants to update its logo, someone edits Nike, Inc.'s file." The pointer variants exist so a brand team owns its own identity without a corporate ops choke point.
+In `dist/schemas/3.1.13/brand.json`, `properties.brand_agent` carries `"deprecated": true` and this note:
 
-Full treatment of both discovery files is on our [discovery files page](/agents/discovery-files/).
+> Deprecated: use agents array with type 'brand' instead. Brand agent that provides dynamic brand data via MCP.
 
-## What operations does a brand agent implement?
+`rights_agent` goes the same way. The replacement is an `agents[]` entry whose `type` comes from an eight-value enum titled "Brand Agent Type".
 
-AdCP 3.1.10 registers **six** brand-protocol operations:
+| `type`        | What that agent does                                            |
+| ------------- | --------------------------------------------------------------- |
+| `brand`       | Brand identity data (logos, colors, tone, guidelines) via MCP   |
+| `rights`      | Rights discovery, pricing and acquisition for licensable assets |
+| `measurement` | Campaign measurement, attribution and reporting                 |
+| `governance`  | Brand safety, compliance and policy enforcement                 |
+| `creative`    | Creative asset generation, review and approval                  |
+| `sales`       | Sells inventory for publishers and media owners                 |
+| `buying`      | Executes media buying for the brand                             |
+| `signals`     | Audience signal discovery and activation                        |
 
-| Operation             | What it does                                                                                  |
-| --------------------- | --------------------------------------------------------------------------------------------- |
-| `get_brand_identity`  | Retrieve brand identity data. Core identity is public; authorised callers get more            |
-| `verify_brand_claim`  | Verify one claim (subsidiary, parent, property, trademark) against a brand agent              |
-| `verify_brand_claims` | Bulk variant, results returned positionally aligned with the request                          |
-| `get_rights`          | Search licensable rights across a brand agent's roster, natural-language first                |
-| `acquire_rights`      | Binding acquisition. Parallels `create_media_buy`: pick a `pricing_option_id`, get terms back |
-| `update_rights`       | Lifecycle management of an existing grant                                                     |
+Both `sales` and `buying` appear in the same enum, so an entry records only that the brand declared the agent, not which side of the trade it sits on. The [sales agent](/agents/sales-agent/) entry sets out the same collision in AdCP's role names.
 
-`docs/protocol/required-tasks.mdx` marks `get_brand_identity` Required and the three rights operations Conditional, "required when the agent manages brand rights."
+Mechanically the change is a rename with a discriminator added: `{"url": ..., "id": ...}` under `brand_agent` becomes `{"type": "brand", "url": ..., "id": ...}` inside `agents[]`. `type`, `url` and `id` are required, everything else is optional, and an unset `jwks_uri` defaults to `/.well-known/jwks.json` on the origin of `url`.
 
-That same table also lists `creative_approval` as conditional, and this is the one place the documentation and the released registry pull apart. In 3.1.10, `creative_approval` is not one of the six registered brand-protocol operations. It exists as a pair of supporting schemas, `creative-approval-request` and `creative-approval-response`, described in the registry as the "payload the buyer submits to the `approval_webhook` from `acquire_rights` for rights-holder creative review." So it is a webhook contract, not a task you call. Both facts are true; they just live in different shapes.
+AdCP's `brand-json.mdx` reference still tables `brand_agent` as an ordinary optional object, `agents` has no row in that table, and the file's one deprecation note is about `rights_agent`. The schema says deprecated rather than removed and names no removal version, so both shapes stay readable: a producer writing new files uses `agents[]`, and a consumer has to accept either.
 
-### Sponsored Intelligence adds a second job
+## Operations and conformance
 
-`docs/protocol/required-tasks.mdx` names the brand agent again under the Sponsored Intelligence Protocol, with `si_initiate_session`, `si_send_message` and `si_terminate_session` Required and `si_get_offering` Optional. Brand agents doing this work "MUST declare `sponsored_intelligence` in `supported_protocols`."
+Six AdCP operations are registered to the brand agent. The four Sponsored Intelligence operations are registered separately and are not in this table.
 
-This is a different function from identity service. Here the brand agent holds a conversation with a user inside an AI assistant, and hands off to a commerce protocol once purchase intent exists. The comparison against the Agentic Commerce Protocol is covered on [AdCP Explorer](https://adcpexplorer.noetis.dev/areas/sponsored-intelligence/).
+| Operation             | What it does                                              | In `required-tasks.mdx` |
+| --------------------- | --------------------------------------------------------- | ----------------------- |
+| `get_brand_identity`  | Identity data; core public, more for authorised callers   | Required                |
+| `verify_brand_claim`  | Verify one claim: subsidiary, parent, property, trademark | Absent                  |
+| `verify_brand_claims` | Bulk variant, results positionally aligned                | Absent                  |
+| `get_rights`          | Search licensable rights, natural-language first          | Conditional             |
+| `acquire_rights`      | Binding acquisition; pick a `pricing_option_id`           | Conditional             |
+| `update_rights`       | Lifecycle of an existing grant                            | Conditional             |
 
-## The rights-licensing loop, and why it is labelled experimental
+The conformance table and the registered operations do not line up in either direction. `creative_approval` is listed Conditional, "required when the agent reviews AI-generated content", with no operation of that name behind it; it is the payload a buyer submits to the `approval_webhook` from `acquire_rights`. `verify_brand_claim` and `verify_brand_claims` are the reverse case: both are callable, and neither appears in the conformance table, so nothing in 3.1.13 says whether they have to ship. The one hard requirement stated is that brand agents MUST declare `brand` in `supported_protocols`.
 
-`acquire_rights` can issue scoped `generation_credentials` that specific providers verify at generation time, with named examples of Midjourney for likeness and ElevenLabs for voice. The grant carries a `rights_constraint` covering uses, countries and an impression cap, plus required disclosure text, and generation stops when the cap is hit. Generated assets go back to the brand agent for review through the approval webhook.
+## The rights half is flagged experimental
 
-AdCP labels this path "a second, experimental path" in `docs/learning/specialist/brand.mdx`. It only applies when generating with licensed-talent likeness or voice. Do not present it as the default brand agent flow, because the specification does not.
+`acquire_rights` can issue scoped `generation_credentials`, bounded by a `rights_constraint` on uses, countries and an impression cap, after which generation stops. AdCP's brand specialist guide names Midjourney for likeness and ElevenLabs for voice as providers that verify those credentials at generation time. Both names appear in documentation, not in the schemas.
 
-## Does AAMP have a brand agent?
+All of it sits in the `brand.rights_lifecycle` experimental cluster under a strict declaration rule: any implementation of a task in it MUST declare the cluster id. "Partial implementation is allowed; silent implementation is not." AdCP gives its reason for the flag as a "Legal-construct surface added late in the 3.0 cycle" whose first deployments will expose edge cases in partial rights, sublicensing and revocation.
 
-No. The string "brand agent" returns zero files across all eight IAB Tech Lab agentic repositories.
+## Brand agent in AAMP
 
-The single trace of the concept is one enum value. `agentic-audiences` defines `producer.agent_role` with six values, one of which is `brand`, in a draft embedding schema whose sibling agent-interface file is zero bytes. That is an enum member, not a role with operations.
+AAMP defines no brand agent. Three artifacts in the IAB Tech Lab repositories use the word, and none is a callable brand service.
 
-So brand identity is a place where the two stacks are not comparable rather than merely different. AdCP has a discovery file, a six-operation protocol, a rights model and a disclosure obligation. AAMP has one string in a JSON Schema enum.
+| What AAMP has         | Where                                                  | What it actually is                                                                                                    |
+| --------------------- | ------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------- |
+| `branding_agent`      | `buyer-agent`, in its CrewAI agent config              | An LLM persona, `role: "Branding Specialist"`, picking premium display and video placements                            |
+| `advertiser_brand_id` | `iab-agentic-primitives`, on the avails request        | A 36-character string, with no schema behind it and nothing to call                                                    |
+| `agent_role: "brand"` | `agentic-audiences`, in `embedding_format.schema.json` | One member of a six-value enum, in a draft whose sibling `specs/v1.0/schema/agent_interface.schema.json` is zero bytes |
 
-## Sources and version pins
+The first row is the one a search surfaces, and it is a persona inside the [buyer agent](https://aampexplorer.com/repos/buyer-agent/) rather than a service anyone can call. The nearest thing AAMP has to brand identity on the wire is the `advertiser_brand_id` string.
 
-- AdCP 3.1.10, repository `adcontextprotocol/adcp` at commit `f1a35ab`. Operation registry from `dist/schemas/3.1.10/index.json`; variants from `dist/schemas/3.1.10/brand.json`; role assignments from `docs/protocol/required-tasks.mdx`; concepts and rights flow from `docs/brand-protocol/key-concepts.mdx` and `docs/learning/specialist/brand.mdx`.
-- Absence of a glossary entry verified against `docs/reference/glossary.mdx` at the same commit.
-- `IABTechLab/agentic-audiences` at commit `106ebd6`, untagged and draft-grade.
+## The buy-side sense
+
+[Scope3's published definition](https://scope3.com/agentic-advertising/brands/) is the buy-side one: "an AI buying agent that acts on behalf of a brand — translating objectives, budgets, and brand standards into advertising decisions". That is `type: "buying"`, another value in the same Brand Agent Type enum. AdCP's own decision-maker material reaches for the buy-side reading too, calling a brand agent "a personal shopper". AdCP's schemas implement the identity sense.
+
+The well-known path is contested as well. [Brand Context Protocol v0.7](https://brandcontextprotocol.dev/spec/v0.7/), published by Encoded Brands and dated 2026-07-05, serves `/.well-known/brand.md`. Its specification says the `brand.json` output projects into AdCP's "`brand_agent`/`get_brand_identity` contract", which is the field AdCP deprecated, and neither corpus acknowledges the other. A document can be valid BCP output and still carry the shape AdCP is retiring.

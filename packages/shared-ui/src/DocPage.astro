@@ -3,8 +3,10 @@
  * Renders one markdown entry as a full page.
  *
  * The hub, answer and brief sites all render the same thing — a document with
- * an answer-first opening, a body, sources and related links — so the JSON-LD
- * assembly lives here once rather than being retyped in six route files.
+ * an answer-first opening, a body and related links — so the JSON-LD assembly
+ * lives here once rather than being retyped in six route files. Citations stay
+ * in frontmatter and reach the page through the Article node, not as a
+ * rendered list.
  */
 import PageLayout from './PageLayout.astro'
 import {
@@ -31,9 +33,28 @@ export interface Props {
   technical?: boolean
   /** emit HowTo when the entry declares steps */
   section?: string
+  /**
+   * Hand-written related links, title and note included.
+   *
+   * `related` in frontmatter is a bare list of hrefs, which `labelFor` below
+   * turns into readable anchor text by unslugging the last path segment. That
+   * recovers a title well enough for `/guides/autonomy-ladder/` and not at all
+   * for `/generate/`, so a route that knows the real title passes it here and
+   * overrides the derivation entirely.
+   */
+  relatedLinks?: { href: string; title: string; note?: string }[]
 }
 
-const { site, entry, path, heading, breadcrumbs = [], technical = true, section } = Astro.props
+const {
+  site,
+  entry,
+  path,
+  heading,
+  breadcrumbs = [],
+  technical = true,
+  section,
+  relatedLinks,
+} = Astro.props
 const BASE = siteUrl(site)
 const url = `${BASE}${path}`
 const d = entry.data
@@ -79,10 +100,59 @@ const jsonLd = graph([
     : null,
 ])
 
-const related = (d.related ?? []).map((href: string) => ({
-  href,
-  title: href.replace(/^https?:\/\//, '').replace(/\/$/, ''),
-}))
+/**
+ * Label a `related` href when the route did not hand over anchor text.
+ *
+ * This used to print the URL itself, so a reader met a list of
+ * `/guides/what-agentic-ad-protocols-dont-standardize` where prose should be —
+ * readable, in the sense that a URL is readable, and the worst-looking thing on
+ * a published page. The slug is the title with the spaces removed, so putting
+ * them back recovers most of it, and a cross-site link keeps its site name
+ * because leaving the site is the thing the reader needs told.
+ *
+ * A route that knows the real title still passes `relatedLinks` and wins.
+ */
+const DOMAIN_TO_SITE = new Map(Object.values(SITES).map((s) => [s.deployDomain, s.name] as const))
+
+function labelFor(href: string): string {
+  const external = /^https?:\/\//.test(href)
+  const domain = external ? href.replace(/^https?:\/\//, '').split('/')[0]! : ''
+  const path = external ? href.replace(/^https?:\/\/[^/]+/, '') : href
+  const slug = path.replace(/\/$/, '').split('/').filter(Boolean).pop() ?? ''
+
+  const words = slug
+    .replace(/[-_]+/g, ' ')
+    .replace(/\bdont\b/g, "don't")
+    .trim()
+  let humanised = words ? words.charAt(0).toUpperCase() + words.slice(1) : ''
+
+  // Sentence case turns the two acronyms this corpus is mostly about into
+  // "Adcp" and "aamp", which looks like a typo on every page that links a
+  // sibling. Restore the casing the rest of the prose uses.
+  const ACRONYMS: Record<string, string> = {
+    adcp: 'AdCP',
+    aamp: 'AAMP',
+    artf: 'ARTF',
+    mcp: 'MCP',
+    a2a: 'A2A',
+    ctv: 'CTV',
+    api: 'API',
+    rtb: 'RTB',
+    faq: 'FAQ',
+    iab: 'IAB',
+  }
+  humanised = humanised.replace(/\b[A-Za-z0-9]+\b/g, (w) => ACRONYMS[w.toLowerCase()] ?? w)
+
+  if (external) {
+    const siteName = DOMAIN_TO_SITE.get(domain) ?? domain
+    // A bare link to another site's root is that site, and nothing more.
+    return humanised ? `${siteName} — ${humanised}` : siteName
+  }
+  return humanised || SITES[site].name
+}
+
+const related =
+  relatedLinks ?? (d.related ?? []).map((href: string) => ({ href, title: labelFor(href) }))
 ---
 
 <PageLayout
@@ -103,21 +173,4 @@ const related = (d.related ?? []).map((href: string) => ({
   wide
 >
   <slot />
-
-  {
-    (d.citations ?? []).length > 0 && (
-      <>
-        <h2>Sources</h2>
-        <ul>
-          {d.citations.map((c: string) => (
-            <li>
-              <a href={c} rel="noopener nofollow">
-                {c.replace(/^https?:\/\//, '')}
-              </a>
-            </li>
-          ))}
-        </ul>
-      </>
-    )
-  }
 </PageLayout>

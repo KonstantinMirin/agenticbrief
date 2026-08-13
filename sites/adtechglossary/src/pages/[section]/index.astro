@@ -18,27 +18,130 @@ const BASE = siteUrl('adtechglossary')
 
 export async function getStaticPaths() {
   const entries = publishedOnly(await getCollection('glossary'))
-  // Only sections that actually have terms get an index. A section page listing
-  // nothing is a soft 404 with a nav link pointing at it.
+  // Only sections with published terms get an index page.
   const used = new Set(entries.map((e) => sectionFor(e.id)))
   return [...used].map((section) => ({ params: { section }, props: { section } }))
 }
 
 const { section } = Astro.props
 const meta = SECTIONS[section as keyof typeof SECTIONS]
-const entries = publishedOnly(await getCollection('glossary'))
+const all = publishedOnly(await getCollection('glossary'))
+const entries = all
   .filter((e) => sectionFor(e.id) === section)
   .sort((a, b) => a.data.term.localeCompare(b.data.term))
 
+// The quotable definition of what each section covers. Max 400 characters.
+const SECTION_ANSWER: Record<string, string> = {
+  concepts:
+    "AdCP, the Ad Context Protocol from AgenticAdvertising.org, and AAMP, IAB Tech Lab's umbrella label, are the two protocol families of agentic advertising. Both run over general-purpose agent transports — MCP and A2A — and AAMP adds REST over OpenDirect 2.1.",
+  agents:
+    'AdCP names agent roles by the job each one does: sales, signal, brand and governance, none of which appears by name in AAMP. AAMP names the parties to a trade instead, buyer agent and seller agent.',
+  'media-buying':
+    "Buying objects are the records a campaign becomes once it has been bought: in AdCP a media buy, the packages inside it and the products they are bought from. AAMP's control plane inherits the equivalent objects — Account, Order, Line and Product — from OpenDirect 2.1.",
+  signals:
+    'A signal is a targeting dimension published by one party for others to discover and activate; an audience is buyer-owned data uploaded to a single seller account and not portable beyond it. AdCP defines both, and the hashed form in which an email address or phone number is matched.',
+  realtime:
+    "Real-time execution in advertising is what runs while an impression is being decided rather than at planning time: AdCP's Trusted Match Protocol, with context_match and identity_match, and ARTF, the AAMP framework in which an agent proposes typed edits to a live OpenRTB bid request.",
+  negotiation:
+    "Negotiation in agentic buying is how a buyer agent and a seller agent agree a price and book it: quotes, negotiation rounds, deals, and the access tier and trust status that decide which prices a buyer agent is shown at all. The objects are AAMP's.",
+  governance:
+    'Governance in agentic buying is the checks a buy has to pass before it runs: a policy category naming the regulatory regime a campaign falls under, and audience constraints listing the audiences it must include or exclude. In AdCP a governance agent evaluates both through check_governance.',
+  about:
+    'Every definition in this glossary is taken from a named specification artifact: AdCP at stable release 3.1.13, and the eight IAB Tech Lab repositories with published code under the AAMP label, which version independently. Ad tech terms that predate agentic buying are out of scope.',
+}
+
+// How the terms in a section relate to each other.
+const SECTION_INTRO: Record<string, string> = {
+  concepts:
+    'Eight words appear in both vocabularies, and only Product and Account mean the same thing in each. Agentic advertising and agentic buying are the names for the category itself, and no specification in either corpus defines agentic advertising, although one protocol family is named after it.',
+  agents:
+    "AdCP's sales agent and AAMP's seller agent are the same role under different nouns. Buyer agent, signal agent, brand agent and governance agent name the other parties, and agent on its own means one thing in AdCP and another in AAMP. Agent card, agent registry and discovery files cover how an agent publishes an identity and how one is found.",
+  'media-buying':
+    'A media buy is the purchased campaign, a package is one product inside it with its own budget, pacing and flight dates, and a product is what a seller advertises before anything has been bought.',
+  signals:
+    "The distinction is ownership: an audience is buyer-owned data uploaded to a single seller, and a signal is a targeting dimension published by someone else. A signal definition is the published record of one signal in a data provider's adagents.json, and activation is the AdCP call that makes a discovered signal usable on a named destination.",
+  realtime:
+    "Trusted Match Protocol keeps context_match and identity_match structurally apart so that page context and user identity never share a request. Mutation and intent are ARTF's: a mutation is a proposed change to a live bid request or response, and an intent is the reason the agent gives for it.",
+  negotiation:
+    "A quote is a seller agent's expiring offer for one product over one flight, buyer and seller exchange negotiation rounds against it, and an accepted quote is booked into a deal by quote_id. Access tier sets which prices a buyer agent sees, and trust status caps the tier that agent may claim.",
+  governance:
+    'A policy category names the regime a campaign falls under, such as fair_housing or children_directed, and resolves to the policies the campaign must obey and the attributes it must not target on. Audience constraints are the include and exclude rules on the same plan, where exclusions beat inclusions.',
+  about:
+    'AdCP publishes one stable release at a time, so a definition taken from it can name a version. The repositories under the AAMP label version independently and publish no shared number, so an AAMP definition names the repository instead.',
+}
+
+// Hand-written per section. 50-200 characters.
+const SECTION_DESCRIPTION: Record<string, string> = {
+  concepts:
+    'The two agentic advertising protocol families, the transports they run on and the names given to the category, defined from the specifications of both.',
+  agents:
+    'Sales, seller, buyer, signal, brand and governance agents defined, with the cards, registries and discovery files by which an agent is identified and found.',
+  'media-buying':
+    'Media buy, package and product defined from the AdCP schemas: what a bought campaign is made of, and which objects AAMP uses in their place.',
+  signals:
+    'Audience against signal, the published signal definition, the activation call that deploys one, and the hashed identifiers used to name a person.',
+  realtime:
+    'Trusted Match Protocol, ARTF mutations and ARTF intent: the AdCP and AAMP surfaces that run while an impression is being decided.',
+  negotiation:
+    'Quote, deal, negotiation round, access tier and trust status: the AAMP objects by which a price is offered, argued down and booked.',
+  governance:
+    'Policy category and audience constraints: the regulatory regime a campaign declares, and the audiences it must include or exclude before it runs.',
+  about:
+    'Where each definition in this glossary comes from: AdCP at stable release 3.1.13, and the eight AAMP repositories with published code, each versioned on its own.',
+}
+
 const path = `/${section}/`
 const url = `${BASE}${path}`
-const heading = meta?.title ?? section
-const title = `${heading} — ad tech glossary`
-const description =
-  `${meta?.summary ?? ''} ${entries.length} terms, each sourced from a specification file and version-pinned.`
-    .trim()
-    .slice(0, 195)
-const answer = `${heading}: ${entries.length} defined terms. ${meta?.summary ?? ''}`.slice(0, 300)
+const heading = meta.title
+const title = `${heading} — agentic advertising glossary`
+const description = SECTION_DESCRIPTION[section] ?? ''
+const answer = SECTION_ANSWER[section] ?? ''
+const intro = SECTION_INTRO[section]
+
+// Descriptions must be 50-200 characters (what a search result shows); answers
+// at most 400 (what an assistant quotes). Truncating either silently would ship
+// a half sentence.
+if (description.length < 50 || description.length > 200) {
+  throw new Error(
+    `section "${section}" description is ${description.length} characters, not 50-200`,
+  )
+}
+if (answer.length === 0 || answer.length > 400) {
+  throw new Error(`section "${section}" answer is ${answer.length} characters, not 1-400`)
+}
+if (!intro) {
+  throw new Error(`section "${section}" has no intro in SECTION_INTRO`)
+}
+
+/**
+ * A one-clause gloss for the term list: the entry's own definition, cut at the
+ * first sentence, colon, semicolon, dash or comma that ends a clause. The full
+ * definition is on the term page, in the answer box.
+ */
+function gloss(text: string): string {
+  const full = text.trim()
+  const boundaries: { at: number; kind: string }[] = []
+  let depth = 0
+  for (let i = 0; i < full.length; i++) {
+    const c = full[i]
+    if (c === '(' || c === '[') depth++
+    else if (c === ')' || c === ']') depth--
+    if (depth > 0) continue
+    if (c === '.' && i >= 40 && /^(\s+[A-Z]|$)/.test(full.slice(i + 1)))
+      boundaries.push({ at: i + 1, kind: 'sentence' })
+    else if (i >= 40 && (c === ':' || c === ';')) boundaries.push({ at: i, kind: 'strong' })
+    else if (i >= 40 && /^\s[—-]\s/.test(full.slice(i))) boundaries.push({ at: i, kind: 'strong' })
+    else if (i >= 70 && c === ',') boundaries.push({ at: i, kind: 'comma' })
+  }
+  const sentence = boundaries.find((b) => b.kind === 'sentence')
+  const cut = sentence && sentence.at <= 160 ? sentence : boundaries[0]
+  return cut ? full.slice(0, cut.at) : answer
+}
+
+const published = new Date(Math.min(...entries.map((e) => e.data.pubDate.getTime()))).toISOString()
+const modified = new Date(
+  Math.max(...entries.map((e) => (e.data.updatedDate ?? e.data.pubDate).getTime())),
+).toISOString()
 
 const breadcrumbs = [
   { name: 'Ad Tech Glossary', url: `${BASE}/` },
@@ -55,13 +158,16 @@ const jsonLd = graph([
     url,
     title,
     description,
-    datePublished: '2026-08-09',
+    datePublished: published,
+    dateModified: modified,
     technical: true,
     keywords: [section, 'ad tech glossary'],
   }),
 ])
 
 const otherSections = Object.entries(SECTIONS).filter(([k]) => k !== section)
+// The about section is sourcing rather than vocabulary, so it is outside the count.
+const total = all.filter((e) => sectionFor(e.id) !== 'about').length
 ---
 
 <PageLayout
@@ -75,7 +181,8 @@ const otherSections = Object.entries(SECTIONS).filter(([k]) => k !== section)
   jsonLd={jsonLd}
   keywords={[section, 'agentic advertising glossary']}
 >
-  <h2>Which terms are in this section?</h2>
+  <p>{intro}</p>
+
   <ul class="term-list">
     {
       entries.map((e) => (
@@ -84,7 +191,7 @@ const otherSections = Object.entries(SECTIONS).filter(([k]) => k !== section)
             {e.data.term}
           </a>
           <br />
-          {e.data.answer}
+          {gloss(e.data.answer)}
         </li>
       ))
     }
@@ -92,11 +199,13 @@ const otherSections = Object.entries(SECTIONS).filter(([k]) => k !== section)
 
   <h2>Other sections</h2>
   <ul>
+    <li>
+      <a href="/">Ad Tech Glossary</a> — all {total} terms, A to Z
+    </li>
     {
       otherSections.map(([k, v]) => (
         <li>
-          <a href={`/${k}/`}>{v.title}</a>
-          <span class="muted"> — {v.summary}</span>
+          <a href={`/${k}/`}>{v.title}</a> — {v.summary}
         </li>
       ))
     }

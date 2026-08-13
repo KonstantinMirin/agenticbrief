@@ -1,68 +1,69 @@
 ---
-title: 'Worked Example: Guaranteed CTV Brand Launch Brief'
-description: 'A filled-in campaign brief for a guaranteed CTV route launch, shown as prose and as a get_products request payload that validates against the AdCP 3.1.10 schema.'
-answer: 'Worked example of a filled-in AdCP brief for a guaranteed CTV brand launch: the prose brief, the routing decision behind every field, and a complete get_products request payload that validates against the published AdCP 3.1.10 schema.'
+title: 'A Guaranteed CTV Launch Brief, Filled In'
+description: 'A guaranteed CTV brand launch written out as an AdCP get_products payload: 13 filters, validated against the published 3.1.13 schema, plus the eight mistakes that validate anyway.'
+answer: 'A guaranteed CTV launch brief in AdCP is one get_products request in brief mode: 13 typed filter keys covering delivery type, channel, flight, budget, currency, metrics and performance thresholds, plus the campaign described in prose in the brief string.'
 pubDate: 2026-08-09
+updatedDate: 2026-08-09
 channel: 'ctv'
 cluster: 'bg-examples'
-worked: true
 keywords:
-  - 'ctv campaign brief example'
   - 'adcp request payload examples'
-  - 'filled media brief example'
+  - 'ctv campaign brief example'
   - 'guaranteed ctv brief'
   - 'get_products example'
+  - 'adcp filters object example'
 citations:
-  - 'https://github.com/adcontextprotocol/adcp/blob/f1a35aba734befa809e1fa780ad77c7edd614e96/dist/schemas/3.1.10/media-buy/get-products-request.json'
-  - 'https://github.com/adcontextprotocol/adcp/blob/f1a35aba734befa809e1fa780ad77c7edd614e96/dist/schemas/3.1.10/core/product-filters.json'
-  - 'https://github.com/adcontextprotocol/adcp/blob/f1a35aba734befa809e1fa780ad77c7edd614e96/dist/schemas/3.1.10/core/performance-standard.json'
-  - 'https://github.com/adcontextprotocol/adcp/blob/f1a35aba734befa809e1fa780ad77c7edd614e96/dist/schemas/3.1.10/enums/available-metric.json'
-  - 'https://github.com/adcontextprotocol/adcp/blob/f1a35aba734befa809e1fa780ad77c7edd614e96/dist/schemas/3.1.10/enums/exclusivity.json'
-  - 'https://github.com/adcontextprotocol/adcp/blob/f1a35aba734befa809e1fa780ad77c7edd614e96/dist/schemas/3.1.10/core/version-envelope.json'
-  - 'https://github.com/adcontextprotocol/adcp/blob/f1a35aba734befa809e1fa780ad77c7edd614e96/dist/schemas/3.1.10/core/targeting.json'
-  - 'https://github.com/adcontextprotocol/adcp/blob/f1a35aba734befa809e1fa780ad77c7edd614e96/dist/schemas/3.1.10/core/duration.json'
-  - 'https://github.com/adcontextprotocol/adcp/blob/f1a35aba734befa809e1fa780ad77c7edd614e96/docs/media-buy/task-reference/get_products.mdx'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/schemas/3.1.13/media-buy/get-products-request.json'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/schemas/3.1.13/media-buy/get-products-response.json'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/schemas/3.1.13/core/product.json'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/schemas/3.1.13/core/product-filters.json'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/schemas/3.1.13/core/performance-standard.json'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/schemas/3.1.13/core/committed-metric.json'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/schemas/3.1.13/core/delivery-metric-aggregate.json'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/schemas/3.1.13/core/account-ref.json'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/schemas/3.1.13/enums/available-metric.json'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/schemas/3.1.13/enums/exclusivity.json'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/schemas/3.1.13/enums/performance-standard-metric.json'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/schemas/3.1.13/enums/viewability-standard.json'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/schemas/3.1.13/enums/task-type.json'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/schemas/3.1.13/core/version-envelope.json'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/schemas/3.1.13/core/targeting.json'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/schemas/3.1.13/core/duration.json'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/schemas/3.1.13/media-buy/create-media-buy-request.json'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/schemas/3.1.13/media-buy/get-products-async-response-submitted.json'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/docs/media-buy/task-reference/get_products.mdx'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/docs/media-buy/product-discovery/example-briefs.mdx'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/docs/media-buy/advanced-topics/accountability.mdx'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/docs/measurement/taxonomy.mdx'
 related:
   - '/spec/'
   - '/spec/brief-vs-filters/'
   - '/crosswalk/creative-brief-to-adcp/'
   - '/'
-  - 'https://adcpexplorer.noetis.dev/operations/get-products/'
-  - 'https://adcpexplorer.noetis.dev/operations/create-media-buy/'
+  - 'https://adcpexplorer.com/operations/get-products/'
+  - 'https://adcpexplorer.com/operations/create-media-buy/'
+  - 'https://agenticadlab.com/'
 reviewState: cto-reviewed
 ---
 
-## What is this example?
+A guaranteed CTV launch, written out as an AdCP `get_products` request: thirteen populated filter keys and a prose brief, valid against the published 3.1.13 schema. Copy the payload, swap the brand, the flight, the budget range and the metric list, and the shape holds for any guaranteed video buy.
 
-Every campaign brief tool I looked at ships a blank template. This is the opposite — one campaign, filled in, routed field by field, down to the payload you can copy.
+## The scenario
 
-The campaign is fictional and the brand domain is a reserved example name. Everything else — field names, enum values, structural rules — is read from the AdCP 3.1.10 published schemas at `dist/schemas/3.1.10/`, repository commit `f1a35ab`, 2026-08-06.
+Match these rows against your own campaign.
 
-## The campaign, in the words a planner would use
+| Input           | This campaign                                                                            |
+| --------------- | ---------------------------------------------------------------------------------------- |
+| Advertiser      | Northwind Air, opening a nonstop transatlantic route out of the US east coast            |
+| Markets         | US and Canada, budget booked in US dollars                                               |
+| Flight          | Mid-September to the week before the mid-November first flight, ahead of booking windows |
+| Budget          | Around a million dollars                                                                 |
+| Audience        | Adults 25 to 54 who travel internationally at least once a year                          |
+| Deal type       | Guaranteed                                                                               |
+| Creative        | 30-second hero spot and a 15-second cutdown, English and French-Canadian                 |
+| Success metrics | Completed views and verified viewability, plus a brand-lift readout at end of flight     |
 
-Northwind Air is opening a new nonstop transatlantic route out of the US east coast, first flight in mid-November. Marketing wants a national CTV awareness burst that lands before booking windows open, running from mid-September to the week before launch. The budget is around a million dollars, and it is guaranteed inventory: they want to know what they are getting before they commit.
-
-The audience is adults 25 to 54 who travel internationally at least once a year, with a skew to people who research trips in the evening. Media has asked for premium full-episode streaming next to travel, food and documentary programming. No news, and no hard-news adjacency at all, which is a standing rule for this advertiser and not a preference. They want sole-category presence in the pod where a publisher can offer it, so no competing airline or online travel agency runs in the same break.
-
-Creative is a 30-second hero spot with a 15-second cutdown, English and French-Canadian. Success is completed views and verified viewability, with a brand-lift readout at the end of the flight.
-
-## How does that route into an AdCP request?
-
-Seven routing decisions, each with a reason.
-
-**Guaranteed goes in both places.** `filters.delivery_type: "guaranteed"` is the hard exclusion, and `preferred_delivery_types: ["guaranteed"]` states the ranking preference. They are different fields with different semantics: the filter removes non-guaranteed products before the seller ranks anything, the preference array only orders results. Sending both is redundant here and I have done it deliberately, because when both are present `filters.delivery_type` takes precedence and the preference array becomes documentation of intent for a human reading the request later.
-
-**Sole-category presence is a filter, not prose.** `filters.exclusivity: "category"`. The enum is `none`, `category`, `exclusive`. This is a hard commercial requirement, so it belongs where it excludes. Worth knowing: the string "exclusivity" appears nowhere in the 1,772 lines of the `get_products` reference page, so you will not find this field by reading the docs. It is in `core/product-filters.json`.
-
-**The flight, budget, geography and currency are filters.** Dates the seller cannot serve are wasted response payload. `budget_range` requires a `currency` inside the object, and `min` or `max` must be present. I have sent a range rather than a point number so the seller can propose above and below the target.
-
-**Measurement splits across two fields.** `required_metrics` is a capability filter: it returns products that commit to reporting those metrics, and the product's declared `available_metrics` becomes the binding reporting contract carried into the resulting media buy. `required_performance_standards` is a threshold filter: `{metric, threshold, vendor}`, with `standard` additionally required when the metric is `viewability` because MRC and GroupM define materially different thresholds. Note the direction rule: viewability and completion rate are floors, `ivt` is a ceiling.
-
-**The news exclusion stays in prose, and that is a known weakness.** There is no content-exclusion filter in `product-filters.json`. The structured options are `required_policies` (registry policy IDs that must already exist) or `property_list` (a list you create through a governance agent before you call this), and neither is set up for this advertiser. So the hardest rule in the brief travels as a sentence and the seller's curation model decides what it means. If this campaign were real, setting up a property list before the first `get_products` call would be the highest-value thing to do.
-
-**The brand-lift readout also stays in prose.** `brand_lift` is in the 36-value metric enum, so it could go in `required_metrics`. I left it out because requiring it would silently exclude every product that does not declare brand-lift reporting, which on CTV is most of them, and the readout is negotiable at package level. Filters delete; preferences persuade. This is a preference.
-
-**Creative durations and languages stay in prose.** They constrain what the buyer can deliver, not what the seller can sell. Format constraints belong in `filters.format_ids` when the requirement is "your product must accept this format"; here it is "we happen to have these cuts", which is context for curation.
+Two lines are standing rules for this advertiser rather than preferences: no news and no hard-news adjacency at all, and no competing airline or online travel agency in the same pod.
 
 ## The payload
 
@@ -114,37 +115,97 @@ Seven routing decisions, each with a reason.
 }
 ```
 
-## Does it validate?
+Northwind Air doesn't exist and `northwindair.example` is a reserved name. The field names, the enum values and the shape rules are all from the published 3.1.13 schemas, and the payload validates against `media-buy/get-products-request.json` in that release. [The generator](/generate/) will emit the skeleton if you'd rather start from your own prose than from someone else's JSON.
 
-Yes. Against `dist/schemas/3.1.10/media-buy/get-products-request.json` with a Draft-07 validator and a local registry built from every schema in the release that declares a `$id`:
+The measurement block follows `docs/media-buy/advanced-topics/accountability.mdx`, which sends `delivery_type: "guaranteed"` with viewability at 0.70 MRC DoubleVerify and an ivt ceiling of 0.05. The block above is that snippet with a tighter ivt ceiling.
 
+This payload is `brief` mode throughout, where you describe the campaign and the publisher recommends products against it. `brief` is required in that mode and forbidden in `wholesale` and `refine` — [the spec page](/spec/) has the full mode table, and the rule that `adcp_version` goes on the wire as `"3.1"` rather than `"3.1.13"`.
+
+One key in that payload does not mean what it looks like. `is_fixed_price: true` does not mean "only fixed-price products". It returns products offering at least one fixed-price option, and a product carrying both fixed and auction options matches either value of the filter. What you get for sending it is on the response side: sellers "MUST return only the pricing_options entries matching the requested pricing type so buyers can deterministically select from the returned options".
+
+## What each filter is doing
+
+| Filter                           | Value here                                                 | Why it is in this payload                                                               |
+| -------------------------------- | ---------------------------------------------------------- | --------------------------------------------------------------------------------------- |
+| `delivery_type`                  | `"guaranteed"`                                             | Excludes every non-guaranteed product outright.                                         |
+| `channels`                       | `["ctv"]`                                                  | CTV only.                                                                               |
+| `video_placement_types`          | `["instream"]`                                             | Instream video, not outstream units.                                                    |
+| `exclusivity`                    | `"category"`                                               | The pod requirement: "only one advertiser per industry category".                       |
+| `countries`                      | `["US", "CA"]`                                             | The two markets the route sells into.                                                   |
+| `start_date`, `end_date`         | `2026-09-14`, `2026-11-08`                                 | The flight. A product the seller can't serve in those weeks is wasted response payload. |
+| `budget_range`                   | 900000-1200000 USD                                         | The order of magnitude, so the seller doesn't return price points nobody can transact.  |
+| `pricing_currencies`             | `["USD"]`                                                  | The buy is transacted in dollars in both markets.                                       |
+| `is_fixed_price`                 | `true`                                                     | Guaranteed at a fixed rate, not an auction floor.                                       |
+| `required_metrics`               | impressions, completed views, completion rate, viewability | Capability filter, and the binding reporting contract on the resulting media buy.       |
+| `required_performance_standards` | viewability 0.70 MRC DoubleVerify, ivt 0.01                | Threshold filter. The floors and ceilings the invoice turns on.                         |
+| `min_exposures`                  | `25000000`                                                 | Measurement-validity floor for the brand-lift study.                                    |
+
+The [crosswalk](/crosswalk/creative-brief-to-adcp/) walks a full agency brief row by row.
+
+Reach for `exclusivity: "category"` by name, because you won't find it by reading the docs. The enum in `enums/exclusivity.json` is `none`, `category`, `exclusive`. The [`get_products` reference page](https://adcpexplorer.com/operations/get-products/) upstream never mentions `exclusivity`; the field is discoverable only by reading the properties of `core/product-filters.json` directly.
+
+Measurement splits across two filters that do different jobs, which is why `viewability` appears in both. `required_metrics` is the capability filter: sellers "MUST silently exclude products that cannot meet this list (filter-not-fail; do not return an error)", and "the product's declared `available_metrics` becomes the binding reporting contract carried into the resulting media buy". `required_performance_standards` is the threshold filter, `{metric, threshold, vendor}` with `standard` for viewability, and direction matters: "viewability, completion_rate, brand_safety, and attention_score are floors (must exceed); ivt is a ceiling (must not exceed)." Send a metric in the first to have it reported at all, and in the second to set the floor.
+
+Keep `brand_lift` out of `required_metrics`, and keep it in the prose. It is a reportable metric, listed in `available-metric.json`, so it would validate there; it is not in `performance-standard-metric.json`, so it could never carry a threshold anyway. Requiring it would silently delete every CTV product that doesn't declare brand-lift reporting, which is most of them, to secure a readout that's negotiable at package level. The [crosswalk](/crosswalk/creative-brief-to-adcp/) routes it the same way.
+
+`min_exposures: 25000000` is what carries the brand-lift ask instead. Its description is the only one in `product-filters.json` about measurement rather than money: "Minimum exposures/impressions needed for measurement validity." Twenty-five million is what this budget buys at a $40 CTV CPM. Nothing in the schema says whether that floor is read per product or across the whole response, and the difference decides what comes back: read per product, a whole-campaign number matches only products that could carry the flight on their own. Size it to what one product plausibly delivers if you want a wider set returned.
+
+`filters.delivery_type` excludes, `preferred_delivery_types` ranks: "Unlike `filters.delivery_type` which excludes non-matching products, this signals preference for curation — the publisher may still include other delivery types when they match the brief well." Sending guaranteed twice is safe here only because both name the same value: the filter decides, and the preference array documents intent for whoever reads the request later. No precedence rule is published anywhere, and a request that filters for `guaranteed` while preferring `non_guaranteed` validates cleanly.
+
+## Content exclusions have no filter
+
+`product-filters.json` has no content-exclusion filter. No blocklist, no category exclusion, nothing that expresses "no news". The two structured surfaces that come close sit at the top level of the request, outside `filters`: `required_policies`, an array of registry policy IDs that must already exist, and `property_list`, a `PropertyListRef` of `{agent_url, list_id, auth_token?}` pointing at a list you build first through the property domain (`create_property_list` and its four siblings are labelled "Property domain" in the task-type enum). Neither is set up for this advertiser, and the upstream `get_products` reference page never mentions `required_policies` either. Either budget engineering time for the "no news" line months before the campaign, or accept that a curation model decides what it means.
+
+Stand the property list up before the first `get_products` call, and treat it as a build rather than a checkbox. `PropertyListRef` points at an `agent_url`, so somebody has to host an agent answering `create_property_list`, `update_property_list`, `get_property_list`, `list_property_lists` and `delete_property_list`, and keep the list current as publishers change. That is buyer-side engineering, or a vendor you contract to hold it.
+
+The payload targets nobody. Every property of `core/targeting.json` is buy-time, attached to packages at `create_media_buy` through `targeting_overlay`: dayparts, device type, language, frequency cap, geo includes and excludes at four levels, signal targeting groups. None of them belong in a discovery request, and nothing here commits. The commitment is [`create_media_buy`](https://adcpexplorer.com/operations/create-media-buy/), which requires `idempotency_key`, `account`, `brand`, `start_time` and `end_time`, and which has no `brief` property at all.
+
+Nothing records an internal approval. `create_media_buy` carries `io_acceptance` with `{io_id, accepted_at, signatory}`, and `signatory` is "Who accepted the IO — agent identifier or human name", so a human sign-off is representable, but what it records is acceptance of the seller's insertion order, and only "when the proposal's insertion_order has requires_signature: true". A media director signing off the plan before anyone books it has no field anywhere in the protocol. Enforce that gate in your own system before you issue `create_media_buy`.
+
+## What validates but should not
+
+Don't ship on a green validator. Every mutation below is a change to the payload above that the released schema accepts.
+
+| Mutation                                                                          | Validator | What it costs on this campaign                                                                                                                                                                                              |
+| --------------------------------------------------------------------------------- | --------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `"filters"` misspelled `"filter"`                                                 | valid     | All 13 constraints vanish at once. Guaranteed-only, category exclusivity, the flight, the budget floor, the viewability standard, gone. The seller returns non-guaranteed FAST inventory and the response looks legitimate. |
+| Viewability standard omitted                                                      | valid     | 0.70 viewable now means MRC or GroupM, seller's choice, on the term the invoice turns on.                                                                                                                                   |
+| `delivery_type: "guaranteed"` plus `preferred_delivery_types: ["non_guaranteed"]` | valid     | No diagnostic, and no published precedence rule to say which one the seller honours.                                                                                                                                        |
+| `start_date` after `end_date`                                                     | valid     | An impossible flight. Draft-07 can't compare two sibling values, so this one is on the schema language.                                                                                                                     |
+| Misspelled key inside `filters` (`exclusivty`)                                    | valid     | That one constraint is dropped silently. `product-filters.json` is also `additionalProperties: true`.                                                                                                                       |
+| `adcp_version` omitted                                                            | valid     | Falls back to the deprecated `adcp_major_version` or a server default.                                                                                                                                                      |
+| `brief` sent in `wholesale` mode                                                  | valid     | Forbidden in the field descriptions and enforced by nothing. [The spec page](/spec/) covers the rule.                                                                                                                       |
+| `brief` sent in `refine` mode                                                     | valid     | Same rule, same silence.                                                                                                                                                                                                    |
+
+### What the released schema does catch
+
+`threshold: 70` instead of `0.70` fails on "must be <= 1"; the field is a rate, not a percentage. `exclusivity: "sole"`, `channels: ["CTV"]` in caps, `countries: ["us"]` in lowercase and `video_placement_types: ["pre-roll"]` all fail their enums or patterns. `min_exposures: -5` fails its `minimum: 1`. `AccountRef` is a `oneOf` with `additionalProperties: false` on both branches, so an `account` carrying `account_id` alongside `brand` and `operator` is rejected.
+
+`budget_range` has structure of its own, and it is one of the few conditionals AdCP encodes inside `filters` at all: `currency` is required, and an `anyOf` demands at least one of `min` and `max`, so `{"currency": "USD"}` alone is rejected.
+
+`time_budget` is a `Duration`, not a number of seconds. `{interval, unit}`, both required, `additionalProperties: false`, and `unit` from `seconds`, `minutes`, `hours`, `days`, `campaign`. It fails twice, once for a missing `unit` and once for a bare `120`. The interval is a trade: 120 seconds leaves curation room, and a shorter one makes the async Submitted envelope likelier.
+
+Run the whole set yourself. [validate.mjs](/validate.mjs) takes a clone of the AdCP repository and prints every mutation with its result:
+
+```bash
+ADCP_SCHEMAS=<adcp-repo>/dist/schemas/3.1.13 node validate.mjs
 ```
-VALID against /schemas/3.1.10/media-buy/get-products-request.json
-```
 
-Three details in that payload are the ones people get wrong.
+Read the viewability row against the measurement docs. `docs/measurement/taxonomy.mdx` says viewability is the canonical Tier 1 metric and that MRC and GroupM "define materially different thresholds and require schema-enforced disambiguation via `qualifier.viewability_standard`". At 3.1.13, nothing enforces it. `core/performance-standard.json` requires `metric`, `threshold` and `vendor`; `standard` sits outside that list with a description that says "Required when metric is 'viewability'" and no `if`/`then` to make it so. `core/committed-metric.json` leaves `qualifier` out of both of its `required` arrays. Send the `standard` yourself on every viewability threshold.
 
-`adcp_version` is `"3.1"`, not `"3.1.10"`. The envelope pattern is `^\d+\.\d+(-[a-zA-Z0-9.-]+)?$`, so the release number you looked up in `latest.json` does not match it. Patches are not negotiated; they surface as `build_version` on the capabilities response.
+## Tighten the schema locally
 
-`is_fixed_price: true` does not mean "only fixed-price products". It means the seller returns products offering at least one fixed-price option, and must return only the `pricing_options` entries matching that pricing type, so the buyer can select deterministically from discovery. A product with both fixed and auction options matches either value of this filter.
+Use your own copy of it, tightened. Wrap the released request schema in an `allOf` that closes `additionalProperties` at the top level and inside `filters`, and add the `if`/`then` that `performance-standard.json` doesn't carry. Run every outbound request through that before it goes on the wire. Three of the eight misses fail immediately: the `"filter"` typo, the `exclusivty` typo, and the omitted viewability `standard`. Because the overlay only ever adds constraints, anything that clears it still validates against the published schema, so you're not inventing a private dialect.
 
-`time_budget` is a `Duration` object, `{interval, unit}`, and both are required. Two minutes is generous, which is the point: curated `brief` mode may return a Submitted envelope instead of an answer when the seller needs an upstream query or a human review, and a short budget makes that more likely.
+Two misses need imperative code. Assert `start_date <= end_date`, and assert `filters.delivery_type` is in `preferred_delivery_types` when you send both. Three lines each, and they cover the contradictions Draft-07 structurally can't see.
 
-## What the payload does not say
+Downstream, the response won't do it for you. `get-products-response.json` carries no echo of the filters you sent. The nearest thing is `filter_diagnostics`, and it's deliberately weak evidence: sellers "MAY populate this when meaningful narrowing occurred; buyers MAY use it for triage UX without depending on its presence", it is "Counts only — products are not enumerated by name", and its `semantics` enum is `only`, `any` or `approximate`, so the same integer means three different things depending on a sibling field ("Buyers SHOULD inspect `semantics` before doing arithmetic on counts"). `property_list_applied` and `catalog_applied` are booleans covering those two surfaces and nothing else.
 
-Worth being explicit, because a filled-in example invites the reader to think it is complete.
+Re-check each returned product against your own constraint list before you commit. `core/product.json` requires `delivery_type`, and carries `exclusivity`, `performance_standards` and `enforced_policies`, the same vocabulary the filters use. Read the defaults carefully: `exclusivity` "Defaults to 'none' when absent", and for `performance_standards`, "When absent, no structured performance standards apply", so an absent field is not a guarantee.
 
-It does not target anybody. Discovery in AdCP finds products; targeting attaches to packages at `create_media_buy` through `targeting_overlay`, which is where geo includes and excludes, dayparts, device type, language, frequency cap and signal targeting groups live. The 28 properties of `core/targeting.json` are all buy-time.
+## Refine, then commit, in separate calls
 
-It does not cap frequency. Same reason. `packages[].targeting_overlay.frequency_cap`, buy time.
-
-It does not commit anything. `get_products` returns products and proposals. Commitment is `create_media_buy`, which requires `idempotency_key`, `account`, `brand`, `start_time` and `end_time`, and which has no `brief` field at all.
-
-It does not encode approval. AdCP has no buyer-side approval object. If Northwind's media director signs off before booking, that gate lives in the buyer agent, not in the protocol.
-
-## What happens next in the conversation?
-
-The seller answers with products, and probably with proposals. If the mix is wrong, the follow-up is not a new brief. It is a `refine` call:
+The seller answers with products, and probably with proposals. If the mix is wrong, follow up with a `refine` call:
 
 ```json
 {
@@ -157,12 +218,10 @@ The seller answers with products, and probably with proposals. If the mix is wro
 }
 ```
 
-`brief` must not be present in `refine` mode. The seller answers each entry through `refinement_applied`, matched by position.
+The seller answers each entry through `refinement_applied`, "matched by position", so the order you send them in decides which answer maps to which ask.
 
-One rule to know before you get there. Once any entry carries `action: "finalize"`, every entry in the array must be proposal-scoped and must also be `finalize`; mixing finalize with `include` or `omit` entries has to be rejected with `INVALID_REQUEST`. Finalize is a commit, not a refinement. Refine and commit are separate calls, in that order.
+Once any entry carries `action: "finalize"`, "ALL entries in the array MUST be proposal-scoped with `action: 'finalize'` — mixing finalize entries with `include`/`omit` entries or with request- / product-scoped entries MUST be rejected by the seller with `INVALID_REQUEST`. Finalize is a commit, not a refinement."
 
-## Reusing this
+Plan for the Submitted envelope, because it is a second code path. In `brief` and `refine` modes the seller MAY answer with one instead of products, when curation needs an upstream query or human review it can't finish inside `time_budget`. The envelope carries `status: "submitted"` and a `task_id`, and the products land on the completion artifact rather than on the envelope, so the buyer either polls `get_task_status` with that handle or registers a `push_notification_config` up front and takes the terminal callback. `wholesale` never uses this arm; it signals shortfall through `incomplete[]` instead.
 
-Swap the brand domain, the flight, the budget range and the metric list, and the shape holds for any guaranteed video buy. The two decisions worth re-making each time are which constraints you are willing to have silently deleted, and which of your genuinely hard rules have no field to live in. On this campaign the answer to the second question was "the most important one", which is the honest state of AdCP 3.1.10 for brand-safety-led advertisers.
-
-The reasoning behind each routing decision is on [brief vs filters](/spec/brief-vs-filters/). The row-by-row map from a normal agency brief is the [crosswalk](/crosswalk/creative-brief-to-adcp/).
+Next: [brief vs filters](/spec/brief-vs-filters/) argues each line of a brief onto one side of the request.

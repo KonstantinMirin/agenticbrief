@@ -24,35 +24,40 @@ const entries = publishedOnly(await getCollection('glossary')).sort((a, b) =>
   a.data.term.localeCompare(b.data.term),
 )
 
+// The about section is sourcing, not vocabulary: it is excluded from the term
+// count and from the A-Z, and reached from the Related list instead.
+const termEntries = entries.filter((e) => sectionFor(e.id) !== 'about')
+
 const bySection = new Map<string, typeof entries>()
-for (const entry of entries) {
+for (const entry of termEntries) {
   const key = sectionFor(entry.id)
   bySection.set(key, [...(bySection.get(key) ?? []), entry])
 }
 
-const answer = `This glossary defines the vocabulary of agentic advertising from the specifications themselves. Every entry names the file and version it comes from, and says whether the other stack has a counterpart term or none.`
+// published = earliest pubDate; modified = latest updatedDate.
+const published = new Date(Math.min(...entries.map((e) => e.data.pubDate.getTime()))).toISOString()
+const modified = new Date(
+  Math.max(...entries.map((e) => (e.data.updatedDate ?? e.data.pubDate).getTime())),
+).toISOString()
+
+const answer = `The Ad Tech Glossary defines ${termEntries.length} terms from the two agentic advertising protocol stacks — AdCP, from AgenticAdvertising.org, and AAMP, from IAB Tech Lab — and gives each term its counterpart in the other stack, or records that it has none.`
 
 const faq = [
   {
-    question: 'Where do these definitions come from?',
+    question: 'What does AAMP stand for?',
     answer:
-      'From the AdCP and AAMP specification repositories directly, at a recorded commit. AdCP terms come from a published release; AAMP terms come from reference implementations rather than a ratified specification, and each page says which.',
-  },
-  {
-    question: 'Why are CPM, DSP and SSP not here?',
-    answer:
-      'Commodity programmatic terms are excluded by policy. A dozen glossaries define them well already, and adding thin duplicates of well-served terms would dilute the entries that are genuinely underserved.',
+      "IAB Tech Lab's hub README expands AAMP as Agentic Advertising Management Protocols. Repositories under the same label use other expansions of the same acronym for the same set of repositories, among them Agentic Advertising Marketplace Protocol in shipped source.",
   },
   {
     question: 'Do AdCP and AAMP use the same words for the same things?',
     answer:
-      'Often not. AdCP says sales agent where AAMP says seller agent, and the phrase "sales agent" appears nowhere in the AAMP corpus. Each entry names its counterpart in the other stack, or states that there is none.',
+      'The two stacks do not share a vocabulary. AdCP says sales agent and AAMP says seller agent for the same role, so the names alone do not reveal that it is one role. Package is the harder case, because both stacks use it: in AdCP a package is a line item inside a media buy that already exists, and in AAMP it is a bundle a seller advertises in a media kit before anything has been bought.',
   },
 ]
 
 const url = `${BASE}/`
-const title = 'Ad Tech Glossary — agentic advertising terms, defined from the specs'
-const description = `${entries.length} agentic advertising terms defined from the AdCP and AAMP specification repositories, each version-pinned and cross-referenced to its counterpart in the other stack.`
+const title = 'Agentic advertising glossary — AdCP and AAMP terms defined'
+const description = `${termEntries.length} terms in agentic advertising, defined from the AdCP and AAMP specifications: agent roles, buying objects, signals, real-time execution, negotiation and governance.`
 
 const jsonLd = graph([
   organizationNode(),
@@ -68,7 +73,8 @@ const jsonLd = graph([
     url,
     title,
     description,
-    datePublished: '2026-08-09',
+    datePublished: published,
+    dateModified: modified,
     technical: true,
     keywords: ['agentic advertising glossary', 'ad tech glossary', 'adcp terms', 'aamp terms'],
   }),
@@ -90,9 +96,14 @@ const jsonLd = graph([
   <AnswerBox answer={answer} />
 
   <p>
-    {entries.length} terms across {bySection.size} sections. Every definition is traceable: the entry
-    names the schema file or specification document it came from and the version that file was read at.
-    Where the two stacks disagree on a word, the entry says so rather than picking one.
+    AdCP, the Ad Context Protocol, is a registry of named operations and JSON schemas for buying and
+    selling media through agents, published by AgenticAdvertising.org. AAMP is IAB Tech Lab's
+    umbrella over its agentic work — nine repositories, eight of them with published code — covering
+    the same ground plus real-time bidding and audience embeddings. Each stack names a buy-side
+    agent and a sell-side agent, and one word can name different objects in each. The entries for <a
+      href="/concepts/adcp/">AdCP</a
+    >, <a href="/concepts/aamp/">AAMP</a> and <a href="/media-buying/package/">Package</a> carry the distinctions
+    the rest of the glossary refers back to.
   </p>
 
   {
@@ -111,8 +122,6 @@ const jsonLd = graph([
                 <a class="term-name" href={`/${key}/${e.id}/`}>
                   {e.data.term}
                 </a>
-                <br />
-                {e.data.answer}
               </li>
             ))}
           </ul>
@@ -126,16 +135,14 @@ const jsonLd = graph([
   <h2>Related</h2>
   <ul>
     <li>
-      <a href={`${HUB}/protocols/adcp-vs-aamp/`} rel="noopener">AdCP compared with AAMP</a> — the architectural
-      comparison behind the terminology
+      <a href={`${HUB}/protocols/adcp-vs-aamp/`} rel="noopener">AdCP compared with AAMP</a> — the architecture
+      underneath the terminology
     </li>
+    <li><a href="https://adcpexplorer.com/" rel="noopener">AdCP Explorer</a></li>
+    <li><a href="https://aampexplorer.com/" rel="noopener">AAMP Explorer</a></li>
     <li>
-      <a href="https://adcpexplorer.noetis.dev/" rel="noopener">AdCP Explorer</a> — every AdCP operation,
-      field by field
-    </li>
-    <li>
-      <a href="https://aampexplorer.noetis.dev/" rel="noopener">AAMP Explorer</a> — what IAB Tech Lab
-      has actually published
+      <a href="/about/sources-and-versions/">Sources and versions</a> — which specification artifact each
+      definition comes from, and the terms this glossary leaves out on purpose
     </li>
   </ul>
 </BaseLayout>

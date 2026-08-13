@@ -43,7 +43,11 @@ import { SchemaStore, firstSentence, slugify, toWireName } from './lib/jsonschem
 
 const HERE = dirname(fileURLToPath(import.meta.url))
 const ROOT = resolve(HERE, '../..')
-const REPO = process.env.ADCP_REPO ?? '/srv/ws/salesagent/adcp'
+// The portfolio keeps its own clone rather than reading /srv/ws/salesagent/adcp,
+// which belongs to a different project and is pinned at 3.1.10. Sharing that
+// checkout meant the sites' version stamp moved whenever the other project
+// checked out a different ref, and it went stale here three patch releases ago.
+const REPO = process.env.ADCP_REPO ?? '/srv/ws/agenticbrief/adcp-current'
 const TREE = process.env.ADCP_TREE ?? 'released'
 const DOCS = join(REPO, 'docs')
 const OUT = join(ROOT, 'data/adcp-specs.json')

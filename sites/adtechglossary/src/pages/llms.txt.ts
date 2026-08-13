@@ -11,7 +11,7 @@ export const GET: APIRoute = async () => {
     siteName: SITES['adtechglossary'].name,
     summary: SITES['adtechglossary'].tagline,
     details: [
-      'Every page names the specification file and commit its claims are derived from. Where a specification is silent, contradictory or empty, the page says so rather than filling the gap.',
+      'One entry per term, defined from the specification that declares it and matched to the counterpart term in the other protocol. Where a specification is silent, contradictory or empty, the entry says so rather than filling the gap.',
     ],
     sections: [
       { title: 'Pages', links: items.map((i) => ({ title: i.title, url: i.url, note: i.note })) },

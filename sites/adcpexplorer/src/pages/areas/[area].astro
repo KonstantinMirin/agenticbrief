@@ -1,11 +1,7 @@
 ---
 /**
  * One page per AdCP area, carrying the full reference for every operation in it.
- *
- * This is where the substance of the site lives. The alternative — 64 pages,
- * one per operation — was measured and rejected: the median operation carries
- * 25 request and response fields, much of it the shared envelope, so most of
- * those pages would differ only by a filter object.
+ * Operations that also have a standalone page are listed in FEATURED_OPERATIONS.
  */
 import BaseLayout from '@agenticbrief/shared-ui/BaseLayout.astro'
 import AnswerBox from '@agenticbrief/shared-ui/AnswerBox.astro'
@@ -29,6 +25,7 @@ import {
   tasksForArea,
   operationUrl,
   FEATURED_OPERATIONS,
+  LAST_UPDATED,
 } from '../../lib/site'
 
 export function getStaticPaths() {
@@ -42,10 +39,235 @@ const layer = adcp.layers.find((l) => l.areaKeys.includes(areaKey!))
 
 const path = `/areas/${areaKey}/`
 const url = `${BASE}${path}`
-const title = `AdCP ${area.title} — all ${tasks.length} operations, ${adcp.version}`
-const description = `Complete field-level reference for the ${tasks.length} operations in the AdCP ${area.title} area, generated from the ${adcp.version} schema registry.`
+const plural = tasks.length === 1 ? '' : 's'
+const title = `AdCP ${area.title}: all ${tasks.length} operation${plural} in release ${adcp.version}`
+const description = `Request and response fields for the ${tasks.length} AdCP ${area.title} operation${plural} in release ${adcp.version}, with required fields, which operations write state, and example payloads.`
 
-const answer = `The AdCP ${area.title} area defines ${tasks.length} operation${tasks.length === 1 ? '' : 's'} in release ${adcp.version}. ${area.summary}`
+/** Operations that declare x-mutates-state, and the ones that do not. */
+const writers = tasks.filter((t) => t.mutatesState)
+const readers = tasks.filter((t) => !t.mutatesState)
+/**
+ * Size of the shared response envelope. Read off create_media_buy, whose
+ * response schema declares no fields outside the envelope, so the number does
+ * not depend on which area is rendering.
+ */
+const envelopeFields =
+  adcp.tasks.find((t) => t.name === 'create_media_buy')?.responseFields.length ?? 0
+const asyncCapable = tasks.filter((t) =>
+  t.requestFields.some((f) => f.name === 'push_notification_config'),
+)
+
+type AreaSection = { heading: string; body: string[] }
+
+type AreaNote = {
+  /** clause that completes the answer sentence, no terminal punctuation */
+  answer: string
+  lede: string[]
+  beforeTable?: AreaSection[]
+  afterTable: AreaSection[]
+  afterOperations: AreaSection[]
+}
+
+/**
+ * Per-area prose. One template renders ten pages, so anything that is true of
+ * one area only has to live here, keyed by area, and every render site guards
+ * on `note` so an unpopulated key renders nothing rather than `undefined`.
+ * Body strings carry inline <code> and are rendered with set:html.
+ */
+const AREA_NOTES: Record<string, AreaNote> = {
+  'media-buy': {
+    answer:
+      'covering product discovery, campaign creation and updates, delivery reporting, conversion tracking, and audience and catalog sync',
+    lede: [
+      `The media buy group covers the buying cycle itself: <code>get_products</code> for discovery, <code>create_media_buy</code> and <code>update_media_buy</code> for the buy, <code>get_media_buy_delivery</code> for reporting, and the <code>sync_*</code> operations for the audiences, catalogs and conversion sources a buy refers to.`,
+      `${writers.length} of the ${tasks.length} write state and require <code>idempotency_key</code>. The other ${readers.length} are reads. <code>adcp_version</code> on the wire takes "3.1": the patch component of ${adcp.version} identifies the bundle of schema files these tables describe and is never sent.`,
+    ],
+    beforeTable: [
+      {
+        heading: 'The order these are called in',
+        body: [
+          `Nothing in the registry declares a sequence. One order the schemas permit is <code>get_products</code> to discover inventory, then <code>create_media_buy</code> to commit budget to it, then <code>sync_creatives</code> to attach creatives, then <code>update_media_buy</code> for every later change, pausing included, then <code>get_media_buy_delivery</code> to read what ran. <code>sync_creatives</code> is not in this group: it lives in the <a href="/areas/creative/">creative group</a>, and a buy with no creatives sits in <code>pending_creatives</code> and does not serve. The buy clears either by polling or by passing <code>create_media_buy</code> a <code>push_notification_config</code>.`,
+          `The <code>sync_*</code> operations and <code>log_event</code> run alongside that sequence rather than inside it. They load the audiences, catalogs and conversion sources a buy refers to, and continue to be called long after the campaign is set up.`,
+        ],
+      },
+    ],
+    afterTable: [
+      {
+        heading: 'Response shape for writes and reads',
+        body: [
+          `A client generated from these schemas types cleanly on the read side. Every write returns a union that has to be discriminated in client code. ${writers.length} of the ${tasks.length} responses declare no fields of their own, so their response column repeats the same ${envelopeFields} envelope fields.`,
+          `Every operation except <code>report_plan_outcome</code> and <code>check_governance</code> returns the full envelope. ${envelopeFields} keys, four of which carry the protocol behaviour: <code>task_id</code> to follow asynchronous work, <code>status</code> for the lifecycle of the task itself, <code>adcp_error</code> for fatal failures, and <code>payload</code>, which <code>core/protocol-envelope.json</code> calls a documentary construct and states is not a required wire field. Version, context and governance keys make up the rest.`,
+          `In <code>dist/schemas/${adcp.version}/media-buy/create-media-buy-response.json</code>, <code>properties</code> is an empty object and the shape sits in three <code>oneOf</code> branches named <code>CreateMediaBuySuccess</code>, <code>CreateMediaBuyError</code> and <code>CreateMediaBuySubmitted</code>. Every operation declaring <code>x-mutates-state: true</code> carries its result in a branch like that. The ${readers.length} that omit the annotation put the result at the top level, where <code>get_products</code> returns <code>products</code> and <code>get_media_buys</code> returns <code>media_buys</code>.`,
+          `Those same ${writers.length} are the only operations here that require <code>idempotency_key</code>. The annotation is opt-in and absent on reads rather than set false, so its absence carries no guarantee: <code>si_terminate_session</code> and <code>comply_test_controller</code> mutate state without requiring <code>idempotency_key</code>. Whether a call requires the key is stated in its request schema, not inferred from <code>x-mutates-state</code>.`,
+        ],
+      },
+      {
+        heading: '<code>status</code> versus <code>media_buy_status</code>',
+        body: [
+          `<code>status</code> describes the task, not the object the task acted on. A media buy's own state (<code>pending_creatives</code>, <code>pending_start</code>, <code>active</code>, <code>paused</code>, <code>completed</code>, <code>rejected</code>, <code>canceled</code>) moved to <code>media_buy_status</code> in 3.1, and the response schema states it: "the status key is reserved for the envelope TaskStatus". Polling <code>status</code> returns the state of the last request, not the state of the campaign.`,
+        ],
+      },
+      {
+        heading: 'What the documentation tree lists',
+        body: [
+          `Membership of this group is decided by one file, <code>dist/schemas/${adcp.version}/index.json</code>, and no page in the documentation tree lists the same ${tasks.length} operations. <code>docs/media-buy/task-reference/index.mdx</code> lists 13 tasks under All Tasks Overview: three of them (<code>get_adcp_capabilities</code>, <code>sync_creatives</code>, <code>list_creatives</code>) are registered under other schema groups, and the sales-agent <code>list_creative_formats</code>, which the registry does file under media buy, is absent from that table.`,
+        ],
+      },
+      {
+        heading: 'delete_missing turns a sync into a delete',
+        body: [
+          `All three <code>sync_*</code> operations here accept <code>delete_missing</code>, and it defaults off. Set it and the request stops being an upsert: it becomes the complete desired state of that collection on the account named in the required <code>account</code> field, and anything omitted is removed. The schema states the effect: "buyer-managed catalogs on the account not included in this sync will be removed".`,
+          `The schema defines no way to signal a partial payload, so a request truncated by a client-side pagination failure removes every item it omitted. <code>sync_catalogs</code> accepts <code>dry_run</code> to rehearse against; <code>sync_audiences</code> and <code>sync_event_sources</code> do not.`,
+        ],
+      },
+      {
+        heading: 'Asynchronous replies and callbacks',
+        body: [
+          `${asyncCapable.length} operations here accept <code>push_notification_config</code> (${asyncCapable.map((t) => `<code>${t.name}</code>`).join(', ')}), and those are the ${asyncCapable.length} here with a published async response arm, out of seven registry-wide that publish one. <code>sync_audiences</code> is the exception: it can answer with a <code>SyncAudiencesSubmitted</code> branch, so it can defer, but it carries no push config, so no callback can be requested for it.`,
+        ],
+      },
+      {
+        heading: 'What a version pin covers',
+        body: [
+          `<code>media_buy_status</code> arriving in 3.1 was a permitted change. AdCP numbers releases VERSION.RELEASE.PATCH, and <code>docs/reference/versioning.mdx</code> allows a release to change schema at the margins: flip a field between required and optional, rename one with a documented alias, tighten validation, deprecate an object when its replacement ships in the same release. The compensating guarantee is that "implementations built against 3.0 will continue to function against any 3.x release".`,
+          `Negotiation runs at release precision. The spec rejects an <code>adcp_version</code> value carrying a patch component, so a client pins to the release, sends "3.1", and can expect field-level movement inside it.`,
+        ],
+      },
+      {
+        heading: 'Two different operations are called list_creative_formats',
+        body: [
+          `<code>list_creative_formats</code> is registered twice in ${adcp.version}, once here and once in the creative group, against request schemas that differ. The variant documented here is the media buy version; both are set out on <a href="/schemas/">the schema registry page</a>.`,
+        ],
+      },
+    ],
+    afterOperations: [
+      {
+        heading: 'Pausing and cancelling a media buy',
+        body: [
+          `No operation name in the registry contains "pause", "stop" or "resume". The two names carrying a destructive verb are <code>delete_property_list</code> and <code>delete_collection_list</code>, and both act on governance lists rather than on campaigns.`,
+          `Pause state is carried by a field. <code>update_media_buy</code> takes <code>paused: true</code> to hold the whole buy and <code>paused: false</code> to release it, and each entry in <code>packages[]</code> carries its own <code>paused</code>, so one package can be held while the rest keeps serving. A buy can also start held: <code>create_media_buy</code> accepts <code>paused</code> to "create the media buy in a paused delivery state".`,
+          `<code>canceled</code> is declared <code>"const": true</code>, so <code>true</code> is the only value the schema accepts and no un-cancel is expressible. The description reads: "Cancellation is irreversible — canceled media buys cannot be reactivated. Sellers MAY reject with NOT_CANCELLABLE if the media buy cannot be canceled in its current state." <code>NOT_CANCELLABLE</code> is one of 92 codes in <code>enums/error-code.json</code>.`,
+          `A paused buy reports the state in <code>media_buy_status</code>, one of that field's seven values, and not in the envelope's <code>status</code>.`,
+        ],
+      },
+      {
+        heading: 'Two agents editing the same buy',
+        body: [
+          `<code>update_media_buy</code> takes a <code>revision</code>. It is optional, for backward compatibility, and no other field in the protocol carries a concurrency token. When it is sent, the seller must reject a stale write with <code>CONFLICT</code> and must make that comparison atomically with the write. The value comes from <code>get_media_buys</code> or from the most recent create or update response.`,
+          `If <code>revision</code> is omitted, the seller performs the write unconditionally. Concurrent updates resolve last-write-wins, both callers receive a success response, and no field records the overwrite. Where more than one system can modify a buy — a bidder and an operator in a UI — <code>revision</code> is the guard the protocol defines for it.`,
+        ],
+      },
+      {
+        heading: 'Conversion tracking: event sources, logging and feedback',
+        body: [
+          `<code>sync_event_sources</code> registers where events come from. A source supplies one required field, its <code>event_source_id</code>; the <code>action_source</code> tag (website, app, in_store and six others) is optional, as is everything else. The response returns a <code>seller_id</code> for each source, the seller's own handle for it, and a <code>setup</code> block carrying the tag or pixel URL that activates it. <code>log_event</code> then posts batches of events against an <code>event_source_id</code>, one of only three required fields on that request and the one that determines whether anything attributes.`,
+          `<code>get_media_buy_delivery</code> takes an <code>attribution_window</code> and returns conversion metrics. <code>provide_performance_feedback</code> runs the other way: the buyer sends a <code>performance_index</code> to the seller so delivery can be optimised against outcomes the seller cannot observe. The score is normalised rather than absolute: 1.0 means the campaign performed as expected, and the schema sets a floor at 0 with no upper bound. Each submission is tagged with one of eight <code>metric_type</code> values and one of four <code>feedback_source</code> values. The upstream conversion-tracking guide stops earlier: its flow diagram ends at the delivery read, and <code>provide_performance_feedback</code> appears nowhere in it.`,
+        ],
+      },
+    ],
+  },
+
+  account: {
+    answer:
+      'covering account provisioning, governance endpoint assignment, usage reporting and billing state',
+    lede: [
+      `The account group establishes and reads a buyer's identity on a seller or vendor platform. <code>sync_accounts</code> provisions buyer-declared accounts or updates settings on existing ones, <code>sync_governance</code> attaches governance agent endpoints to specific accounts, <code>list_accounts</code> returns the accounts an authenticated agent can operate on, <code>report_usage</code> sends consumption data after delivery, and <code>get_account_financials</code> returns spend summaries, credit balances, payment status and invoice history for operator-billed accounts.`,
+      `<code>account/</code> is one of the four schema groups the release's <code>bundled/</code> directory omits; <a href="/schemas/">the schema registry page</a> lists the 23 operations that ship without a bundle.`,
+    ],
+    afterTable: [],
+    afterOperations: [],
+  },
+
+  creative: {
+    answer:
+      'covering creative generation, preview, format and transformer discovery, library sync and delivery reporting',
+    lede: [
+      `The creative group builds, stores and renders the assets a media buy serves. <code>build_creative</code> generates or transforms a manifest from a natural language brief, <code>sync_creatives</code> uploads and manages assets in a creative library, <code>preview_creative</code> renders an existing manifest to a URL, image or HTML, and <code>get_creative_delivery</code> returns variant-level delivery data with manifests and performance metrics.`,
+      `<code>sync_creatives</code> sits on the critical path of a media buy even though it is registered here: a buy with no creatives attached stays in <code>pending_creatives</code> and does not serve. <code>list_creative_formats</code> is registered in this group and again in <a href="/areas/media-buy/">media buy</a>, against different request schemas — the creative agent's variant takes <code>type</code>, <code>include_pricing</code> and <code>account</code>, the media-buy variant takes <code>publisher_domain</code> and <code>property_id</code>. <code>get_adcp_capabilities</code> is what says which contract an agent implements.`,
+    ],
+    afterTable: [],
+    afterOperations: [],
+  },
+
+  signals: {
+    answer: 'covering audience and contextual signal discovery and activation',
+    lede: [
+      `<code>get_signals</code> discovers audience and contextual signals. <code>activate_signal</code> pushes an audience segment to a DSP or a sales agent. <code>activate_signal</code> declares <code>x-mutates-state</code> and <code>get_signals</code> does not.`,
+      `<code>get_signals</code> is one of seven operations in release ${adcp.version} that publish a dedicated async response arm, so a discovery call can return <code>submitted</code> or <code>working</code> and be completed later against <code>task_id</code>.`,
+    ],
+    afterTable: [],
+    afterOperations: [],
+  },
+
+  governance: {
+    answer:
+      'covering property and collection lists, content standards, campaign plans and the validation gate called before a campaign action executes',
+    lede: [
+      `Governance is the largest group in the registry at ${tasks.length} of the ${adcp.tasks.length} operations. Ten are create, update, get, list and delete cycles over property lists and collection lists. Six define, retrieve and apply content standards, including <code>calibrate_content</code>, which aligns buyer and seller on brand suitability through structured dialogue before execution. Two evaluate delivered material: <code>get_media_buy_artifacts</code> retrieves content context records from a media buy for post-delivery validation, and <code>get_creative_features</code> evaluates a creative manifest against a governance agent.`,
+      `The remaining four are experimental: <code>sync_plans</code>, <code>report_plan_outcome</code>, <code>get_plan_audit_logs</code> and <code>check_governance</code>, the validation gate orchestrators and sellers call before executing any campaign action. Experimental means the surface can change between 3.x releases on at least six weeks' notice, and an agent implementing one declares its feature id in <code>experimental_features</code> on <code>get_adcp_capabilities</code>. Nine of the ${tasks.length} ship without a <code>bundled/</code> copy: the five collection-list operations and the four plan operations.`,
+    ],
+    afterTable: [],
+    afterOperations: [],
+  },
+
+  protocol: {
+    answer:
+      'covering capability discovery and task tracking across every AdCP domain protocol: get_adcp_capabilities, get_task_status and list_tasks',
+    lede: [
+      `The protocol group holds the operations that belong to no single domain protocol. <code>get_adcp_capabilities</code> is the first call a buyer makes and the one operation required of every conforming agent: it returns the seller's supported protocols, auth model, version and feature capabilities, and it is the only thing that says which variant of <code>list_creative_formats</code> an agent implements. <code>get_task_status</code> and <code>list_tasks</code> track work that came back <code>submitted</code>, <code>working</code> or <code>input-required</code> rather than <code>completed</code>.`,
+      `This group belongs to no declared protocol layer. The layer list covers negotiation and serving and omits <code>protocol</code>, so the required entry point to AdCP sits outside both layers. Layer membership has no effect on conformance.`,
+    ],
+    afterTable: [],
+    afterOperations: [],
+  },
+
+  'sponsored-intelligence': {
+    answer:
+      'covering the offering lookup and session lifecycle for conversational brand experiences inside AI assistants',
+    lede: [
+      `All ${tasks.length} Sponsored Intelligence operations are marked experimental. <code>si_get_offering</code> is an anonymous pre-session lookup; <code>si_initiate_session</code>, <code>si_send_message</code> and <code>si_terminate_session</code> run the session itself.`,
+      `<code>si_terminate_session</code> declares <code>x-mutates-state: true</code> and its request schema does not require <code>idempotency_key</code>, so the protocol defines no retry protection for it. <code>comply_test_controller</code> is the other operation where those two come apart.`,
+    ],
+    afterTable: [],
+    afterOperations: [],
+  },
+
+  'trusted-match': {
+    answer:
+      'the serve-time layer: context_match and identity_match, evaluating pre-negotiated packages at request time',
+    lede: [
+      `Trusted Match is the only group that does not run over MCP or A2A. Its ${tasks.length} operations use a direct HTTP profile, because the latency budget for a serve-time decision is a single impression. Both are marked experimental.`,
+      `Their request schemas are the most tightly constrained in the release. <code>context-match-request.json</code> states that the request MUST NOT carry user identity; <code>identity-match-request.json</code> states the same about page context. Neither accepts a <code>request_id</code> that correlates with the other's, and neither accepts <code>ext</code> or <code>context</code> extension fields, so nothing either schema admits can rejoin the two halves of a decision. Neither ships with a <code>bundled/</code> copy.`,
+    ],
+    afterTable: [],
+    afterOperations: [],
+  },
+
+  'brand-protocol': {
+    answer:
+      'covering brand identity retrieval, claim verification, and rights discovery, acquisition and update',
+    lede: [
+      `The brand protocol splits in two. <code>get_brand_identity</code>, <code>verify_brand_claim</code> and <code>verify_brand_claims</code> read from a brand agent: a claim comes back owned, pending, disputed or licensed, and the plural form verifies many claims against one brand agent in a single round trip. <code>get_rights</code>, <code>acquire_rights</code> and <code>update_rights</code> cover licensable talent, music and stock media, and all three are experimental.`,
+      `<code>brand</code> appears in the negotiation layer as a schema group holding no operations; the operations listed here are registered under <code>brand-protocol</code>, which the layer list does not name. None of the ${tasks.length} ships with a <code>bundled/</code> copy.`,
+    ],
+    afterTable: [],
+    afterOperations: [],
+  },
+
+  compliance: {
+    answer: `one operation, comply_test_controller, the compliance testing tool of release ${adcp.version}`,
+    lede: [
+      `The compliance group holds a single operation. <code>comply_test_controller</code> declares <code>x-mutates-state: true</code> and its request schema does not require <code>idempotency_key</code>. <code>si_terminate_session</code> is the other operation where those two come apart.`,
+      `The group is in no declared protocol layer and ships no <code>bundled/</code> copy of its schemas.`,
+    ],
+    afterTable: [],
+    afterOperations: [],
+  },
+}
+
+const note = AREA_NOTES[areaKey!] ?? null
+
+const answer = `AdCP ${area.title} is a schema group of the Ad Context Protocol holding ${tasks.length} of the ${adcp.tasks.length} operations in release ${adcp.version}${note ? `, ${note.answer}` : ''}.`
 
 const breadcrumbs = [
   { name: 'AdCP Explorer', url: `${BASE}/` },
@@ -62,7 +284,7 @@ const jsonLd = graph([
     url,
     title,
     description,
-    datePublished: '2026-08-08',
+    datePublished: LAST_UPDATED,
     technical: true,
     proficiencyLevel: 'Expert',
     section: area.title,
@@ -82,7 +304,7 @@ const otherAreas = orderedAreas().filter((a) => a.key !== areaKey)
   jsonLd={jsonLd}
   wide
   ogType="article"
-  publishDate={new Date('2026-08-08')}
+  publishDate={new Date(LAST_UPDATED)}
   keywords={[`adcp ${area.key}`, `${area.title.toLowerCase()} protocol`, 'ad context protocol']}
 >
   <nav class="breadcrumbs" aria-label="Breadcrumb">
@@ -92,15 +314,34 @@ const otherAreas = orderedAreas().filter((a) => a.key !== areaKey)
     </ol>
   </nav>
 
-  <p class="eyebrow">AdCP {adcp.version} · {layer?.title ?? 'Protocol area'}</p>
+  <p class="eyebrow">AdCP {adcp.version}{layer ? ` · ${layer.title}` : ''}</p>
   <h1>AdCP {area.title}</h1>
 
   <AnswerBox answer={answer} />
 
-  <h2>Operations in this area</h2>
+  {note && note.lede.map((p) => <p set:html={p} />)}
+
+  {
+    note?.beforeTable?.map((s) => (
+      <section>
+        <h2>{s.heading}</h2>
+        {s.body.map((p) => (
+          <p set:html={p} />
+        ))}
+      </section>
+    ))
+  }
+
+  <h2>
+    {
+      `What the ${tasks.length} ${area.title.toLowerCase()} operation${plural} ${
+        tasks.length === 1 ? 'does' : 'do'
+      }`
+    }
+  </h2>
 
   <table>
-    <caption>{area.title} — {tasks.length} operations</caption>
+    <caption>{area.title} — {tasks.length} operation{plural}</caption>
     <thead>
       <tr>
         <th scope="col">Operation</th>
@@ -128,6 +369,18 @@ const otherAreas = orderedAreas().filter((a) => a.key !== areaKey)
   </table>
 
   {
+    note &&
+      note.afterTable.map((s) => (
+        <section>
+          <h2>{s.heading}</h2>
+          {s.body.map((p) => (
+            <p set:html={p} />
+          ))}
+        </section>
+      ))
+  }
+
+  {
     tasks.map((task) => (
       <section aria-labelledby={`${task.slug}-heading`}>
         <h2 id={task.slug}>
@@ -139,7 +392,7 @@ const otherAreas = orderedAreas().filter((a) => a.key !== areaKey)
         {(FEATURED_OPERATIONS as readonly string[]).includes(task.name) && (
           <p>
             <a href={operationUrl(task)}>
-              Full page for <code>{task.name}</code>
+              Every field and edge case for <code>{task.name}</code>
             </a>
           </p>
         )}
@@ -169,21 +422,39 @@ const otherAreas = orderedAreas().filter((a) => a.key !== areaKey)
     ))
   }
 
-  <h2>Other AdCP areas</h2>
+  {
+    note &&
+      note.afterOperations.map((s) => (
+        <section>
+          <h2>{s.heading}</h2>
+          {s.body.map((p) => (
+            <p set:html={p} />
+          ))}
+        </section>
+      ))
+  }
+
+  <h2>{`The other ${otherAreas.length} AdCP areas`}</h2>
   <ul>
     {
-      otherAreas.map((a) => (
-        <li>
-          <a href={`/areas/${a.key}/`}>{a.title}</a>
-          <span class="muted"> — {tasksForArea(a.key).length} operations</span>
-        </li>
-      ))
+      otherAreas.map((a) => {
+        const n = tasksForArea(a.key).length
+        return (
+          <li>
+            <a href={`/areas/${a.key}/`}>{a.title}</a>
+            <span class="muted">
+              {' '}
+              — {n} operation{n === 1 ? '' : 's'}
+            </span>
+          </li>
+        )
+      })
     }
   </ul>
 
   <h2>Related</h2>
   <ul>
-    <li><a href="/">All {adcp.tasks.length} AdCP operations</a></li>
+    <li><a href="/">Every AdCP operation, all {adcp.tasks.length} of them</a></li>
     <li><a href="/schemas/">How the AdCP schema registry is organised</a></li>
     <li>
       <a href={`${HUB}/protocols/adcp-vs-aamp/`} rel="noopener">AdCP compared with AAMP</a>

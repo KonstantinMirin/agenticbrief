@@ -1,7 +1,7 @@
 ---
-title: 'State of the AdCP and AAMP Repositories'
-description: 'A dated observation of what is actually committed to the agentic advertising repositories on 9 August 2026, with tags, commit dates and the adoption numbers that have named sources.'
-answer: 'State of the AdCP and AAMP repositories on 9 August 2026: AdCP has a stable release, 3.1.10, registering 64 operations. AAMP has eight repositories, four untagged and four zero-byte spec files. IAB reports 21% of video buyers live.'
+title: 'Is Agentic Buying Real Yet? What Has Actually Shipped'
+description: 'Which parts of agentic buying have actually transacted, which are still announcements, and what the surveys are really counting: eight named deployments and one named advertiser.'
+answer: 'Agentic buying is real in parts. Eight named deployments have transacted since December 2025, most of them on the same protocol, and the most optimistic industry forecast for 2027 agentic ad spend is under a billion dollars. Nothing yet runs end to end unattended.'
 pubDate: 2026-08-09
 updatedDate: 2026-08-09
 cluster: 'wiab-maturity'
@@ -11,17 +11,20 @@ keywords:
     'agentic buying adoption',
     'agentic advertising hype',
     'agentic buying production ready',
-    'adcp maturity',
-    'aamp maturity',
   ]
 citations:
   [
-    'https://github.com/adcontextprotocol/adcp/blob/f1a35aba734befa809e1fa780ad77c7edd614e96/dist/schemas/latest.json',
-    'https://github.com/adcontextprotocol/adcp/blob/f1a35aba734befa809e1fa780ad77c7edd614e96/dist/schemas/3.1.10/index.json',
-    'https://github.com/adcontextprotocol/adcp/blob/f1a35aba734befa809e1fa780ad77c7edd614e96/CHANGELOG.md',
+    'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/schemas/latest.json',
+    'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/schemas/3.1.13/index.json',
+    'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/CHANGELOG.md',
+    'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/CHARTER.md',
+    'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/docs/protocol/required-tasks.mdx',
+    'https://github.com/adcontextprotocol/adcp/tree/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/static/compliance/source',
+    'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/docs/faq.mdx',
     'https://github.com/IABTechLab/AAMP',
     'https://github.com/IABTechLab/seller-agent',
     'https://github.com/IABTechLab/buyer-agent',
+    'https://github.com/IABTechLab/agentic-direct',
     'https://github.com/IABTechLab/agentic-rtb-framework',
     'https://github.com/IABTechLab/agentic-audiences',
     'https://github.com/IABTechLab/iab-agentic-primitives',
@@ -37,95 +40,188 @@ related:
     '/how-it-works/',
     '/agentic-buying-vs-programmatic/',
     '/about/',
-    'https://agenticadlab.noetis.dev/protocols/aamp/',
-    'https://aampexplorer.noetis.dev/versions/',
-    'https://adcpexplorer.noetis.dev/',
+    'https://agenticadlab.com/guides/who-is-running-agentic-buys/',
+    'https://agenticadlab.com/protocols/aamp/',
+    'https://agenticadlab.com/protocols/adcp-vs-aamp/',
+    'https://aampexplorer.com/versions/',
+    'https://aampexplorer.com/what-does-aamp-stand-for/',
+    'https://adcpexplorer.com/',
   ]
 reviewState: cto-reviewed
 ---
 
-## Is agentic buying real yet?
+Partly, and the real part is smaller and more specific than either the vendors or the sceptics say.
 
-Partly. One stack has a published, versioned schema registry. The other has reference implementations that work, a spec tagged `v1.0`, and four files that are literally empty. Buyer adoption is a real minority: not a rounding error, not a majority.
+Eight named deployments have actually transacted since December 2025. Exactly one advertiser has put its name to any of them: Geloso Beverage Group, whose Clubtails brand ran a connected-TV campaign across Samsung, Paramount, Vizio and Tubi over two flights from December into January. Software planned and executed it from a brief written in ordinary English. A person at the agency, Butler/Till, signed off the inventory list before it ran.
 
-That is an observation, not a verdict. Everything below was read off local clones of the repositories on 9 August 2026. Where a number comes from a survey rather than a file, the survey is named and dated, and where I think the figure circulating in the trade press is wrong, I say so and give the primary one.
+The money is the part that rarely makes the coverage. Michael Barrett, chief executive of the exchange Magnite, said the most optimistic 2027 forecasts he could collect at Cannes put total industry spend bought this way at [600 to 700 million dollars](https://ppc.land/magnite-ceo-caps-2027-agentic-ad-spend-near-700m-as-ai-cuts-contractor-tasks/). Magnite alone processes about 9 billion dollars of ad spend a year. The whole category next year, at its most hopeful, is four weeks of one exchange's pipe.
 
-## What is actually in the AdCP repository on 9 August 2026?
+A software team can build against a published standard today. Nowhere does the chain run brief to booking to invoice with nobody watching, and nothing is close to it.
 
-AdCP's current published stable release is **3.1.10**. The version oracle is `dist/schemas/latest.json`, which reads `{"latest":"3.1.10","latest_stable":"3.1.10","channel":"stable"}`. The registry at `dist/schemas/3.1.10/index.json` stamps `lastUpdated` as 2026-08-04, declares `stability: stable`, and registers **64 operations**.
+## Eight deployments have transacted since December
 
-Watch out for the working branch. `package.json` and `static/schemas/source/index.json` on `main` still carry a `3.1.1` stamp, because the release tooling only bumps them at publish time. A 65th operation, `sync_agent_notification_configs`, exists on `main` and appears in no published release. Anyone quoting 65 operations, or a version of 3.1.1, has read the branch instead of the release.
+1. **Butler/Till and PubMatic**, for Geloso's Clubtails brand, over two flights from December 2025 into January 2026. The only campaign in the set with a published performance figure, taken apart below.
+2. **Magnite**, which built a selling agent into its SpringServe ad server in December and ran its first test buys through it. No number published.
+3. **NBCUniversal, the agency RPA, FreeWheel and Newton Research**, who transacted a single premium video investment across linear and streaming in the first quarter of 2026, including live NFL playoff inventory. Buy-side and sell-side software negotiated it. No number published.
+4. **Yahoo**, which opened its demand-side platform to outside agents in January. A trafficking agent built by Newton and RPA has executed programmatic guaranteed buys through it, the kind where the impressions and the price are fixed in advance. No number published.
+5. **PubMatic**, which reports more than 4,000 agentic deals transacted by the second quarter. That is an unaudited operating metric in an earnings release rather than a spend figure.
+6. **Omnicom**, which told investors in April that it had run live client buys on agent-to-agent infrastructure, with the stated aim of shrinking what the intermediaries in the middle take. No number published.
+7. **Boostr and Vox Media**, in June: Vox's selling agent received, negotiated and closed a campaign-level buy covering budget, audience and delivery schedule. A person at Vox accepted the buy and checked it in the ad server before it launched. No number published.
+8. **Magnite again**, with a neutral layer connecting third-party buyer agents to its supply, launched in June. On the August earnings call it put the total transacted that way at a handful of millions of dollars.
 
-Other things the repository says about itself:
+## Every performance number came from a company selling the software
 
-- `dist/schemas/` holds 63 published version directories, from 2.5.0 up.
-- Release 3.1.3 was **withdrawn**. The changelog describes 3.1.4 as "the corrective successor to withdrawn 3.1.3", restoring the 3.1.2 contract by removing a patch-ineligible field, with "exact 3.1.3 artifacts remain available as an immutable withdrawn release record". A standards body that withdraws a bad patch and keeps the record is behaving like a standards body.
-- 7 of the 64 operations publish async response arms (`-async-response-submitted`, `-working`, `-input-required`): `build_creative`, `create_media_buy`, `get_products`, `get_signals`, `sync_catalogs`, `sync_creatives` and `update_media_buy`. Everything else is expected to answer inline.
-- HEAD of the clone I read is `f1a35aba`, dated 2026-08-06.
+Five of the eight published nothing at all. The one number in circulation is from the Clubtails campaign: a 5.5x improvement in buy-side supply-chain cost efficiency, which comes out at roughly an [82% cut in the fees the buying platform charged](https://digiday.com/media-buying/butler-tills-first-agentic-media-buying-tests-cut-media-and-supply-chain-costs/). It is a supply-chain figure rather than a smarter-buying figure. PubMatic removed the fee, and PubMatic published the multiple. Both of those can be entirely honest and the number still says nothing about what the software was worth, because the budget was never disclosed and nobody ran the same money the old way alongside it.
 
-## What is actually in the AAMP repositories on 9 August 2026?
+One measurement in the whole set came from outside the trade. The verification firm Jounce audited the inventory on that campaign and found made-for-advertising sites — the low-quality pages that exist only to carry ads — below 1% of it. That is the only occasion a third party has looked at an agentic campaign and published what it saw, and it measured quality rather than performance. [The deployments ledger](https://agenticadlab.com/guides/who-is-running-agentic-buys/) keeps the dated list, with a column separating what a vendor claimed from what somebody independent measured.
 
-There is no single AAMP version. The hub README states that each repository uses independent semantic versioning and that cross-repository alignment happens through governance coordination. Anyone printing "AAMP 2.3" as a version of the whole umbrella is quoting a press release, not an artifact.
+## What to build on today
 
-| Repository               | Tag at HEAD                    | HEAD commit | Date       | What it contains                                                                                            |
-| ------------------------ | ------------------------------ | ----------- | ---------- | ----------------------------------------------------------------------------------------------------------- |
-| `AAMP`                   | none                           | `3b20e67`   | 2026-04-16 | A README and a licence. That is the whole repository.                                                       |
-| `agentic-direct`         | none                           | `915bda9`   | 2026-01-27 | An MCP manifest, `opendirect.json`, wrapping IAB OpenDirect 2.1. Handlers return mock data.                 |
-| `buyer-agent`            | `v2.3.0` (HEAD is ahead of it) | `0c3a154`   | 2026-08-05 | Demand-side reference implementation. The largest documentation set in the corpus.                          |
-| `seller-agent`           | `v2.4.1`                       | `2bb7ebc`   | 2026-08-05 | Supply-side reference implementation. 74 paths and 91 component schemas in its OpenAPI file.                |
-| `registry-agent-example` | none                           | `1ff8dda`   | 2026-02-24 | One commit. `agent.ts` is 22 lines. It consumes a registry it does not specify.                             |
-| `agentic-rtb-framework`  | `v1.0`                         | `7f48161`   | 2026-07-21 | A prose specification plus protobuf plus Go and Rust implementations. The most spec-shaped repository here. |
-| `agentic-audiences`      | none                           | `106ebd6`   | 2026-07-27 | A draft embedding-exchange spec, a taxonomy, a scoring service. Contributed by LiveRamp.                    |
-| `iab-agentic-primitives` | `v0.5.0` (HEAD is ahead of it) | `2fc7029`   | 2026-07-28 | The shared wire contract both agents depend on.                                                             |
+Two standards are competing to be how this works. AdCP, the Ad Context Protocol, is what most of those deployments ran on; AAMP is IAB Tech Lab's set of reference implementations for the same job. Neither is one thing you adopt or refuse. Each is a stack of layers at different stages, and the stage is what decides whether you can build on it.
 
-Four findings from that table are worth stating plainly.
+Two counts decide it. An operation is one call the software can make: ask what is for sale, book the buy, report what ran. A conformance scenario is a published storyboard of an end-to-end flow, with the requests and responses it should produce, so two implementations can find out whether they agree before a customer does.
 
-**Four files in `agentic-audiences` are zero bytes.** `specs/roadmap.md`, `specs/v1.0/schema/agent_interface.schema.json`, `specs/v1.0/examples/buyer_agent_request.json` and `specs/v1.0/examples/seller_agent_response.json` all have a length of zero. The second of those is the buyer/seller agent interface schema, which is the file that would connect the data plane to the rest of AAMP. It does not exist. Its own exchange spec is self-labelled "Draft v0.1" while living in a directory named `specs/v1.0/`.
+| Layer                       | Status                                  | What that supports                                                                                                 |
+| --------------------------- | --------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| AdCP media-buy              | Shipping                                | Build against it. Seven required tasks, 52 conformance scenarios, one corrective event in fourteen patch releases. |
+| AdCP creative and signals   | Shipping, lightly tested                | Build, and expect to write the flows the eight scenarios between them do not cover.                                |
+| AdCP governance and account | Specified, untested                     | Pin a version and watch. Twenty-seven operations and one scenario means the integrator is the test suite.          |
+| AdCP Trusted Match          | Pre-production, per its own maintainers | Wait. Twelve experimental files, no scenarios, and a shape that has already broken twice.                          |
+| AAMP reference agents       | Running, tested, unratified             | Runnable today if the commit is pinned, and the contract under them can move without notice.                       |
+| `agentic-direct`            | Mock                                    | Nothing to integrate. Every handler returns a fixture.                                                             |
+| `agentic-audiences`         | Empty where the schema goes             | Nothing to integrate. The agent interface file is zero bytes.                                                      |
 
-**The canonical wire contract is unreleased.** `buyer-agent/pyproject.toml` and `seller-agent/pyproject.toml` both hard-pin `iab-agentic-primitives` at `v0.5.0`. That library defines the shared `Product`, `Money`, `Deal`, `Quote`, `Negotiation` and `Avails` types. Its README opens with: "WORK IN PROGRESS — NOT YET RELEASED. This library is under active construction... APIs, schemas, and package layout are unstable and will change without notice. It is not yet an official IAB Tech Lab release." It is also not listed in the AAMP hub README, so a reader working from the hub would not know it exists.
+If you operate a sales agent or an orchestrator, the media-buy row is actionable now and the rest is planning. If you buy through a demand-side platform or sell through a supply-side platform — the buying software and the selling software either side of an ad — none of it lands until your platform ships an endpoint, and nothing here tells you when that is.
 
-**The registry protocol is not finalised.** `seller-agent/docs/guides/agent-management.md` says the `AAMPRegistryClient` "will be updated once the AAMP spec is finalized".
+None of those statuses is fixed. Four changes would move them:
 
-**Every AAMP term comes from a reference implementation.** The trust lifecycle, the access tiers, the quote TTL, the negotiation actions: all of them are documented in the seller-agent and buyer-agent repositories, which are working code with generated docs, not ratified specifications. The full per-repo version matrix lives on [AAMP Explorer](https://aampexplorer.noetis.dev/versions/), and the acronym problem — the corpus expands AAMP four different ways — is documented at [what does AAMP stand for](https://aampexplorer.noetis.dev/what-does-aamp-stand-for/).
+- Fill the zero-byte files in `agentic-audiences`, and the claim that AAMP's audience data plane has no agent interface inverts.
+- Give the shared library both AAMP reference agents depend on a release, or simply list it in AAMP's own README, and the unlisted-dependency problem goes away.
+- Publish a ratified IAB Tech Lab specification separate from the reference implementations, and the code-is-the-specification reading ends outright. This is the least likely of the four.
+- Write conformance scenarios for AdCP governance or Trusted Match, and two more rows turn over.
 
-## How many buyers are actually using agentic AI?
+## Only three registered sales agents will talk to a stranger
 
-The best-sourced number I have found comes from IAB's own research. From the 2026 IAB Digital Video Ad Spend and Strategy Report: Part One, published 5 May 2026 and produced with Advertiser Perceptions and Guideline:
+There is a public directory of AdCP agents, maintained by AgenticAdvertising.org, and it is the cheapest reality check anybody can run. On 12 August 2026 it listed 23 agents. Thirteen completed an anonymous connection. Six sales agents exposed the product-discovery call to a caller with no credentials, and three of those returned an actual catalogue of things to buy. The protocol's own public test agent would not answer without credentials.
+
+Two of the three returned the same catalogue for every brief submitted, including one a single character long, which means two of the three are not reading the brief at all. [The agent-by-agent results](https://adcpexplorer.com/guides/adcp-registry-measured/) list each endpoint and what it answered.
+
+Three is a small number and it is not zero, and that is the useful part. A buy-side integration can be tested against something that answers before anyone signs anything.
+
+## The survey number everyone quotes counts something else
+
+The best-sourced adoption figure is IAB's own, from the 2026 Digital Video Ad Spend and Strategy Report published 5 May 2026, fielded 20 February to 13 March with Advertiser Perceptions and Guideline:
 
 > Two in three buyers are live (21%), testing (20%), or planning to use (25%) agentic AI for digital video campaigns in 2026.
 
-Read the composition, not the headline. Live is 21%. Testing and planning are intent, and intent converts unevenly. The report also notes a further 28% investigating. That framing supports "most of the market is looking at this", and it does not support "most of the market is doing this".
+Live is 21%. The other 45% is intent, and intent converts unevenly. A further 28% are investigating and 6% say it is not on the roadmap.
 
-Scope matters too. The number covers digital video buyers using agentic AI in some capacity for campaigns, which is a wider claim than "buying media over an agent protocol". Nothing in the report says those 21% are sending `create_media_buy` calls.
+IAB supplies the caveat itself, and it is the important half. The use cases behind that 21% are media planning and buying recommendations, inventory discovery and evaluation, and creative testing, each cited by roughly half of the live-testing-planning group. The report notes that use declines as processes become external-facing. Those are decision-support workloads. A planner accepting a recommendation from software is not a machine placing an order, and nothing in the report says those buyers are sending the call that [actually books the media](/how-it-works/).
 
-## What is stopping agentic AI from reaching production?
+## One standard is a contract you can pin, the other is running code
 
-Here I have a correction to make, and it is the reason this section exists.
+AdCP is a version number you can write into an agreement: pin it, and both sides know what they agreed to. AAMP is eight independently versioned repositories in IAB Tech Lab's GitHub organisation, and what the two sides have agreed to is whatever the code does that week.
 
-Secondary coverage circulating in early 2026 attributes to a January 2026 Dynatrace report the claim that the top production barriers are security and data privacy at 59% and accuracy and reliability at 55%. I went to Dynatrace's own press release for The Pulse of Agentic AI 2026, published 22 January 2026. Those two figures do not appear in it. What appears is:
+Who stands behind each one runs the same way. AdCP is published by AgenticAdvertising.org, a pending 501(c)(6) trade association incorporated in Delaware, whose charter names four interim directors, two of them from Scope3, with an elected board due after the first annual meeting. Across AAMP's eight repositories there is no charter, no bylaws and no intellectual-property policy, and the only written statement of governance is a single sentence saying that alignment across the repositories happens through coordination.
 
-| Barrier to moving agentic AI into production                    | Share |
-| --------------------------------------------------------------- | ----- |
-| Security, privacy or compliance concerns                        | 52%   |
-| Technical challenges to managing and monitoring agents at scale | 51%   |
-| Shortage of skilled staff or training                           | 44%   |
+## AdCP ships a stable release every three or four days
 
-The study surveyed 919 senior leaders and decision makers at enterprises with revenues above $100M, fielded by Y2 Analytics during November and December 2025. It also reports that roughly half of agentic AI projects are still at proof-of-concept or pilot stage, that 69% of agentic decisions are still verified by a human, and that only 13% of organisations run fully autonomous agents.
+The published stable release is 3.1.13. It registers 64 operations across ten areas and stamps itself stable.
 
-The themes in the secondary version were right. The numbers were not. If you have seen 59% and 55% quoted, they did not come from Dynatrace's own materials, and I could not trace them to a primary source. This is a general-purpose enterprise study rather than an advertising one, so treat it as background on why autonomous systems stall, not as a measure of ad-buying agents specifically.
+The 3.0.0 release is dated 22 April 2026 and 3.1.13 is dated 11 August 2026. Across the 111 days between them, AdCP published 32 stable releases.
 
-## What did the buy side say at CES 2026?
+That cadence has a cost, and the changelog is unusually honest about paying it. Release 3.1.3 was withdrawn, and 3.1.4 restored the previous contract by removing a field that should never have shipped in a patch. The withdrawn release stays published as a record of what happened. Two more releases on the same line changed a shape that implementers had already built against. Fourteen patch releases, and three of them broke or corrected something.
 
-Digiday's podcast episode of 13 January 2026, "CES 2026: Agentic AI hype vs. media buyers' pragmatism", is the cleanest summary of the gap between the stage and the desk. Digiday's executive editor of news, Seb Joseph, described buyers as finding agentic AI "more interesting than urgent", and added: "Everyone wants to do things faster, cheaper, better. But ultimately, that is about everything up until an ad is bought."
+That is a project shipping faster than it can review.
 
-At Digiday's Programmatic Marketing Summit in May 2026, agency executives said they were not trusting programmatic activations to language-model agents, naming hallucination as the specific hesitation, and describing a decimal-point error in a live buy as a career-level risk. Agents were being kept to brainstorming and insight summarisation.
+It is also a project that writes every one of those events down and argues each against a published policy, which is more discipline than most standards bodies manage.
 
-That is the honest state of the buy side: interested, funded, and not yet handing over the card.
+Budget for movement, then, but budget it against a surface much smaller than 64. Seven tasks are marked required for a sales agent selling media: list what is for sale (`get_products`), declare what the agent supports (`get_adcp_capabilities`), book a buy (`create_media_buy`), change one (`update_media_buy`), list them (`get_media_buys`), report delivery against one (`get_media_buy_delivery`) and take performance feedback (`provide_performance_feedback`). Everything else is conditional on a capability the agent declares for itself. Buy-side orchestrators implement none of them; they call them.
 
-## What would change this page?
+Of the three corrective events, one touched that required set. The other two were both inside Trusted Match, which the release itself flags as experimental.
 
-I would rewrite it, not patch it, if any of the following happened.
+The repository trips people up in one specific way. Its working branch still declares version 3.1.1, and a 65th operation for syncing an agent's notification settings (`sync_agent_notification_configs`) sits on that branch and appears in no published release. If a deck shows you 65 operations, or a version of 3.1.1, it is quoting the development branch rather than the shipped one. AdCP's own documentation has the same problem: a comparison table in the repository still gives the protocol a maturity of 3.0 GA, more than thirty stable releases behind the registry sitting a few directories away.
 
-If `agentic-audiences` fills its four zero-byte files, the claim that AAMP's data plane has no agent interface inverts. If `iab-agentic-primitives` is renamed, absorbed into another repository, or given a release, the unlisted-unreleased-dependency finding disappears. If IAB Tech Lab publishes a ratified specification distinct from the reference implementations, the "every AAMP term comes from working code" line stops being true. If AdCP publishes a 3.2 line, every operation count on this page needs re-deriving against `dist/schemas/latest.json`.
+## The governance layer has never been tested against another implementation
 
-The [method page](/about/) explains how these checks are re-run and what happens when the repositories move under this page. The definition problem behind all of it is on [what is agentic buying](/).
+Fifty-two of AdCP's 69 conformance scenarios test a single area, media-buy, which holds 11 of the 64 operations.
+
+| Area                   | Operations | Conformance scenarios | Files flagged experimental |
+| ---------------------- | ---------- | --------------------- | -------------------------- |
+| media-buy              | 11         | 52                    | 2                          |
+| governance             | 22         | 1 (+3 specialisms)    | 8                          |
+| creative               | 8          | 7 (+1 specialism)     | 0                          |
+| brand-protocol         | 6          | 2 (+1 specialism)     | 10                         |
+| account                | 5          | 0                     | 0                          |
+| sponsored-intelligence | 4          | 1                     | 14                         |
+| protocol               | 3          | 0                     | 1                          |
+| signals                | 2          | 1 (+1 specialism)     | 0                          |
+| trusted-match          | 2          | 0                     | 12                         |
+| compliance             | 1          | 0                     | 0                          |
+
+Sixty-four of the 69 track a protocol area. The other five track a capability a seller declares for itself rather than an area of the protocol, and are bracketed separately above.
+
+Governance is the largest area in the registry, 22 of the 64 operations, and it has one scenario. Trusted Match has two operations, twelve schema files carrying an experimental flag, and no scenario at all. Its full surface is on [AdCP Explorer](https://adcpexplorer.com/areas/trusted-match/).
+
+For anyone integrating, that cashes out plainly. Build against the 22 governance operations and you can check your payloads against the schema. That is the end of what you can check. There is no published flow to run your endpoint through, and no artifact anywhere showing that two implementations have ever completed a governance exchange between them. You write that suite yourself and find out whose reading was wrong on the first call with a counterparty.
+
+AdCP's maintainers wrote the interpretation of that themselves, in a changelog entry dated 3 August 2026 explaining why a breaking reshape was allowed inside a patch release:
+
+> Why 3.1.x, not 3.2 — bounded pre-production correction. TMP has no production use yet, and this corrected shape will be in place before any 3.1 TMP production deployment ships.
+
+A maintainer writing that down is worth more than any survey.
+
+The published release also ships 53 schema files marked experimental inside a tree labelled stable, six of them in shared files no single area owns, and nothing on the outside of the release says which parts are which.
+
+## In AAMP, the code is the specification
+
+AAMP documents 143 operations across its eight repositories. The seller and buyer reference agents account for 101 of them, and those 101 are documented from the code that implements them. No specification sits behind them.
+
+| Origin                   | Operations |
+| ------------------------ | ---------- |
+| `seller-agent`           | 87         |
+| `agentic-direct`         | 33         |
+| `buyer-agent`            | 14         |
+| `iab-agentic-primitives` | 8          |
+| `agentic-rtb-framework`  | 1          |
+
+The table understates one row badly. All 33 tools in `agentic-direct` route through one function that returns a canned answer, under a comment telling whoever picks it up to replace it with a real implementation in production. The two repositories that behave like wire specifications, `iab-agentic-primitives` and `agentic-rtb-framework`, account for nine of the 143 between them.
+
+| Repository               | Tag      | Last commit | What it contains                                                                               |
+| ------------------------ | -------- | ----------- | ---------------------------------------------------------------------------------------------- |
+| `AAMP`                   | none     | 2026-04-16  | A README and a licence. That is the whole repository.                                          |
+| `agentic-direct`         | none     | 2026-01-27  | A machine-readable list of calls wrapping IAB OpenDirect 2.1. Every handler returns mock data. |
+| `registry-agent-example` | none     | 2026-02-24  | One commit, and it consumes a registry it does not specify.                                    |
+| `agentic-audiences`      | none     | 2026-07-27  | A draft embedding-exchange spec, a taxonomy, a scoring service.                                |
+| `agentic-rtb-framework`  | `v1.0`   | 2026-07-21  | A written specification with working code under it. The most spec-shaped repository here.      |
+| `iab-agentic-primitives` | `v0.5.0` | 2026-07-28  | The shared wire contract both agents depend on.                                                |
+| `buyer-agent`            | `v2.3.0` | 2026-08-05  | Demand-side reference implementation, and the most documented thing in AAMP.                   |
+| `seller-agent`           | `v2.4.1` | 2026-08-05  | Supply-side reference implementation, and the biggest codebase in AAMP.                        |
+
+The engineering is real. Both reference agents carry test suites that run on every change, and a team could pull them today and build them. Three of the eight repositories have taken no commit since 9 May 2026.
+
+The hub is where it comes apart. AAMP's own README lists six repositories and says releases are published as tags, while half of what it points at has [never been tagged](https://aampexplorer.com/versions/), three of those six included. `iab-agentic-primitives`, the shared library both reference agents depend on, is not listed there at all, and both of them pin it at `v0.5.0` — a version its own authors describe as unreleased, with interfaces that may change without notice. Version numbers declared inside these repositories disagree with the tags on them in both directions, so asking what version this is gets two defensible answers.
+
+Then `agentic-audiences`, where four files under `specs/` are zero bytes. One of them is `specs/v1.0/schema/agent_interface.schema.json`, the buyer-to-seller interface that would connect the audience data plane to the rest of AAMP, and the specification document beside it is headed "Draft v0.1" inside a directory named `v1.0`. IAB Tech Lab announced a release on 30 July 2026 that included the line that Agentic Audiences v1.0 is ready for transactions; that repository has no tags at all. Both statements can be true, since the release may point at something living somewhere else, but the version anyone can check out is the empty one. [The repository-by-repository read](https://agenticadlab.com/protocols/aamp/) has the file list.
+
+The seller agent's own documentation completes the picture, in a note saying its registry integration is stubbed pending the public API specification and will be updated once the AAMP spec is finalized. So if you are weighing whether to support AAMP now, that is what you are weighing: running code and a pre-release library, not a document anyone can be held to.
+
+Which of those two problems hurts more, an unwritten specification or a thinly tested one, is what the [AdCP-versus-AAMP choice](https://agenticadlab.com/protocols/adcp-vs-aamp/) actually turns on.
+
+## Security and staffing stop it, not the protocols
+
+The broadest measurement available is Dynatrace's The Pulse of Agentic AI 2026, released 22 January 2026. It surveyed 919 senior leaders at enterprises above $100M revenue, fielded by Y2 Analytics in November and December 2025.
+
+| Barrier to moving agentic AI into production                 | Share |
+| ------------------------------------------------------------ | ----- |
+| Security, privacy or compliance concerns                     | 52%   |
+| Technical challenges managing and monitoring agents at scale | 51%   |
+| Shortage of skilled staff or training                        | 44%   |
+
+The same study reports roughly half of agentic AI projects still at proof-of-concept or pilot stage, 69% of agentic decisions still verified by a human, and 13% of organisations running fully autonomous agents.
+
+Two other figures get credited to that report and are not in it: 59% for security and data privacy, 55% for accuracy and reliability. Neither appears in [the release](https://www.dynatrace.com/news/press-release/pulse-of-agentic-ai-2026/) and neither traces to any primary source. A 59/55 pair carrying Dynatrace's name came from somewhere else, and if a deck shows it to you, that is the deck to stop trusting.
+
+That study covers enterprise IT generally. The advertising-specific blockers are narrower and worse. You can check your payloads against a schema for most areas, but there is no published flow to run them through. The library both AAMP reference agents depend on tells you in its own README not to depend on it. Thirty-three of AAMP's operations return a canned answer whatever you send them. None of that stops a pilot. All of it stops a finance director signing off unattended spend.
+
+Two named practitioners put the buy-side version of it on the record. Digiday's CES 2026 podcast of 13 January quotes executive editor of news Seb Joseph on buyers finding agentic AI "more interesting than urgent", because "everyone wants to do things faster, cheaper, better. But ultimately, that is about everything up until an ad is bought." Greg Langer, VP of programmatic supply at Havas Media Network, was blunter at Digiday's Programmatic Marketing Summit in May: "Agentic AI still hallucinates. There's still that issue that if it doesn't know the answer, it just makes one up." That is a buy side that is interested and funded and still [not handing over the card](/agentic-buying-vs-programmatic/).

@@ -1,80 +1,75 @@
 ---
-title: 'Agentic Buying in the Specifications'
-description: 'What the AdCP and AAMP source files actually say about agentic buying: one FAQ line, no glossary entry, and zero occurrences anywhere in the IAB Tech Lab corpus.'
-answer: "Agentic buying is the campaign-layer half of agentic advertising: an AI agent discovering inventory, negotiating terms and booking a media buy. No specification defines it. The only in-corpus definition is one line in AdCP's FAQ."
+title: 'Agentic Buying'
+description: 'Agentic buying is machine-to-machine media procurement: a buyer agent and a seller agent agree a media buy across product discovery, pricing, creative, signals and governance.'
+answer: 'Agentic buying is media procurement performed by software agents: a buyer agent and a seller agent discover, price and agree a media buy, so the unit transacted is a booked buy rather than an impression won at auction.'
 pubDate: 2026-08-09
+updatedDate: 2026-08-09
 term: 'Agentic Buying'
 alternateNames: ['agentic media buying']
 category: 'agentic'
-cluster: gl-adcp
+cluster: gl-stacks
 keywords:
   - 'what do the specs call agentic buying'
   - 'is agentic buying defined in a specification'
   - 'adcp agentic buying'
-  - 'agentic buying source'
+  - 'agentic buying agentic bidding'
+  - 'adcp faq aamp comparison'
 citations:
-  - 'https://docs.adcontextprotocol.org/'
-  - 'https://github.com/adcontextprotocol/adcp/blob/f1a35aba734befa809e1fa780ad77c7edd614e96/docs/faq.mdx'
-  - 'https://github.com/adcontextprotocol/adcp/blob/f1a35aba734befa809e1fa780ad77c7edd614e96/docs/reference/glossary.mdx'
-  - 'https://github.com/adcontextprotocol/adcp/blob/f1a35aba734befa809e1fa780ad77c7edd614e96/dist/schemas/latest.json'
-  - 'https://github.com/IABTechLab/AAMP'
-  - 'https://github.com/IABTechLab/seller-agent'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/docs/faq.mdx'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/docs/reference/glossary.mdx'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/docs/learning/decision-makers/l1-agentic-advertising.mdx'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/schemas/latest.json'
+  - 'https://docs.adcontextprotocol.org/docs/faq'
+  - 'https://github.com/IABTechLab/AAMP/blob/3b20e67b568235d86c4025bec7c1301edd7466a0/README.md'
+  - 'https://github.com/IABTechLab/iab-agentic-primitives/blob/2fc7029fb9eca801bc94586aec398906aa6af6c0/README.md'
+  - 'https://github.com/IABTechLab/iab-agentic-primitives/blob/2fc7029fb9eca801bc94586aec398906aa6af6c0/spec/jsonschema/Order.json'
+  - 'https://github.com/IABTechLab/iab-agentic-primitives/blob/2fc7029fb9eca801bc94586aec398906aa6af6c0/spec/jsonschema/Deal.json'
+  - 'https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/README.md'
+  - 'https://github.com/IABTechLab/agentic-rtb-framework/blob/7f481614ba228f8fab5b08df2e13ed540d4a1954/Agentic_Real_Time_Framework_Version_1_0_FINAL.md'
 related:
-  - '/concepts/agentic-advertising/'
   - '/concepts/adcp/'
+  - '/agents/buyer-agent/'
+  - '/agents/seller-agent/'
   - '/concepts/aamp/'
+  - '/concepts/agentic-advertising/'
   - '/concepts/adcp-vs-aamp-terminology/'
-  - 'https://whatisagenticbuying.noetis.dev/'
-  - 'https://agenticadlab.noetis.dev/protocols/adcp-vs-aamp/'
-seeAlso: ['Agentic Advertising', 'Ad Context Protocol', 'AAMP', 'Media Buy']
+  - '/media-buying/media-buy/'
+  - '/negotiation/quote/'
+  - 'https://whatisagenticbuying.com/'
+  - 'https://agenticadlab.com/protocols/adcp-vs-aamp/'
+seeAlso: ['Agentic Advertising', 'Ad Context Protocol', 'AAMP', 'Media Buy', 'Quote']
 reviewState: cto-reviewed
 ---
 
-## Which specification defines agentic buying?
+Agentic buying is media procurement performed by software agents. A [buyer agent](/agents/buyer-agent/) states what a campaign needs, a [seller agent](/agents/seller-agent/) replies with products and prices, and the two agree a [media buy](/media-buying/media-buy/) without human intervention at each step. The unit that changes hands is a booked buy agreed between two parties rather than an impression won against a bid.
 
-No specification defines agentic buying. The phrase has exactly one definitional appearance across both corpora, and it is in an FAQ answer where AdCP is positioning itself against a rival.
+[AdCP](/concepts/adcp/)'s FAQ gives the term its only definition in either specification corpus, with the same scope: "how a buyer agent and a seller agent negotiate, transact, and govern a media buy across product discovery, pricing, creative, signals, and governance."
 
-`docs/faq.mdx:141`, under the question "How does AdCP compare to AAMP?":
+That same answer draws the line between the two agentic advertising stacks — "AAMP is agentic bidding; AdCP is agentic buying" — a characterisation AdCP qualifies as "based on AAMP materials published to date", alongside "we do not yet publish a formal technical comparison because AAMP is still defining its normative surface". Neither phrase appears in the [AAMP](/concepts/aamp/) repositories, and AdCP's glossary carries neither the term nor [agentic advertising](/concepts/agentic-advertising/).
 
-> Put simply: **AAMP is agentic bidding; AdCP is agentic buying.**
+## Where the context sits at decision time
 
-Two lines later the same answer stamps itself: "As of April 2026". That stamp is doing real work, because the comparison table underneath it describes AdCP's maturity as "3.0 GA (released April 2026)" while the version oracle at `dist/schemas/latest.json` now reads `3.1.10`. The framing has not been refreshed since it was written.
+In AdCP's training material for decision makers, programmatic "sends thin signals out to a remote bidder without context", while agentic advertising "brings rich data in to the platform that holds the context and generates the response". A bid request carries a page URL, a device type and perhaps an identifier; the retailer, the CTV app or the assistant receiving it already holds the basket, the purchase history and the session. Agentic buying pushes brand rules, goals and product catalogue into that party instead of pulling a thin request out of it.
 
-AdCP's own glossary declines to formalise the term. All 123 bolded entries in `docs/reference/glossary.mdx` were parsed; neither "agentic buying" nor "agentic bidding" is among them. The specification defines `create_media_buy`, `get_products` and a Media Buy object. It does not define the marketing category those operations sit in.
+An end-to-end walkthrough of the transaction, before any protocol vocabulary, is at [whatisagenticbuying.com](https://whatisagenticbuying.com/).
 
-## Does AAMP use the term agentic buying?
+## Where each stack sits relative to the auction
 
-No. Grepping all eight IAB Tech Lab repositories in the AAMP corpus for "agentic buying" or "agentic bidding" across markdown, Python, TypeScript and JSON returns zero hits.
+|                                          | AdCP 3.1.13                                | AAMP corpus                                       |
+| ---------------------------------------- | ------------------------------------------ | ------------------------------------------------- |
+| Operations                               | 64                                         | 143                                               |
+| Serve-time operations                    | 2 (`context_match`, `identity_match`)      | 1 (`GetMutations`, ARTF)                          |
+| Shared object schemas                    | published registry, `dist/schemas/3.1.13/` | 48, in `iab-agentic-primitives`                   |
+| Repositories the stack's own index lists | one, the schema registry                   | six on the hub README, of which one is serve-time |
 
-This is worth stating carefully, because the AdCP FAQ line asserts a claim about AAMP that AAMP has never made about itself. IAB Tech Lab's agent repositories describe what they do in terms of orders, quotes, negotiation rounds and deals. The seller agent's README calls itself "an AI-powered inventory management system for publishers and SSPs to automate programmatic deal negotiation, booking, and distribution". The word "bidding" is not the frame it chose.
+AdCP's total is one release; the AAMP total spans nine independently versioned repositories, so the totals are not equivalent. What compares is the share of each stack that runs at serve time: two operations of 64 on one side, one of 143 on the other.
 
-So the "AAMP is agentic bidding" half of the line is one standards body's characterisation of another's, published by the first, and unendorsed by the second.
+Both of AdCP's impression-layer operations belong to the [Trusted Match Protocol](/realtime/trusted-match-protocol/). None of the 48 schemas in AAMP's shared wire contract describes a bid; they describe Order, Line, [Quote](/negotiation/quote/), Deal, Negotiation, Proposal, ChangeRequest and RateCard. `Order.json` describes itself as a "Campaign container (insertion order) holding one or more lines", and the seller agent's README describes that project as "An AI-powered inventory management system for publishers and SSPs to automate programmatic deal negotiation, booking, and distribution using IAB Tech Lab standards." The only bid-shaped field in those 48 schemas is `bidfloor`, on `Deal.json` and on the booking response that embeds it, which "adapters translate to the raw OpenRTB float ... at the DSP edge". AdCP's FAQ describes the same relationship when it says one `create_media_buy` can spawn thousands of impression-layer events.
 
-## What does agentic buying refer to in practice?
+[ARTF](https://aampexplorer.com/repos/agentic-rtb-framework/) is the one AAMP repository the agentic-bidding label fits and the only AAMP artifact stamped Version 1.0 FINAL, while `iab-agentic-primitives`, the repository carrying those 48 schemas, is neither linked from the hub README nor released. Both reference agents pin it as their wire contract. Whether that makes AAMP a [bid-request mutation](/realtime/rtb-mutation/) stack or a booking stack is argued at [Agentic Ad Lab](https://agenticadlab.com/protocols/adcp-vs-aamp/).
 
-The useful content in the FAQ line is the layer split, which is checkable against both corpora even if the labels are not.
+## What agentic buying is not
 
-|              | Impression layer                                           | Campaign layer                           |
-| ------------ | ---------------------------------------------------------- | ---------------------------------------- |
-| Time budget  | Sub-200ms, one auction                                     | Hours to weeks, one campaign             |
-| AdCP surface | Trusted Match Protocol (`context_match`, `identity_match`) | Media Buy, Creative, Signals, Governance |
-| AAMP surface | ARTF bid-request mutation                                  | Quote, negotiation, deal booking         |
-| Typical unit | One bid request                                            | One media buy or one deal                |
+Google's Universal Commerce Protocol (UCP) and the Agentic Commerce Protocol (ACP) from OpenAI and Stripe standardise payment and fulfilment inside AI assistants; neither books media, and AdCP's FAQ files them under commerce in a separate answer. A conversational front end on a demand-side platform is a separate case: agentic buying requires a machine counterparty rather than a machine interface, and a chat window over a DSP leaves the buy assembled and executed by the same system, with the human in the same place.
 
-"Agentic buying" points at the right-hand column. A buyer agent reads a brief, discovers inventory, agrees terms and books. AdCP's FAQ also notes what the split implies: a single `create_media_buy` can spawn thousands of impression-layer events, so campaign-layer agentic buying does not replace the auction, it sits above one.
-
-For the answer-shaped version of this question, with the full sequence of calls, see [whatisagenticbuying.noetis.dev](https://whatisagenticbuying.noetis.dev/). This page only records what the source files say.
-
-## What is agentic buying's counterpart in the AAMP stack?
-
-There is no counterpart term. There are counterpart objects. What AdCP calls a media buy, AAMP's shared wire contract calls an Order with Lines; what AdCP handles by publishing pricing options on a product, AAMP handles with a Quote and a multi-round negotiation. Every mapping, including the rows where one side has nothing, is on the [AdCP and AAMP terminology lookup](/concepts/adcp-vs-aamp-terminology/).
-
-Remember the provenance asymmetry. The AdCP objects come from a published, versioned schema registry. The AAMP objects come from reference implementations and a library that says it is not yet released.
-
-## What is agentic buying confused with?
-
-**Agentic buying is not agentic commerce.** Commerce protocols cover checkout and payment inside an AI assistant. Agentic buying is media procurement.
-
-**Agentic buying is not "programmatic with an LLM on top".** The distinction the specifications draw is about who holds the context and what unit is being transacted, not about whether a model is in the loop. A dashboard with a chat box is not agentic buying by any definition either corpus offers.
-
-**Do not cite "AAMP is agentic bidding" as neutral.** It is a dated line from one party's FAQ. If you need it, quote it with its source and its April 2026 stamp, as this page does.
+The two object vocabularies — media buy, or Order and Line — are set side by side on the [terminology map](/concepts/adcp-vs-aamp-terminology/).

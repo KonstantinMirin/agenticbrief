@@ -1,79 +1,85 @@
 ---
 title: 'Agentic Advertising'
-description: 'Agentic advertising is the category term for advertising run by AI agents. Neither AdCP nor AAMP defines it normatively. Here is what each corpus actually says, with file paths.'
-answer: 'Agentic advertising is the category term for advertising workflows executed by AI agents rather than by humans operating dashboards. Neither AdCP nor AAMP defines it normatively; both use the phrase in positioning text and leave it undefined.'
+description: 'Agentic advertising is the category name for advertising planned, bought and sold by AI agents. Neither the AdCP nor the AAMP corpus defines the phrase.'
+answer: 'Agentic advertising is the category name for advertising planned, bought and sold by AI agents acting for a buyer and a seller, rather than by humans in dashboards.'
 pubDate: 2026-08-09
+updatedDate: 2026-08-09
 term: 'Agentic Advertising'
-alternateNames: ['agentic ads', 'AI agent advertising']
+alternateNames: ['agentic ads', 'AI agent advertising', 'agent-to-agent advertising']
 category: 'agentic'
-cluster: gl-adcp
+cluster: gl-stacks
 keywords:
   - 'agentic advertising'
   - 'agentic advertising definition'
   - 'what is agentic advertising'
   - 'agentic vs programmatic advertising'
 citations:
-  - 'https://docs.adcontextprotocol.org/'
-  - 'https://github.com/adcontextprotocol/adcp/blob/f1a35aba734befa809e1fa780ad77c7edd614e96/docs/reference/glossary.mdx'
-  - 'https://github.com/adcontextprotocol/adcp/blob/f1a35aba734befa809e1fa780ad77c7edd614e96/docs/learning/decision-makers/l1-agentic-advertising.mdx'
-  - 'https://github.com/adcontextprotocol/adcp/blob/f1a35aba734befa809e1fa780ad77c7edd614e96/docs/building/concepts/industry-landscape.mdx'
-  - 'https://github.com/IABTechLab/AAMP'
-  - 'https://iabtechlab.com/standards/aamp-agentic-advertising-management-protocols/'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/docs/reference/glossary.mdx'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/docs/learning/decision-makers/l1-agentic-advertising.mdx'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/docs/learning/decision-makers/explaining-agentic-advertising.mdx'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/docs/faq.mdx'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/docs/building/concepts/industry-landscape.mdx'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/docs/protocol/required-tasks.mdx'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/docs/reference/versioning.mdx'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/docs/building/verification/compliance-catalog.mdx'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/docs/building/verification/aao-verified.mdx'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/schemas/3.1.13/brand.json'
+  - 'https://github.com/IABTechLab/AAMP/blob/3b20e67b568235d86c4025bec7c1301edd7466a0/README.md'
+  - 'https://github.com/IABTechLab/iab-agentic-primitives/blob/2fc7029fb9eca801bc94586aec398906aa6af6c0/SANDBOX_REGISTRY.md'
+  - 'https://github.com/IABTechLab/iab-agentic-primitives/blob/2fc7029fb9eca801bc94586aec398906aa6af6c0/README.md'
+  - 'https://github.com/IABTechLab/agentic-direct/blob/915bda98f4de986aa0bbafe1d64df52fae974e62/server/src/mcp/mcp-server.ts'
+  - 'https://www.thecurrent.com/marketing/how-6-ad-tech-execs-define-agentic-advertising'
+  - 'https://www.indexexchange.com/index-explains/what-agentic-advertising-means-for-marketers/'
 related:
   - '/concepts/agentic-buying/'
   - '/concepts/adcp/'
   - '/concepts/aamp/'
   - '/concepts/sponsored-intelligence/'
-  - 'https://whatisagenticbuying.noetis.dev/'
-  - 'https://agenticadlab.noetis.dev/'
+  - '/concepts/adcp-vs-aamp-terminology/'
+  - '/about/sources-and-versions/'
+  - 'https://agenticadlab.com/protocols/adcp-vs-aamp/'
+  - 'https://whatisagenticbuying.com/'
 seeAlso: ['Agentic Buying', 'Ad Context Protocol', 'AAMP', 'Sponsored Intelligence']
 reviewState: cto-reviewed
 ---
 
-## Which specification defines agentic advertising?
+Agentic advertising is the category name for advertising planned, bought and sold by AI agents acting for a buyer and a seller, rather than by people working in dashboards. It is a category label rather than a specification, and no document in either the AdCP or the AAMP corpus defines it.
 
-None of them.
-
-AdCP's published glossary carries 123 bolded term entries. Three of them begin with "Agentic": Agentic Commerce Protocol, Agentic eXecution Engine, and AgenticAdvertising.org, which is an organisation. There is no entry for agentic advertising itself (`docs/reference/glossary.mdx`).
-
-The AAMP hub README does not define it either. Its closest sentence describes the umbrella as a framework "to support the evolution of agentic transactions within digital advertising ecosystems", which uses a different phrase and defines neither.
-
-So the term is category vocabulary. Both standards bodies use it in positioning material, neither ratifies it, and no schema field anywhere in either corpus is named for it. If a vendor tells you their product is "AdCP-compliant agentic advertising", the second half of that claim is not checkable against anything.
-
-## What does agentic advertising mean in practice?
-
-The most usable working definition inside either corpus is in an AdCP training module rather than in the specification. `docs/learning/decision-makers/l1-agentic-advertising.mdx` states it as a data-flow inversion:
-
-> programmatic sends a thin request out; agentic advertising brings your data in.
-
-The module's expansion: a bid request carries a page URL, a device type and maybe a user ID out to a remote decision-maker that does not hold the conversation context. The AI platform closest to the user does hold that context. So the buyer pushes brand identity, rules, goals and product catalogue in, and the platform generates the response.
-
-The same page quotes Ben Masse of Triton Digital, speaking at the egta CEO Summit, compressing the shift to three moves:
-
-> From bidding to reasoning. From impressions to relationships. From milliseconds to months.
-
-That is a good framing and it is also marketing. Note what it quietly concedes: the thing being described is a change in where the decision happens, not a new transport, a new auction, or a new measurement standard.
-
-## How does agentic advertising differ from programmatic advertising?
+## Agentic advertising and programmatic advertising
 
 |                 | Programmatic                            | Agentic advertising                                                    |
 | --------------- | --------------------------------------- | ---------------------------------------------------------------------- |
 | Who decides     | A remote bidder, per impression         | The platform holding the user context, or a pair of negotiating agents |
 | What moves      | A thin bid request out                  | Catalogues, brand rules, goals and constraints in                      |
 | Unit of work    | One impression, sub-second              | A campaign, a media buy, a negotiation                                 |
-| Standard in use | OpenRTB, VAST, `ads.txt`                | AdCP 3.1.10, or the AAMP repositories                                  |
+| Standard in use | OpenRTB, VAST, `ads.txt`                | AdCP 3.1.13, or the AAMP repositories                                  |
 | Human role      | Configures a dashboard, then supervises | States intent, then reviews what an agent did                          |
 
-The two do not replace one another. AdCP's own FAQ points out that a single `create_media_buy` call can spawn thousands of impression-layer events, so an agentic buy usually terminates in a programmatic auction.
+Neither replaces the other, and AdCP's FAQ says so: "The layers compose — a single AdCP `create_media_buy` can spawn thousands of impression-layer events. A platform can implement both." An agentic buy usually terminates in a programmatic auction. That FAQ answer is also the only place in either corpus that says what [agentic buying](/concepts/agentic-buying/) means, and it is AdCP describing AAMP. The data flow behind the second row is set out under [agentic buying](/concepts/agentic-buying/).
 
-## What is agentic advertising's counterpart in the other stack?
+## What can be checked instead of a definition
 
-There is no counterpart, because there is no term to map. Both AdCP and AAMP use the phrase as an umbrella for what they are building, and both define the concrete objects underneath it instead. On the AdCP side those objects are media buy, package, product and signal; on the AAMP side they are order, line, product, quote and deal. The [AdCP and AAMP terminology lookup](/concepts/adcp-vs-aamp-terminology/) maps them one by one.
+"Agentic" is not a conformance claim, and three checkable things stand in for it. `get_adcp_capabilities` is a Required task in `docs/protocol/required-tasks.mdx`, and `docs/reference/versioning.mdx` tells buyers that a seller not exposing it is a pre-v3 implementation. A specialism is a named capability a seller lists in `get_adcp_capabilities.specialisms`, with a wire ID such as `sales-guaranteed`; each one carries a bundle of YAML compliance tests that AgenticAdvertising.org (AAO) runs against a live agent, so a specialism listed without a run result is untested. On the AAMP side the unit is a repository and a tag, since there is no AAMP version: four AAMP repositories carry git tags and four carry none, the hub included, and [AAMP Explorer](https://aampexplorer.com/) tracks what each is pinned to.
 
-## What is agentic advertising confused with?
+Neither corpus can yet attest a production deployment, because both sides are still building the mechanism that would. AdCP's trust mark, AAO Verified, is stamped "Request for Comments". Its (Spec) axis is available now, and what it is earned against is a "test deployment, local dev, sandbox-only stack", explicitly "not production tolerance"; the axis that covers a real production endpoint is called (Sandbox), and it is "Foundation shipping" rather than available. On the AAMP side, `iab-agentic-primitives` v0.5.0 is unreleased and `agentic-direct`'s MCP handlers call `generateMockResponse`. Named deployments do exist, and are catalogued in a [sourced ledger on the hub](https://agenticadlab.com/guides/who-is-running-agentic-buys/).
 
-**Agentic advertising is broader than agentic buying.** Buying is the transaction half. Agentic advertising as used by AdCP also covers creative generation, signal activation, brand governance and conversational brand experiences. See [agentic buying in the specifications](/concepts/agentic-buying/).
+## Where the term is used
 
-**Agentic advertising is not agentic commerce.** The Agentic Commerce Protocol from OpenAI and Stripe, and Google's Universal Commerce Protocol, standardise checkout, payment and fulfilment inside AI assistants. Advertising is how an offer gets surfaced; commerce is what happens after someone accepts it. AdCP's glossary lists ACP and UCP as separate entries and calls them a complementary layer.
+The closest thing to a definition in either corpus is a line in an AdCP course for decision makers: "programmatic sends a thin request out; agentic advertising brings your data in." The line appears in a training module rather than in the schema registry. The same module quotes Ben Masse of Triton Digital, one of the four interim board directors of AgenticAdvertising.org, from the egta CEO Summit: "From bidding to reasoning. From impressions to relationships. From milliseconds to months."
 
-**"Agentic" is not a conformance claim.** Nothing in either corpus tests whether a system is agentic. What is testable is whether an implementation answers `get_adcp_capabilities` correctly, or whether it satisfies the storyboard bundle for a declared specialism. Ask for that instead.
+AdCP's glossary, `docs/reference/glossary.mdx`, carries the Agentic Commerce Protocol (ACP), another body's protocol covering checkout rather than media; the Agentic eXecution Engine (AXE), deprecated and "Replaced by the Trusted Match Protocol (TMP)"; and AgenticAdvertising.org, the member organisation that stewards AdCP itself. The phrase agentic advertising is not among them, and the nearest thing to it in the specification is a parenthetical on `docs/building/concepts/industry-landscape.mdx`, "agentic (AI agents managing full campaign lifecycles)".
+
+The phrase is the first two words of the AAMP hub README, `# **AAMP - Agentic Advertising Management Protocols**`, whose opening calls AAMP "an open-source framework developed under IAB Tech Lab to support the evolution of agentic transactions within digital advertising ecosystems" — a different phrase, also undefined. AAMP publishes no glossary. Two repositories, `agentic-rtb-framework` and `agentic-direct`, never use the phrase, and the acronym itself does not hold steady: `iab-agentic-primitives/SANDBOX_REGISTRY.md` expands AAMP as "Agentic Advertising Marketplace Protocol". [AAMP](/concepts/aamp/) has the rest of that list.
+
+Vendors publish definitions of their own.
+
+| Who                                 | Their definition                                                                                                  |
+| ----------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| Anthony Katsur, CEO of IAB Tech Lab | "agentic is just systems executing and interacting across advertising workflows"                                  |
+| Index Exchange                      | Systems that "act independently to achieve defined goals within set guardrails"                                   |
+| Adgentek                            | "the planning, buying, and selling of advertising by AI agents that transact with each other over open protocols" |
+| Scope3, an AdCP member              | A taxonomy of agent types: buying, sales, signals, creative, governance                                           |
+
+None of these cites a version or a conformance test. Index Exchange's names MCP, AdCP and ARTF without a version for any of them; the other three name no specification at all. Index Exchange calls the state of the term "agentic confusion".
+
+Agentic advertising is broader than [agentic buying](/concepts/agentic-buying/), which covers the procurement step and has [a site of its own](https://whatisagenticbuying.com/). It is separate again from agentic commerce: ACP and UCP standardise checkout and payment inside AI assistants, and AdCP's glossary calls them the layer complementing its own. Related terms: [AdCP](/concepts/adcp/), [AAMP](/concepts/aamp/), [Sponsored Intelligence](/concepts/sponsored-intelligence/), and [the terminology map](/concepts/adcp-vs-aamp-terminology/) for the object vocabularies rather than the category words.

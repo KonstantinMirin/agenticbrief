@@ -7,6 +7,8 @@
   "engines": {
     "node": ">=20.11.0"
   },
+  "//packageManager": "turbo 2.10+ refuses to resolve the workspace without this field, which breaks `npm run build`, `dev` and `typecheck`. deploy.sh builds each site with `npm run build --workspace=...` and so never hit it.",
+  "packageManager": "npm@11.16.0",
   "workspaces": [
     "sites/*",
     "packages/*"
@@ -25,6 +27,7 @@
     "data:glossary": "node scripts/glossary-generator/generate.mjs",
     "data:all": "npm run data:adcp && npm run data:aamp && npm run data:glossary",
     "deploy": "bash scripts/deploy.sh",
+    "test:engine": "node --test \"packages/brief-engine/test/*.test.ts\"",
     "lint:content": "node scripts/content-lint.mjs"
   },
   "devDependencies": {

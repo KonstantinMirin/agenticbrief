@@ -1,111 +1,102 @@
 ---
 title: 'Discovery Files: adagents.json and brand.json'
-description: 'AdCP publishes two domain-hosted discovery files, adagents.json and brand.json, both schema-registered. AAMP discovers agents through a registry instead, and names a .txt file it never specifies.'
-answer: "AdCP defines two domain-hosted discovery files: adagents.json declares which agents may sell a publisher's inventory or resell its signals, and brand.json declares brand identity. Both live under /.well-known/. AAMP has neither."
+description: 'Discovery files are domain-hosted declarations about agents. AdCP defines two under /.well-known/: adagents.json for selling rights, brand.json for identity.'
+answer: 'Discovery files are documents a domain owner publishes at a fixed /.well-known/ path to declare which agents may act for that domain; AdCP defines two, adagents.json and brand.json, and AAMP defines none.'
 pubDate: 2026-08-09
+updatedDate: 2026-08-09
 term: 'Discovery Files'
 alternateNames: ['brand.json', 'adagents.json', 'well-known files']
 category: 'protocol'
 cluster: 'gl-roles'
 keywords:
   - 'brand.json'
+  - 'well-known brand.json'
   - 'adagents.json brand.json'
   - 'agent discovery files advertising'
-  - 'well-known brand.json'
 citations:
   - 'https://docs.adcontextprotocol.org/docs/brand-protocol/brand-json'
-  - 'https://github.com/adcontextprotocol/adcp/blob/f1a35aba734befa809e1fa780ad77c7edd614e96/dist/schemas/3.1.10/brand.json'
-  - 'https://github.com/adcontextprotocol/adcp/blob/f1a35aba734befa809e1fa780ad77c7edd614e96/dist/schemas/3.1.10/adagents.json'
-  - 'https://github.com/adcontextprotocol/adcp/blob/f1a35aba734befa809e1fa780ad77c7edd614e96/dist/schemas/3.1.10/core/authorized-agent-base.json'
-  - 'https://github.com/adcontextprotocol/adcp/blob/f1a35aba734befa809e1fa780ad77c7edd614e96/docs/brand-protocol/brand-json.mdx'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/schemas/3.1.13/brand.json'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/schemas/3.1.13/adagents.json'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/schemas/3.1.13/core/authorized-agent-base.json'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/docs/brand-protocol/brand-json.mdx'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/docs/verification/overview.mdx'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/docs/governance/property/managed-networks.mdx'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/docs/registry/index.mdx'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/docs/trust.mdx'
   - 'https://github.com/IABTechLab/iab-agentic-primitives/blob/2fc7029fb9eca801bc94586aec398906aa6af6c0/src/iab_agentic_primitives/registry_client.py'
-  - 'https://datatracker.ietf.org/doc/html/rfc8615'
   - 'https://github.com/IABTechLab/iab-agentic-primitives/blob/2fc7029fb9eca801bc94586aec398906aa6af6c0/src/iab_agentic_primitives/sandbox_registry/real_double.py'
+  - 'https://datatracker.ietf.org/doc/html/rfc8615'
 related:
-  - '/agents/agent-registry/'
   - '/agents/agent-card/'
+  - '/agents/agent-registry/'
   - '/agents/brand-agent/'
   - '/agents/sales-agent/'
   - '/agents/signal-agent/'
-  - 'https://adcpexplorer.noetis.dev/discovery/adagents-json/'
-  - 'https://agenticadlab.noetis.dev/guides/agent-discovery-files/'
-seeAlso: ['Agent Registry', 'Agent Card', 'Brand Agent', 'Sales Agent']
+  - '/negotiation/trust-status/'
+  - '/about/sources-and-versions/'
+  - 'https://adcpexplorer.com/discovery/'
+  - 'https://agenticadlab.com/guides/agent-discovery-files/'
+seeAlso: ['Agent Card', 'Agent Registry', 'Brand Agent', 'Sales Agent', 'Trust Status']
 reviewState: cto-reviewed
 ---
 
-## What are agent discovery files?
+A discovery file is a document a domain owner publishes at a fixed `/.well-known/` path to declare which agents may act for that domain. An [agent card](/agents/agent-card/), served from the same `/.well-known/` prefix, is the reverse: an agent's statement about itself. AdCP defines two discovery files, and AAMP defines none.
 
-Discovery files are documents a domain owner publishes at a fixed path so that any agent can find out, without asking permission, who is authorised to act on that domain's behalf. AdCP defines two, both under `/.well-known/` per RFC 8615, and both registered in the published 3.1.10 schema registry:
+| File            | Hosted by                                    | Schema title              | Answers                                                        |
+| --------------- | -------------------------------------------- | ------------------------- | -------------------------------------------------------------- |
+| `adagents.json` | Publisher domains, and data provider domains | AdCP Agents Authorization | Which agents may sell this inventory, or resell these signals? |
+| `brand.json`    | Brand and house domains                      | Brand Discovery           | Who is this brand, and who speaks for it?                      |
 
-| File            | Hosted by                                    | Schema `$id`                    | Answers                                                        |
-| --------------- | -------------------------------------------- | ------------------------------- | -------------------------------------------------------------- |
-| `adagents.json` | Publisher domains, and data provider domains | `/schemas/3.1.10/adagents.json` | Which agents may sell this inventory, or resell these signals? |
-| `brand.json`    | Brand and house domains                      | `/schemas/3.1.10/brand.json`    | Who is this brand, and who speaks for it?                      |
+Other strings share the namespace and none has a schema. `/.well-known/adcp/sales` and `/adcp/signals` are agent endpoints that appear only in examples. `adcp-ownership.txt` carries the domain-control challenge: the [registry](/agents/agent-registry/) issues a single-use nonce, echoed back from that path inside fifteen minutes, or the same proof runs through a `_adcp-owner.{domain}` DNS TXT record. Neither of the two schemas has changed across the stable 3.1.x releases.
 
-Version pin: AdCP **3.1.10**, per `dist/schemas/latest.json`, repository at commit `f1a35ab`.
+## What a buyer computes from the two files
 
-The model is the thing that separates the two stacks. AdCP puts authority on the domain. Whoever controls `example.com` decides what `example.com/.well-known/adagents.json` says, and that assertion needs no intermediary. AAMP puts authority in an [agent registry](/agents/agent-registry/) instead.
+The two files are read against each other, and validation "checks both sides": the publisher's `adagents.json` (does it authorise this agent with the claimed `delegation_type`?) and the operator's `brand.json` (does it declare this property with a matching `relationship`?). The result is a five-state signal with one documented buyer action per state.
 
-## What is brand.json?
+| State              | Meaning                                                                                          | Buyer action                                                                      |
+| ------------------ | ------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------- |
+| `inline`           | The seller is the brand owner, no delegation involved                                            | Proceed                                                                           |
+| `mutual_assertion` | Both sides published matching declarations                                                       | Proceed                                                                           |
+| `one_sided_brand`  | The seller's `brand.json` claims a publisher that hasn't reciprocated                            | "Do not treat as authorization. Any domain can claim any publisher unilaterally." |
+| `one_sided_house`  | The publisher's `adagents.json` names a seller whose `brand.json` doesn't acknowledge it         | Hold for human review                                                             |
+| `standalone`       | Neither side publishes, bearer-token trust only, which is where a silent domain puts every buyer | Out-of-band authorisation, or refuse                                              |
 
-`brand.json` is the brand identity file, hosted at `https://example.com/.well-known/brand.json`. Its 3.1.10 schema is titled "Brand Discovery" and defines five variants:
+AdCP credits the mutual-assertion pattern to `ads.txt` and `sellers.json`, and what it adds is the second side: an entry in a publisher's `adagents.json` counts as authorisation only when the named agent's own `brand.json` declares the same property back.
 
-| #   | Variant                             | Use when                                           |
-| --- | ----------------------------------- | -------------------------------------------------- |
-| 1   | Authoritative Location Redirect     | The canonical document is hosted at another URL    |
-| 2   | House Redirect                      | This brand domain rolls up into a larger house     |
-| 3   | [Brand Agent](/agents/brand-agent/) | An MCP agent serves authoritative brand identity   |
-| 4   | House Portfolio                     | A house publishes its brands, inline or by pointer |
-| 5   | Brand Canonical Document            | A brand self-publishes its own identity            |
+The string `mutual_assertion` appears in no published schema, in 3.1.13 or earlier. The five states live in three `.mdx` documents and nowhere else, and `docs/trust.mdx` labels the model an RFC linked to a GitHub issue rather than settled specification. Two conformant implementations can compute different verdicts about the same publisher without either violating a schema.
 
-Variants 1 to 3 are mutually exclusive with each other and with 4 and 5. Variants 4 and 5 compose, through `brand_refs[]` pointing down and `house_domain` pointing back up. The hierarchy is one level deep: "only a house declares ownership; a brand cannot itself have children."
+The two cross-checked enums are different lengths. `delegation_type` has three values: `direct`, `delegated`, `ad_network`. `relationship` has those three plus `owned`, which the schema documents as having "no adagents.json delegation_type counterpart", and no rule says what a validator does with the leftover. [AAMP's trust status](/negotiation/trust-status/) is a typed field on the wire; AdCP's five states are not in any schema.
 
-That composition is the interesting design choice, and the specification explains why it exists in a sentence worth quoting: "If Converse wants to update its logo, someone edits Nike, Inc.'s file." Inline `brands[]` keeps the parent in control; `brand_refs[]` lets a subsidiary own its own canonical document while the house remains the authority on who is in the family. AdCP calls the two-sided version of this a mutual-assertion trust model, because the house names the brand and the brand names the house.
+## The five brand.json variants
 
-Redirects carry a reason. `redirect_reason` is an enum with `acquisition`, `rebrand`, `regional`, `legacy`, `consolidation` and `other`, which exists so a cache can tell a corporate restructure from a CDN change.
+| #   | Variant                             | Use when                                   |
+| --- | ----------------------------------- | ------------------------------------------ |
+| 1   | Authoritative Location Redirect     | The canonical document is hosted elsewhere |
+| 2   | House Redirect                      | The brand domain rolls up into a house     |
+| 3   | [Brand Agent](/agents/brand-agent/) | An MCP agent serves brand identity         |
+| 4   | House Portfolio                     | A house publishes its brands               |
+| 5   | Brand Canonical Document            | A brand self-publishes its own identity    |
 
-## What is adagents.json?
+A canonical document is the schema's `brand` definition: `id` and `names` required, the rest optional, plus `house_domain` for a brand in a house. Variant 4 wraps that definition in `brands[]`, inline or by pointer, and adds house-level `trademarks` and `authorized_operators`.
 
-`adagents.json` is the authorisation file. The schema description: "Declaration of authorized agents for advertising inventory and data signals. Hosted at `/.well-known/adagents.json` on publisher domains (for properties) or data provider domains (for signals)."
+Variants 1 to 3 are mutually exclusive with each other and with 4 and 5. Variants 4 and 5 compose: `brand_refs[]` points down from the house, `house_domain` points back up, and each side must name the other. Nesting stops there — "A brand cannot itself declare brand_refs[]" — so a house that lists its brands inline keeps editorial control: "If Converse wants to update its logo, someone edits Nike, Inc.'s file".
 
-It has two top-level shapes. A pointer file carries `authoritative_location` and nothing else of substance. An inline file carries the real data: `properties[]`, `collections[]`, `placements[]`, `formats[]`, `signals[]`, `contact`, `catalog_etag` and the array that gives the file its name, `authorized_agents[]`.
+Both redirect variants take an optional `redirect_reason` with seven values, four of which "suggest the resolved target is in transition and consumers SHOULD shorten cache TTL until stable".
 
-Entries in `authorized_agents[]` are discriminated on `authorization_type` and come in six shapes. Four scope inventory (`property_ids`, `property_tags`, `inline_properties`, `publisher_properties`) and two scope data (`signal_ids`, `signal_tags`). Every shape inherits `url`, `authorized_for` and optional `signing_keys` and `encryption_keys` from `core/authorized-agent-base.json`, so a publisher can attest an agent's public keys rather than leaving buyers to discover keys on the agent's own domain.
+The schema's own top-level `description` lists four of the five. Brand Canonical Document is missing from it, and the same sentence says the file is hosted "on house domains" when variant 5 puts it at the brand's own `/.well-known/brand.json`. A reader working from that description rather than from the definitions under it will miss a valid variant.
 
-Two rules catch people out.
+## adagents.json: six authorisation variants over one base
 
-**An empty array is not a denial.** `authorized_agents: []` is legal and means a catalog-only file for a platform that has not adopted AdCP. The schema instructs validators that they "MUST NOT read it as deny-all, authorize-all, or a revocation" and MUST still consume the catalog arrays.
+A pointer file carries `authoritative_location`; an inline file carries the catalog arrays, `contact`, `catalog_etag` and `authorized_agents[]`.
 
-**Fetching is treated as a security operation.** Because one deploy at an authoritative location can change authorisation for every publisher in a network, the schema tells validators to cap response size, refuse redirects on the fetch, enforce short timeouts, and serve the previously cached file on a transient 5xx. It sets a two-tier size cap: 5 MB for the pointer file served at the well-known path, and a recommended 20 MB for the dereferenced authoritative file, because that origin has explicitly opted into fanning out.
+Entries in `authorized_agents[]` are discriminated on `authorization_type`: four variants scope inventory (`property_ids`, `property_tags`, `inline_properties`, `publisher_properties`), two scope data (`signal_ids`, `signal_tags`). All six inherit `url`, `authorized_for`, `signing_keys`, `encryption_keys` and `last_updated` from `core/authorized-agent-base.json`, "centralized to prevent drift across all authorization-type variants". Because the publisher rather than the agent publishes those keys, a buyer can check an agent's signature against the domain's own declaration.
 
-Field-by-field reference for the whole file lives on [AdCP Explorer](https://adcpexplorer.noetis.dev/discovery/adagents-json/).
+`authorized_agents: []` carries no authorisation meaning. Validators "MUST NOT read it as deny-all, authorize-all, or a revocation, MUST NOT treat its presence as an error, and MUST still consume the catalog arrays." The registry emits exactly this shape: its writes are "an identity-only write surface: the stored document always carries `authorized_agents: []`". A validator that reads an empty array as deny-all rejects every publisher the registry has written.
 
-## Does AAMP have discovery files?
+Fetching carries its own risk: one deploy at an authoritative location changes authorisation for every publisher in the network. AdCP's managed-networks guidance writes the fetch rules at MUST: the response is capped at 5 MB for the pointer and a recommended 20 MB for the dereferenced file, redirects are refused, and both hops carry short timeouts. On a transient 5xx the cached file is served rather than failing closed, a deliberate availability choice.
 
-Not in the same sense. AAMP discovery runs through a registry lookup followed by an [agent card](/agents/agent-card/) fetch, and the card is served by the agent about itself rather than by the domain owner about the agent.
+## Discovery files in AAMP
 
-There is one exception, and it is a thin one. The shared contract library `iab-agentic-primitives` documents a public registry endpoint, `POST /api/agents/validate/agent`, that answers "whether a publisher domain authorizes a given agent URL, per the publisher's `/.well-known/authorized-agents.txt` file."
+AAMP defines no domain-hosted authorisation file and no brand identity file. It does use `/.well-known/` for the agent's own card, the opposite direction of assertion. The nearest approach is a docstring: `iab-agentic-primitives` documents a registry endpoint answering "whether a publisher domain authorizes a given agent URL, per the publisher's `/.well-known/authorized-agents.txt` file." No schema or field list for that file is published, and the test double "does not fetch the publisher's authorized-agents.txt".
 
-So AAMP does have the concept of a publisher-hosted authorisation file. What it does not have is a specification of one. That filename appears in a Python docstring, and in a test that asserts the unauthorised result. There is no schema, no example file, no field list, and no other mention anywhere in the eight repositories. The library's own test double "does not fetch the publisher's authorized-agents.txt" at all.
-
-| Question                            | AdCP 3.1.10                                                         | AAMP                                                                      |
-| ----------------------------------- | ------------------------------------------------------------------- | ------------------------------------------------------------------------- |
-| Publisher-hosted authorisation file | `adagents.json`, JSON Schema registered, six authorisation variants | `/.well-known/authorized-agents.txt`, named in one docstring, unspecified |
-| Brand identity file                 | `brand.json`, five variants, hierarchy and trademark fields         | None                                                                      |
-| Primary discovery mechanism         | Domain file, then runtime capability call                           | Registry query, then agent card fetch                                     |
-| Where authority lives               | The domain owner                                                    | The registry operator                                                     |
-| Key attestation                     | `signing_keys` and `encryption_keys` inside the authorisation entry | Not in the discovery path                                                 |
-
-## Which model should you build against?
-
-Both, if you are building for either. They fail differently, and that is the practical point.
-
-A domain file is self-serve, cacheable and cheap to verify, and it goes stale silently when nobody edits it. A registry is queryable and can carry trust state that changes without a publisher redeploying, and it puts the registry operator in the path of every discovery. AdCP's registry documentation makes the split explicit on its side: crawled `adagents.json` files feed an authorisation graph, but they never create catalog entries. The domain file and the registry answer different questions on purpose.
-
-The two-model comparison in full is on the [Agentic Ad Lab hub](https://agenticadlab.noetis.dev/guides/agent-discovery-files/).
-
-## Sources and version pins
-
-- AdCP 3.1.10, repository `adcontextprotocol/adcp` at commit `f1a35ab`. Schemas from `dist/schemas/3.1.10/{adagents.json, brand.json, core/authorized-agent-base.json}`; prose from `docs/brand-protocol/brand-json.mdx`.
-- `IABTechLab/iab-agentic-primitives` at commit `2fc7029`, `src/iab_agentic_primitives/registry_client.py` and `src/iab_agentic_primitives/sandbox_registry/real_double.py`. That library declares itself "WORK IN PROGRESS — NOT YET RELEASED".
-- RFC 8615 for the `/.well-known/` URI convention.
+Authority sits in a different place in each stack. AdCP's discovery path starts at a file the domain owner publishes and moves on to a runtime capability call, and the authorisation entry carries the agent's `signing_keys` and `encryption_keys`. AAMP's starts at a [registry](/agents/agent-registry/) query and moves on to an agent card fetch, with no key attestation in the discovery path, so the registry operator holds the position the domain owner holds in AdCP.

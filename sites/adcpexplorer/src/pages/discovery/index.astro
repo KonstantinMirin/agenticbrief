@@ -16,31 +16,30 @@ import {
   breadcrumbNode,
   faqPageNode,
 } from '@agenticbrief/seo/schema'
-import { BASE, HUB } from '../../lib/site'
+import { BASE, HUB, LAST_UPDATED } from '../../lib/site'
 
 const files = adcp.discoveryFiles
 const path = '/discovery/'
 const url = `${BASE}${path}`
-const title = 'adagents.json and brand.json — the AdCP discovery files'
-const description = `Field reference for AdCP's two discovery files: adagents.json, which declares who may sell a property's inventory, and brand.json, which declares a brand's identity and agents.`
+const title = 'adagents.json and brand.json — the two files AdCP asks a domain to host'
+const description = `Field reference for adagents.json and brand.json, the only two schemas in the AdCP ${adcp.version} registry with a file location, plus the union rules that decide whether a file validates.`
 const answer =
-  'AdCP has two discovery files. adagents.json is hosted by a publisher to declare which sales agents may sell its inventory; brand.json is hosted by a brand to declare its identity, agents and rights. Both are fetched from a well-known path on the domain that owns them.'
+  'adagents.json is the file a publisher or data provider hosts at /.well-known/adagents.json to declare which agents may sell its inventory or resell its signals; brand.json, at /.well-known/brand.json, is the buy-side half.'
 
 const faq = [
   {
     question: 'What is adagents.json?',
     answer:
-      'A file a publisher hosts on its own domain that declares which sales agents are authorised to sell that property’s inventory. A buyer fetches it to confirm that an agent offering inventory is actually allowed to.',
+      'A file at /.well-known/adagents.json naming the agents a publisher or data provider allows to sell its inventory or resell its signals. Each entry needs a url, an authorized_for label, and an authorization_type saying what the authorization covers.',
   },
   {
     question: 'What is brand.json?',
     answer:
-      'A file a brand hosts to declare its identity, the agents that represent it, and the rights available for licensing. It is the buy-side counterpart to adagents.json.',
+      "The buy-side half of the pair, hosted at /.well-known/brand.json. It declares who the brand is, which agents speak for it, and which properties it owns or sells. AdCP's docs line it up against sellers.json.",
   },
   {
-    question: 'Why does each file have several shapes?',
-    answer:
-      'Both are defined as a union of variants rather than one object. A host can publish the full document inline, or point at an authoritative copy elsewhere. The variants are alternatives — the fields of one do not appear alongside the fields of another.',
+    question: 'Can an adagents.json point at an authoritative copy and still list agents inline?',
+    answer: 'No. Both branches match, and a oneOf needs exactly one.',
   },
 ]
 
@@ -57,7 +56,7 @@ const jsonLd = graph([
     url,
     title,
     description,
-    datePublished: '2026-08-09',
+    datePublished: LAST_UPDATED,
     technical: true,
     proficiencyLevel: 'Expert',
     keywords: ['adagents.json', 'brand.json', 'adcp discovery'],
@@ -75,7 +74,7 @@ const jsonLd = graph([
   jsonLd={jsonLd}
   wide
   ogType="article"
-  publishDate={new Date('2026-08-09')}
+  publishDate={new Date(LAST_UPDATED)}
   keywords={['adagents.json', 'brand.json', 'adcp discovery file']}
 >
   <nav class="breadcrumbs" aria-label="Breadcrumb">
@@ -85,9 +84,39 @@ const jsonLd = graph([
   <AnswerBox answer={answer} />
 
   <p>
-    Both files are unions of several alternative shapes rather than one fixed object. That matters
-    for anyone writing a parser: the variants are mutually exclusive, so merging their fields into a
-    single table would describe a document that cannot exist. They are listed separately below.
+    Publisher domains host an <code>adagents.json</code> for their properties, data provider domains host
+    one for their signals, and brands host <code>brand.json</code>. The consumer is a buyer's agent
+    checking that whoever offered it the inventory is allowed to sell it, which is why the
+    declaration sits on the domain that owns the thing rather than in the offer.
+  </p>
+
+  <h2>The ads.txt and sellers.json equivalents</h2>
+
+  <p>
+    The mapping is AdCP's own: adagents.json takes the ads.txt role, and brand.json's properties
+    take the sellers.json role, each property carrying a <code>relationship</code>. <code
+      >direct</code
+    >, <code>delegated</code> and <code>ad_network</code> appear on both sides with the same meaning.
+  </p>
+
+  <h2>Where the two files sit in the registry</h2>
+
+  <p>
+    AdCP, the Ad Context Protocol, is governed by AgenticAdvertising.org and ships as one versioned
+    schema registry. {files.length} schemas in it carry a <code>file_location</code>: the annotation
+    marking a document that is fetched from a fixed path on a domain rather than passed inside an
+    API call. Those two are <code>adagents.json</code>, hosted by the owner of the inventory or the
+    data, and <code>brand.json</code>, hosted by the owner of the brand.
+  </p>
+
+  <p>
+    AdCP names three further well-known paths that have no schema in the registry, all three
+    specified in prose only: <code>/.well-known/jwks.json</code>, which publishes an agent's own
+    signing keys and which the <code>signing_keys</code> pin overrides; <code
+      >/.well-known/adcp-ownership.txt</code
+    >, which carries the ownership challenge; and <code
+      >/.well-known/governance-revocations.json</code
+    >. Verification rules for those three paths are prose and have no schema in the registry.
   </p>
 
   {
@@ -104,7 +133,7 @@ const jsonLd = graph([
         {file.variants && file.variants.length > 0 ? (
           <>
             <h3>
-              The {file.variants.length} variants of <code>{file.name}</code>
+              The {file.variants.length} branches of <code>{file.name}</code>
             </h3>
             {file.variants.map((v) => (
               <>
@@ -139,6 +168,151 @@ const jsonLd = graph([
     ))
   }
 
+  <h2>Authenticity guarantees</h2>
+
+  <p>
+    Control of the domain is the only guarantee. The document carries no signature and the registry
+    defines no schema for one. The only assertion a consumer can verify is that the file was served
+    by the host it speaks for. AdCP does define an ownership challenge: a single-use nonce published
+    either as a DNS TXT record at <code>_adcp-owner.&#123;domain&#125;</code> or as a file at <code
+      >/.well-known/adcp-ownership.txt</code
+    >, expiring fifteen minutes after issue. That challenge gates writes to AdCP's registry index.
+    It does not gate the file on the publisher's own domain.
+  </p>
+
+  <p>
+    <code>signing_keys</code> pins the publisher-attested public keys an authorized agent is allowed to
+    sign with. A verifier that finds a pin must reject any signature whose key is outside it, whatever
+    the agent's own JWKS advertises. The field sits in <code>core/authorized-agent-base.json</code> next
+    to <code>url</code> and <code>authorized_for</code>, and unlike those two it is not in <code
+      >required</code
+    >. The docs make it a MUST for any agent whose delegated scopes include mutating operations: <code
+      >create_media_buy</code
+    >, <code>update_media_buy</code>, <code>sync_creatives</code> and <code
+      >update_performance_index</code
+    >.
+  </p>
+
+  <h2>Two rules that reject a well-formed file</h2>
+
+  <p>
+    Both files are <code>oneOf</code> unions with overlapping branches: <code>$schema</code> and <code
+      >last_updated</code
+    > appear in all of them, and a document must satisfy exactly one branch. The first rule follows from
+    that. A document carrying both <code>authoritative_location</code> and <code
+      >authorized_agents</code
+    > validates against both branches, which fails the <code>oneOf</code> under a draft-07 validator.
+    The schema defines no pointer-with-inline-fallback shape.
+  </p>
+
+  <p>
+    The second is emptiness. <code>authorized_agents</code> may be empty, but only in a file that publishes
+    something else. The inline branch wraps an <code>anyOf</code> over six arrays (<code
+      >authorized_agents</code
+    >, <code>formats</code>, <code>properties</code>, <code>placements</code>, <code
+      >collections</code
+    >, <code>signals</code>) and asks for one of them to be non-empty. The <code>$comment</code> on that
+    <code>anyOf</code>
+    says why: "a file with neither sales authorization nor non-empty catalog content is rejected." The
+    <code>authorized_agents</code> description names the case it protects: a catalog-only community mirror,
+    publishing a platform's formats and properties for a platform that has not adopted AdCP, where there
+    is no sales agent to authorize. An empty array there asserts no sales authorization, and the schema
+    tells validators not to read it as deny-all, authorize-all or a revocation.
+  </p>
+
+  <h2>Following authoritative_location</h2>
+
+  <p>
+    <code>authoritative_location</code> is an indirection: the well-known path holds a pointer and the
+    real file lives at the URL it names. The rules for dereferencing it sit in the field description rather
+    than in any schema keyword. Validators must refuse redirects on it and keep timeouts short. On a transient
+    5xx they serve the previously cached file. The size cap comes in two tiers, the smaller of them the
+    general server-side request forgery (SSRF) cap: "pointer files served at /.well-known/adagents.json
+    use the general 5 MB SSRF cap; dereferenced authoritative files (this URL's response, after the indirection)
+    use a recommended 20 MB cap because the origin has explicitly opted in to fanning out across a publisher
+    network." The 20 MB tier is sized for one file covering every property on a publisher network rather
+    than one domain.
+  </p>
+
+  <h2><code>additionalProperties</code> in adagents.json and brand.json</h2>
+
+  <p>
+    Both adagents.json branches set <code>additionalProperties</code> to true, and so do all six <code
+      >authorized_agents</code
+    > entry shapes. An agent entry whose key is misspelled — <code>delegatoin_type</code> in place of
+    <code>delegation_type</code> — validates clean and has no effect. The correctly spelled key with an
+    invalid value, <code>delegation_type</code> of "reseller", fails validation. The value is enum-constrained;
+    the key name is not checked. Validation of a generated adagents.json therefore has to check key names
+    against the six <code>authorized_agents</code> entry shapes rather than rely on a draft-07 pass.
+  </p>
+
+  <p>
+    brand.json, in the same release and the same registry, sets <code>additionalProperties</code> to false
+    on four of its five branches: Authoritative Location Redirect, House Redirect, Brand Agent and House
+    Portfolio. The identical misspelling in a House Portfolio file is therefore a hard error. The fifth
+    branch, Brand Canonical Document, sets no <code>additionalProperties</code> and stays open. The release
+    notes do not mention the difference.
+  </p>
+
+  <h2>Required fields inherited through <code>allOf</code></h2>
+
+  <p>
+    Every <code>authorized_agents</code> entry requires <code>url</code> and <code
+      >authorized_for</code
+    >, and neither appears in the branch's own <code>required</code> list. Both are inherited through
+    an <code>allOf</code> onto <code>core/authorized-agent-base.json</code>. A validator reports the
+    two as missing against <code>core/authorized-agent-base.json</code>, not against the branch.
+  </p>
+
+  <p>
+    brand.json inherits required fields the same way. Its Brand Canonical Document branch is an <code
+      >allOf</code
+    > onto the shared brand definition, so <code>id</code> and <code>names</code> are required there even
+    though the branch names neither. Its Brand Agent branch goes further: an empty <code
+      >required</code
+    > list plus an <code>anyOf</code> demanding <code>agents</code> or <code>brand_agent</code>.
+  </p>
+
+  <h2><code>authorization_type</code> and the scope of a signal authorization</h2>
+
+  <p>
+    <code>authorized_agents</code> is a discriminated union on <code>authorization_type</code>. Four
+    values scope inventory (<code>property_ids</code>, <code>property_tags</code>, <code
+      >inline_properties</code
+    >, <code>publisher_properties</code>), and <code>signal_ids</code> and <code>signal_tags</code> are
+    the two that scope data. The four inventory branches carry <code>delegation_type</code>. On the
+    brand.json side, <code>relationship</code> takes a fourth value, <code>owned</code>, which the
+    schema describes as having no <code>delegation_type</code> counterpart.
+  </p>
+
+  <p>
+    The two data branches declare the discriminator and the selector only. <code>countries</code>, <code
+      >effective_from</code
+    >, <code>effective_until</code> and <code>delegation_type</code> are absent from both. Adding <code
+      >effective_until</code
+    > to a <code>signal_tags</code> entry still validates, because the object is open, and no consumer
+    built from this schema reads the field. A time-bounded or geo-bounded signal authorization has no
+    representation in the file.
+  </p>
+
+  <h2>A missing or malformed file</h2>
+
+  <p>
+    A 404 on the well-known path means the file is absent. Consumers proceed without verification;
+    absence is not a denial, and the docs state that it does not mean the agent is unauthorized. A
+    404 or an S3-style 403 AccessDenied may send a validator to the domain's ads.txt for a <code
+      >managerdomain</code
+    > line instead, one hop only and only on those two statuses. Otherwise the publisher is unverifiable.
+  </p>
+
+  <p>
+    Unparseable JSON, or a missing top-level <code>authorized_agents</code>, aborts processing for
+    that domain outright. A missing file does not. A single malformed property inside an
+    otherwise-valid file must not either: validators skip that entry, log it and continue. A
+    generation bug therefore causes a larger failure than hosting nothing, and the effect is largest
+    on a managed-network file covering hundreds of publisher domains.
+  </p>
+
   <FaqBlock entries={faq} />
 
   <h2>Related</h2>
@@ -146,7 +320,9 @@ const jsonLd = graph([
     <li><a href="/schemas/">How the AdCP schema registry is organised</a></li>
     <li><a href="/">All {adcp.tasks.length} AdCP operations</a></li>
     <li>
-      <a href={`${HUB}/protocols/adcp-vs-aamp/`} rel="noopener">How AAMP handles agent discovery</a>
+      <a href={`${HUB}/protocols/adcp-vs-aamp/`} rel="noopener">AdCP and AAMP, compared</a>
     </li>
   </ul>
+
+  <SpecSource provenance={adcp.provenance} specVersion={adcp.version} />
 </BaseLayout>

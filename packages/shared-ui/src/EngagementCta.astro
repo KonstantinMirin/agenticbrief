@@ -1,0 +1,73 @@
+---
+/**
+ * End-of-page commercial block.
+ *
+ * Three constraints from the persona study, and the design is mostly a
+ * consequence of them:
+ *
+ * 1. NO CAPTURE. The absence of a form is the highest-rated trust signal on the
+ *    estate — "they're choosing not to collect me", "this one gave up the lead"
+ *    — and the Brief Gateway's own survey dings nine competitors for wanting a
+ *    login before accepting input. A form here would refute the corpus. So this
+ *    is links and an email address, no field, no popup, no interstitial.
+ *
+ * 2. SHAPE, NOT PRICE. The convergent complaint was never the missing price, it
+ *    was not knowing what you would be buying an instance of. So the block
+ *    states the shape of the smallest engagement — bounded, read-only, ends in
+ *    a document — which is the one two of three buyers reached for unprompted.
+ *
+ * 3. NOT ON THE REFERENCE SITES. It renders on the hub and on Brief Gateway
+ *    only. The explorers, the glossary and the answer site stay clean, because
+ *    "none of it was written for me" is why they were trusted in the first
+ *    place. Those sites carry the Postindustria line in the footer and nothing
+ *    else.
+ *
+ * It sits after the body and after the related links, so a reader meets it
+ * having already read the page rather than instead of reading it.
+ */
+import { author, POSTINDUSTRIA, org } from './org'
+import { siteUrl, type SiteKey } from './sites'
+
+export interface Props {
+  site: SiteKey
+}
+
+const { site } = Astro.props
+
+/** Sites that carry commercial intent at all. */
+const COMMERCIAL: SiteKey[] = ['agenticadlab', 'briefgateway']
+const show = COMMERCIAL.includes(site)
+
+const SERVICES = `${siteUrl('agenticadlab')}/services/`
+---
+
+{
+  show && (
+    <aside class="engagement" aria-labelledby="engagement-heading">
+      <h2 id="engagement-heading">Doing this for real?</h2>
+
+      <p>
+        The smallest useful engagement is a counterparty discovery audit: the agents you actually
+        transact with, probed read-only against their public endpoints, checked against the release
+        they claim. It runs outside your repository, touches no client data, and ends in a written
+        finding against a named version rather than a deployment.
+      </p>
+
+      <p>
+        <a class="cta-primary" href={SERVICES}>
+          What the work is, and when it is not worth doing
+        </a>
+      </p>
+
+      <p class="muted">
+        Or email <a href={`mailto:${org.email}`}>{org.email}</a> with your role in the transaction,
+        your current integration state, and which stack. That is enough to say whether there is an
+        engagement here or whether the answer is to wait. Builds are delivered by{' '}
+        <a href={POSTINDUSTRIA} rel="noopener">
+          {author.company.name}
+        </a>{' '}
+        rather than by the author alone.
+      </p>
+    </aside>
+  )
+}

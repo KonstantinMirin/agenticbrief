@@ -14,9 +14,132 @@ export async function getStaticPaths() {
   return entries.map((entry) => ({ params: { slug: slugFor(entry.id) }, props: { entry } }))
 }
 
+/**
+ * Anchor text for every href these four pages link to in `related`.
+ *
+ * DocPage's fallback labels a link with its own URL, which reads as a list of
+ * paths and hostnames. Reader-facing pages get a title and a reason to click,
+ * so the map is keyed by href and the pages keep declaring links as URLs.
+ */
+const LINKS: Record<string, { title: string; note?: string }> = {
+  '/': {
+    title: 'What is agentic buying?',
+    note: 'The plain-English answer, what it does to a fee, and how much of it has actually transacted.',
+  },
+  '/how-it-works/': {
+    title: 'How agentic buying works, step by step',
+    note: 'One buy traced from the brief to the booking, and where the sequence trips clients up.',
+  },
+  '/agentic-buying-vs-programmatic/': {
+    title: 'Agentic buying vs programmatic buying',
+    note: 'One impression per auction against a whole campaign, and the two standards bodies that disagree about whether that is a difference.',
+  },
+  '/maturity/': {
+    title: 'Is agentic buying real yet?',
+    note: 'Eight named deployments, one named advertiser, and which layers are safe to build on.',
+  },
+  '/about/': {
+    title: 'About this site and who pays for it',
+    note: 'Who writes it, what he sells, and why neither standards body has any say over it.',
+  },
+  'https://agenticadlab.com/guides/who-is-running-agentic-buys/': {
+    title: 'Who is actually running agentic buys',
+    note: 'The dated ledger, with a column separating vendor claims from independent measurement.',
+  },
+  'https://agenticadlab.com/guides/how-a-machine-buys-media/': {
+    title: 'How a machine actually buys media, end to end',
+    note: 'The same sequence at wire level, with the field names and the response shapes.',
+  },
+  'https://agenticadlab.com/guides/what-agentic-ad-protocols-dont-standardize/': {
+    title: 'Five gaps neither AdCP nor AAMP fills',
+    note: 'Reconciliation, invalid traffic and the rest of what you still build yourself.',
+  },
+  'https://agenticadlab.com/guides/agent-discovery-files/': {
+    title: 'Publishing adagents.json',
+    note: 'What belongs in the file that says who may sell your inventory.',
+  },
+  'https://agenticadlab.com/protocols/adcp-vs-aamp/': {
+    title: 'AdCP vs AAMP: which standard to implement',
+    note: 'The two stacks side by side, payload by payload.',
+  },
+  'https://agenticadlab.com/protocols/aamp/': {
+    title: 'What IAB Tech Lab has actually published as AAMP',
+    note: 'The eight repositories, read one at a time.',
+  },
+  'https://agenticadlab.com/about/': {
+    title: 'About Agentic Ad Lab',
+    note: 'The hub these pages draw their protocol work from.',
+  },
+  'https://agenticadlab.com/services/': {
+    title: 'Protocol integration and agent readiness work',
+    note: 'What the author sells, stated plainly.',
+  },
+  'https://adcpexplorer.com/': {
+    title: 'AdCP Explorer',
+    note: 'Every published operation, area by area, at the current release.',
+  },
+  'https://adcpexplorer.com/operations/get-products/': {
+    title: 'The get_products request, field by field',
+    note: 'The one required field, and the filters that sit beside the brief.',
+  },
+  'https://adcpexplorer.com/discovery/': {
+    title: 'The discovery file, field by field',
+    note: 'What a publisher puts in adagents.json and what a reader must not infer from it.',
+  },
+  'https://adcpexplorer.com/areas/governance/': {
+    title: 'AdCP governance operations',
+    note: 'The 22 operations that decide whether an agent may spend.',
+  },
+  'https://adcpexplorer.com/areas/trusted-match/': {
+    title: 'AdCP Trusted Match',
+    note: 'The sub-50ms decisioning surface its own maintainers call pre-production.',
+  },
+  'https://adcpexplorer.com/guides/adcp-registry-measured/': {
+    title: 'The AdCP agent registry, measured',
+    note: 'What each of the 23 listed agents answered to a caller with no credentials.',
+  },
+  'https://aampexplorer.com/negotiation/': {
+    title: 'How AAMP negotiation works',
+    note: 'Accept, counter, final offer and reject, with the round limits and concession caps.',
+  },
+  'https://aampexplorer.com/versions/': {
+    title: 'What each AAMP repository is versioned at',
+    note: 'Tags, releases, and the half of the corpus that has neither.',
+  },
+  'https://aampexplorer.com/what-does-aamp-stand-for/': {
+    title: 'What AAMP stands for',
+    note: 'The acronym, and where IAB Tech Lab expands it differently.',
+  },
+  'https://aampexplorer.com/repos/agentic-rtb-framework/': {
+    title: 'Inside the Agentic RTB Framework',
+    note: 'The protobuf, the eight intents, and what the repository does not contain.',
+  },
+  'https://briefgateway.com/spec/brief-vs-filters/': {
+    title: 'Brief string or filters: what goes where',
+    note: 'Which half of a campaign description belongs in prose and which in structured fields.',
+  },
+  'https://adtechglossary.com/agents/sales-agent/': {
+    title: 'Sales agent, defined',
+    note: "AdCP's noun for the software that sells a publisher's inventory.",
+  },
+  'https://adtechglossary.com/agents/seller-agent/': {
+    title: 'Seller agent, defined',
+    note: "AAMP's noun for the same role, and why the two are not interchangeable.",
+  },
+  'https://adtechglossary.com/about/sources-and-versions/': {
+    title: 'Sources and versions',
+    note: 'The releases every definition in the glossary was read from.',
+  },
+}
+
 const { entry } = Astro.props
 const { Content } = await render(entry)
 const slug = Astro.params.slug
+
+const relatedLinks = (entry.data.related ?? []).map((href: string) => ({
+  href,
+  ...(LINKS[href] ?? { title: href.replace(/^https?:\/\//, '').replace(/\/$/, '') }),
+}))
 ---
 
 <DocPage
@@ -28,6 +151,7 @@ const slug = Astro.params.slug
     { name: 'What Is Agentic Buying', url: `${BASE}/` },
     { name: entry.data.title, url: `${BASE}/${slug}/` },
   ]}
+  relatedLinks={relatedLinks}
 >
   <Content />
 </DocPage>

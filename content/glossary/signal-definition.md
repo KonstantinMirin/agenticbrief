@@ -1,116 +1,109 @@
 ---
-title: 'Signal Definition (AdCP) — the Disclosure Record Behind a Targeting Segment'
-description: "A signal definition is one entry in a data provider's adagents.json signals[] array. 31 fields, 3 required, most of them provenance and consent disclosure."
-answer: "A signal definition is one entry in a data provider's published adagents.json signals[] array. AdCP 3.1.10 gives it 31 fields and requires three: id, name and value_type. Most of the rest are provenance disclosure."
+title: 'Signal Definition (AdCP)'
+description: "A signal definition is one entry in a data provider's adagents.json signals[]. AdCP 3.1.13 gives it 31 fields: seven of identity and shape, and 24 optional disclosures."
+answer: "A signal definition is one entry in a data provider's published adagents.json signals[]: AdCP 3.1.13 gives it 31 fields, seven of identity and shape, three of them required (id, name, value_type), and 24 optional provenance and consent disclosures."
 pubDate: 2026-08-09
+updatedDate: 2026-08-09
 term: 'Signal Definition'
 category: 'identity'
 cluster: 'gl-signals'
-alternateNames: ['signal', 'signal definition record']
+alternateNames: ['signal', 'signal definition record', 'adagents.json signal entry']
 keywords:
   - 'signal definition advertising'
+  - 'signal vs audience advertising'
   - 'adcp signal definition'
   - 'adagents.json signals'
   - 'signal provenance disclosure'
 citations:
-  - 'https://github.com/adcontextprotocol/adcp/blob/f1a35aba734befa809e1fa780ad77c7edd614e96/dist/schemas/3.1.10/core/signal-definition.json'
-  - 'https://github.com/adcontextprotocol/adcp/blob/f1a35aba734befa809e1fa780ad77c7edd614e96/dist/schemas/3.1.10/enums/signal-value-type.json'
-  - 'https://github.com/adcontextprotocol/adcp/blob/f1a35aba734befa809e1fa780ad77c7edd614e96/dist/schemas/3.1.10/core/signal-listing.json'
-  - 'https://github.com/adcontextprotocol/adcp/blob/f1a35aba734befa809e1fa780ad77c7edd614e96/dist/schemas/3.1.10/core/signal-ref.json'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/schemas/3.1.13/core/signal-definition.json'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/schemas/3.1.13/core/signal-definition-enrichment.json'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/schemas/3.1.13/core/signal-listing.json'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/schemas/3.1.13/core/signal-ref.json'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/schemas/3.1.13/adagents.json'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/schemas/3.1.13/signals/get-signals-request.json'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/schemas/3.1.13/signals/get-signals-response.json'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/schemas/3.1.13/enums/restricted-attribute.json'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/schemas/3.1.13/enums/error-code.json'
+  - 'https://docs.adcontextprotocol.org/docs/signals/data-providers'
   - 'https://docs.adcontextprotocol.org/docs/reference/glossary'
-  - 'https://github.com/IABTechLab/agentic-audiences/blob/106ebd645668677ff8be458877a5684a5d229961/specs/v1.0/schema/embedding_format.schema.json'
+  - 'https://github.com/IABTechLab/iab-agentic-primitives/blob/2fc7029fb9eca801bc94586aec398906aa6af6c0/spec/jsonschema/Product.json'
+  - 'https://github.com/IABTechLab/iab-agentic-primitives/blob/2fc7029fb9eca801bc94586aec398906aa6af6c0/spec/fixtures/primitives/Product.golden.json'
+  - 'https://iabtechlab.com/standards/data-transparency-standard/'
 related:
   - '/signals/audience-vs-signal/'
   - '/signals/activation/'
-  - 'https://adcpexplorer.noetis.dev/areas/signals/'
-  - 'https://adcpexplorer.noetis.dev/discovery/adagents-json/'
-seeAlso: ['audience-vs-signal', 'activation', 'hashed-identifier']
+  - '/signals/hashed-identifier/'
+  - '/governance/policy-category/'
+  - '/agents/discovery-files/'
+  - '/about/sources-and-versions/'
+  - 'https://adcpexplorer.com/areas/signals/'
+  - 'https://adcpexplorer.com/discovery/'
+seeAlso: ['audience-vs-signal', 'activation', 'hashed-identifier', 'policy-category']
 reviewState: cto-reviewed
 ---
 
-## What is a signal definition in AdCP?
+A signal definition is the authoritative record of one targeting signal, published by the domain that owns the data. AdCP 3.1.13 puts 31 properties on the object and requires three: `id`, pattern `^[a-zA-Z0-9_-]+$` and local to the domain; `name`; and `value_type`, one of `binary`, `categorical` or `numeric`, which determines the shape of any targeting expression written against the signal.
 
-A signal definition is the authoritative record of one targeting signal, published by the domain that owns it. The schema says where it lives: "Definition of a signal in published `adagents.json` `signals[]`. The publishing domain supplies the namespace, so this definition carries a local `id` rather than a `signal_ref`."
+`core/signal-definition.json` says where the record lives in its opening line: "Definition of a signal in published adagents.json signals[]. The publishing domain supplies the namespace, so this definition carries a local id rather than a signal_ref." A data provider hosts [`adagents.json`](/agents/discovery-files/) on its own domain, and `signals[]` inside it holds the definitions. A product that offers the signal points at it with a `signal_ref` of scope `data_provider`. The buyer resolves that ref to the provider's domain, fetches the file and reads the entry its owner published, so a seller's account of a segment can be checked against the owner's record. That check is what separates a signal from an [audience the buyer uploaded](/signals/audience-vs-signal/).
 
-That is the mechanism in one sentence. A data provider hosts `adagents.json` on its own domain. Inside it, `signals[]` holds signal definitions. A product elsewhere in the ecosystem points at one with a `signal_ref` of scope `data_provider`, naming the provider domain and the signal id. Authorization is verifiable by fetching the provider's file.
+## Definition, listing and ref are three different schemas
 
-AdCP 3.1.10 puts 31 properties on a signal definition and requires three: `id`, `name` and `value_type`.
+| Schema                   | Role                                   | Where it appears                                          |
+| ------------------------ | -------------------------------------- | --------------------------------------------------------- |
+| `signal-definition.json` | the record the provider publishes      | a data provider's `adagents.json` `signals[]`             |
+| `signal-listing.json`    | identity metadata lifted out of it     | product `included_signals`, `get_signals` results         |
+| `signal-ref.json`        | a pointer with a `scope` discriminator | targeting expressions, [activation](/signals/activation/) |
 
-## Which three fields are required, and why so few?
+`signal-listing.json` states the boundary: "Product-local signals use the listing as the definition boundary and MUST include name and value_type." `signal-ref.json` adds three scopes, `product`, `data_provider` and `signal_source`, and states that "scope is the resolution path, not provenance".
 
-| Field        | Type   | Purpose                                                      |
-| ------------ | ------ | ------------------------------------------------------------ |
-| `id`         | string | Signal identifier within the publishing domain's `signals[]` |
-| `name`       | string | Human-readable signal name                                   |
-| `value_type` | enum   | `binary`, `categorical` or `numeric`                         |
+`get-signals-response.json` carries a fourth shape, `signal_id`, marked "DEPRECATED. Use `signal_ref` instead. Legacy SignalId retained for compatibility with older Signals Protocol clients." A buyer agent written against an older release still sends that shape, and a seller that reads only `signal_ref` will not see it.
 
-`value_type` is required because it determines how the signal can be targeted at all. The enum descriptions spell out the three shapes: binary means the user matches or does not, categorical means the user has one of a defined set of values, numeric means the user has a score within a range. A buyer agent cannot construct a targeting expression without knowing which of the three it is dealing with.
+## Provenance and consent fields
 
-The other 28 fields are optional because they are disclosure, and disclosure is a policy question rather than a wire-format question. AdCP encodes the fields and leaves the enforcement to governance agents and to contracts.
+Seven fields are identity and shape: `id`, `name`, `description`, `value_type`, `tags`, `allowed_values`, `range`. The other 24 describe where the segment came from and under what legal basis. AdCP factors 19 of those 24 into `core/signal-definition-enrichment.json`, the file the `get_signals` response reuses; the remaining five live on the definition and nowhere else.
 
-## What does a signal definition disclose about provenance?
+Some of the 24 resolve to a value a buyer agent can branch on. The table below groups the ones that share an enum; the rest are URLs, nested objects, country lists and timestamps.
 
-This is the part of the schema that repays reading. A large block of fields exists to describe where a segment came from, and several align explicitly with the IAB Data Transparency Standard:
+| Field                         | Value space                                                                                                                 |
+| ----------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| `methodology`                 | `observed`, `declared`, `derived`, `inferred`, `modeled`                                                                    |
+| `data_sources`                | 17 values, `web_usage` and `loyalty_card` through `public_record_voter_file`                                                |
+| `subject_type`                | `individual`, `household`, `business`, `contextual`, `none`                                                                 |
+| `resolution_method`           | `deterministic_id`, `probabilistic_device`, `browser`, `geographic`, `content_signal`, `mixed`                              |
+| `audience_scope`              | `single_domain`, `cross_domain_owned`, `cross_domain_unowned`, `offline`                                                    |
+| `id_types`                    | `cookie`, `mobile_id`, `platform_id`, [`user_enabled_id`](/signals/hashed-identifier/)                                      |
+| `refresh_cadence`             | 8 values, `intra_day` to `annually`; `lookback_window` shares the enum                                                      |
+| `consent_basis`, `art9_basis` | 4 GDPR Article 6 bases; then `explicit_consent`, `manifestly_made_public`, `substantial_public_interest`, `vital_interests` |
+| `restricted_attributes`       | the closed 10-value registry, 8 of them [Article 9 special categories](/governance/policy-category/)                        |
 
-| Field                   | Values or shape                                                                                |
-| ----------------------- | ---------------------------------------------------------------------------------------------- |
-| `methodology`           | `observed`, `declared`, `derived`, `inferred`, `modeled`                                       |
-| `data_sources`          | 17 values, from `web_usage` and `loyalty_card` to `public_record_voter_file`                   |
-| `subject_type`          | `individual`, `household`, `business`, `contextual`, `none`                                    |
-| `resolution_method`     | `deterministic_id`, `probabilistic_device`, `browser`, `geographic`, `content_signal`, `mixed` |
-| `audience_scope`        | `single_domain`, `cross_domain_owned`, `cross_domain_unowned`, `offline`                       |
-| `id_types`              | `cookie`, `mobile_id`, `platform_id`, `user_enabled_id`                                        |
-| `refresh_cadence`       | 8 values from `intra_day` to `annually`                                                        |
-| `lookback_window`       | Time window in which a qualifying event can occur                                              |
-| `segmentation_criteria` | Free text, aligned with IAB Data Transparency audience criteria disclosure                     |
-| `criteria_url`          | Pointer to a longer methodology document                                                       |
-| `dts_compliant_version` | The IAB Data Transparency Standard version the definition self-attests to                      |
+Two of these fields tell a buyer what not to do with them. `criteria_url` points at a longer methodology document and then closes off the obvious use: "This is a disclosure pointer; buyers should not branch programmatically on the linked content." `last_updated` "indicates freshness of the definition record, not an attestation that the underlying data or model was refreshed at that time".
 
-Two conditional rules tie the block together. `methodology: modeled` requires the `modeling` object. `audience_expansion: true` also requires `modeling`, and the field itself asks whether "look-alike or similar-audience expansion was used to include additional identifiers".
+The five fields that live only on the definition — `subject_type`, `resolution_method`, `id_types`, `audience_scope` and `originating_domain` — never reach the wire. `get_signals` returns an `allOf` of exactly two schemas, `signal-listing.json` and `signal-definition-enrichment.json`, and the `fields` projection on `get-signals-request.json` enumerates 18 field names a buyer can ask for, none of them these five. The projection is not an entitlement: "fields is a projection request, not an entitlement grant; agents MAY redact requested definition fields unless the caller is authorized", and AdCP does not define what authorises a caller. Establishing whether a segment resolves deterministically or probabilistically therefore means fetching the provider's `adagents.json` directly.
 
-That pair is the useful one for a buyer. It means a provider cannot quietly ship a modelled lookalike as if it were an observed segment without either populating a modelling disclosure or shipping something the schema rejects.
+## The disclosure fields come from the IAB Data Transparency Standard
 
-The `criteria_url` field carries a caution I have not seen elsewhere in a schema: "This is a disclosure pointer; buyers should not branch programmatically on the linked document." A field that tells you not to parse it.
+The 19 enrichment fields track the [IAB Data Transparency Standard](https://iabtechlab.com/standards/data-transparency-standard/) almost item for item. DTS v1.2, published April 2024, defines up to 20 standardised disclosure fields and ships them as a human-readable Data Label backed by an annual business audit. AdCP carries the same fields as JSON without the audit, replacing it with `dts_compliant_version`: the "IAB Data Transparency Standard version this signal definition self-attests as satisfying, when applicable." `dts_compliant_version` is self-asserted; no party countersigns it and nothing revokes it.
 
-## How does a signal definition connect to governance?
+## When the conditional disclosure rules fire
 
-Through four fields that governance agents match against, rather than through anything the signal itself enforces:
+All five of the `allOf` conditionals on `signal-definition.json` wait for the provider to declare something first.
 
-- `restricted_attributes` — restricted attribute categories the signal touches, declared "so governance agents can structurally match signals against" plan-level constraints.
-- `policy_categories` — policy categories the signal is sensitive for. The schema's example is a children's interest signal declaring `children_directed`.
-- `consent_basis` — declared GDPR Article 6 lawful basis, as an array.
-- `art9_basis` — GDPR Article 9 basis, taking `explicit_consent`, `manifestly_made_public`, `substantial_public_interest` or `vital_interests`, required by policy when `restricted_attributes` is non-empty in jurisdictions where Article 9 applies.
+| If the definition declares                                                                                                                  | It must then carry        |
+| ------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------- |
+| `value_type: categorical` with a `taxonomy`                                                                                                 | `taxonomy.value_mappings` |
+| `audience_scope: single_domain`                                                                                                             | `originating_domain`      |
+| `methodology: modeled`                                                                                                                      | a `modeling` block        |
+| `audience_expansion: true`                                                                                                                  | the same `modeling` block |
+| any of `offline_survey`, `public_record_census`, `public_record_voter_file`, `public_record_other`, `offline_transaction` in `data_sources` | an `onboarder`            |
 
-The Article 9 field is a small, concrete example of a protocol encoding a legal regime directly. Eight of the ten values in AdCP's restricted-attribute registry are GDPR Article 9 special categories.
+Each conditional puts a `required` on its own trigger field — `{"if": {"properties": {"methodology": {"const": "modeled"}}, "required": ["methodology"]}}` — so each keys on a field the provider is free to omit. A definition that omits `methodology`, `audience_expansion` and `data_sources` triggers none of the five, and a modelled lookalike validates clean as `{"id": "auto_intenders_q3", "name": "Auto Intenders Q3", "value_type": "binary"}`. `additionalProperties` is `true` on the definition, so unknown keys pass validation as well. `policy_categories` is typed as a bare `{"type": "string"}` array while the documentation says "Values MUST match the canonical definitions in the Policy Registry", a constraint that exists in prose only; its neighbour `restricted_attributes` does `$ref` its enum.
 
-`last_updated` carries its own disclaimer: it "indicates freshness of the definition record, not an attestation that the underlying data or model is current". A provider can keep the paperwork fresh while the segment rots, and the schema declines to pretend otherwise.
+AdCP states the consequence itself: "Without governance metadata, a governance agent must infer sensitivity from signal names — this is fragile and produces false positives."
 
-## What is the difference between a signal definition, a signal listing and a signal ref?
+## Audience targeting in AAMP
 
-Three schemas, three jobs, and mixing them up is the most common way to misread the Signals area.
+AAMP's version of this object is one untyped field. `Product.audience_targeting` in `iab-agentic-primitives` v0.5.0 is typed `{"anyOf": [{"additionalProperties": true, "type": "object"}, {"type": "null"}], "default": null}` with the description "IAB Audience Taxonomy targeting intent". No properties, no required keys. `content_targeting` and `ad_product_targeting` are shaped identically, and the seller-agent OpenAPI repeats the typing.
 
-| Schema                   | Role                                                                              | Where it appears                                   |
-| ------------------------ | --------------------------------------------------------------------------------- | -------------------------------------------------- |
-| `signal-definition.json` | The authoritative record                                                          | A data provider's `adagents.json` `signals[]`      |
-| `signal-listing.json`    | A copy of identity metadata used when a signal is listed away from its definition | Product `included_signals`, `get_signals` results  |
-| `signal-ref.json`        | A pointer with a scope discriminator                                              | Targeting expressions, product options, activation |
+The only place a shape is committed to is `Product.golden.json`, the conformance fixture generated from that schema: `"audience_targeting": {"segment_ids": ["1001"]}`, an array of opaque strings. The [Agentic Real-Time Framework](/realtime/artf-intent/), another repository in the same programme, reduces segments to a single protobuf enum value, `ACTIVATE_SEGMENTS = 1`.
 
-The listing schema states the boundary directly: "Product-local signals use the listing as the definition boundary and MUST include `name` and `value_type`. Data-provider and signal-source refs MAY omit definition metadata." A product-local signal has no upstream definition, so the listing has to be one. A provider-published signal has one, so the listing is display text.
-
-`signal-ref.json` adds the third axis with its `scope` discriminator: `product`, `data_provider`, or `signal_source`. Its own description warns that "scope is the resolution path, not provenance".
-
-Also note the deprecation. `signal_id` is marked "DEPRECATED. Use `signal_ref` instead", retained "for compatibility with older Signals Protocol clients". A buyer agent written against an older AdCP release will still be sending the deprecated shape.
-
-## Does AAMP have a signal definition?
-
-No. There is no equivalent object anywhere in the AAMP corpus, and the reason is that AAMP's audience work is not built on named segments.
-
-The nearest artifact is the embedding message in `agentic-audiences`, defined by `specs/v1.0/schema/embedding_format.schema.json`. It describes a vector rather than a segment: a `model` descriptor with `dimension`, `metric`, `embedding_space_id`, `pooling`, `normalization` and `quantization`; an `embeddings[]` array with dtypes; a `consent` block; a `security` block with signature and attestation. There is no id namespace, no provider domain, no verifiable authorization path, and no disclosure of methodology in the IAB Data Transparency sense.
-
-The two models are not competing implementations of one idea. They are different ideas about what an audience signal is.
-
-## How is this term sourced?
-
-AdCP side, at commit `f1a35ab`, release 3.1.10 per `dist/schemas/latest.json`: `dist/schemas/3.1.10/core/signal-definition.json`, `core/signal-listing.json`, `core/signal-ref.json`, `enums/signal-value-type.json`, `enums/signal-source.json`. Prose quoted from `docs/reference/glossary.mdx`.
-
-AAMP side: `specs/v1.0/schema/embedding_format.schema.json` in `IABTechLab/agentic-audiences` at commit `106ebd6`. That repository has no git tags, its specification is self-labelled "Draft v0.1" while living under a `v1.0` directory, and its README states that the specification "represents LiveRamp's initial proposal". It is a draft contribution, not a ratified IAB specification.
+The IAB Data Transparency Standard appears in no AAMP repository, under any of its names, though IAB Tech Lab wrote that standard and AdCP encoded 19 of its fields.

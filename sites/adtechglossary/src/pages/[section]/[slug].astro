@@ -2,10 +2,9 @@
 /**
  * One page per glossary term.
  *
- * DefinedTerm + inDefinedTermSet is the correct markup for a glossary. It earns
- * no rich result, and the vendor claims about it lifting AI citations are
- * unverified — it is here because it is cheap, correct, and hands a retrieval
- * pipeline the term and its definition without making it parse prose.
+ * DefinedTerm + inDefinedTermSet is the schema.org markup for a glossary: it
+ * hands a retrieval pipeline the term and its definition without making it
+ * parse prose.
  */
 import { getCollection, render } from 'astro:content'
 import PageLayout from '@agenticbrief/shared-ui/PageLayout.astro'
@@ -21,7 +20,7 @@ import {
   definedTermNode,
   definedTermSetNode,
 } from '@agenticbrief/seo/schema'
-import { siteUrl } from '@agenticbrief/shared-ui/sites'
+import { SITES, siteUrl } from '@agenticbrief/shared-ui/sites'
 import { SECTIONS, sectionFor } from '../../lib/sections'
 
 const BASE = siteUrl('adtechglossary')
@@ -67,15 +66,21 @@ const jsonLd = graph([
     url: termsetUrl,
     name: 'Ad Tech Glossary — agentic advertising terms',
     description:
-      'Definitions sourced from the AdCP and AAMP specification repositories, each version-pinned.',
+      'Agentic advertising terms defined from the AdCP and AAMP specifications: agent roles, buying objects, signals, real-time execution, negotiation and governance.',
   }),
-  definedTermNode({
-    url,
-    term: entry.data.term,
-    definition: entry.data.answer,
-    termSetUrl: termsetUrl,
-    alternateNames: entry.data.alternateNames,
-  }),
+  // The about section is sourcing, not vocabulary, so it is not marked up as a
+  // term in the set.
+  ...(section === 'about'
+    ? []
+    : [
+        definedTermNode({
+          url,
+          term: entry.data.term,
+          definition: entry.data.answer,
+          termSetUrl: termsetUrl,
+          alternateNames: entry.data.alternateNames,
+        }),
+      ]),
   articleNode({
     url,
     title: entry.data.title,
@@ -89,30 +94,68 @@ const jsonLd = graph([
   }),
 ])
 
-// related[] is authored as paths or absolute URLs. Where an entry points at
-// another term on this site, resolve its title so the anchor text is the term
-// rather than a slug — descriptive anchors are the only thing holding this
-// multi-domain cluster together as one entity.
+// related[] is authored as paths or absolute URLs. Resolve internal links to
+// the term title and external ones to the destination site and page, so no
+// anchor renders as a bare URL.
 const all = publishedOnly(await getCollection('glossary'))
 const titleBySlug = new Map(all.map((e) => [e.id, e.data.term]))
 
-// The glossary ships in priority waves, so a shipped page can legitimately
-// reference a term scheduled for a later wave. Internal links are dropped when
-// their target does not exist yet rather than rendered as a 404 — the reference
-// stays in frontmatter and starts working the moment that term ships.
+const siteNameByDomain = new Map<string, string>(
+  Object.values(SITES).flatMap((s) => [
+    [s.deployDomain, s.name] as [string, string],
+    [s.productionDomain, s.name] as [string, string],
+  ]),
+)
+
+// Slug words that are names rather than words.
+const CASED: Record<string, string> = {
+  adcp: 'AdCP',
+  aamp: 'AAMP',
+  artf: 'ARTF',
+  rtb: 'RTB',
+  mcp: 'MCP',
+  a2a: 'A2A',
+  si: 'SI',
+  tmp: 'TMP',
+  api: 'API',
+  iab: 'IAB',
+  openrtb: 'OpenRTB',
+  opendirect: 'OpenDirect',
+  json: 'JSON',
+}
+
+function externalLink(href: string): { href: string; title: string; note?: string } {
+  const target = new URL(href)
+  const name = siteNameByDomain.get(target.hostname)
+  if (!name) return { href, title: `${target.hostname}${target.pathname}` }
+  const segments = target.pathname.split('/').filter(Boolean)
+  if (segments.length === 0) return { href, title: name }
+  const words = segments[segments.length - 1].split('-').map((w) => CASED[w] ?? w)
+  const note = words.join(' ').replace(/^./, (c) => c.toUpperCase())
+  return { href, title: name, note }
+}
+
+// An internal link whose target is not published is dropped rather than
+// rendered as a 404. The reference stays in frontmatter and starts working the
+// moment that term ships, and the build warns so the gap stays visible.
 const related = entry.data.related
   .map((href) => {
     const isExternal = /^https?:\/\//.test(href)
-    const slug =
-      href
-        .replace(/^https?:\/\/[^/]+/, '')
-        .split('/')
-        .filter(Boolean)
-        .pop() ?? ''
-    if (!isExternal && !titleBySlug.has(slug)) return null
-    return { href, title: titleBySlug.get(slug) ?? href.replace(/^https?:\/\//, '') }
+    if (isExternal) return externalLink(href)
+    const segments = href.split('/').filter(Boolean)
+    if (segments.length === 0) return { href, title: 'Ad Tech Glossary' }
+    if (segments.length === 1) {
+      const meta = SECTIONS[segments[0] as keyof typeof SECTIONS]
+      if (meta) return { href, title: meta.title }
+    }
+    const term = titleBySlug.get(segments[segments.length - 1])
+    if (!term) {
+      console.warn(`[adtechglossary] ${entry.id}: related link "${href}" has no published target`)
+      return null
+    }
+    return { href, title: term }
   })
-  .filter((l): l is { href: string; title: string } => l !== null)
+  .filter((l): l is { href: string; title: string; note?: string } => l !== null)
 ---
 
 <PageLayout
@@ -122,7 +165,6 @@ const related = entry.data.related
   description={entry.data.description}
   path={path}
   answer={entry.data.answer}
-  eyebrow={sectionMeta?.title}
   breadcrumbs={breadcrumbs}
   related={related}
   jsonLd={jsonLd}
@@ -132,21 +174,4 @@ const related = entry.data.related
   keywords={entry.data.keywords}
 >
   <Content />
-
-  {
-    entry.data.citations.length > 0 && (
-      <>
-        <h2>Sources</h2>
-        <ul>
-          {entry.data.citations.map((c) => (
-            <li>
-              <a href={c} rel="noopener nofollow">
-                {c.replace(/^https?:\/\//, '')}
-              </a>
-            </li>
-          ))}
-        </ul>
-      </>
-    )
-  }
 </PageLayout>

@@ -1,12 +1,4 @@
 ---
-/**
- * The strongest AAMP material in the corpus, and the clearest structural
- * difference between the two stacks: AdCP has no negotiation protocol at all.
- *
- * Every number below is read from seller-agent/docs/integration/negotiation.md
- * and docs/api/quotes.md. The plan requires all FOUR tier rows — an earlier
- * draft elsewhere printed three.
- */
 import BaseLayout from '@agenticbrief/shared-ui/BaseLayout.astro'
 import AnswerBox from '@agenticbrief/shared-ui/AnswerBox.astro'
 import FaqBlock from '@agenticbrief/shared-ui/FaqBlock.astro'
@@ -54,35 +46,35 @@ const TIERS = [
   },
 ]
 
-const TRUST = ['unknown', 'registered', 'approved', 'preferred', 'blocked']
+const TRUST = ['unknown', 'registered', 'approved', 'preferred']
 
 const path = '/negotiation/'
 const url = `${BASE}${path}`
-const title = 'Quote, negotiate, book — price negotiation in AAMP'
+const title = 'Quote, counter, book — price negotiation in AAMP'
 const description =
-  'AAMP is the only agentic advertising stack that specifies price negotiation between agents: four actions, tier-keyed concession caps, and a 24-hour quote TTL. AdCP has no equivalent.'
+  'AAMP types the price argument: a NegotiationMessage with four actions, concession caps keyed to access tier, a round record, and a quote that expires 24 hours after the seller mints it.'
 const answer =
-  'AAMP specifies multi-round price negotiation between buyer and seller agents. A buyer requests a non-binding quote with a 24-hour TTL, then both sides exchange counters bounded by per-round and cumulative concession caps keyed to the buyer’s access tier.'
+  'AAMP price negotiation is a typed multi-round exchange where the buyer sends an action and a price and the seller answers accept, counter, final_offer or reject, bounded by concession caps the shared schema deliberately keeps off the wire.'
 
 const faq = [
   {
     question: 'Does AdCP have a negotiation protocol?',
-    answer: `No. Across all ${adcp.tasks.length} operations in AdCP ${adcp.version} there is no counter-offer, no quote object and no concession model. An AdCP buyer discovers products and creates a media buy; price is a property of the product, not something the two agents converge on.`,
+    answer: `No bargaining one. Across all ${adcp.tasks.length} operations in AdCP ${adcp.version} there is no counter-offer message, no round record and no concession field. AdCP does have the quote-then-book shape (a proposal moves from draft to committed through a finalize action) plus a refinement channel where the buyer's ask is free text.`,
   },
   {
     question: 'What are the four negotiation actions?',
     answer:
-      'accept, counter, final_offer and reject. Each round records the buyer price, the seller price, the action taken, the concession made in that round and the cumulative concession so far.',
+      "accept, counter, final_offer and reject. The same enum is required on the buyer's NegotiationMessage and on the seller's round, so either side can close or walk away. Each round records the round number, both prices, the action, the concession, the cumulative concession, a rationale and a timestamp.",
   },
   {
     question: 'How long is a quote valid?',
     answer:
-      'Twenty-four hours. After that the quote expires and retrieving it returns HTTP 410. Quotes are explicitly non-binding until converted into a deal.',
+      'Twenty-four hours, hard-coded rather than negotiated or seller-configurable. After that, retrieving the quote returns HTTP 410 and the buyer has to ask for a new one. Quotes are non-binding until booked into a deal, at which point the seller issues the deal_id.',
   },
   {
-    question: 'Is this a ratified specification?',
+    question: 'Are the concession caps part of the specification?',
     answer:
-      'No, and that qualification matters. This model is documented in the seller-agent reference implementation, not in a ratified IAB Tech Lab specification. It is what one implementation does, published openly, rather than something an implementer is obliged to match.',
+      "No. The floor price, the base price, the strategy and the concession limits are seller-internal in the shared schema's own description, and none of them crosses the wire. The published table is one seller's policy, and a buyer agent cannot read it.",
   },
 ]
 
@@ -129,48 +121,89 @@ const jsonLd = graph([
   <AnswerBox answer={answer} />
 
   <p>
-    This is the most substantial thing in the AAMP corpus, and it has no counterpart in AdCP. It is
-    also the clearest illustration of what the two stacks are each for: AdCP models a catalogue you
-    buy from, AAMP models a conversation you haggle in.
+    AAMP negotiation is a typed multi-round price exchange. The buyer sends an action and a price in
+    micros; the seller answers with one of four actions and a price, and every round is recorded
+    with the concession it cost. AAMP expands to Agentic Advertising Management Protocols, IAB Tech
+    Lab's umbrella over a set of agent repositories, and the seller agent holds the pricing engine.
   </p>
 
   <p>
-    One qualification, stated up front because it changes how much weight the numbers below can
-    carry: this model lives in the <strong>seller-agent reference implementation</strong>, not in a
-    ratified specification. It is what one implementation does and publishes, not a conformance
-    requirement.
+    <code>spec/jsonschema/Negotiation.json</code> in <code>iab-agentic-primitives</code> describes itself
+    as the seller's negotiation history "minus everything that must NOT cross the wire". The floor price,
+    the base price, the strategy and the concession limits are "seller-internal guardrails and are deliberately
+    absent from the shared schema". The message sequence is shared and the bounds are not, so a seller's
+    concession policy is published documentation rather than specification. The library that carries the
+    schema opens its README "WORK IN PROGRESS — NOT YET RELEASED".
   </p>
 
-  <h2>How does an AAMP negotiation run?</h2>
+  <h2>The negotiation sequence</h2>
   <ol>
-    <li>The buyer requests <strong>avails</strong> against the seller's media kit.</li>
     <li>
-      The seller issues a <strong>quote</strong> — a non-binding price offer with a 24-hour TTL.
+      The buyer authenticates. The API key maps to an access tier on the seller side, and pricing
+      starts from there.
     </li>
     <li>
-      Either side may <strong>counter</strong>. Each round is recorded with both prices, the action,
-      and the concession made.
+      The buyer browses the media kit and POSTs to <code>/api/v1/quotes</code>. The seller prices it
+      and mints the <code>quote_id</code>. The quote is non-binding and expires 24 hours later. No
+      document states what happens to an open negotiation when the quote expires. The status enum
+      has an <code>expired</code> value and no code path in the seller ever sets it.
     </li>
     <li>
-      The exchange ends on <code>accept</code>, <code>reject</code>, a <code>final_offer</code> that is
-      accepted or refused, or the round limit.
+      Either agent can open a negotiation, quote-led against that <code>quote_id</code> or proposal-led
+      against a <code>proposal_id</code>, which is a seller-minted buy proposal already under
+      discussion. The move is a <code>NegotiationMessage</code>: a required action, a price in
+      micros (millionths of a currency unit, integers only, carrying an ISO 4217 code that defaults
+      to USD), an <code>idempotency_key</code>, and optionally the round number the sender believes
+      it is answering. A round number that disagrees with the seller's comes back as a contention
+      error; the seller's numbering is authoritative.
     </li>
     <li>
-      An accepted quote is converted into a <strong>deal</strong>, and the seller issues the deal
-      ID. The sell side is the system of record.
+      The answer is <code>accept</code>, <code>counter</code>, <code>final_offer</code> or
+      <code>reject</code>, and a round is appended to a history both sides read from the same
+      schema. That round carries the concession it cost and a free-text rationale.
+    </li>
+    <li>
+      The exchange ends on an accept, a reject, a <code>final_offer</code> taken or refused, or the round
+      limit. The buyer books the quote and the seller returns a <code>deal_id</code>. Every
+      identifier in the flow is seller-issued. The buyer agent's documentation gives the reason: it
+      stops buyers fabricating deal IDs client-side.
     </li>
   </ol>
 
-  <h2>What bounds the negotiation?</h2>
   <p>
-    Concessions are capped, and the caps are keyed to the buyer's access tier. A buyer with no
-    relationship gets three rounds and eight percent; a named advertiser gets six rounds and twenty.
+    None of <code>quote_id</code>, <code>proposal_id</code> or <code>deal_id</code> carries to a second
+    seller: each is minted by the seller that issued it.
+  </p>
+
+  <p>
+    <code>idempotency_key</code> is required on every negotiation message, on the shared model's own stated
+    grounds that <q>a retried counter must not consume an extra round</q>. The seller's handler for <code
+      >POST /api/v1/negotiations/messages</code
+    > never reads the field. A retried message runs the pricing engine again and appends another round,
+    and rounds are the budget the concession caps are spent from, so a buyer agent cannot safely retry
+    a request to that endpoint. The same repository does honour idempotency on deal booking, where <code
+      >routers/deals.py</code
+    > keys a replay off <code>idempotency:deal:&#123;key&#125;</code>.
+  </p>
+
+  <h2>The per-round cap binds before the gap share does</h2>
+  <p>
+    The seller agent applies three limits, all keyed to the buyer's access tier: a per-round cap on
+    how much it gives away at once, a total cap it will not cross however long the exchange runs,
+    and a gap share, the fraction of the current price gap it concedes in a round. Gap share is
+    computed in <code>negotiation_engine.py</code>. With the seller opening at a 120 CPM and the
+    buyer countering at 100, the gap is 20 and the advertiser tier's share is 65%, so the gap share
+    alone would concede 13 and answer 107; the per-round cap is 6% of the opening price, 7.20, so
+    the engine answers 112.80. On later rounds the gap is measured from the seller's last counter
+    rather than from where it opened, so each concession is a share of a shrinking number.
   </p>
 
   <figure class="comparison">
     <table>
       <caption
-        >Negotiation strategy by access tier, from seller-agent docs/integration/negotiation.md</caption
+        >Concession budget by access tier, from seller-agent docs/integration/negotiation.md. One
+        seller's internal policy: none of these values crosses the wire, and no other implementation
+        is bound by them.</caption
       >
       <thead>
         <tr>
@@ -179,7 +212,7 @@ const jsonLd = graph([
           <th scope="col">Max rounds</th>
           <th scope="col">Per-round cap</th>
           <th scope="col">Total cap</th>
-          <th scope="col">Buyer gap share</th>
+          <th scope="col">Seller concession share of gap</th>
         </tr>
       </thead>
       <tbody>
@@ -203,10 +236,46 @@ const jsonLd = graph([
     </table>
   </figure>
 
-  <h2>How does a buyer get a better tier?</h2>
   <p>
-    Not by claiming one. A buyer's effective tier is the minimum of the tier it claims and the
-    ceiling its trust status allows, so identity alone does not buy a discount. Trust status runs
+    The seller agent's docs label that column "buyer gap share" and gloss it as how much of the gap
+    the seller expects the buyer to close, "higher = more favorable to seller".
+    <code>negotiation_engine.py</code> computes the seller's concession as the gap times that share, so
+    a bigger number moves the seller further, which is why the best-treated tier carries the biggest one.
+  </p>
+  <p>
+    The one negotiation bound a buyer can observe is <code>rounds_remaining</code>, defined as
+    "Rounds left before the seller walks away, if disclosed". It is optional, nullable and defaults
+    to null, so a buyer agent negotiating against a conformant AAMP seller cannot compute when to
+    stop. The reference buyer picks a limit for itself: <code>SimpleThresholdStrategy</code> takes a
+    <code>max_rounds</code> from the buyer's own settings, defaulting to three.
+  </p>
+
+  <h2>The eligibility rule has zero call sites</h2>
+  <p>
+    The two reference agents give different answers on which buyers may negotiate. The seller
+    publishes a strategy for all four tiers, <code>public</code> included, at three rounds. Its own buyer
+    model restricts it: <code>eligible_for_negotiation</code> returns true only for
+    <code>agency</code> and <code>advertiser</code>. The buyer agent's deal-booking guide follows
+    the model rather than the table: "Only Agency and Advertiser tier buyers. PUBLIC and SEAT tier
+    buyers skip this step."
+  </p>
+  <p>
+    <code>eligible_for_negotiation</code> has five assertions in the test suite and zero call sites in
+    <code>src/</code>, so neither rule is enforced. Two routes reach the engine, the legacy
+    <code>POST /proposals/&#123;proposal_id&#125;/counter</code> and the canonical
+    <code>POST /api/v1/negotiations/messages</code>, and both do the same two things: cap the
+    claimed tier at what the registry will verify, then run the engine. What the registry can verify
+    differs by surface: a quote request carries the agent's URL and a negotiation message does not.
+    Neither route checks whether the buyer was entitled to negotiate. Two of the four rows in the
+    concession table describe a strategy the seller applies to buyers its own documentation excludes
+    from negotiation.
+  </p>
+
+  <h2>Access tier is capped by verified trust status</h2>
+  <p>
+    The effective tier is the smaller of two values: the tier a buyer claims, and the ceiling its
+    trust status allows. An unverifiable claim floors to <code>public</code>, so self-asserted
+    identity never raises a buyer above what the seller can check. The trust ladder runs
     {' '}{
       TRUST.map((t, i) => (
         <>
@@ -215,27 +284,74 @@ const jsonLd = graph([
         </>
       ))
     }, where <code>registered</code>
-    {' '}means the agent was found in the AAMP registry.
+    {' '}means the seller found the agent in the AAMP registry.
+  </p>
+  <p>
+    <code>TRUST_TO_TIER_MAP</code> collapses those four values into three ceilings:
+    <code>approved</code> and <code>preferred</code> both map to <code>advertiser</code>, so a
+    manually approved partner and a strategic one land in the same place. A fifth status,
+    <code>blocked</code>, maps to no tier, and the request is rejected before any pricing data
+    moves.
+  </p>
+  <p>
+    The shared <code>NegotiationMessage</code> has no <code>agent_url</code> field, so there is nothing
+    in the message to look up in the registry. The hole is in the shared primitives package rather than
+    in the seller: <code>QuoteRequest</code> carries the field, <code>NegotiationMessage</code> does not,
+    and the seller's own code comment says so. A message posted to
+    <code>/api/v1/negotiations/messages</code> can therefore be checked against an API key only, and an
+    anonymous caller floors to <code>public</code> whatever its registry status.
+  </p>
+  <p>
+    The legacy counter route applied no trust-tier ceiling at all until the change a source comment
+    marks EP-5.2: a buyer that set <code>advertiser_id</code> on the request received advertiser pricing,
+    so the tier, and with it the price, was set by a field the caller supplied. On the current checkout
+    that route calls the trust-verification path. The same self-asserted identity fields still drive the
+    tier decision on <code>POST /proposals</code> and on the message endpoint.
+  </p>
+  <p>
+    EP-5.2 is an internal change marker rather than a tag or a release: the comment does not name
+    the release that carried it, and no version in the corpus resolves it, so which checkouts hold
+    the fix is decided by reading the route rather than by a version number.
   </p>
 
-  <h2>Why does AdCP have nothing like this?</h2>
+  <h2>AdCP has no counter-offer message</h2>
   <p>
-    Because it models a different transaction. In AdCP {adcp.version}, a product carries its pricing
-    options and a buyer either buys it or does not. There is no object representing an offer under
-    discussion. Whether that is a gap or a deliberate scope boundary is exactly the kind of question
-    the two camps have not published a joint answer to — and neither corpus references the other.
+    AdCP {adcp.version} carries the quote-then-book shape and no bargaining round: a proposal sits at
+    <code>draft</code>, indicative pricing a buyer can plan against, until a <code>finalize</code>
+    action turns it <code>committed</code>, firm pricing with inventory reserved until
+    <code>expires_at</code>, and executing it with <code>create_media_buy</code> is acceptance. A buyer
+    that wants a lower number sends a <code>refine</code> entry whose <code>ask</code> field is a free-text
+    string, example "reduce total by 10%"; the seller answers <code>applied</code>,
+    <code>partial</code> or <code>unable</code>, with prose in <code>notes</code>. Neither side of
+    that exchange carries a price field, nothing counts the rounds, and no AAMP repository mentions
+    AdCP anywhere. The two stacks are compared operation by operation on <a
+      href={`${HUB}/protocols/adcp-vs-aamp/`}
+      rel="noopener">the hub</a
+    >.
+  </p>
+
+  <h2>What the negotiation surface supports today</h2>
+  <p>
+    The surface applies where price is set per deal — OOH, CTV sponsorships, direct deals — which is
+    the same set AdCP's docs name; a transaction at a published rate card does not use it. The
+    seller agent's README opens "V2 — Feature Complete", and no file in either corpus records a live
+    AAMP negotiation between two parties.
   </p>
 
   <FaqBlock entries={faq} />
 
   <h2>Related</h2>
   <ul>
-    <li><a href="/repos/seller-agent/">The seller agent, where this model is implemented</a></li>
     <li>
-      <a href="/repos/iab-agentic-primitives/">The wire contract these objects are defined in</a>
+      <a href="/repos/seller-agent/">The seller agent, where the concession table is published</a>
     </li>
     <li>
-      <a href="https://adtechglossary.noetis.dev/negotiation/" rel="noopener"
+      <a href="/repos/iab-agentic-primitives/"
+        >The shared contract that keeps that table off the wire</a
+      >
+    </li>
+    <li>
+      <a href="https://adtechglossary.com/negotiation/" rel="noopener"
         >Negotiation vocabulary, term by term</a
       >
     </li>

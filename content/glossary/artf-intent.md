@@ -1,54 +1,59 @@
 ---
-title: 'Intent (ARTF) — One Spec, One Word, Two Incompatible Vocabularies'
-description: 'ARTF defines intent twice: an 8-value protobuf enum for mutations, and a separate 7-entry manifest vocabulary. They share no values. Both are documented here.'
-answer: 'Intent in ARTF means two different things. The protobuf Intent enum has 8 usable values from ACTIVATE_SEGMENTS to ADD_CIDS. The Agent Manifest declares a separate intents list of 7 named capabilities. The two share no values.'
+title: 'Intent (ARTF)'
+description: 'ARTF v1.0 gives intent a protobuf enum on the wire, camelCase strings in the spec document, capability objects in the manifest, and enum names in the Dockerfiles.'
+answer: 'Intent in ARTF is the reason an agent gives for an edit to a live bid request, carried on the wire as an 8-value protobuf enum that the framework document and the Agent Manifest both contradict.'
 pubDate: 2026-08-09
+updatedDate: 2026-08-09
 term: 'Intent (ARTF)'
 category: 'protocol'
 cluster: 'gl-realtime'
-alternateNames: ['ARTF intent', 'intent enum', 'agent manifest intents']
+alternateNames: ['ARTF intent', 'ARTF intent enum', 'agent manifest intents', 'applicable_intents']
 keywords:
   - 'artf intent enum'
   - 'agentic rtb framework intent'
   - 'artf agent manifest'
-  - 'mutation intent advertising'
+  - 'applicable_intents artf'
 citations:
   - 'https://github.com/IABTechLab/agentic-rtb-framework/blob/7f481614ba228f8fab5b08df2e13ed540d4a1954/rust/proto/agenticrtbframework.proto'
   - 'https://github.com/IABTechLab/agentic-rtb-framework/blob/7f481614ba228f8fab5b08df2e13ed540d4a1954/Agentic_Real_Time_Framework_Version_1_0_FINAL.md'
+  - 'https://github.com/IABTechLab/agentic-rtb-framework/blob/7f481614ba228f8fab5b08df2e13ed540d4a1954/pkg/pb/artf/agenticrtbframework.pb.go'
+  - 'https://github.com/IABTechLab/agentic-rtb-framework/blob/7f481614ba228f8fab5b08df2e13ed540d4a1954/rust/src/com.iabtechlab.bidstream.mutation.v1.rs'
+  - 'https://github.com/IABTechLab/agentic-rtb-framework/blob/7f481614ba228f8fab5b08df2e13ed540d4a1954/internal/agent/agent.go'
+  - 'https://github.com/IABTechLab/agentic-rtb-framework/blob/7f481614ba228f8fab5b08df2e13ed540d4a1954/internal/handlers/handlers.go'
+  - 'https://github.com/IABTechLab/agentic-rtb-framework/blob/7f481614ba228f8fab5b08df2e13ed540d4a1954/internal/federation/config.go'
+  - 'https://github.com/IABTechLab/agentic-rtb-framework/blob/7f481614ba228f8fab5b08df2e13ed540d4a1954/internal/federation/manager.go'
+  - 'https://github.com/IABTechLab/agentic-rtb-framework/blob/7f481614ba228f8fab5b08df2e13ed540d4a1954/internal/mcp/mcp.go'
+  - 'https://github.com/IABTechLab/agentic-rtb-framework/blob/7f481614ba228f8fab5b08df2e13ed540d4a1954/Dockerfile'
+  - 'https://github.com/IABTechLab/agentic-rtb-framework/blob/7f481614ba228f8fab5b08df2e13ed540d4a1954/rust/Dockerfile'
   - 'https://github.com/IABTechLab/agentic-rtb-framework/blob/7f481614ba228f8fab5b08df2e13ed540d4a1954/docs/00-EXAMPLE.md'
-  - 'https://github.com/IABTechLab/agentic-rtb-framework/blob/7f481614ba228f8fab5b08df2e13ed540d4a1954/samples/banner-basic.json'
-  - 'https://iabtechlab.com/standards/aamp-agentic-advertising-management-protocols/'
   - 'https://github.com/IABTechLab/agentic-rtb-framework/blob/7f481614ba228f8fab5b08df2e13ed540d4a1954/CLAUDE.md'
-  - 'https://github.com/IABTechLab/agentic-rtb-framework/blob/7f481614ba228f8fab5b08df2e13ed540d4a1954/samples/bid-shading.json'
+  - 'https://github.com/IABTechLab/agentic-rtb-framework/blob/7f481614ba228f8fab5b08df2e13ed540d4a1954/samples/multi-impression.json'
+  - 'https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/src/ad_seller/models/session.py'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/schemas/3.1.13/sponsored-intelligence/si-get-offering-request.json'
+  - 'https://github.com/IABTechLab/agentic-real-time-framework/issues/10'
 related:
   - '/realtime/rtb-mutation/'
   - '/realtime/trusted-match-protocol/'
   - '/signals/activation/'
-  - 'https://aampexplorer.noetis.dev/repos/agentic-rtb-framework/'
-seeAlso: ['rtb-mutation', 'trusted-match-protocol', 'activation']
+  - '/concepts/sponsored-intelligence/'
+  - '/about/sources-and-versions/'
+  - 'https://aampexplorer.com/repos/agentic-rtb-framework/'
+  - 'https://agenticadlab.com/'
+seeAlso: ['rtb-mutation', 'trusted-match-protocol', 'activation', 'sponsored-intelligence']
 reviewState: cto-reviewed
 ---
 
-## What does intent mean in ARTF?
+Intent in ARTF is the reason an agent gives for an edit it wants to make to a bid request in flight. ARTF is the Agentic Real-Time Framework, one of the repositories in IAB Tech Lab's AAMP programme and the only one released as a Tech Lab standard, at v1.0 in November 2025. It is published as `agentic-rtb-framework`, since renamed `agentic-real-time-framework`, and the old URL redirects.
 
-That depends which file in the repository you opened, and the two answers do not reconcile.
+Agents ship as container images, and an orchestrator runs them against live traffic and accepts or rejects each mutation they propose. That orchestrator is the party running the auction: `RTBRequest` carries a `tmax` described as the time "the exchange allows for mutations to be received", and the originating party is typed `TYPE_PUBLISHER`, `TYPE_SSP`, `TYPE_EXCHANGE` or `TYPE_DSP`. The wire field is a protobuf enum, the framework document and the Agent Manifest each name intents their own way, and only the enum is compiled.
 
-The Agentic Real-Time Framework uses the word "intent" for two distinct things:
+## The Intent enum
 
-1. A **protobuf enum** called `Intent`, carried on every mutation and negotiated on every request. Eight usable values, all screaming snake case, all describing a specific edit to an OpenRTB payload.
-2. A list called **`intents[]` in the Agent Manifest**, the JSON blob a container declares itself with. Seven entries, camel case, each describing a broad capability.
-
-They share no values. Not one. The framework document, the protobuf and the example documentation all use the word without qualifying which one they mean.
-
-Both vocabularies are documented below. The fuller treatment of ARTF as a whole lives on [AAMP Explorer](https://aampexplorer.noetis.dev/repos/agentic-rtb-framework/); this page is about the collision.
-
-## What is the ARTF Intent enum?
-
-The protobuf enum, defined in `rust/proto/agenticrtbframework.proto` at package `com.iabtechlab.bidstream.mutation.v1`. Nine declared values, of which the zero value is the proto3 placeholder:
+Nine members are defined. `INTENT_UNSPECIFIED` is the proto3 zero value, leaving eight usable.
 
 | Value | Name                 | Comment in the proto                                 |
 | ----- | -------------------- | ---------------------------------------------------- |
-| 0     | `INTENT_UNSPECIFIED` | placeholder                                          |
+| 0     | `INTENT_UNSPECIFIED` | proto3 placeholder, no comment                       |
 | 1     | `ACTIVATE_SEGMENTS`  | Activate user segments by their external segment IDs |
 | 2     | `ACTIVATE_DEALS`     | Activate deals by their external deal IDs            |
 | 3     | `SUPPRESS_DEALS`     | Suppress deals by their external deal IDs            |
@@ -58,19 +63,27 @@ The protobuf enum, defined in `rust/proto/agenticrtbframework.proto` at package 
 | 7     | `ADD_METRICS`        | Add metrics to an impression                         |
 | 8     | `ADD_CIDS`           | Add extended content IDs                             |
 
-The proto adds "more intents can be added in the future" and reserves numbers 1000 to 1999 "for experimental/test intents".
+The enum lives in `rust/proto/agenticrtbframework.proto`, package `com.iabtechlab.bidstream.mutation.v1`, which reserves 1000 to 1999 "for experimental/test intents". It reaches the wire twice. `Mutation.intent` says what one proposed edit is for, one intent per edit, on the [bidstream mutation object](/realtime/rtb-mutation/) (field 1). `RTBRequest.applicable_intents` is the list the orchestrator will accept, sent before the agent replies (repeated field 7).
 
-This enum appears in two places on the wire. `Mutation.intent` states the purpose of one proposed change. `RTBRequest.applicable_intents` is a repeated field the orchestrator sends ahead of time, which the proto comment describes as the list of intents the server is eligible to send back. So the enum is both the vocabulary of a mutation and the vocabulary of the pre-flight negotiation.
+## The framework document declares a different type
 
-The sample payloads use it that way. `samples/banner-basic.json` sets `"applicable_intents": ["ACTIVATE_SEGMENTS", "ACTIVATE_DEALS"]`, and `samples/bid-shading.json` sets `"applicable_intents": ["BID_SHADE"]`.
+`Agentic_Real_Time_Framework_Version_1_0_FINAL.md` declares `string intent = 1;` where the shipped proto declares `Intent intent = 1;`. The Go and Rust bindings are generated from the proto; nothing is generated from the framework document.
 
-## What is the Agent Manifest intents list?
+None of the five names the document uses in its examples and glossary exists in the enum:
 
-A completely separate vocabulary, defined only by example in the framework document.
+| Name in the framework document | Nearest enum value                        | Exact match |
+| ------------------------------ | ----------------------------------------- | ----------- |
+| `activateSegments`             | `ACTIVATE_SEGMENTS`                       | no          |
+| `activateDeals`                | `ACTIVATE_DEALS`                          | no          |
+| `expireDeals`                  | `SUPPRESS_DEALS`                          | no          |
+| `adjustDeals`                  | `ADJUST_DEAL_FLOOR`, `ADJUST_DEAL_MARGIN` | no          |
+| `adjustBid`                    | `BID_SHADE`                               | no          |
 
-The Agent Manifest is JSON attached to a container image as a label. The specification describes its purpose directly: agents must declare "the intents they will invoke", and "if the orchestrating entity cannot support the requirements and intents of a container, it should not be started."
+`pb.Intent_activateSegments` does not exist, so Go source carrying a document name will not compile, and the Go agent's federation config rejects the same string in a config file. [Issue #10](https://github.com/IABTechLab/agentic-real-time-framework/issues/10), opened in March 2026 and unanswered, asks how to prevent a container mutating deals it does not own, phrasing the question around "expireDeals or adjustDeals". Both names come out of the normative document.
 
-The manifest example in the specification lists seven intents, each an object with a `name` and a `description`:
+## The Agent Manifest, a third vocabulary
+
+A separate vocabulary rides on the container image: JSON in an image label keyed `agent-manifest`, where a container declares "the intents they will invoke". The spec adds: "If the orchestrating entity cannot support the requirements and intents of a container, it should not be started."
 
 | Name                     | Description in the specification                                                         |
 | ------------------------ | ---------------------------------------------------------------------------------------- |
@@ -82,74 +95,24 @@ The manifest example in the specification lists seven intents, each an object wi
 | `dynamicDealCuration`    | Curate deals in real time, optimize margins or enforce dynamic inclusion/exclusion lists |
 | `audienceSegmentation`   | Activate or enrich user cohorts and audience segments                                    |
 
-These are capability categories. They describe what kind of agent this is, not what edit it wants to make.
+These are capability categories: what kind of agent this is, not what edit it wants. `bidResponseGeneration` and `auctionOrchestration` have no enum counterpart, and no enum value maps onto exactly one manifest intent, so an orchestrator matching a manifest against `applicable_intents` has no published mapping to follow.
 
-## Do the two vocabularies overlap at all?
+The specification gives the manifest two label names. The key is `agent-manifest`, and a later section says "the manifest may be stored as a string with the container label `com.iabtechlab.artf.descriptor` with a Base64 value", alongside `com.iabtechlab.artf.container-version`.
 
-Not as identifiers. Functionally they are adjacent, which is exactly what makes the collision expensive rather than merely untidy.
+The manifest's own `intents` list — a different field from `Mutation.intent` — differs in every file that declares one. The framework specification lists seven `{name, description}` capability objects, `docs/00-EXAMPLE.md` lists five enum names, the Go `Dockerfile` lists seven and omits `ADD_CIDS`, and `rust/Dockerfile` lists three in a label that is not valid JSON. No schema and no code validate the manifest, so the malformed label is never caught.
 
-| Manifest intent          | Nearest enum values                                                           | Exact match |
-| ------------------------ | ----------------------------------------------------------------------------- | ----------- |
-| `audienceSegmentation`   | `ACTIVATE_SEGMENTS`                                                           | no          |
-| `dynamicDealCuration`    | `ACTIVATE_DEALS`, `SUPPRESS_DEALS`, `ADJUST_DEAL_FLOOR`, `ADJUST_DEAL_MARGIN` | no          |
-| `bidValuation`           | `BID_SHADE`                                                                   | no          |
-| `metadataEnhancement`    | `ADD_METRICS`, `ADD_CIDS`                                                     | no          |
-| `bidRequestModification` | all of them, arguably                                                         | no          |
-| `bidResponseGeneration`  | none                                                                          | no          |
-| `auctionOrchestration`   | none                                                                          | no          |
+## Which values each reference agent implements
 
-Two manifest intents have no enum counterpart at all, and no enum value maps cleanly onto a single manifest intent. An orchestrator that reads a manifest and then filters runtime requests by `applicable_intents` is translating between two vocabularies with no published mapping.
+The Rust bindings carry every value in the enum. The Go const block and both name maps stop at `ADD_METRICS = 7`, and the Go handler for the missing value says why: "ADD_CIDS intent requires protobuf regeneration to be fully supported." That handler returns `nil, nil`.
 
-## Which shape does the manifest intents field actually take?
+`applicable_intents` matters more, because pre-flight negotiation is where ARTF's governance story lives. The field is present in the Rust bindings at tag 7 and absent from the Go ones: the Go reference agent hardcodes an empty slice under the comment "For now, pass nil which means all intents are applicable", and all five samples set a field it cannot read. A `ValidIntents` list in its federation config carries all eight names and matches with `strings.EqualFold`, so the binary accepts `add_cids` as configuration for a value its own bindings cannot express.
 
-Here the repository contradicts itself, and this is the part that will break an implementation.
+The JSON path drops the field instead. The MCP tool pulls `applicable_intents` out of a request as raw strings, validates none of them, and never puts them on the `pb.RTBRequest` it builds. Under federation those strings reach `filterMutationsByIntent`, which matches case-sensitively against enum names, so a request asking for `activateSegments` gets back zero mutations and no error.
 
-In the framework document's container manifest example, `intents` is an **array of objects**, each with `name` and `description`.
+## Intent in AdCP and in AAMP's seller agent
 
-In `docs/00-EXAMPLE.md`, the same field in the same manifest is an **array of strings**, and the strings are protobuf enum values:
+Four schema properties in AdCP 3.1.13 have names containing "intent", all four inside [Sponsored Intelligence](/concepts/sponsored-intelligence/), and all four free text describing a human's request rather than an agent's capability. `si-get-offering-request.json` calls its `intent` an "Optional natural language description of user intent for personalized results". AdCP has no mutation vocabulary because it has no mutation object; its serve-time layer is the [Trusted Match Protocol](/realtime/trusted-match-protocol/), and capability is declared at runtime through `get_adcp_capabilities` rather than stamped into image metadata at build time. The verbs collide too: `ACTIVATE_SEGMENTS` edits one auction in flight, while [`activate_signal`](/signals/activation/) provisions a durable `activation_key`.
 
-```json
-"intents": [
-  "ACTIVATE_SEGMENTS",
-  "ACTIVATE_DEALS",
-  "SUPPRESS_DEALS",
-  "ADJUST_DEAL_FLOOR",
-  "BID_SHADE"
-]
-```
+Within AAMP the term is not shared either. `seller-agent` v2.4.1 carries `NegotiationState.last_intent`, an untyped `Optional[str]` that a chat classifier sets to `pricing_inquiry`, `availability_inquiry`, `deal_request` or `counter_offer`. It shares no type with ARTF in either direction.
 
-The repository's `CLAUDE.md` does the same, with `"intents": ["ACTIVATE_SEGMENTS", "ACTIVATE_DEALS"]`.
-
-So one field name, in one repository, at one commit, has two incompatible JSON types and two incompatible value vocabularies. A parser written against the specification will fail on the documentation's manifests, and vice versa.
-
-There is nothing to arbitrate the disagreement. I searched the repository for a JSON Schema describing the Agent Manifest and there is none — no `*.schema.json` file exists anywhere in the tree. The protobuf constrains the wire messages; the manifest is constrained by nothing but two examples that disagree.
-
-The label naming has the same texture. The specification says the manifest key is `agent-manifest`, then adds later that "the manifest may be stored as a string with the container label `com.iabtechlab.artf.descriptor` with a Base64 value", alongside `com.iabtechlab.artf.container-version`. Two label names, one optional, described in two sections.
-
-## Why does this collision matter in practice?
-
-Because the manifest vocabulary and the runtime vocabulary are supposed to be the same negotiation, seen at two moments.
-
-At deploy time, the orchestrator reads the manifest and decides whether it can host the container. The specification is unambiguous that failing this check should stop the container from starting.
-
-At request time, the orchestrator sends `applicable_intents` and the agent replies with mutations whose `intent` must be in that set.
-
-If the vocabularies differ, the deploy-time check cannot be expressed in the terms the runtime check uses. An orchestrator either implements a private mapping table, or it accepts protobuf enum names in the manifest and quietly ignores the specification's own example. Both choices are undocumented behaviour that will differ between implementations, which is the outcome a framework document exists to prevent.
-
-Renaming one of the two would cost the specification nothing and would remove the ambiguity entirely.
-
-## Is there an AdCP counterpart to ARTF intents?
-
-No, in both senses.
-
-AdCP has no serve-time mutation vocabulary, because it has no mutation object. Its serve-time layer is the Trusted Match Protocol, which returns offers and eligible package IDs rather than proposed edits.
-
-AdCP also has no container manifest. Capability declaration happens through the `get_adcp_capabilities` operation, which an agent answers over the wire at runtime, rather than through metadata attached to an image at build time. The two stacks disagree about where an agent's self-description lives, not just about what it says.
-
-Note also that the word "activate" crosses the two stacks with different meanings. `ACTIVATE_SEGMENTS` in ARTF is a request to modify one auction in flight. `activate_signal` in AdCP is a planning-time provisioning call that returns a durable activation key. Same verb, different time horizon, no relationship.
-
-## How is this term sourced?
-
-`rust/proto/agenticrtbframework.proto`, `Agentic_Real_Time_Framework_Version_1_0_FINAL.md`, `docs/00-EXAMPLE.md`, `CLAUDE.md` and `samples/*.json`, all in `IABTechLab/agentic-rtb-framework` at commit `7f48161`, tag `v1.0-1-g7f48161`. The absence of a manifest schema was verified by searching the repository tree for `*.schema.json` at that commit.
-
-ARTF is an IAB Tech Lab framework document with Go and Rust reference implementations. It is not a ratified interoperability standard, and AAMP has no single version number that covers it — each AAMP repository versions independently. Nothing in the AAMP corpus references AdCP.
+Related terms: [bidstream mutation](/realtime/rtb-mutation/), [Trusted Match Protocol](/realtime/trusted-match-protocol/), [activation](/signals/activation/), [Sponsored Intelligence](/concepts/sponsored-intelligence/). The repository is covered file by file in [AAMP Explorer](https://aampexplorer.com/repos/agentic-rtb-framework/).

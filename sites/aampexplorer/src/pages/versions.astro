@@ -17,11 +17,7 @@ import {
 import { BASE, HUB, MATURITY, componentsByMaturity } from '../lib/site'
 
 const components = componentsByMaturity()
-const generated = aamp.provenance.parsedAt.slice(0, 10)
 
-// The plan forbids publishing commit-distance in a version table: a tag plus
-// "24 commits since" invites a reader to treat the distance as meaningful when
-// it just means the branch moved. Tags and manifest versions only.
 function displayVersion(v: string | undefined): string {
   if (!v) return 'untagged'
   const tag = /^(v[\d.]+)/.exec(v)
@@ -29,29 +25,27 @@ function displayVersion(v: string | undefined): string {
   return v.length === 7 || v.length === 8 ? 'untagged' : v
 }
 
+const untagged = components.filter((c) => displayVersion(c.version) === 'untagged').length
+
 const path = '/versions/'
 const url = `${BASE}${path}`
-const title = 'AAMP version matrix — there is no single AAMP version'
-const description =
-  'Each AAMP repository versions independently. This is what every one of the eight is actually at, why a single AAMP version number does not exist, and what to cite instead.'
-const answer =
-  'AAMP has no single version number. Each repository versions independently — stated policy in the hub README. Citing "AAMP 2.3" names a press release, not an artifact you can resolve to a schema.'
+const title = 'AAMP version matrix — what "AAMP 2.3" resolves to in the repositories'
+const description = `AAMP has no single version. What each of the ${components.length} repositories is tagged at, which ${untagged} have never been tagged, and why the wire contract every AAMP agent imports installs itself as 0.1.0.`
+const answer = `AAMP has no single version number: ${untagged} of its ${components.length} repositories have never been tagged, and the string "AAMP 2.3" appears in no file in the corpus — it names a July 2026 IAB Tech Lab announcement.`
 
 const faq = [
   {
     question: 'What version of AAMP should I cite?',
-    answer:
-      'Cite the repository and its tag, not AAMP as a whole. "AAMP seller-agent v2.4.1" resolves to a specific artifact; "AAMP 2.4" does not.',
+    answer: `A repository name and a tag together, such as "AAMP seller-agent v2.4.1". The ${untagged} untagged repositories have nothing to cite but a commit SHA.`,
   },
   {
     question: 'Why does AAMP not have one version?',
-    answer:
-      'By design. The hub README states that each repository uses independent semantic versioning and that cross-repository alignment happens through governance coordination rather than a shared release train.',
+    answer: `No artifact defines one. The hub README leaves cross-repository alignment to "governance coordination", and the corpus holds no shared manifest and no file that names a set of repository versions as a release. The README does not list all ${components.length} repositories: the wire contract both agents import is missing from it.`,
   },
   {
-    question: 'Do the press-release version numbers mean anything?',
+    question: 'Is AAMP 2.3 a real version?',
     answer:
-      'They describe a coordinated announcement, not a tagged artifact. No file in any of the eight repositories carries a version matching the umbrella numbers used in announcements.',
+      'No. The only AAMP-plus-number identifier anywhere in the corpus is the mock AGY-AAMP-001, in a seller-agent test fixture.',
   },
 ]
 
@@ -97,17 +91,77 @@ const jsonLd = graph([
   <AnswerBox answer={answer} />
 
   <p>
-    The hub README states the policy directly: <q
+    AAMP is IAB Tech Lab's umbrella for agent-to-agent ad buying, expanded by the hub README as
+    Agentic Advertising Management Protocols. It ships as {components.length} separate GitHub repositories
+    rather than as one specification, and the README sets the versioning policy: <q
       >Each repository uses independent semantic versioning.</q
-    > There is no release train, no lockstep, and no manifest that pins a set of repositories to one umbrella
-    number. Anyone writing "AAMP 2.3" is quoting an announcement.
+    > The next bullet promises releases via GitHub tags and release notes. The README has not been edited
+    since April 2026; the first tag in any AAMP repository was cut on 8 July 2026.
   </p>
 
-  <h2>What is each repository actually at?</h2>
+  <p>
+    IAB Tech Lab announced "AAMP 2.3" on 30 July 2026, and no file in any repository contains that
+    string, so the number resolves to the announcement and to nothing in the code. The dates line up
+    with the agents' minor line: <code>buyer-agent</code>'s latest tag is <code>v2.3.0</code>, and
+    <code>seller-agent</code> was tagged <code>v2.3.3</code> the day before the release went out. No README,
+    changelog or manifest in the corpus states that mapping or mentions the announcement, and seller-agent
+    was tagged <code>v2.4.1</code> six days after it.
+  </p>
+
+  <h2>What to pin today</h2>
+  <p>
+    An integration is possible by pinning and vendoring: seller-agent at a tag, the primitives at
+    <code>v0.5.0</code>, the schemas copied into the implementer's own tree, and the umbrella number
+    left out of the build. The seller-agent tag matters. Its README records that
+    <code>v2.3.3</code> and earlier ship a <code>uv.lock</code> stale against
+    <code>pyproject.toml</code>, so <code>uv sync --locked</code> fails on those checkouts; the fix landed
+    in <code>v2.4.0</code>.
+  </p>
+  <p>
+    What is not available is a version range or a single AAMP version to name in a contract. A
+    commit SHA pins one of the {untagged} untagged repositories exactly but carries no signal: nothing
+    announces that the repository moved. Vendoring costs the same — a copied schema set has no upstream
+    version, so a change upstream is found by diffing.
+  </p>
+
+  <h2>The wire contract's package version</h2>
+  <p>
+    <code>iab-agentic-primitives</code> carries five tags and a CHANGELOG with an entry for one of them.
+    The tag <code>v0.5.0</code> points to commit
+    <code>5fdbe57</code>, and that commit's <code>pyproject.toml</code> reads
+    <code>version = "0.1.0"</code>. The bump to 0.5.0 landed one commit later, after the tag. Both
+    reference agents pin the tag exactly, <code
+      >iab-agentic-primitives[client] @
+      git+https://github.com/IABTechLab/iab-agentic-primitives.git@v0.5.0</code
+    >, and <code>buyer-agent/uv.lock</code> records the <code>v0.5.0</code> revision and the version
+    <code>0.1.0</code> on two adjacent lines.
+  </p>
+  <p>
+    A tag pin ignores the number the package reports, so the mismatch only bites a dependency range.
+    The primitives README says both agent repositories pin a compatible version range; neither does,
+    and an implementer who follows that README and writes <code>&gt;=0.5,&lt;0.6</code> gets no candidate,
+    because the published package reports 0.1.0. The same README opens <q
+      >WORK IN PROGRESS — NOT YET RELEASED</q
+    > and says the library should not be depended on for production use, a notice that reaches anyone
+    who inherits the library through an agent's dependency list.
+  </p>
+
+  <h2>Untagged repositories</h2>
+
+  <p>
+    None of the {untagged} untagged repositories sits on the path of a transaction; the four tagged ones
+    do. <code>agentic-direct</code> declares <code>"version": "1.0.0"</code> in each of its three
+    <code>package.json</code> files, and <code>registry-agent-example</code> declares the same in its
+    one, so four manifests carry a version no tag corresponds to. None of the {untagged} has a
+    <code>.github/</code> directory, so none has a workflow that could cut a tag.
+  </p>
 
   <figure class="comparison">
     <table>
-      <caption>AAMP repositories, as read on {generated}</caption>
+      <caption
+        >AAMP repositories on 12 August 2026: tag, kind, substance and hub listing. The version
+        column shows the nearest git tag.</caption
+      >
       <thead>
         <tr>
           <th scope="col">Repository</th>
@@ -137,27 +191,71 @@ const jsonLd = graph([
     </table>
   </figure>
 
-  <h2>What should you cite instead?</h2>
   <p>
-    Name the repository and its tag. <code>seller-agent v2.4.1</code> resolves to a commit, a set of schemas
-    and an OpenAPI document. <code>ARTF v1.0</code> resolves to a protobuf contract and a numbered specification
-    document. An umbrella version resolves to nothing.
+    <code>agentic-audiences</code> carries no tag. It calls itself "Draft v0.1" from inside a directory
+    named <code>v1.0</code>, and its <code>catalog-info.yaml</code> still files the project as
+    <code>LiveRamp/user-context-protocol</code>. Nothing in the repository declares how it connects
+    to the other {components.length - 1}: the file that would, and three others, are among <a
+      href="/">the empty files in the corpus</a
+    >.
+  </p>
+
+  <h2>Manifest versions</h2>
+  <p>
+    The policy the README quotes asks for semantic versions. Two tags are two-part rather than
+    three: ARTF's only tag is <code>v1.0</code>, and the oldest of seller-agent's twelve is
+    <code>v2.0</code>. For the three-part tags the mismatch is inside the repository.
   </p>
   <p>
-    The awkward case is <code>agentic-audiences</code>, which has no tag at all, describes itself as
-    "Draft v0.1" while living in a directory called <code>v1.0</code>, and still carries its
-    pre-donation project identity in its metadata. Cite it by commit or not at all.
+    <code>seller-agent</code> is tagged <code>v2.4.1</code>, its <code>pyproject.toml</code> reads 2.4.1,
+    and the top released entry in its CHANGELOG is <code>[2.4.1] — 2026-08-05</code>. Then
+    <code>docs/api/openapi.json</code> in that same repository declares <code
+      >"version": "1.0.0"</code
+    >. <code>buyer-agent</code> has four tags, the latest being <code>v2.3.0</code>, which sits 24
+    commits behind the branch it points into, and its <code>pyproject.toml</code> still reads
+    <code>version = "0.1.0"</code>, its starting value. The repository has no CHANGELOG.
+  </p>
+  <p>
+    Three of the {components.length} repositories have CI: the primitives and the two agents. Their nine
+    workflow files all run on pushes and pull requests, and none is triggered by a tag or publishes a
+    release.
+  </p>
+  <h2>The ARTF protobuf</h2>
+  <p>
+    <code>agentic-rtb-framework</code> (ARTF) ships its protobuf twice under <code>v1.0</code>. The
+    root copy opens <code>edition = "2023"</code>; the copy under <code>rust/proto/</code> opens
+    <code>syntax = "proto3"</code>, and they disagree about where the telemetry field comes from:
+    <code>MetricsPayload.metric</code> is typed <code>BidRequest.Metric</code> in the root file and
+    <code>BidRequest.Imp.Metric</code> in the rust one. Only the second exists. Both copies of the vendored
+    <code>openrtb.proto</code> define <code>Metric</code> inside <code>Imp</code>, and the root
+    file's import path is not in its own tree either.
+  </p>
+
+  <h2>Citing a version</h2>
+  <p>
+    <code>seller-agent v2.4.1</code> resolves to a commit and to the schemas that commit ships, and it
+    is the one version string in AAMP a repository will back up. <code>ARTF v1.0</code> resolves to a
+    specification document that records a November 2025 release and to a git tag cut in July 2026. There
+    is no smaller unit to cite: almost every JSON file under the primitives <code>spec/</code> directory
+    carries no <code>$id</code>, so an individual schema has no identifier of its own.
+  </p>
+  <p>
+    Two files under that directory do carry a <code>$id</code>. Both resolve to <code
+      >github.com/atc964/</code
+    >, a personal fork, rather than to an IABTechLab URL.
   </p>
 
   <FaqBlock entries={faq} />
 
   <h2>Related</h2>
   <ul>
-    <li><a href="/">What AAMP actually contains</a></li>
-    <li><a href="/what-does-aamp-stand-for/">Three expansions of the same acronym</a></li>
-    <li><a href="/repos/">The eight repositories, ranked by what they ship</a></li>
+    <li><a href="/">What AAMP contains</a></li>
+    <li><a href="/what-does-aamp-stand-for/">What does AAMP stand for?</a></li>
+    <li><a href="/repos/">Every AAMP repository, ranked by what it defines</a></li>
     <li>
-      <a href={`${HUB}/protocols/adcp-vs-aamp/`} rel="noopener">How AdCP versions by comparison</a>
+      <a href={`${HUB}/protocols/adcp-vs-aamp/`} rel="noopener"
+        >AdCP resolves its version from one file</a
+      >
     </li>
   </ul>
 

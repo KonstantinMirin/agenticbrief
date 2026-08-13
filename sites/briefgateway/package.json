@@ -10,6 +10,7 @@
     "typecheck": "astro check"
   },
   "dependencies": {
+    "@agenticbrief/brief-engine": "*",
     "@agenticbrief/content-utils": "*",
     "@agenticbrief/protocol-data": "*",
     "@agenticbrief/seo": "*",

@@ -1,111 +1,102 @@
 ---
 title: 'Access Tier — public, seat, agency, advertiser'
-description: 'Access tier in AAMP is a four-value enum that gates what price a buyer agent can see and how hard it can negotiate. The tiers, the caps, and why AdCP has no equivalent.'
-answer: "Access Tier in AAMP is a four-value enum — public, seat, agency, advertiser — derived from how much identity a buyer agent reveals. It gates price visibility and selects the seller's negotiation strategy."
+description: "AAMP's access tier is a four-value enum deciding what price, negotiation and availability detail a buyer agent sees. What sets it, and how the seller caps it."
+answer: "Access Tier is AAMP's four-value enum (public, seat, agency, advertiser) that gates what price, negotiation and availability detail a buyer agent gets. It travels as buyer_tier, is capped server-side by the calling agent's trust status, and is never self-asserted."
 pubDate: 2026-08-09
+updatedDate: 2026-08-09
 term: 'Access Tier'
-alternateNames: ['buyer tier', 'pricing tier', 'AccessTier']
+alternateNames: ['buyer tier', 'buyer_tier', 'pricing tier', 'AccessTier']
 category: commerce
 cluster: gl-negotiation
 keywords:
   - 'access tier advertising agent'
   - 'aamp access tier'
   - 'buyer tier pricing advertising'
-  - 'progressive identity revelation advertising'
-  - 'tier based discount media buying'
+  - 'buyer_tier aamp schema'
 citations:
   - 'https://github.com/IABTechLab/iab-agentic-primitives/blob/2fc7029fb9eca801bc94586aec398906aa6af6c0/spec/jsonschema/Quote.json'
-  - 'https://github.com/IABTechLab/iab-agentic-primitives/blob/2fc7029fb9eca801bc94586aec398906aa6af6c0/spec/jsonschema/protocol/DealBookingRequest.json'
-  - 'https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/docs/integration/negotiation.md'
+  - 'https://github.com/IABTechLab/iab-agentic-primitives/blob/2fc7029fb9eca801bc94586aec398906aa6af6c0/spec/jsonschema/Session.json'
+  - 'https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/src/ad_seller/models/buyer_identity.py'
+  - 'https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/src/ad_seller/models/pricing_tiers.py'
+  - 'https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/src/ad_seller/engines/negotiation_engine.py'
+  - 'https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/src/ad_seller/interfaces/api/deps.py'
+  - 'https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/src/ad_seller/interfaces/api/routers/media_kit.py'
+  - 'https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/src/ad_seller/flows/discovery_inquiry_flow.py'
   - 'https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/docs/api/authentication.md'
+  - 'https://github.com/IABTechLab/buyer-agent/blob/0c3a1545e334a0dc6acf0a6722b554cc4a4503d6/src/ad_buyer/models/buyer_identity.py'
   - 'https://github.com/IABTechLab/buyer-agent/blob/0c3a1545e334a0dc6acf0a6722b554cc4a4503d6/docs/api/media-kit.md'
-  - 'https://github.com/adcontextprotocol/adcp/blob/f1a35aba734befa809e1fa780ad77c7edd614e96/dist/schemas/3.1.10/core/product.json'
-  - 'https://github.com/adcontextprotocol/adcp/blob/f1a35aba734befa809e1fa780ad77c7edd614e96/dist/schemas/3.1.10/enums/action-not-allowed-reason.json'
+  - 'https://github.com/IABTechLab/buyer-agent/blob/0c3a1545e334a0dc6acf0a6722b554cc4a4503d6/docs/guides/multi-seller.md'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/schemas/3.1.13/core/account.json'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/schemas/3.1.13/core/account-authorization.json'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/schemas/3.1.13/core/product.json'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/schemas/3.1.13/enums/account-scope.json'
 related:
   - '/negotiation/trust-status/'
   - '/negotiation/negotiation-round/'
   - '/negotiation/quote/'
+  - '/negotiation/deal/'
   - '/about/sources-and-versions/'
-  - 'https://aampexplorer.noetis.dev/negotiation/'
-  - 'https://agenticadlab.noetis.dev/protocols/adcp-vs-aamp/'
+  - 'https://aampexplorer.com/negotiation/'
+  - 'https://agenticadlab.com/protocols/adcp-vs-aamp/'
 seeAlso: ['Trust Status', 'Quote', 'Deal', 'Negotiation Round']
 reviewState: cto-reviewed
 ---
 
-## What is an access tier in AAMP?
+Access Tier is AAMP's four-value string enum for what a buyer agent is allowed to see and pay. On the wire it is `buyer_tier`, carried on the [Quote](/negotiation/quote/), [Deal](/negotiation/deal/) and Negotiation objects and glossed "Access tier for tiered pricing, derived from revealed buyer identity".
 
-Access Tier is a four-value string enum carried on the AAMP Quote, Deal and Negotiation objects as `buyer_tier`. The shared schema defines it as "Access tier for tiered pricing, derived from revealed buyer identity" and documents the four values inline:
+| Value (schema) | Identity revealed       | What the schema says                            |
+| -------------- | ----------------------- | ----------------------------------------------- |
+| `public`       | None                    | "no identity — price ranges only"               |
+| `seat`         | DSP seat, authenticated | "authenticated DSP (demand-side platform) seat" |
+| `agency`       | Agency                  | "agency identity revealed"                      |
+| `advertiser`   | Advertiser              | "advertiser identity revealed (best rates)"     |
 
-| Value        | Identity revealed       | What the schema says                            |
-| ------------ | ----------------------- | ----------------------------------------------- |
-| `public`     | None                    | "no identity — price ranges only"               |
-| `seat`       | DSP seat, authenticated | "authenticated DSP (demand-side platform) seat" |
-| `agency`     | Agency                  | "agency identity revealed"                      |
-| `advertiser` | Advertiser              | "advertiser identity revealed (best rates)"     |
+All three objects declare it identically: `{"$ref": "#/$defs/AccessTier", "default": "public"}`. A buyer that sends no identity is priced at the `public` tier rather than rejected.
 
-The mechanism is progressive identity revelation. A buyer agent browsing anonymously sees ranges. The more it discloses through `BuyerIdentity` — `seat_id`, `agency_id`, `advertiser_id`, `dsp_platform` — the more exact and the cheaper the price it is quoted.
+The schema derives the tier from revealed buyer identity. In the reference implementations the seller's API key fixes it instead, and an identity sent in the payload can only confirm what the key already allows.
 
-**Access Tier comes from a reference implementation, not a ratified specification.** The enum is defined in `iab-agentic-primitives`, whose README states: "WORK IN PROGRESS — NOT YET RELEASED… APIs, schemas, and package layout are unstable and will change without notice."
+The repository that defines it is [unreleased](https://aampexplorer.com/versions/) and warns that its schemas will change without notice. There is no canonical `AccessTier.json`: the same block is copied into five schema files, and the two reference agents no longer derive the tier the same way.
 
-## What does an access tier actually control?
+## Entitlements at each tier
 
-Two things: what price a buyer agent can see, and how a negotiation with it will be run.
+Pricing visibility, negotiation and availability detail all move together. The discounts below are the reference seller agent's `_default_tiers()` fallback, which an operator overrides, rather than a published rate.
 
-On visibility, the seller agent's authentication reference gives this table:
+| Tier         | Pricing visibility         | Negotiation | Default discount | Avails granularity |
+| ------------ | -------------------------- | ----------- | ---------------- | ------------------ |
+| `public`     | Price ranges only          | No          | 0%               | `high_level`       |
+| `seat`       | Exact prices, no discounts | Limited     | 5%               | `moderate`         |
+| `agency`     | Tier discounts applied     | Standard    | 10%              | `detailed`         |
+| `advertiser` | Full discounts plus volume | Premium     | 15%              | `detailed`         |
 
-| Tier         | Pricing visibility         | Negotiation |
-| ------------ | -------------------------- | ----------- |
-| `public`     | Price ranges only          | No          |
-| `seat`       | Exact prices, no discounts | Limited     |
-| `agency`     | Tier discounts applied     | Standard    |
-| `advertiser` | Full discounts plus volume | Premium     |
+The reference seller agent also maps the effective tier to a named negotiation strategy, with three hard limits and one behavioural parameter. These are that agent's defaults, not protocol.
 
-On price level, the buyer agent's media-kit reference gives indicative discounts of roughly 0 percent for `public`, 5 percent for `seat`, 10 percent for `agency` and 15 percent for `advertiser`. Note the column heading in the source is "Typical Discount" — these are illustrative numbers from a reference implementation's sample rate card, not a rate any implementer is obliged to honour. The worked example in the seller agent's quote documentation shows a 10 percent agency tier discount stacked with a 5 percent volume discount, taking a $12.00 base CPM to $10.26.
+| Tier         | Strategy        | Max rounds | Per-round cap | Cumulative cap | Buyer gap share |
+| ------------ | --------------- | ---------- | ------------- | -------------- | --------------- |
+| `public`     | `aggressive`    | 3          | 3%            | 8%             | 30%             |
+| `seat`       | `standard`      | 4          | 4%            | 12%            | 40%             |
+| `agency`     | `collaborative` | 5          | 5%            | 15%            | 50%             |
+| `advertiser` | `premium`       | 6          | 6%            | 20%            | 65%             |
 
-## How does access tier drive negotiation?
+Buyer gap share, `gap_split_buyer_share` on the wire, rises with the tier: at `advertiser` the seller expects the buyer to close 65 percent of the remaining gap, alongside the widest concession budget. `docs/integration/negotiation.md` glosses the field as "How much of the price gap the seller expects the buyer to close (higher = more favorable to seller)". The worked example is on [AAMP Explorer](https://aampexplorer.com/negotiation/); the round record is a [Negotiation Round](/negotiation/negotiation-round/).
 
-This is the part with real numbers behind it. The seller agent maps each tier to a named negotiation strategy with three hard limits and one behavioural parameter.
+The tier also controls how much availability detail a caller sees, which the tier documentation does not cover. A `public` caller is told a product is `Available`, a `seat` caller that availability is `High`, and `agency` and `advertiser` callers get numbers: `estimated_monthly_impressions` of `10M-50M`, a `fill_rate` of `85-95%`.
 
-| Access tier  | Strategy        | Max rounds | Per-round concession cap | Cumulative cap | Buyer gap share |
-| ------------ | --------------- | ---------- | ------------------------ | -------------- | --------------- |
-| `public`     | `aggressive`    | 3          | 3%                       | 8%             | 30%             |
-| `seat`       | `standard`      | 4          | 4%                       | 12%            | 40%             |
-| `agency`     | `collaborative` | 5          | 5%                       | 15%            | 50%             |
-| `advertiser` | `premium`       | 6          | 6%                       | 20%            | 65%             |
+The default rate card sets `negotiation_enabled=False` for `public` and `seat`, and the seller's negotiation engine never reads the flag.
 
-Read the columns as the source defines them. Max rounds is the walk-away point. The per-round cap is the largest concession the seller will make in one round; the cumulative cap is the ceiling across the whole negotiation. Buyer gap share is "how much of the price gap the seller expects the buyer to close (higher = more favorable to seller)" — counter-intuitively, the `advertiser` tier is expected to close the largest share of the remaining gap, at 65 percent, in exchange for the widest concession budget.
+## What sets the tier
 
-The practical reading: identity buys you rounds and room, and the seller's total exposure is bounded before the conversation starts. A `public` buyer cannot argue a price down by more than eight percent no matter how it bids, because the engine will not concede past the cap.
+`BuyerIdentity` has eleven properties and no `required` array, so an empty `BuyerIdentity {}` validates. Only `seat_id`, `agency_id` and `advertiser_id` change the tier; neither reference implementation branches on `dsp_platform`, `advertiser_name` or the campaign fields.
 
-Rounds are recorded on the [Negotiation Round](/negotiation/negotiation-round/) object. The full walkthrough with a worked three-round example is on [AAMP Explorer](https://aampexplorer.noetis.dev/negotiation/).
+A brand buying direct, with no agency and no seat, computes `advertiser` on its own agent while the seller walks the same identity down to `ANONYMOUS` and quotes a range. Neither agent raises an error, and the buyer is quoted at the lower tier. The two agents disagree about how many IDs the top tier needs: the seller requires both an advertiser ID and an agency ID, and its `identity_level` reaches `AGENCY_AND_ADVERTISER` only when both are present, while the buyer treats an advertiser ID alone as enough. The buyer's model carries the seller's rule as a comment, `# Agency + Advertiser - 15% discount`, and does not implement it.
 
-## Can a buyer agent just claim a higher tier?
+The revelation mechanism the buyer's documentation describes is not wired up. `to_header_dict()` builds `X-DSP-Seat-ID`, `X-Agency-ID` and `X-Advertiser-ID`, no code in the repository calls it, and the seller reads only `Authorization` and `X-Api-Key`. `docs/api/authentication.md` states the arithmetic: "The effective tier is the **minimum** of the API key tier and the agent trust tier. A `preferred` agent with a `seat`-level API key gets `seat` access." A `BuyerIdentity` sent afterwards cannot raise the tier above what the key allows. The ceiling side of that minimum is [Trust Status](/negotiation/trust-status/).
 
-No. The tier a buyer asserts is capped by what the registry says about it. The `BuyerIdentity` schema states the rule directly: "The tier derived from these fields is capped server-side by the registry-verified trust status of the calling agent — it is never self-asserted."
+The schema states that the tier is "capped server-side by the registry-verified trust status of the calling agent — it is never self-asserted", over the order `public < seat < agency < advertiser`. Quotes, deals and negotiation all go through `_verified_buyer_context`, which floors the effective tier to `public` when the claim is unverifiable.
 
-The seller agent's authentication reference gives the arithmetic: "The effective tier is the **minimum** of the API key tier and the agent trust tier. A `preferred` agent with a `seat`-level API key gets `seat` access. A `public` API key with an `approved` agent gets `public` access."
+One discovery endpoint in the reference seller agent does not apply that cap. `POST /media-kit/search` bypasses `_verified_buyer_context`, builds a buyer context whenever `api_key_record is not None or request.buyer_tier != "public"`, and leaves `max_access_tier` unset, so an unauthenticated caller claiming `advertiser` is answered at that tier: `exact_price` at the top-tier discount, `floor_price`, placements, audience segment IDs and `negotiation_enabled: true`. It is a defect in that repository rather than a reading of the schema.
 
-That second sentence is the one people misread. Trust does not upgrade a weak credential; it only caps a strong one. See [Trust Status](/negotiation/trust-status/) for the five-value lattice and the trust-to-tier ceiling map.
+## Access tier in AdCP
 
-One caveat carried from the sources: the seller agent's authentication page says `public` tier gets no negotiation, while the same repository's negotiation page assigns `public` a three-round `aggressive` strategy, and the buyer agent says only `agency` and `advertiser` can negotiate at all. Those three statements have not been reconciled in the corpus.
+AdCP 3.1.13 defines no access tier, and no `tier`, `access_tier`, `buyer_tier` or `account_tier` property in `dist/schemas/3.1.13/`. The relationship is modelled under another name: `core/account.json` describes "the relationship between a buyer and seller", an account that "determines rate cards, payment terms, and billing entity", and its `rate_card` is `{"type": "string"}`, so the rate card is named and its contents are left to the parties. Capability lives in `core/account-authorization.json`, an allowlist of task names in `allowed_tasks[]` plus `field_scopes` and `read_only`.
 
-## Does AdCP have an access tier?
-
-No. There is no `tier`, `access_tier` or `buyer_tier` field anywhere in the published AdCP 3.1.10 schema registry. I checked every JSON file under `dist/schemas/3.1.10/` outside the bundled copies; the string appears zero times as a property name.
-
-"Account tier" does appear, five times across five files, and only in prose. `core/product.json` says a buyer should pre-flight its actions against a live endpoint "which resolves modes against current buy state, account tier, and negotiated terms." `enums/action-not-allowed-reason.json` explains that an action may be unavailable because "the specific buy was negotiated without this capability (account tier, IO terms, or buy-level override)."
-
-AdCP therefore acknowledges that tiering exists and treats it as an input it does not model. AAMP models it as an enum and derives pricing and negotiation behaviour from it. Same commercial reality, opposite decisions about what belongs in the protocol.
-
-## Where does this definition come from?
-
-| Claim                                    | File                                                                       | Version pin                                  |
-| ---------------------------------------- | -------------------------------------------------------------------------- | -------------------------------------------- |
-| `AccessTier` enum and value descriptions | `spec/jsonschema/Quote.json` (`$defs.AccessTier`)                          | `iab-agentic-primitives` `v0.5.0-1-g2fc7029` |
-| Tier never self-asserted                 | `spec/jsonschema/protocol/DealBookingRequest.json` (`$defs.BuyerIdentity`) | same                                         |
-| Strategy, round and concession caps      | `docs/integration/negotiation.md`                                          | `seller-agent` `v2.4.1`                      |
-| Visibility table, effective-tier rule    | `docs/api/authentication.md`                                               | `seller-agent` `v2.4.1`                      |
-| Indicative tier discounts                | `docs/api/media-kit.md`                                                    | `buyer-agent` `v2.3.0-24-g0c3a154`           |
-| Absence of a tier field in AdCP          | `dist/schemas/3.1.10/` registry                                            | AdCP `3.1.10` (published stable)             |
-
-Method, commits and correction policy: [How These Definitions Are Sourced](/about/sources-and-versions/).
+AdCP's `account_scope` is also a four-value enum on the buyer relationship — `operator`, `brand`, `operator_brand`, `agent` — but its values are categories, not levels, so they do not compose into a ceiling. The rest of that shape difference is in the [protocol comparison](https://agenticadlab.com/protocols/adcp-vs-aamp/).

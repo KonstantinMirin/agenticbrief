@@ -1,9 +1,8 @@
 ---
 title: 'How a Machine Actually Buys Media, End to End'
-description: "A wire-level trace of one campaign through AdCP 3.1.10, with real operation and field names, then the same buy walked through AAMP's canonical contract."
-answer: "How a machine buys media in AdCP 3.1.10: get_adcp_capabilities, sync_plans, get_products, refine to a committed proposal, sync_creatives, check_governance, create_media_buy, then get_media_buy_delivery. AAMP's contract replaces the middle with quote, negotiate, book."
+description: "One CTV campaign traced call by call through AdCP 3.1.13 and AAMP's shared contract: the payloads, and which rules each stack actually enforces rather than merely describes."
+answer: "How a machine buys media: one CTV campaign runs 13 of AdCP 3.1.13's 64 operations, from get_adcp_capabilities through create_media_buy to get_media_buy_delivery. AAMP's shared contract begins at the quote and stops at the deal ID, leaving creative, delivery and spending authority outside it."
 pubDate: 2026-08-09
-updatedDate: 2026-08-09
 cluster: 'hub-workflow'
 keywords:
   - 'agentic media buying workflow'
@@ -13,115 +12,141 @@ keywords:
   - 'adcp create_media_buy example'
 steps:
   - name: 'Ask the seller what it supports'
-    text: "Call get_adcp_capabilities to read supported_protocols, auth model, specialisms and the seller's declared properties before sending anything else."
-  - name: 'Register the campaign plan with a governance agent'
-    text: 'Call sync_plans with plan_id, brand, objectives, budget and flight so later spend can be checked against a declared authority.'
+    text: "Call get_adcp_capabilities and read supported_protocols, the adcp block's supported_versions, and request_signing before sending anything else."
+  - name: 'The plan has to exist before anything can be checked against it'
+    text: 'sync_plans carries plan_id, brand, objectives, budget and flight, so later spend can be checked against a declared authority.'
   - name: 'Discover inventory from a brief'
     text: "Call get_products with buying_mode 'brief' and a natural-language brief; read products[] and proposals[] from the response."
   - name: 'Refine and commit a proposal'
-    text: "Call get_products again with buying_mode 'refine' and a proposal-scoped entry with action 'finalize' to convert a draft proposal to committed with a hold window."
+    text: "get_products again, this time with buying_mode 'refine' and a proposal-scoped entry carrying action 'finalize'. A draft proposal becomes committed, with a hold window."
   - name: 'Attach audience signals'
     text: 'Call get_signals to discover signals, then activate_signal against the destination platform and seat.'
   - name: 'Load creatives into the library'
     text: 'Call sync_creatives with an idempotency_key, the creatives array and optional package assignments; use build_creative when the creative does not exist yet.'
   - name: 'Get a governance verdict before spending'
-    text: "Call check_governance with plan_id, caller, tool 'create_media_buy' and the payload; read verdict of approved, denied or conditions."
+    text: 'Call check_governance with plan_id and caller, plus the tool name and payload, and read verdict of approved, denied or conditions.'
   - name: 'Commit the buy'
-    text: 'Call create_media_buy with idempotency_key, account, brand, packages, start_time and end_time; receive media_buy_id and media_buy_status.'
+    text: 'Call create_media_buy with idempotency_key, account, brand, start_time and end_time, plus either packages or a proposal_id; receive media_buy_id and media_buy_status.'
   - name: 'Watch it start and read delivery'
     text: 'Call get_media_buys for creative approvals and configuration state, then get_media_buy_delivery for impressions, spend and pacing.'
   - name: 'Close the reporting, governance and billing loops'
-    text: 'Call provide_performance_feedback with a performance_index, report_plan_outcome to the governance agent, and report_usage to the vendor agent.'
+    text: 'Three reports, three recipients: provide_performance_feedback with a performance_index to the seller, report_plan_outcome to the governance agent, report_usage to the vendor agent.'
+faq:
+  - question: 'Can this trace be run today?'
+    answer: 'The AdCP half, yes: every schema is published under dist/schemas/3.1.13/, and the same release ships 38 universal compliance storyboards under dist/compliance/3.1.13/ to test an implementation against. The AAMP half, no: its library README says it is not yet released, so re-check the field names before you ship.'
+  - question: 'Which calls take an idempotency_key?'
+    answer: '28 of the 64 AdCP operations take an idempotency_key, and the response envelope marks a replay with replayed: true. Two operations that mutate state, comply_test_controller and si_terminate_session, do not take one. That reads as a gap rather than a design. AAMP requires one on quote, book and change request.'
+  - question: 'Do I need a governance agent?'
+    answer: 'Only if a plan is registered. check_governance validates against a plan_id, so with no plan there is nothing to check against. AdCP ships its strongest control as opt-in. Once a plan exists, four policy categories force human_review_required at the schema level.'
+  - question: 'Does either stack define a standard error shape?'
+    answer: 'Both do. AdCP requires code and message on core/error.json, publishes 92 documented codes as an open vocabulary, and carries a three-value recovery classification plus retry_after. AAMP publishes one envelope over a closed 11-code enum, with no recovery hint and no retry timing.'
+  - question: 'Why is there no auction step?'
+    answer: "Neither stack is an auction protocol. AdCP's FAQ argues that OpenRTB already works at the impression layer and targets direct-sold inventory, guaranteed deals and commerce media instead. An AAMP deal reaches the auction by handing openrtb_params to a DSP that already bids."
 citations:
-  - 'https://github.com/adcontextprotocol/adcp/blob/f1a35aba734befa809e1fa780ad77c7edd614e96/dist/schemas/3.1.10/index.json'
-  - 'https://github.com/adcontextprotocol/adcp/blob/f1a35aba734befa809e1fa780ad77c7edd614e96/dist/schemas/3.1.10/core/version-envelope.json'
-  - 'https://github.com/adcontextprotocol/adcp/blob/f1a35aba734befa809e1fa780ad77c7edd614e96/dist/schemas/3.1.10/media-buy/create-media-buy-request.json'
-  - 'https://github.com/adcontextprotocol/adcp/blob/f1a35aba734befa809e1fa780ad77c7edd614e96/dist/schemas/3.1.10/media-buy/get-products-request.json'
-  - 'https://github.com/adcontextprotocol/adcp/blob/f1a35aba734befa809e1fa780ad77c7edd614e96/dist/schemas/3.1.10/governance/check-governance-request.json'
-  - 'https://github.com/adcontextprotocol/adcp/blob/f1a35aba734befa809e1fa780ad77c7edd614e96/dist/schemas/3.1.10/creative/sync-creatives-request.json'
-  - 'https://github.com/adcontextprotocol/adcp/blob/f1a35aba734befa809e1fa780ad77c7edd614e96/dist/schemas/3.1.10/governance/sync-plans-request.json'
-  - 'https://github.com/adcontextprotocol/adcp/blob/f1a35aba734befa809e1fa780ad77c7edd614e96/dist/schemas/3.1.10/core/protocol-envelope.json'
-  - 'https://github.com/adcontextprotocol/adcp/blob/f1a35aba734befa809e1fa780ad77c7edd614e96/dist/compliance/3.1.10/index.json'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/schemas/latest.json'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/schemas/3.1.13/index.json'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/schemas/3.1.13/core/version-envelope.json'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/schemas/3.1.13/core/protocol-envelope.json'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/schemas/3.1.13/enums/task-status.json'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/schemas/3.1.13/core/error.json'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/schemas/3.1.13/enums/error-code.json'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/schemas/3.1.13/governance/sync-plans-request.json'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/schemas/3.1.13/governance/check-governance-request.json'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/schemas/3.1.13/media-buy/get-products-request.json'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/schemas/3.1.13/media-buy/create-media-buy-request.json'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/schemas/3.1.13/creative/sync-creatives-request.json'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/static/registry/policy-categories/fair_housing.json'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/docs/reference/known-limitations.mdx'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/compliance/3.1.13/index.json'
   - 'https://docs.adcontextprotocol.org/'
   - 'https://github.com/IABTechLab/iab-agentic-primitives/blob/2fc7029fb9eca801bc94586aec398906aa6af6c0/spec/openapi/iab-agentic-api.yaml'
   - 'https://github.com/IABTechLab/iab-agentic-primitives/blob/2fc7029fb9eca801bc94586aec398906aa6af6c0/spec/jsonschema/protocol/QuoteRequest.json'
-  - 'https://github.com/IABTechLab/iab-agentic-primitives/blob/2fc7029fb9eca801bc94586aec398906aa6af6c0/spec/jsonschema/protocol/DealBookingRequest.json'
   - 'https://github.com/IABTechLab/iab-agentic-primitives/blob/2fc7029fb9eca801bc94586aec398906aa6af6c0/spec/jsonschema/protocol/NegotiationMessage.json'
+  - 'https://github.com/IABTechLab/iab-agentic-primitives/blob/2fc7029fb9eca801bc94586aec398906aa6af6c0/spec/jsonschema/protocol/DealBookingRequest.json'
+  - 'https://github.com/IABTechLab/iab-agentic-primitives/blob/2fc7029fb9eca801bc94586aec398906aa6af6c0/spec/jsonschema/protocol/ErrorEnvelope.json'
+  - 'https://github.com/IABTechLab/iab-agentic-primitives/blob/2fc7029fb9eca801bc94586aec398906aa6af6c0/spec/jsonschema/Negotiation.json'
   - 'https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/docs/integration/negotiation.md'
   - 'https://github.com/IABTechLab/buyer-agent/blob/0c3a1545e334a0dc6acf0a6722b554cc4a4503d6/docs/api/openapi.json'
-  - 'https://iabtechlab.com/opendirect'
 related:
   - '/protocols/adcp-vs-aamp/'
   - '/guides/what-agentic-ad-protocols-dont-standardize/'
-  - 'https://adcpexplorer.noetis.dev/operations/get-products/'
-  - 'https://adcpexplorer.noetis.dev/areas/protocol/'
-  - 'https://aampexplorer.noetis.dev/negotiation/'
-  - 'https://aampexplorer.noetis.dev/repos/iab-agentic-primitives/'
-  - 'https://briefgateway.noetis.dev/'
+  - '/guides/agent-discovery-files/'
+  - 'https://adcpexplorer.com/operations/get-products/'
+  - 'https://adcpexplorer.com/operations/create-media-buy/'
+  - 'https://adcpexplorer.com/areas/protocol/'
+  - 'https://adcpexplorer.com/areas/creative/'
+  - 'https://aampexplorer.com/negotiation/'
+  - 'https://aampexplorer.com/repos/iab-agentic-primitives/'
+  - 'https://briefgateway.com/'
+  - 'https://whatisagenticbuying.com/how-it-works/'
 reviewState: cto-reviewed
 ---
 
-## What does this trace cover, and what is invented?
+AAMP's shared buyer-to-seller contract begins at the quote and stops at the deal ID. Creative, delivery reporting and spending authority fall outside it, which puts all three inside your integration budget, per counterparty, forever.
 
-One campaign, walked call by call. The buyer is an agent acting for an advertiser that wants connected TV and online video for a product launch. Every operation name, every field name and every enum value below comes from AdCP release 3.1.10 as published in `dist/schemas/3.1.10/`, or from `iab-agentic-primitives` at commit `2fc7029`.
+AdCP's surface runs the other way, from who authorised the spend through to what it delivered and who gets billed for the tooling. One connected-TV campaign uses 13 of the 64 operations it publishes in 3.1.13. The procurement decision is settled before the first payload, by where each contract starts and where it gives up.
 
-Invented: the advertiser, the budget numbers, the identifiers and the brief text. Not invented: the shape around them. If a field isn't in this trace, it's because the schema doesn't have it.
+## The two stacks, step for step
 
-Two things to fix before the first call.
+| Step                 | AdCP 3.1.13                                                                                                 | AAMP canonical contract                                                                                         |
+| -------------------- | ----------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
+| Capability discovery | `get_adcp_capabilities`                                                                                     | `/.well-known/agent.json`, then `/registry/agents/discover`                                                     |
+| Spending authority   | `sync_plans`, then `check_governance`                                                                       | None. `ConsentContext` rides on the quote                                                                       |
+| Inventory discovery  | `get_products` with a prose `brief`                                                                         | `GET /products`, then `/products/avails`                                                                        |
+| Price agreement      | `refine` with an `ask`, then `finalize`                                                                     | `/api/v1/quotes`, then a numeric `buyer_price`                                                                  |
+| Audience attachment  | `get_signals`, `activate_signal`, `sync_audiences`                                                          | `audience_plan`, an open object                                                                                 |
+| Creative             | `sync_creatives`, `build_creative` and six more                                                             | None in the wire contract                                                                                       |
+| Commit               | `create_media_buy` returning `media_buy_id`                                                                 | `/api/v1/deals` returning `deal_id`                                                                             |
+| Modification         | `update_media_buy`, PATCH semantics                                                                         | `/api/v1/change-requests`                                                                                       |
+| Delivery reporting   | `get_media_buy_delivery`, `get_media_buys`                                                                  | None. `/deals/{id}/performance` on the seller agent, `/reports/{job_id}` on the buyer agent, neither a standard |
+| Closing the loop     | `provide_performance_feedback`, `report_plan_outcome`, `report_usage`                                       | No counterpart                                                                                                  |
+| Errors               | `core/error.json`, 92 documented codes, open vocabulary, `recovery`, `retry_after`, 15 typed detail schemas | `ErrorEnvelope`, closed 11-code enum, no recovery or retry hint                                                 |
 
-**Pin the version at release precision.** `core/version-envelope.json` is explicit: `adcp_version` takes values like `"3.1"`, and "Patches are not negotiated." Sending `"3.1.10"` is wrong even though 3.1.10 is the release you read the schemas from. The envelope also advises emitting the deprecated `adcp_major_version` alongside it through the 3.x line, for sellers that only read the legacy field.
+Four of those eleven rows are empty on the AAMP side, and the two questions a finance team asks first, who authorised this spend and what did it deliver, are two of the four. That is my case for putting AdCP first on an integration roadmap and treating AAMP as the negotiation layer it is good at. The [longer version of that argument](/protocols/adcp-vs-aamp/) sits with the version evidence.
 
-**Expect async.** Seven of the 64 operations in 3.1.10 ship async response arms: `get_products`, `create_media_buy`, `update_media_buy`, `sync_creatives`, `sync_catalogs`, `build_creative` and `get_signals`. Those are the calls that can return `status: "submitted"` with a `task_id` instead of a result. The other 57 answer in line. The [protocol envelope reference](https://adcpexplorer.noetis.dev/areas/protocol/) has the full lifecycle.
+The price of the call is the negotiation record. AdCP has no field for a counter-offer, so a desk that wants a machine-checkable concession trail builds one in its own orchestration, and AAMP is the stack that already has one. Governance is the second qualification: `check_governance` validates against a registered plan, so with no plan there is nothing to check, and AdCP ships its strongest control as opt-in.
 
-## Step 1: what does this seller actually support?
+## Who is in the trace
 
-`get_adcp_capabilities` is the first call, and it is the only one that is required of every AdCP agent regardless of which protocols it implements.
+AdCP is the Ad Context Protocol, one versioned registry out of the adcontextprotocol project, and you call its operations as tool calls over MCP and A2A. AAMP is Agentic Advertising Management Protocols, IAB Tech Lab's umbrella over eight independently versioned repositories, and its shared contract is an OpenAPI 3.1 document you hit over plain HTTP, so where one stack has operation names the other has URL paths.
+
+Five parties show up: a buyer agent for the advertiser, a seller agent for the publisher, and AdCP's governance agent (spending authority), signals agent (segments) and vendor agent (invoicing). AAMP's shared contract knows about two.
+
+`build_creative`, `preview_creative`, `update_media_buy` and `sync_audiences` get named in passing and never called, which leaves 51 operations a straightforward campaign never touches. A campaign that changes mid-flight adds `update_media_buy` to the count. Anyone quoting you a per-operation implementation estimate for all 64 is quoting you for a surface you will not use.
+
+The payloads below are the wire view: real field names at the paths the schemas put them, with the budgets and identifiers invented. There is a [prose version of the same buy](https://whatisagenticbuying.com/how-it-works/), no field names in it, if you want the story first.
+
+## Before the first call
+
+The envelope will not let you pin the wire version at release precision. `core/version-envelope.json` takes `adcp_version` as a major and a minor with an optional prerelease suffix, so `"3.1"` validates and `"3.1.13"`, the release you read the schemas from, does not. The file says why: "Patches are not negotiated; surface them as build_version on capabilities for operational visibility." Keep emitting the deprecated `adcp_major_version` through 3.x anyway, for sellers that read only the legacy field.
+
+## Capability discovery, then spending authority
+
+`get_adcp_capabilities` is the only unconditionally required task in AdCP. The Shared table in `docs/protocol/required-tasks.mdx` has one other row, `sync_agent_notification_configs`, and it is conditional.
+
+Two things come back that you have to read: `supported_protocols`, and an `adcp` block whose `supported_versions` is the authoritative list of releases the seller speaks. Read `request_signing` off the same response before you send anything mutating. It says whether RFC 9421 signed HTTP requests are required, and finding that out from a failed `create_media_buy` is finding it out too late.
+
+The request's `protocols` enum is snake_case: `media_buy`, `signals`, `governance`, `sponsored_intelligence`, `creative`. The registry directories for those areas are kebab-case. A client that generates its constants from directory names ships strings the seller rejects.
+
+Spending authority lives with the governance agent, and the plan gets registered there before any buying happens.
 
 ```json
 {
-  "adcp_version": "3.1",
-  "adcp_major_version": 3,
-  "protocols": ["media_buy", "creative", "signals", "governance"]
+  "plan_id": "plan_q4_launch",
+  "brand": { "domain": "example-advertiser.com" },
+  "objectives": "Launch awareness across CTV and online video",
+  "budget": { "total": 400000, "currency": "USD", "per_seller_max_pct": 40 },
+  "flight": { "start": "2026-09-01T00:00:00Z", "end": "2026-10-15T23:59:59Z" },
+  "policy_categories": ["fair_housing"],
+  "human_review_required": true
 }
 ```
 
-`protocols` is optional and narrows the answer; omit it and the seller returns everything it supports. Its enum takes five values, `media_buy`, `signals`, `governance`, `sponsored_intelligence` and `creative`, in snake_case. The schema registry uses kebab-case group keys for the same areas, which is a naming split worth knowing about before you generate client code from directory names.
+One entry in `plans[]`, alongside a required `idempotency_key`. The first five members are required; the optional ones carry the teeth. `static/registry/policy-categories/` holds ten categories as registry strings rather than an enum, so a new category can arrive without a release. Only four of the ten are enforced by the validator itself, and they are the four you would guess from a compliance memo: `fair_housing`, `fair_lending`, `fair_employment`, `pharmaceutical_advertising`. The other six, `political_advertising` included, are strings no code reads, so the extensibility is currently a place to file categories that do nothing. If your compliance officer is relying on one of those six, tell them today rather than in the incident review.
 
-The response carries `supported_protocols` as its one other required field beyond the envelope, plus per-protocol capability blocks: `media_buy`, `creative`, `signals`, `governance`, `brand`, `sponsored_intelligence`, `account`, `identity`, `measurement`, `compliance_testing`. It also carries `specialisms`, `request_signing`, `experimental_features` and `last_updated`.
+## How AdCP negotiates a price: in English, and in nothing else
 
-Read `request_signing` before anything else. It tells you whether the seller requires RFC 9421 signed HTTP requests on mutating calls, and a buyer that discovers that after sending `create_media_buy` has already failed.
-
-## Step 2: does the buyer have authority to spend this money?
-
-Governance in AdCP is a separate agent with its own operations, and the plan is registered before the buying starts. `sync_plans` pushes it.
-
-```json
-{
-  "adcp_version": "3.1",
-  "idempotency_key": "0f0d1b2c-4a1e-4c7f-8f6a-9a1f2c3d4e5f",
-  "plans": [
-    {
-      "plan_id": "plan_q4_launch",
-      "brand": { "domain": "example-advertiser.com" },
-      "objectives": "Launch awareness across CTV and online video",
-      "budget": { "total": 400000, "currency": "USD", "per_seller_max_pct": 40 },
-      "flight": { "start": "2026-09-01T00:00:00Z", "end": "2026-10-15T23:59:59Z" },
-      "channels": { "allowed": ["ctv", "olv"] },
-      "human_review_required": false
-    }
-  ]
-}
-```
-
-`plan_id`, `brand`, `objectives`, `budget` and `flight` are the required members of a plan. The optional members are where the interesting constraints live: `policy_ids`, `policy_categories`, `restricted_attributes`, `min_audience_size`, `approved_sellers`, `audience` and `custom_policies`.
-
-`policy_categories` is the field with teeth. Its values are registry-defined strings rather than an enum, deliberately, so new categories can be added as regulation moves. The registry at `static/registry/policy-categories/` carries ten: `age_restricted`, `children_directed`, `fair_employment`, `fair_housing`, `fair_lending`, `firearms_weapons`, `gambling_advertising`, `health_wellness`, `pharmaceutical_advertising`, `political_advertising`.
-
-Four of those bite at the schema level. `sync-plans-request.json` carries an `if/then` that fires when `policy_categories` contains `fair_housing`, `fair_lending`, `fair_employment` or `pharmaceutical_advertising`: the plan must then also carry `human_review_required: true`, or it fails validation. A second `if/then` does the same for the `eu_ai_act_annex_iii` policy ID. Every other category, political advertising included, depends on the governance agent's implementation rather than a schema invariant. That distinction is the difference between a control and an intention.
-
-## Step 3: how does an agent find inventory from a brief?
-
-`get_products` is the discovery call, and `buying_mode` is required on every v3 request. Three values: `brief`, `wholesale`, `refine`.
+`get_products` is discovery, and `buying_mode` is required on every 3.x request, taking `brief`, `wholesale` or `refine`.
 
 ```json
 {
@@ -130,78 +155,21 @@ Four of those bite at the schema level. `sync-plans-request.json` carries an `if
   "brief": "Connected TV and online video for a September product launch. Adults 25-54, US only, brand-safe premium video, no news adjacency.",
   "brand": { "domain": "example-advertiser.com" },
   "account": { "account_id": "acct_8842" },
-  "filters": { "channels": ["ctv", "olv"] },
-  "preferred_delivery_types": ["guaranteed"],
-  "pagination": { "max_results": 25 }
+  "filters": { "channels": ["ctv", "olv"] }
 }
 ```
 
-The response returns `products[]` and, when the seller curates rather than just filters, `proposals[]`. A `product` requires seven fields: `product_id`, `name`, `description`, `publisher_properties`, `delivery_type`, `pricing_options` and `reporting_capabilities`. Everything else on it is optional, including `forecast`, `measurement_terms`, `performance_standards`, `creative_policy` and `format_options`.
+The response carries `products[]` and, when the seller curates rather than filters, `proposals[]`. A product has 44 properties, requires seven, and carries `pricing_options` as a discriminated array with nine models on disk, CPM through flat rate and time. Choosing a `pricing_option_id` is how an AdCP buyer accepts a rate; the [get_products reference](https://adcpexplorer.com/operations/get-products/) has the other 43 fields, and [what belongs in the brief string rather than in `filters`](https://briefgateway.com/spec/brief-vs-filters/) is a decision with money on it.
 
-`pricing_options` is where the money starts. It is a discriminated array keyed on `pricing_model`, with one schema per model under `pricing-options/`: CPM, vCPM, CPC, CPCV, CPV, CPP, CPA, flat rate and time-based. A product can offer several. The buyer picks one by `pricing_option_id` at package time, which is the AdCP equivalent of accepting a rate.
+Pushing back happens inside `get_products` too, on a second call with `buying_mode: "refine"`. Entries are discriminated on `scope`: request-scoped carries only a prose `ask`, product-scoped adds `more_like_this`, and only proposal-scoped takes `finalize`. Finalize is exclusive: "if any entry has `action: 'finalize'`, ALL entries in the array MUST be proposal-scoped with `action: 'finalize'`", or the seller returns `INVALID_REQUEST`. Multiple finalizes all land or none do. There is no rollback, and `proposal_status` has exactly two values, so a half-finished finalize is neither visible nor recoverable.
 
-Note what did not happen here. The buyer did not send targeting parameters and get back a filtered list. It sent a paragraph of English and got back a curated set with a publisher's recommendation attached. That is the actual design difference between AdCP discovery and an ad server query, and it is why the [brief itself is a structured artifact worth getting right](https://briefgateway.noetis.dev/).
+That prose `ask` is the whole negotiation vocabulary. Nowhere in the published schemas is there a `buyer_price`, a `round_number` or a `concession_pct`. A trading desk that wants a machine-checkable concession trail out of AdCP is going to build it in its own orchestration or not have one.
 
-## Step 4: how does a buyer push back on a proposal?
+## Creative, and the two shapes that catch people out
 
-`refine` is a second `get_products` call, not a separate operation.
+Creative is eight operations in AdCP, third-largest behind Governance's 22 and Media Buy's 11, and zero operations in AAMP's shared contract. Build against AAMP and the creative pipeline is yours to invent.
 
-```json
-{
-  "adcp_version": "3.1",
-  "buying_mode": "refine",
-  "refine": [
-    { "scope": "request", "ask": "more CTV, less mid-roll online video" },
-    {
-      "scope": "product",
-      "product_id": "prod_ctv_premium_01",
-      "action": "more_like_this",
-      "ask": "same audience, longer ad pods"
-    },
-    { "scope": "product", "product_id": "prod_olv_run_of_site", "action": "omit" }
-  ]
-}
-```
-
-Each entry is discriminated on `scope`. Request-scoped entries carry only an `ask`. Product-scoped entries take `action` of `include`, `omit` or `more_like_this`. Proposal-scoped entries take `include`, `omit` or `finalize`.
-
-`finalize` is the commit, and it has two rules that will bite an implementer. First, exclusivity: if any entry carries `action: "finalize"`, every entry in the array has to be proposal-scoped and finalize, or the seller rejects with `INVALID_REQUEST`. Second, atomicity: multiple finalize entries against different proposals must all commit or none commit, and the seller must not return success until every named proposal is persisted as committed.
-
-```json
-{
-  "adcp_version": "3.1",
-  "buying_mode": "refine",
-  "refine": [{ "scope": "proposal", "proposal_id": "prop_q4_ctv_mix_v3", "action": "finalize" }]
-}
-```
-
-A finalized proposal moves from `proposal_status: "draft"` to `"committed"` and carries `expires_at`, the hold window. `proposal-status.json` has exactly two values, so there is no "pending" state to poll: a proposal is draft or it is committed.
-
-This is the closest thing AdCP has to negotiation, and it negotiates in prose. The buyer writes "reduce total by 10%" into `ask` and the seller re-prices. There is no `buyer_price` field, no round counter and no concession. Hold that thought until the AAMP section.
-
-## Step 5: how do audience signals get attached?
-
-`get_signals` and `activate_signal`. Between them, that is the entire Signals protocol.
-
-`get_signals` takes a `signal_spec` in natural language, or `signal_refs`, or `signal_ids`, plus `destinations`, `countries` and `filters`. `activate_signal` then makes a discovered signal targetable on a specific platform.
-
-```json
-{
-  "adcp_version": "3.1",
-  "action": "activate",
-  "signal_agent_segment_id": "seg_auto_intenders_us",
-  "destinations": [{ "type": "platform", "platform": "example-dsp", "account": "seat_44120" }],
-  "idempotency_key": "8c1b0d4e-77aa-4f19-9a02-3d5e6f7a8b90"
-}
-```
-
-`signal_agent_segment_id`, `destinations` and `idempotency_key` are all required, and each destination is discriminated on `type`: `platform` with a `platform` string, or `agent` with an `agent_url`. `action` also takes `deactivate`, which the schema ties to data governance: removing a segment from downstream platforms when a campaign ends.
-
-Signals are third-party or marketplace data. First-party CRM records go somewhere else entirely: `sync_audiences`, which takes SHA-256 `hashed_email` and `hashed_phone` and will not accept cleartext. Confusing the two is the most common modelling error I see people make in AdCP, because both end up as targeting.
-
-## Step 6: how do creatives get into the buy?
-
-`sync_creatives` is an upsert against a creative library, capped at 100 creatives per call.
+`sync_creatives` upserts into a library capped at 100 creatives per call.
 
 ```json
 {
@@ -232,15 +200,29 @@ Signals are third-party or marketplace data. First-party CRM records go somewher
 }
 ```
 
-`creative_id`, `name` and `assets` are the required members of a creative asset. Two shapes catch people out. `assets` is an object keyed by the format's `asset_group_id`, not an array, and each value carries an `asset_type` discriminator that selects the matching asset schema. And `format_id`, the legacy named-format path, is always a structured object of `{agent_url, id}` and never a plain string; `format_kind` is the 3.1 canonical path and takes one of 13 values, which is what the example above uses.
+A creative requires `creative_id`, `name` and `assets`, and two of those three have a shape that catches everyone once. `assets` is an object keyed by the format's `asset_group_id` rather than an array, with each value carrying an `asset_type` discriminator that selects the matching asset schema. `format_id` is always a `{agent_url, id}` object rather than a plain string, mutually exclusive with `format_kind`.
 
-`delete_missing` turns the call into a full replacement, and `dry_run` validates without writing, which is the flag to use the first time you point at a new seller.
+`dry_run`, `validation_mode` and `delete_missing` are the flags worth knowing before the first run against a new counterparty, and the [creative area reference](https://adcpexplorer.com/areas/creative/) has the other seven operations. `dry_run` rehearses the sync without applying it, validating library upsert semantics and creative IDs against the seller's current context. `validation_mode` defaults to `strict`, which fails the entire sync on any error, against `lenient`, which processes the valid creatives and reports the rest. And `delete_missing` turns the call into a full library replacement by archiving everything not named in this request, which the schema flags "use with caution" and refuses to combine with `creative_ids`.
 
-When the creative does not exist yet, `build_creative` generates it from a `message` brief plus a `target_format_id`, with `max_spend`, `max_creatives` and `max_variants` as the guard rails, and `preview_creative` renders a manifest before anything is assigned. AdCP has eight creative operations in total, which makes Creative the third-largest area in the protocol behind Governance with 22 and Media Buy with 11. It is also the part of the protocol with no counterpart anywhere in AAMP.
+## Signals attach on a discriminated destination
 
-## Step 7: does the plan allow this specific purchase?
+Third-party segments and first-party CRM records take different operations. `get_signals` and `activate_signal` handle segments; CRM records go to `sync_audiences`, whose SHA-256 `hashed_email` the schema calls "Pseudonymous PII, not anonymous". Both roads end in targeting, which is why [signal and audience](https://adtechglossary.com/signals/audience-vs-signal/) get conflated.
 
-`check_governance` is the gate. The orchestrator or the seller calls it before executing, and it is a read: it does not mutate state.
+```json
+{
+  "adcp_version": "3.1",
+  "action": "activate",
+  "signal_agent_segment_id": "seg_auto_intenders_us",
+  "destinations": [{ "type": "platform", "platform": "example-dsp", "account": "seat_44120" }],
+  "idempotency_key": "8c1b0d4e-77aa-4f19-9a02-3d5e6f7a8b90"
+}
+```
+
+`idempotency_key`, `signal_agent_segment_id` and `destinations` are all required, and `core/destination.json` is a `oneOf` discriminated on `type`: a `platform` branch requiring a `platform` string, or an `agent` branch requiring an `agent_url`. Both take an optional `account`. `action` also takes `deactivate`, which the schema ties to data governance, "removing the segment from downstream platforms, required when campaigns end to comply with data governance policies (GDPR, CCPA)". The teardown is in the contract rather than in a runbook.
+
+## The verdict before the money
+
+`check_governance` is the gate, and it is read-only.
 
 ```json
 {
@@ -254,13 +236,9 @@ When the creative does not exist yet, `build_creative` generates it from a `mess
 }
 ```
 
-The response requires `check_id`, `verdict`, `plan_id` and `explanation`. `verdict` takes three values: `approved`, `denied`, `conditions`. When it returns `conditions`, the `conditions` array tells you what has to be true, and `expires_at` tells you how long the verdict is good for.
+The response requires `check_id`, `verdict`, `plan_id` and `explanation`. `verdict` takes `approved`, `denied` or `conditions`; on `conditions` the `conditions` array says what has to become true, and `expires_at` says how long the verdict is good for. Porting 3.0 code, read that field's description first: "Renamed from `status` in 3.1 to free the top-level `status` key for the envelope task-status ..." The enum values did not move, only the property name, so a 3.0 client reads the task status and treats it as the decision.
 
-One naming trap in this schema. The verdict field was called `status` in 3.0 and was renamed to `verdict` in 3.1 so the top-level `status` key could carry the envelope's task status under MCP flat-on-the-wire serialisation. The enum values did not change; only the property name moved. Code written against 3.0 reads the wrong key and sees the task status instead of the governance decision.
-
-## Step 8: what actually commits the money?
-
-`create_media_buy`. Required: `idempotency_key`, `account`, `brand`, `start_time`, `end_time`, and either `packages` or a `proposal_id`.
+Then the money.
 
 ```json
 {
@@ -275,26 +253,22 @@ One naming trap in this schema. The verdict field was called `status` in 3.0 and
 }
 ```
 
-Three optional webhook slots sit alongside those: `reporting_webhook`, `artifact_webhook` and `push_notification_config`. `reporting_webhook` is not just a URL; it requires `url`, `authentication` and a `reporting_frequency` of `hourly`, `daily` or `monthly`, and that frequency has to be supported by every product in the buy.
+Five fields are required and neither `packages` nor `proposal_id` is one of them. Executing a committed proposal by `proposal_id` lets you skip `packages`; the seller derives them from the proposal's allocations.
 
-Executing a committed proposal by `proposal_id` lets you omit `packages` entirely; the seller derives them from the proposal's allocations. Building packages by hand instead means each entry needs `product_id`, `budget` and `pricing_option_id`, with `impressions`, `pacing`, `targeting_overlay`, `optimization_goals`, `performance_standards` and `creative_assignments` available on top.
+`reporting_webhook`, `artifact_webhook` and `push_notification_config` are optional and sit alongside those, and the first has a requirement inside it. `reporting_webhook` resolves to `core/reporting-webhook.json`, which requires `url`, `authentication` and a `reporting_frequency` of `hourly`, `daily` or `monthly`, and that frequency "must be supported by all products in the media buy". An `hourly` setting across a mixed CTV and online-video buy can be invalidated by a single product. The other two slots take a URL and its auth.
 
-The response is one of exactly three shapes, and the schema says so in its description. Synchronous success returns `media_buy_id` and `packages` in line with a `media_buy_status` of `pending_creatives`, `pending_start`, `active` or `paused`. Terminal failure returns an `errors` array with no media-buy artifact. The submitted branch returns `status: "submitted"` with a `task_id`, and `media_buy_id` lands on the task's completion artifact rather than on this response. A client that reads `media_buy_id` unconditionally breaks on the third shape, which is the shape you get whenever a human has to sign an insertion order.
+The response is one of exactly three mutually exclusive shapes, [all three worth reading in full](https://adcpexplorer.com/operations/create-media-buy/) before you write the client. Sync success returns `media_buy_id`, `packages` and a `media_buy_status` of `pending_creatives`, `pending_start`, `active` or `paused`. Terminal failure returns an `errors` array and no media-buy artifact. The submitted branch returns a `task_id`, and `media_buy_id` lands on the task's completion artifact. A client that reads `media_buy_id` unconditionally breaks on that third shape, which is what you get whenever a human signs an insertion order. A repeat of the key returns the existing buy, marked `replayed: true` on the envelope.
 
-`idempotency_key` is the field that makes retries safe. Its own description sets the rule: a repeat with the same key and account returns the existing media buy rather than creating a duplicate. The flag that tells you which happened lives one level up, on `core/protocol-envelope.json` — `replayed: true` means the response came out of the idempotency cache rather than a fresh execution.
+That third shape is the general case for seven of the 64 operations: `get_products`, `create_media_buy`, `update_media_buy`, `sync_creatives`, `sync_catalogs`, `build_creative` and `get_signals` all ship async response arms and can return `status: "submitted"` and a `task_id` instead of a result. The other 57 answer in line, so a client that treats all 64 as async keeps books for 57 that never need them. Retrieval is specified either way: `enums/task-status.json` says the client "can always poll `get_task_status` (legacy `tasks/get`) with `task_id`", webhooks through `push_notification_config` are A2A and REST only because "MCP uses progress notifications instead of webhooks", and a `submitted` task is queued for "hours to days", so the polling interval comes off a human's calendar rather than a request timeout.
 
-## Step 9: how does the buyer know it is running?
+## The reporting loop runs to three different agents
 
-Two different calls for two different questions.
-
-`get_media_buys` answers "what state is this in?" It returns `media_buys[]` with creative approval status, missing assets and configuration, and takes `include_snapshot`, `include_history` and `include_webhook_activity` to widen the answer.
-
-`get_media_buy_delivery` answers "what has it delivered?" Its response requires `reporting_period`, `currency` and `media_buy_deliveries`, and offers `include_package_daily_breakdown`, `time_granularity`, `include_window_breakdown`, `attribution_window` and `reporting_dimensions`. It also carries `partial_data`, `unavailable_count` and `next_expected_at`, which exist because delivery data for some channels arrives in stages rather than final on day one.
+`get_media_buys` answers what state the buy is in. `get_media_buy_delivery` answers what it delivered, and requires nothing at all.
 
 ```json
 {
   "adcp_version": "3.1",
-  "media_buy_ids": ["mb_9f31c7"],
+  "media_buy_ids": ["mb_9f21c0"],
   "start_date": "2026-09-01",
   "end_date": "2026-09-30",
   "time_granularity": "daily",
@@ -302,46 +276,27 @@ Two different calls for two different questions.
 }
 ```
 
-If the buy needs changing rather than watching, `update_media_buy` applies PATCH semantics against `media_buy_id` with a `revision`, and can pause, cancel, move dates or add `new_packages`.
+Every field there is optional, including the buy you are asking about, so an empty request is a schema-valid way to ask a seller for everything. The response carries `partial_data` and `next_expected_at`, because some channels report in stages.
 
-## Step 10: which loops have to be closed after delivery?
+The three reports that close the campaign do not all go to the same place. `provide_performance_feedback` goes back to the seller carrying a normalised `performance_index` rather than raw conversions, and that single float is the entire quantitative channel from buyer to seller in 3.1.13. The governance agent gets `report_plan_outcome`. `report_usage` is for the vendor agent, and it exists because AdCP does not settle payment: it reports the consumption an off-protocol invoice gets built from. Build only the seller-facing half and you have built a third of the loop.
 
-Three loops, and they go to three different counterparties, which is the part people miss when they build only the seller-facing half.
+## Most of a client's code lives in the error model
 
-`provide_performance_feedback` goes back to the seller. It requires `media_buy_id`, `idempotency_key`, `measurement_period` and `performance_index` — a normalised score, not raw conversions — so the seller can optimise without the buyer handing over its outcome data.
+Both stacks publish one error shape and then disagree about what a code is for. AdCP's `core/error.json` requires `code` and `message` and carries a `retry_after` the client "MUST clamp" to 1 through 3600 seconds. Its vocabulary is 92 documented codes in `enums/error-code.json`, deliberately open: `error.code` is wire-typed `string`, sellers may emit codes outside the list, and receivers "MUST decode unknown codes" by falling back to `error.recovery`, one of `transient`, `correctable`, `terminal`. So the code list is documentation and the recovery classification is the contract. When `recovery` is absent it defaults to `transient`, which means an error that forgot to say what kind of error it is gets retried.
 
-`report_plan_outcome` goes back to the governance agent. It requires `plan_id`, `idempotency_key`, `outcome` and `governance_context`, and returns `outcome_id`, `outcome_state` and `committed_budget`. This is the call that moves budget from reserved to spent in the governance agent's ledger.
+Underneath that sit 15 typed schemas in `error-details/`, one per failure a client can do something about. The three that change client behaviour most are `budget-too-low`, `version-unsupported` and `rate-limited`, each carrying the field that makes the next attempt different from a repeat: a minimum budget, the version the seller does speak, a wait. A production client spends more code against those 15 than against the happy path.
 
-`report_usage` goes to the vendor agent. It requires `idempotency_key`, `reporting_period` and `usage`, and it exists so vendors can bill: impressions served, signals queried, governance checks run. AdCP does not settle payment. It reports the consumption that an invoice is built from, and the invoice happens off-protocol.
+AAMP's `ErrorEnvelope` is one shape over a closed 11-value enum, with no recovery classification and no retry timing. A closed enum is easier to switch on, and a client built on one ships a release the day the spec adds a code.
 
-That is one campaign, ten steps, thirteen distinct operations out of the 64 in the release.
+## The same buy through AAMP's contract
 
-## Where does AAMP's path differ?
+The wire contract underneath everything in this section is [unreleased](https://aampexplorer.com/versions/): both reference agents pin the package at `v0.5.0`, and the OpenAPI document's own `info.version` reads `0.1.0`. Read the field names below as intent rather than as an integration target.
 
-AAMP's canonical buyer-to-seller contract lives in `iab-agentic-primitives`, whose OpenAPI document declares 13 operations total. Here is the same buy through it.
+Discovery is a file plus a registry call. `GET /.well-known/agent.json` returns the Agent Card with `capabilities`, `skills`, `inventory_types`, `supported_deal_types` and `trust_status`; `POST /registry/agents/discover` registers the counterparty with a one-field body. No capability negotiation, no version pin, nothing saying which release you are talking to. [Agent discovery files](/guides/agent-discovery-files/) has both models side by side.
 
-**Discovery.** `GET /.well-known/agent.json` returns the Agent Card: `capabilities.protocols`, `skills[]`, `inventory_types`, `supported_deal_types`. Then `POST /registry/agents/discover` with `{"agent_url": "https://seller.example.com"}` fetches and registers the counterparty. There is no per-protocol capability negotiation and no version pin in the envelope.
+`GET /products` takes `limit` and `offset` and nothing else, because "filtering is client-side; no /products/search". Then `POST /products/avails` per product, in the lowercase unseparated field names (`productid`, `startdate`, `enddate`) inherited from OpenDirect 2.1. `POST /api/v1/quotes` requires `idempotency_key`, `product_id` and `deal_type`, one of `PG`, `PD` or `PA`, and `buyer_identity` sets the access tier, though "the effective tier is capped server-side by registry-verified trust" and that ceiling is code rather than schema, `TRUST_TIER_CEILING` in `registry_client.py`. So the tier your agent asks for is a claim the seller's registry lookup can quietly downgrade, and the round limits and concession caps you thought you had move with it.
 
-**Inventory.** `GET /products` takes `limit` and `offset` and returns `products[]` with `total_count`. Filtering is client-side; the OpenAPI summary says so. Then `POST /products/avails` asks whether a specific product can deliver:
-
-```json
-{
-  "productid": "prd_ctv_primetime",
-  "startdate": "2026-09-01",
-  "enddate": "2026-10-15",
-  "budget": 250000,
-  "requestedImpressions": 18000000,
-  "targeting": { "geo": ["US"] }
-}
-```
-
-The response requires `productid`, `availableImpressions`, `estimatedCpm` and `totalCost`, with `guaranteedImpressions`, `deliveryConfidence` and `availableTargeting` optional. The field names are lowercase and unseparated because they are OpenDirect 2.1's wire names, carried through unchanged.
-
-**Quote.** `POST /api/v1/quotes` requires `product_id`, `deal_type` and `idempotency_key`. `deal_type` is a three-value enum: `PG` for programmatic guaranteed, `PD` for preferred deal, `PA` for private auction. The optional fields are the ones that set the price: `buyer_identity`, `impressions`, `target_cpm`, `rate_card_id`, `agent_url` and `consent_context`.
-
-`buyer_identity` deserves a sentence. The buyer reveals identity progressively, and pricing follows: four access tiers from `public` through `advertiser`. But the schema description says the effective tier "is capped server-side by registry-verified trust," so claiming to be an advertiser does not make you one. Trust status caps the tier; the tier caps the price.
-
-**Negotiation.** This is the step AdCP does not have.
+Here AAMP has a step AdCP doesn't.
 
 ```json
 {
@@ -354,64 +309,32 @@ The response requires `productid`, `availableImpressions`, `estimatedCpm` and `t
 }
 ```
 
-That price object is not decoration. AAMP's flagged decision FD-11 makes `Money` an integer micros amount and bans floats on the wire, and the schema says why: "IEEE 754 floating point is non-deterministic for money math (`0.1 + 0.2 != 0.3`, and repeated CPM arithmetic accumulates error), and the two source repos used `float` end-to-end; that defect must not be fossilized into the spec." Sending `41.50` is rejected at validation rather than truncated. The one exception is `POST /products/avails`, whose `budget` stays a plain number because it inherits OpenDirect 2.1's float dialect.
+That price object is the most opinionated thing in either corpus. Flagged decision FD-11 makes `Money` an integer micros amount and bans floats: "IEEE 754 floating point is non-deterministic for money math ... that defect must not be fossilized into the spec." Sending `41.50` gets rejected rather than truncated. The one float left on the wire is `avails.budget`. `action` takes `accept`, `counter`, `final_offer` or `reject` and has no default, and a round requires `round_number`, `buyer_price`, `seller_price` and `action`, with the response adding `concession_pct` and `cumulative_concession_pct`. Round limits and concession caps vary by trust tier, four rows of them, on [AAMP Explorer](https://aampexplorer.com/negotiation/).
 
-`action` takes `accept`, `counter`, `final_offer` or `reject`, and it has no default: the schema notes that "the action-less bare-price payload that caused the historical 422 does not validate." `buyer_price` is required for `counter` and `final_offer`, an optional echo on `accept`, and omitted on `reject`. The response returns a `NegotiationRound` with `concession_pct` and `cumulative_concession_pct`, plus `rounds_remaining` when the seller chooses to disclose it, and a `status` that goes terminal on `accepted`, `rejected` or `expired`. The reference seller bounds all of this with per-tier round limits and concession caps, published on [AAMP Explorer's negotiation page](https://aampexplorer.noetis.dev/negotiation/).
+Booking is thin because the quote did the work: `POST /api/v1/deals` requires only `quote_id` and `idempotency_key`, and the `Deal` it returns requires `deal_id`, `deal_type`, `product`, `pricing` and `terms` while carrying `openrtb_params` optionally. `openrtb_params` is the field that hands the buy to a DSP, and a seller can return a valid, booked `Deal` without it.
 
-**Booking.** `POST /api/v1/deals` requires only `quote_id` and `idempotency_key`. Everything commercial was settled in the quote; booking binds it. The response wraps a `Deal` carrying `deal_id`, `openrtb_params`, `activation_instructions`, `pricing`, `supply_chain`, `terms` and `expires_at`. That `openrtb_params` field is the handoff: an AAMP deal terminates in an OpenRTB deal ID that a DSP bids against.
+## What the schema enforces, and what it only describes
 
-**After booking.** `POST /api/v1/change-requests` with `change_type`, `proposed_values`, `severity` and a `makegood` flag. Reporting is not in the shared contract at all: `/api/v1/deals/{deal_id}/performance` on the seller agent, `/reports/{job_id}` on the buyer agent, and neither is a standard.
+53 AdCP schema files carry an `if` conditional. Zero of AAMP's 48 shared-contract schemas do. An `if` is a rule a validator will hold your counterparty to; a description is a rule you will be arguing about over email.
 
-### Step-by-step correspondence
+| Stack                     | Payload                                                                    | Result                                                     |
+| ------------------------- | -------------------------------------------------------------------------- | ---------------------------------------------------------- |
+| AdCP `sync_plans`         | `policy_categories: ["fair_housing"]`, no `human_review_required`          | rejected: "'human_review_required' is a required property" |
+| AdCP `sync_plans`         | same plan, `human_review_required: false`                                  | rejected: "True was expected"                              |
+| AdCP `sync_plans`         | `policy_ids: ["eu_ai_act_annex_iii"]`, no `human_review_required`          | rejected                                                   |
+| AdCP `sync_plans`         | `policy_categories: ["political_advertising"]`, no `human_review_required` | accepted                                                   |
+| AdCP `create_media_buy`   | the required five, neither `packages` nor `proposal_id`                    | accepted                                                   |
+| AAMP `NegotiationMessage` | `action: "counter"`, no `buyer_price`                                      | accepted                                                   |
+| AAMP `NegotiationMessage` | `action: "reject"` carrying a `buyer_price`                                | accepted                                                   |
+| AAMP `NegotiationMessage` | `buyer_price.amount_micros: 41.5`                                          | rejected: "41.5 is not of type 'integer'"                  |
+| AAMP `NegotiationMessage` | a price with no `action`                                                   | rejected: "'action' is a required property"                |
 
-| Step                 | AdCP 3.1.10                                                           | AAMP canonical contract                                                                                                              |
-| -------------------- | --------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
-| Capability discovery | `get_adcp_capabilities`                                               | `GET /.well-known/agent.json`, then `POST /registry/agents/discover`                                                                 |
-| Spending authority   | `sync_plans`, then `check_governance` before each action              | No counterpart. `ConsentContext` rides on the quote; `seller-agent` has `/approvals` for human review                                |
-| Inventory discovery  | `get_products` with a natural-language `brief`                        | `GET /products` with pagination, then `POST /products/avails` per product                                                            |
-| Price agreement      | `refine` with a prose `ask`, then `action: "finalize"`                | `POST /api/v1/quotes`, then `POST /api/v1/negotiations/messages` with a numeric `buyer_price`                                        |
-| Audience attachment  | `get_signals`, `activate_signal`, `sync_audiences`                    | `audience_plan` as an open object on the quote and booking; `POST /agentic-audience/match` on `seller-agent`                         |
-| Creative             | `sync_creatives`, `build_creative`, `preview_creative` and five more  | No counterpart in the wire contract. `Creative` and `Assignment` exist as objects; `agentic-direct`'s tool handlers return mock data |
-| Commit               | `create_media_buy` returning `media_buy_id`                           | `POST /api/v1/deals` returning `deal_id` and `openrtb_params`                                                                        |
-| Modification         | `update_media_buy` with PATCH semantics                               | `POST /api/v1/change-requests` with a seller-owned lifecycle                                                                         |
-| Delivery reporting   | `get_media_buy_delivery`, `get_media_buys`                            | No counterpart in the wire contract. Per-implementation endpoints only                                                               |
-| Closing the loop     | `provide_performance_feedback`, `report_plan_outcome`, `report_usage` | No counterpart                                                                                                                       |
+AdCP's hardest governance rule compiles. Declare `fair_housing` and the validator makes you declare human review, and it will not take `false` for an answer either. Declare `political_advertising` and nothing happens.
 
-### Three differences that change how you build
+FD-11 holds up on the AAMP side, so floats bounce. The negotiation rules go the other way: `buyer_price` is described as "REQUIRED for 'counter'/'final_offer'" and "omitted on 'reject'", and the validator enforces neither, so a counter with no price and a rejection carrying one both sail through. Anyone building against `NegotiationMessage` is implementing that state machine in application code, whether they planned to or not.
 
-**Where the price is settled.** AdCP settles price by picking a `pricing_option_id` off a product the seller already published, optionally after a prose refinement. AAMP settles it by exchanging numbers until one side says `accept`. If your business runs on negotiated rates, AAMP models what you already do. If it runs on rate cards, AdCP does.
+`create-media-buy-request.json` says "One of packages or proposal_id must be provided" and has no `oneOf` to make it so, which is why the call that commits the money accepts a request with nothing to buy in it. Run both stacks' schemas against your own fixtures before you trust a description.
 
-**Where the commit point is.** AdCP commits in one call, `create_media_buy`, guarded by an `idempotency_key` and, when the plan requires it, a governance verdict. AAMP commits in two, quote then book, with the quote acting as a priced, expiring option. Two-phase commit is more work and gives you a document to hand a finance team.
+Neither trace measures delivery against a conversion, and neither settles a payment. AdCP says the first part about itself in `known-limitations.mdx`: "Not an attribution protocol." The list of [everything else neither stack standardises](/guides/what-agentic-ad-protocols-dont-standardize/) is longer than the trace above. So the thirteen calls get you a booked, delivering, governed campaign and stop one step short of the number your CFO cares about, which stays where it is today: in your measurement stack, reconciled by hand.
 
-**What the buy terminates in.** An AdCP media buy terminates in a media buy: packages, creative assignments, delivery reporting, and optionally Trusted Match activation at serve time. An AAMP deal terminates in `openrtb_params`, which is to say in a deal ID that an existing DSP already knows how to bid against. AAMP's path is shorter because it stops at the boundary of infrastructure that already exists.
-
-One thing worth saying plainly: the AAMP side of this trace comes from a repository whose README says "WORK IN PROGRESS — NOT YET RELEASED," pinned at `v0.5.0` by both reference agents. The endpoints are real and the schemas are real. The stability promise is not there yet.
-
-## What is missing from both traces?
-
-Neither path above contains a measurement call, because neither protocol has one. AdCP carries delivery facts and outcome signals and explicitly declines to specify an attribution model; AAMP has no measurement object in its shared contract at all. Neither path contains a payment or settlement call. Neither contains a dispute flow for the case where the buyer's numbers and the seller's numbers disagree.
-
-Those gaps have their own page: [what neither stack standardises](/guides/what-agentic-ad-protocols-dont-standardize/).
-
-## Common questions
-
-**Can this trace be run today?**
-The AdCP half can be written against a frozen artifact: every schema in it is published under `dist/schemas/3.1.10/`, and the same release ships a compliance suite — 38 universal storyboards plus per-protocol and per-specialism scenarios under `dist/compliance/3.1.10/` — to test an implementation against. Whether a given seller answers is a separate question from whether the protocol is specified. The AAMP half is written against an unreleased library, so treat the field names as accurate at commit `2fc7029` and re-check them before you ship.
-
-**Which of these calls are required?**
-In AdCP, `get_adcp_capabilities` is required of every agent. The rest depend on role and on which protocols the agent implements; `docs/protocol/required-tasks.mdx` is the per-role conformance matrix. In the AAMP contract, nothing is formally required, because there is no conformance level to be required by.
-
-**Do I need a governance agent?**
-Only if a plan is registered. `check_governance` validates against a `plan_id`, so with no plan there is nothing to check against. That means the strongest control in AdCP is opt-in. Once you do register a plan, one rule is enforced by the schema rather than the agent: declaring `fair_housing`, `fair_lending`, `fair_employment` or `pharmaceutical_advertising` forces `human_review_required: true`.
-
-**What happens on a retry?**
-Twenty-nine AdCP request schemas take an `idempotency_key` — every mutating operation in the release — and the response envelope marks a repeat with `replayed`. AAMP does the same on all three money-mutating endpoints, quote, book and change request, and the schemas label them with the internal flag `FD-12`. Both stacks got this right, which is not something you can say about most REST APIs in advertising.
-
-**Why is there no auction step?**
-Because neither of these is an auction protocol. AdCP's FAQ argues the point directly: OpenRTB already works at the impression layer, and AdCP targets direct-sold inventory, guaranteed deals and commerce media. AAMP reaches the auction by handing a deal ID to one. The serve-time layers, AdCP's Trusted Match and AAMP's ARTF, are covered in the [protocol comparison](/protocols/adcp-vs-aamp/).
-
-## How was this trace checked?
-
-Every AdCP field name was read from `dist/schemas/3.1.10/` in `adcontextprotocol/adcp` at commit `f1a35ab` (2026-08-06), which is the published stable release per `dist/schemas/latest.json`. Every AAMP field name was read from `spec/jsonschema/` and `spec/openapi/iab-agentic-api.yaml` in `IABTechLab/iab-agentic-primitives` at commit `2fc7029` (2026-07-28), with the negotiation strategy table from `IABTechLab/seller-agent` v2.4.1 and the booking workflow from `IABTechLab/buyer-agent` at `0c3a154`.
-
-The payloads are illustrative, not executed. I read schemas; I did not run a conformance suite against a live agent. Where a payload omits optional fields it does so for readability, and where it includes one it is because the field exists in the schema at that path. **Verified 2026-08-09.**
+If you are scoping one of these integrations, [I do that for money](/services/).

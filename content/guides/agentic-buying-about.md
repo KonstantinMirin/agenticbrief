@@ -1,24 +1,25 @@
 ---
-title: 'About, Method and Non-Affiliation'
-description: 'How this site checks its claims, which repository commits it reads, what it deliberately refuses to do, and its relationship to AgenticAdvertising.org and IAB Tech Lab, which is none.'
-answer: 'About, method and non-affiliation: this site is written from local clones of the AdCP and IAB Tech Lab repositories, pinned to named commits. It is independent of AgenticAdvertising.org and IAB Tech Lab.'
+title: 'About This Site and Who Pays for It'
+description: 'What this site answers, who writes it, what he sells, and why neither of the two organisations writing the agentic advertising standards has any say over what appears here.'
+answer: 'This site answers one question in plain English for people who buy or sell advertising: what agentic buying is, how it works, and how much of it is real. It is written by an operator who sells work in the field he writes about.'
 pubDate: 2026-08-09
-cluster: 'wiab-term'
+updatedDate: 2026-08-09
+cluster: 'wiab-trust'
 keywords:
-  [
-    'whatisagenticbuying sources',
-    'agentic buying methodology',
-    'agentic buying non-affiliation',
-    'adcp source of truth',
-  ]
+  ['whatisagenticbuying sources', 'agentic buying methodology', 'agentic buying non-affiliation']
 citations:
   [
-    'https://github.com/adcontextprotocol/adcp',
-    'https://github.com/adcontextprotocol/adcp/blob/f1a35aba734befa809e1fa780ad77c7edd614e96/dist/schemas/latest.json',
-    'https://github.com/IABTechLab/AAMP',
-    'https://adcontextprotocol.org/',
+    'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/schemas/latest.json',
+    'https://github.com/adcontextprotocol/adcp/blob/main/dist/schemas/latest.json',
+    'https://github.com/adcontextprotocol/adcp/blob/main/package.json',
+    'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/docs/faq.mdx',
+    'https://github.com/IABTechLab/AAMP/blob/3b20e67b568235d86c4025bec7c1301edd7466a0/README.md',
+    'https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/docs/guides/agent-management.md',
+    'https://github.com/IABTechLab/agentic-audiences/blob/106ebd645668677ff8be458877a5684a5d229961/specs/v1.0/schema/agent_interface.schema.json',
+    'https://github.com/IABTechLab/iab-agentic-primitives/blob/2fc7029fb9eca801bc94586aec398906aa6af6c0/README.md',
     'https://agenticadvertising.org/',
     'https://iabtechlab.com/standards/aamp-agentic-advertising-management-protocols/',
+    'https://iabtechlab.com/press-releases/iab-tech-lab-releases-aamp-2-3-bringing-enterprise-grade-infrastructure-and-privacy-diligence-to-agentic-advertising/',
     'https://www.dynatrace.com/news/press-release/pulse-of-agentic-ai-2026/',
   ]
 related:
@@ -27,64 +28,37 @@ related:
     '/maturity/',
     '/how-it-works/',
     '/agentic-buying-vs-programmatic/',
-    'https://agenticadlab.noetis.dev/about/',
-    'https://adtechglossary.noetis.dev/about/sources-and-versions/',
+    'https://agenticadlab.com/about/',
+    'https://agenticadlab.com/services/',
+    'https://adtechglossary.com/about/sources-and-versions/',
   ]
 reviewState: cto-reviewed
 ---
 
-## What is this site for?
+## What this site answers
 
-One question, answered as well as I can answer it: what is agentic buying?
+[What agentic buying is](/), [how a buy actually runs](/how-it-works/), [how it differs from programmatic](/agentic-buying-vs-programmatic/), and [how much of it is real yet](/maturity/). It is written for someone who buys or sells advertising and heard the phrase at a conference.
 
-That is the whole scope. Four content pages and this one. The domain is an exact-match answer domain, and the only reason such a domain deserves to exist is if it holds the single best answer to its own question. Adding a blog would make it worse.
+Two figures get quoted everywhere with Dynatrace's name on them: 59% for security, 55% for accuracy. Neither is in Dynatrace's [own release](https://www.dynatrace.com/news/press-release/pulse-of-agentic-ai-2026/), and neither traces to any primary source. The [maturity page](/maturity/) prints the real numbers next to the phantom ones.
 
-The reason the question needs a site at all is that the honest answer is uncomfortable. The term is contested, the only formal definition comes from one of the two competing standards camps, and that camp's own glossary declines to include it. Most writing about agentic buying opens with a confident definition. A confident definition is the wrong answer here, and being right about that is the point of the site.
+Where a primary source and the press coverage of it disagree here, the primary source wins, and no page on this site predicts a date. Where a specification says nothing on a point, the page says so and stops. Guessing produces a plausible sentence with nothing behind it.
 
-## How are the claims on this site checked?
+## I sell work in this field
 
-By reading files, on disk, at a named commit.
+Constantine Mirin, chief executive of Postindustria, where I build agentic systems that have to survive production. That is how I ended up reading two advertising standards line by line.
 
-The AdCP claims come from a clone of `github.com/adcontextprotocol/adcp` at commit `f1a35aba734befa809e1fa780ad77c7edd614e96`, dated 2026-08-06. The AAMP claims come from clones of the eight IAB Tech Lab agentic repositories, with each repository's tag and HEAD commit printed in the table on the [maturity page](/maturity/).
+I also sell work in this field, and that is the disclosure worth leading with. Agentic Ad Lab, the sister site to this one and the technical half of it, publishes [what that work is](https://agenticadlab.com/services/): integration and readiness reviews for companies deciding whether to expose a buying or a selling agent. That includes an audit of which of the 64 operations in AdCP — the protocol most live deployments run on — a given role actually needs. A sales agent selling media is required to implement seven of them, and a buy-side orchestrator implements none and calls them instead.
 
-Three rules govern how those files are read.
+Non-affiliation costs me nothing. An invoice could bend a page.
 
-**The version oracle is `dist/schemas/latest.json`.** For AdCP, that file names the current published stable release, and `dist/schemas/<version>/index.json` is the operation registry. The working branch is not the release. `package.json` and `static/schemas/source/index.json` on `main` carry a stale `3.1.1` stamp because the release tooling only bumps them at publish time, and a 65th operation exists on `main` that has never shipped. Every operation count on this site is re-derived from `dist/` before publication. If you see a page anywhere claiming AdCP 3.1.1 or 65 operations, it read the branch.
+## Neither standards body has any say over this
 
-**AAMP has no umbrella version.** Each repository versions independently, which the AAMP hub README states as its release model. Per-repo tags and commit dates are printed instead. "AAMP 2.3" is a press-release number with no corresponding artifact, and it does not appear on this site as a version.
+Two organisations are writing the rules. AgenticAdvertising.org maintains AdCP under Apache 2.0 and claims 123+ members on [its homepage](https://agenticadvertising.org/), Yahoo, PubMatic and Scope3 among them. IAB Tech Lab publishes [AAMP](https://iabtechlab.com/standards/aamp-agentic-advertising-management-protocols/) and the reference implementations under it.
 
-**Every AAMP term is sourced from a reference implementation, not a ratified specification.** The trust lifecycle, the access tiers, the quote TTL, the negotiation actions: all of them are documented inside working code repositories with generated documentation. They describe what IAB Tech Lab's reference agents do. They are not normative standards text, and this site never presents them as such.
+Neither is a client. I am a member of neither, and nobody at either has read a word of this, let alone approved it. Trademarks belong to their owners.
 
-## What are the rules for numbers on this site?
+There is no AdCP-versus-AAMP table on this site. That comparison lives at [Agentic Ad Lab](https://agenticadlab.com/protocols/adcp-vs-aamp/) with the payloads attached, and a thinner copy of it here would make both worse.
 
-Every numeric claim carries a named, dated source, and the source URL is in the page's citations. Where the number is a survey figure rather than something I read out of a file, the page says which survey, who ran it, when it was fielded, and what the sample was.
+## How to report an error
 
-When a number circulating in secondary coverage does not match its primary source, this site prints the primary figure and flags the discrepancy. That already happened once. Trade coverage credited a January 2026 Dynatrace report with production-barrier figures of 59% and 55%. Dynatrace's own press release gives 52% and 51%, against different question wording, from a survey of 919 senior leaders fielded by Y2 Analytics. The [maturity page](/maturity/) shows the correction with both sources.
-
-Nothing here carries a search-volume figure, a market-size projection or a growth forecast that I have not traced to a named publisher.
-
-## What does this site refuse to do?
-
-It does not invent protocol facts. If a claim can't be traced to a file, a schema, a commit or a named publication, either it isn't written or the page says "the specification does not say". That phrase appears in these pages on purpose.
-
-Contradictions that belong to the source stay unresolved here. The AAMP corpus expands its own acronym four different ways across its repositories. This site discloses that and points at the [full evidence](https://aampexplorer.noetis.dev/what-does-aamp-stand-for/) rather than picking a winner. Deciding which expansion is correct is IAB Tech Lab's job.
-
-No page here predicts how long anything takes: no implementation timelines, no adoption forecasts, no "by the end of the year" claims.
-
-And there is no AdCP-versus-AAMP comparison table. That comparison belongs to [Agentic Ad Lab](https://agenticadlab.noetis.dev/protocols/adcp-vs-aamp/), which publishes it in full with payloads. Duplicating it here would make both worse.
-
-## Is this site affiliated with AgenticAdvertising.org or IAB Tech Lab?
-
-No. This site is independent of both.
-
-AdCP, the Ad Context Protocol, is a specification maintained by AgenticAdvertising.org and published under Apache 2.0. AAMP and the agentic repositories referenced here are published by IAB Tech Lab. Neither organisation has reviewed, endorsed, sponsored or approved anything on this site. All trademarks and specification content belong to their respective owners, and are used here nominatively, to refer to the specifications being described.
-
-Where this site quotes a specification, it quotes it, with a file path and a link to the source, rather than paraphrasing it into something that reads like our own claim. Where it disagrees with a specification's framing — as it does with the FAQ sentence that defines agentic buying — it says which document it is disagreeing with and why.
-
-## How do I report an error?
-
-Tell me which file, which line, and what it actually says. That is the only correction format that is faster to act on than to argue about.
-
-Corrections are made in place, and any page whose factual basis changes gets its `updatedDate` moved and, where the underlying finding has inverted rather than shifted, gets rewritten rather than patched. The [maturity page](/maturity/) lists the specific repository changes that would trigger a rewrite of that page: the four zero-byte files in `agentic-audiences` gaining content, `iab-agentic-primitives` being released or absorbed, IAB Tech Lab publishing ratified specification text, or AdCP shipping a 3.2 line.
-
-Because the repositories move faster than any publishing schedule, treat every claim here as stamped with the date at the top of its page. If you are making a purchasing or engineering decision, re-run the checks. All of them are `git clone`, `grep` and reading a JSON file. That is the whole method, and it is deliberately cheap to repeat.
+Send the page, the sentence, and what it should say instead, to hello@agenticadlab.com. If the defect is upstream and the specification itself is wrong, an issue on that repository fixes more than a correction here does.

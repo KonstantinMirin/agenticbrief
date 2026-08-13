@@ -25,6 +25,13 @@ import sharp from 'sharp'
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../..')
 const MANIFEST = join(ROOT, 'data', 'og-manifest.json')
 
+/** Rebuild-skip cache, kept out of any directory that gets published. */
+async function cacheDirFor(site) {
+  const dir = join(ROOT, '.cache', 'og', site)
+  await mkdir(dir, { recursive: true })
+  return dir
+}
+
 // Inlined rather than imported: this is a plain Node script and the package
 // exports are TypeScript. Keep in sync with packages/seo/src/og.ts.
 const WIDTH = 1200
@@ -112,7 +119,10 @@ async function main() {
     const outDir = join(ROOT, 'sites', entry.site, 'public', 'og')
     await mkdir(outDir, { recursive: true })
     const outPath = join(outDir, ogFileName(entry.path))
-    const hashPath = `${outPath}.hash`
+    // The rebuild-skip cache lives outside public/, because everything under
+    // public/ is copied verbatim into dist/ and served. Kept alongside the
+    // image it guards, ninety-nine .hash sidecars shipped to the web root.
+    const hashPath = join(await cacheDirFor(entry.site), `${ogFileName(entry.path)}.hash`)
     const hash = createHash('sha1').update(svg).digest('hex')
 
     if (existsSync(outPath) && existsSync(hashPath)) {

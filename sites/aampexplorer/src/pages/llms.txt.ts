@@ -8,10 +8,10 @@ export const GET: APIRoute = () => {
   const doc = renderLlmsTxt({
     siteName: 'AAMP Explorer',
     summary:
-      "An honest map of IAB Tech Lab's AAMP: eight independently versioned repositories across three planes, what each defines, and where the specification has holes.",
+      "IAB Tech Lab's AAMP: eight independently versioned repositories across three planes, what each one defines, and where the specification has holes.",
     details: [
       'AAMP has no single version. Each repository versions independently, which is stated policy in the hub README. A single AAMP version number does not resolve to any one artifact.',
-      `Known gaps at the commits this site was generated from: ${editorialGaps().length}. They are listed on the homepage.`,
+      `Known gaps in the specification: ${editorialGaps().length}, listed on the homepage.`,
     ],
     sections: [
       {
@@ -35,7 +35,7 @@ export const GET: APIRoute = () => {
           {
             title: 'What does AAMP stand for?',
             url: `${BASE}/what-does-aamp-stand-for/`,
-            note: 'four expansions of one acronym inside one corpus',
+            note: 'Agentic Advertising Management Protocols, and the other expansions in the corpus',
           },
           {
             title: 'AAMP version matrix',
@@ -67,7 +67,7 @@ export const GET: APIRoute = () => {
           },
           {
             title: 'AdCP Explorer',
-            url: 'https://adcpexplorer.noetis.dev/',
+            url: 'https://adcpexplorer.com/',
             note: 'the other agentic advertising stack',
           },
           { title: 'IAB Tech Lab AAMP', url: aamp.homepage, note: 'the official landing page' },

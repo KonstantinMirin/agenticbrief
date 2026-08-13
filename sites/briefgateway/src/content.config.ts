@@ -4,6 +4,7 @@ import {
   templateSchema,
   guideSchema,
   comparisonSchema,
+  faqEntrySchema,
   baseFields,
 } from '@agenticbrief/content-utils/schemas'
 import { z } from 'astro:content'
@@ -15,6 +16,8 @@ export const collections = {
       ...baseFields,
       channel: z.string().optional(),
       worked: z.boolean().default(false),
+      /** rendered as an FAQPage node, same shape as the guide collection */
+      faq: z.array(faqEntrySchema).default([]),
     }),
   }),
   templates: defineCollection({

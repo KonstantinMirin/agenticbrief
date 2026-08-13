@@ -1,0 +1,30 @@
+---
+import { getCollection, render } from 'astro:content'
+import DocPage from '@agenticbrief/shared-ui/DocPage.astro'
+import { publishedOnly } from '@agenticbrief/content-utils'
+import { BASE } from '../../lib/site'
+
+// The rest of this site is generated from the schema registry. The guides
+// collection globs `adcp-*` out of content/guides and carries the prose pages
+// that do not map onto a single operation or schema group.
+export async function getStaticPaths() {
+  const entries = publishedOnly(await getCollection('guides'))
+  return entries.map((entry) => ({ params: { slug: entry.id }, props: { entry } }))
+}
+
+const { entry } = Astro.props
+const { Content } = await render(entry)
+---
+
+<DocPage
+  site="adcpexplorer"
+  entry={entry}
+  path={`/guides/${entry.id}/`}
+  section="Guides"
+  breadcrumbs={[
+    { name: 'AdCP Explorer', url: `${BASE}/` },
+    { name: entry.data.title, url: `${BASE}/guides/${entry.id}/` },
+  ]}
+>
+  <Content />
+</DocPage>

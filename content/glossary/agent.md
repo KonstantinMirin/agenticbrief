@@ -1,110 +1,125 @@
 ---
-title: 'Agent — and the Three Things It Can Mean'
-description: 'In AdCP the bare word agent means the authenticated caller, not the AI and not the sales agent. Three meanings, one word, and the schemas only ever mean one of them.'
-answer: 'AdCP uses the word agent three ways. Agent is the authenticated caller identified by its auth token; Sales Agent is the server exposing inventory; AI Agent is the assistant. The glossary distinguishes all three.'
+title: 'Agent'
+description: 'In AdCP an agent is the authenticated caller, distinct from a sales agent and from an AI assistant. In AAMP an agent is a party record the registry issues.'
+answer: 'In AdCP an agent is the authenticated caller identified by its auth token, distinct from a Sales Agent (the server exposing inventory) and an AI Agent (the assistant), while AAMP makes an agent a registry-issued record instead.'
 pubDate: 2026-08-09
+updatedDate: 2026-08-09
 term: 'Agent'
-alternateNames: ['authenticated caller', 'principal (deprecated)']
+alternateNames: ['authenticated caller', 'principal']
 category: 'agentic'
 cluster: 'gl-roles'
 keywords:
   - 'agent definition advertising'
   - 'what is an agent in adcp'
   - 'adcp principal deprecated'
-  - 'ai agent vs sales agent'
+  - 'agent vs ai agent advertising'
+  - 'adcp authenticated caller'
 citations:
   - 'https://docs.adcontextprotocol.org/docs/reference/glossary'
   - 'https://docs.adcontextprotocol.org/docs/building/by-layer/L2/accounts-and-agents'
-  - 'https://github.com/adcontextprotocol/adcp/blob/f1a35aba734befa809e1fa780ad77c7edd614e96/docs/reference/glossary.mdx'
-  - 'https://github.com/adcontextprotocol/adcp/blob/f1a35aba734befa809e1fa780ad77c7edd614e96/docs/building/by-layer/L2/accounts-and-agents.mdx'
-  - 'https://github.com/adcontextprotocol/adcp/blob/f1a35aba734befa809e1fa780ad77c7edd614e96/docs/protocol/required-tasks.mdx'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/docs/reference/glossary.mdx'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/docs/building/by-layer/L2/accounts-and-agents.mdx'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/docs/protocol/sync_agent_notification_configs.mdx'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/docs/quickstart.mdx'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/docs/media-buy/advanced-topics/accounts-and-security.mdx'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/docs/faq.mdx'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/schemas/3.1.13/enums/error-scope.json'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/schemas/3.1.13/enums/account-scope.json'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/schemas/3.1.13/enums/billing-party.json'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/schemas/3.1.13/enums/signal-source.json'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/schemas/3.1.13/enums/error-code.json'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/schemas/3.1.13/aao/agent-publishers.json'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/schemas/3.1.13/index.json'
   - 'https://github.com/IABTechLab/iab-agentic-primitives/blob/2fc7029fb9eca801bc94586aec398906aa6af6c0/src/iab_agentic_primitives/primitives/identity.py'
-  - 'https://github.com/adcontextprotocol/adcp/blob/f1a35aba734befa809e1fa780ad77c7edd614e96/dist/schemas/3.1.10/index.json'
+  - 'https://github.com/IABTechLab/iab-agentic-primitives/blob/2fc7029fb9eca801bc94586aec398906aa6af6c0/spec/jsonschema/Agent.json'
+  - 'https://github.com/IABTechLab/iab-agentic-primitives/blob/2fc7029fb9eca801bc94586aec398906aa6af6c0/spec/fixtures/primitives/Agent.golden.json'
+  - 'https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/docs/api/agent-discovery.md'
 related:
   - '/agents/sales-agent/'
   - '/agents/buyer-agent/'
   - '/agents/agent-registry/'
+  - '/agents/agent-card/'
+  - '/agents/discovery-files/'
+  - '/negotiation/trust-status/'
+  - '/negotiation/access-tier/'
   - '/concepts/adcp-vs-aamp-terminology/'
-  - 'https://adcpexplorer.noetis.dev/areas/accounts/'
-seeAlso: ['Sales Agent', 'Buyer Agent', 'Agent Card', 'Agent Registry']
+  - 'https://adcpexplorer.com/areas/account/'
+  - 'https://aampexplorer.com/repos/iab-agentic-primitives/'
+seeAlso: ['Sales Agent', 'Buyer Agent', 'Agent Card', 'Agent Registry', 'Trust Status']
 reviewState: cto-reviewed
 ---
 
-## What does "agent" mean in AdCP?
+An agent, in AdCP, is the authenticated entity making API calls, identified by its authentication token. The definition is narrow: it covers a brand's in-house team and an unattended buying system equally. An AdCP agent can be a cron job holding an API key, with no model anywhere in the loop. AdCP's FAQ describes AdCP as a protocol that lets AI agents collaborate across advertising platforms, but the glossary definition covers whatever software authenticates.
 
-It means the authenticated caller. Nothing more.
+| Term                                | What it is                                  | How it is identified                      |
+| ----------------------------------- | ------------------------------------------- | ----------------------------------------- |
+| Agent                               | The authenticated entity making API calls   | Authentication token                      |
+| [Sales Agent](/agents/sales-agent/) | The MCP server exposing publisher inventory | Endpoint URL, declared in `adagents.json` |
+| AI Agent                            | The AI assistant a human talks to           | Not a protocol object                     |
 
-AdCP's glossary carries an entry headed **Agent (AdCP Context)**, and the definition is deliberately narrow. The authenticated entity making API calls, which may be a brand's internal team, an agency's trading desk, or an automated buying system. It is identified by the authentication token. The entry then rules out the two things a reader is most likely to assume it means:
+AAMP uses `agent` for a registry record. The two definitions differ on four points:
 
-> Distinct from "Sales Agent" (the MCP server exposing inventory) and "AI Agent" (the AI assistant).
+| Question                       | AdCP 3.1.13                                                                     | AAMP                                                                |
+| ------------------------------ | ------------------------------------------------------------------------------- | ------------------------------------------------------------------- |
+| What "agent" primarily denotes | The authenticated caller                                                        | A registry-issued party record                                      |
+| Identity comes from            | A token, plus a signature or a per-seller onboarding record                     | An `agent_id` minted by the registry at registration                |
+| Enumerated?                    | No. Role qualifiers are documentation headings and `supported_protocols` values | Yes. `AgentType` has five values                                    |
+| Does identity affect price?    | No                                                                              | Yes. `trust_status` caps the tier, the tier caps pricing visibility |
 
-That single sentence is why this page exists. Three concepts share one word inside one specification, and only one of them is what a schema means when it says `agent`.
+## Agent in AAMP
 
-| Term                                | What it is                                | How it is identified                      |
-| ----------------------------------- | ----------------------------------------- | ----------------------------------------- |
-| Agent                               | The authenticated entity making API calls | Authentication token                      |
-| [Sales Agent](/agents/sales-agent/) | The server exposing publisher inventory   | Endpoint URL, declared in `adagents.json` |
-| AI Agent                            | The AI assistant a human talks to         | Not a protocol object                     |
+In AAMP an agent is a record the registry issues at registration. In the unreleased `iab-agentic-primitives` library (v0.5.0), `identity.py` makes `agent_id` required on the `Agent` model, and the [registry](/agents/agent-registry/) mints it. `AgentType` is a closed enum of `buyer`, `seller`, `tool_provider`, `data_provider` and `other`, so [`buyer`](/agents/buyer-agent/) is one of its values; AdCP's role names are documentation headings. [`TrustStatus`](/negotiation/trust-status/) has five values, is "never self-asserted", and caps the [access tier](/negotiation/access-tier/) an agent can trade at.
 
-An AI agent can be an agent. A sales agent is always an agent when it calls someone else. But "agent" in an AdCP request means the credential on the wire, and it is perfectly possible for the agent to be a cron job with an API key and no model in the loop at all.
+AAMP publishes no glossary, and the record itself is specified only in that unreleased library. AdCP's published schemas contain no equivalent to `agent_id`.
 
-## Why does the distinction matter in practice?
+## Role qualifiers
 
-Because AdCP bills it. `docs/building/by-layer/L2/accounts-and-agents.mdx` names four entities in every billable operation, and agent is one of them:
+AdCP's conformance reference organises the protocol by role, and its section headings are the canonical list. Each role is defined by the operations it must implement, and an agent declares which it plays through `supported_protocols`.
 
-| Entity   | The question it answers             | How it is identified                                      |
-| -------- | ----------------------------------- | --------------------------------------------------------- |
-| Brand    | Whose products are advertised?      | `brand` reference, resolved via `/.well-known/brand.json` |
-| Account  | Who gets billed, and at what rates? | Account reference                                         |
-| Operator | Who operates on the brand's behalf? | Domain, for example `pinnacle-media.com`                  |
-| Agent    | What software is placing the buy?   | Authenticated session                                     |
+| Role                                          | Domain claim in `supported_protocols`                   |
+| --------------------------------------------- | ------------------------------------------------------- |
+| Sales agent (seller)                          | `media_buy`                                             |
+| Orchestrator (buyer)                          | none; orchestrators are not servers                     |
+| Creative agent                                | `creative`                                              |
+| [Signal agent](/agents/signal-agent/)         | `signals`                                               |
+| [Brand agent](/agents/brand-agent/)           | `brand`, plus `sponsored_intelligence` for the SI tasks |
+| [Governance agent](/agents/governance-agent/) | `governance`                                            |
+| Content standards agent                       | `governance`                                            |
+| Creative governance agent                     | `governance`                                            |
 
-The specification's own gloss for the fourth row: "The software placing buys and managing campaigns. Authenticates with the seller and may operate on behalf of multiple operators and brands."
+The three governance roles all claim the same `governance` domain. Nothing in `supported_protocols` tells them apart; they are separated only by the documentation sections that define them.
 
-That last clause is the operational consequence. One agent, many operators, many brands. A seller declares `supported_billing` in `get_adcp_capabilities`, and `agent` is one of the accepted values, meaning the agent itself is invoiced and "consolidates billing across brands." Model the agent as the AI and your billing model will be wrong for every agency trading desk.
+In 3.1.13 `supported_protocols` accepts `media_buy`, `signals`, `governance`, `sponsored_intelligence`, `creative`, `brand` and `measurement`. `measurement` is experimental and scoped to catalog discovery. The qualifier records which operations the agent is expected to serve; the entity itself is an agent as soon as it authenticates.
 
-### What happened to "principal"?
+## Agent, account, brand and operator
 
-AdCP retired it. The glossary entry now reads, in full: "_Deprecated term._ See Account (billing relationship) and Agent (authenticated caller)."
+AdCP's accounts and agents guide separates four entities that a billable operation involves, and Agent is the one most often collapsed into the other three. Brand answers whose products are advertised, resolved via `/.well-known/brand.json`. Account answers who gets billed and at what rates. Operator answers who acts on the brand's behalf, identified by domain. Agent answers what software is placing the buy, identified by the authenticated session, and its gloss adds that an agent "may operate on behalf of multiple operators and brands."
 
-One word used to carry both the billing relationship and the calling identity. AdCP split it into two, and the split is the reason the four-entity table above has four rows rather than three. If you are reading older AdCP material or a v2 integration, `principal` maps onto `account` plus `agent`, and you have to decide which half each usage meant.
+Consolidated billing has a value of its own: `agent` is one of three accepted values of [`supported_billing`](https://adcpexplorer.com/areas/account/), the agent that "consolidates billing across brands and is invoiced by the seller". One credential can therefore be invoiced for buys placed across several brands.
 
-## Which agents does AdCP actually name?
+## How AdCP identifies the caller
 
-Role-qualified agents, each defined by the operations it must implement rather than by a job title. `docs/protocol/required-tasks.mdx` organises AdCP by role, and the section headings are the canonical list:
+Nothing in an AdCP request body names the caller. A `tools/call` for `get_products` carries a bearer token in the header and campaign arguments in the payload, and AdCP's accounts and security guide describes what happens next: "The server validates this token and identifies the agent making the request." `enums/error-scope.json` defines a per-buyer-agent rejection scope and attaches a condition to it:
 
-- Sales agent (seller)
-- Orchestrator (buyer)
-- Creative agent
-- Signal agent
-- Brand agent
-- Governance agent
-- Content standards agent
-- Creative governance agent
+> Sellers MUST emit per-agent scope only when buyer-agent identity has been established via signed-request derivation or a credential-to-agent mapping in the seller's onboarding record; emitting it without established identity is a cross-tenant onboarding oracle.
 
-Every one of them is an agent in the narrow sense as soon as it authenticates. The role qualifier tells you which of the 64 operations in AdCP 3.1.10 it is expected to serve. A domain claim in `supported_protocols` (`media_buy`, `creative`, `signals`, `governance`, `brand`, `sponsored_intelligence`) is how an agent declares which of those roles it plays.
+The condition is on established identity, not on a successful login. Emitting the scope without established identity discloses whether the caller's credential maps to an onboarded agent.
 
-## Does AAMP use the word the same way?
+Three things carry identity. A token arrives on the request. An [`authorized_agents[].url` entry](/agents/discovery-files/) sits on the publisher's domain. A commercial mapping sits in an onboarding record the caller cannot read. The AAO directory maps `agent_url` to publishers and its schema declines to let that mapping confer trust, since "The publisher's own adagents.json remains the trust root". No AdCP document states which of the three is authoritative.
 
-No, and the difference will bite you the first time you read across the two corpora.
+## `principal` (deprecated)
 
-In AAMP, "agent" is primarily a registry record with a type. The shared contract library `iab-agentic-primitives` defines an `AgentType` enum with five values: `buyer`, `seller`, `tool_provider`, `data_provider` and `other`. An agent in that sense has an identity in the [agent registry](/agents/agent-registry/), a [trust status](/negotiation/trust-status/), and an [agent card](/agents/agent-card/). It is a party in a directory, not a credential on a request.
+AdCP retired the word in its glossary, flagged the entry _Deprecated term_, and split it into Account (billing, rate cards, platform mappings) and Agent (authentication and API access). The term remains in the documentation, including inside MUST clauses: the `sync_agent_notification_configs` reference states that "This task MUST only be accepted when the transport request resolves to a stable authenticated principal". It also survives in schema descriptions in the 3.1.13 registry, where `error-code.json` explains `CREDENTIAL_IN_ARGS` in terms of "buyer-principal credentials that should arrive on the inbound transport". It is never a JSON key, so no parser breaks on it. Each surviving use has to be read as either the Account sense or the Agent sense.
 
-| Question                       | AdCP 3.1.10                                                                 | AAMP                                |
-| ------------------------------ | --------------------------------------------------------------------------- | ----------------------------------- |
-| What "agent" primarily denotes | The authenticated caller                                                    | A typed party in the registry       |
-| Identified by                  | Authentication token                                                        | Registry record plus agent card URL |
-| Enumerated?                    | No. Role qualifiers appear as doc headings and `supported_protocols` values | Yes. `AgentType` has five values    |
-| Is the AI meaning called out?  | Yes, and explicitly excluded                                                | Not called out                      |
+## `agent` as an enum value
 
-Neither corpus references the other, so the row above is a comparison made from outside both. AAMP's enum is sourced from a library whose README says it is not yet released.
+The literal string `agent` is an enum value in the 3.1.13 schema bundle, and it denotes something different in each file that carries it.
 
-## The failure mode this term causes
+| Enum file                  | What `agent` means there                                        |
+| -------------------------- | --------------------------------------------------------------- |
+| `enums/billing-party.json` | The party the seller invoices                                   |
+| `enums/account-scope.json` | An account with no brand or operator split                      |
+| `enums/error-scope.json`   | The per-buyer-agent authorization axis                          |
+| `enums/signal-source.json` | A signal source addressed by `agent_url`, not the caller at all |
 
-Someone reads "agent" in an AdCP schema, pictures an LLM, and builds an integration where the model holds the credential. AdCP's model is the opposite: the credential belongs to the software system, the account determines the rates, the operator determines whose behalf, and the AI is not a protocol object at any point. Whether an AI wrote the request is invisible on the wire and outside the specification's scope.
-
-## Sources and version pins
-
-- AdCP 3.1.10, repository `adcontextprotocol/adcp` at commit `f1a35ab`. Definitions from `docs/reference/glossary.mdx` (entries **Agent (AdCP Context)**, **Sales Agent**, **Principal**), the four-entity table from `docs/building/by-layer/L2/accounts-and-agents.mdx`, and the role list from `docs/protocol/required-tasks.mdx`.
-- Operation count from `dist/schemas/3.1.10/index.json`, the registry named by `dist/schemas/latest.json`.
-- `AgentType` from `IABTechLab/iab-agentic-primitives` at commit `2fc7029`, `src/iab_agentic_primitives/primitives/identity.py`.
+In `signal-source.json` alone, `agent` denotes the signal vendor addressed by `agent_url`, "Signal native to a signal source identified by agent_url", and not the caller.

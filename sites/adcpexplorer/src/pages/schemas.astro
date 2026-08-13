@@ -2,6 +2,7 @@
 import BaseLayout from '@agenticbrief/shared-ui/BaseLayout.astro'
 import AnswerBox from '@agenticbrief/shared-ui/AnswerBox.astro'
 import FieldTable from '@agenticbrief/shared-ui/FieldTable.astro'
+import CodeSample from '@agenticbrief/shared-ui/CodeSample.astro'
 import SpecSource from '@agenticbrief/shared-ui/SpecSource.astro'
 import FaqBlock from '@agenticbrief/shared-ui/FaqBlock.astro'
 import { adcp } from '@agenticbrief/protocol-data'
@@ -15,29 +16,45 @@ import {
   breadcrumbNode,
   faqPageNode,
 } from '@agenticbrief/seo/schema'
-import { BASE, HUB } from '../lib/site'
+import { BASE, HUB, LAST_UPDATED } from '../lib/site'
 
 const path = '/schemas/'
 const url = `${BASE}${path}`
-const title = `The AdCP schema registry — how AdCP ${adcp.version} is organised`
-const description = `How AdCP's JSON Schema registry works: the index that lists every operation, the reference convention that binds the files together, and the core objects shared across all areas.`
-const answer = `AdCP's schemas are JSON Schema draft-07 files published per release under dist/schemas/. A single index.json registers every operation and points at its request and response schema; the files reference each other by absolute published path.`
+const title = `The AdCP schema registry — how ${adcp.version} indexes, references and bundles its schemas`
+const description =
+  'AdCP ships two registry files per release. Neither index.json nor manifest.json lists every schema on disk, and the $ref convention flips between the source tree and the published release.'
+const answer =
+  'The AdCP schema registry is the set of draft-07 JSON Schema files published per release under dist/schemas/, indexed by two files that disagree: index.json lists schemas by protocol area, manifest.json lists them by tool.'
+
+/**
+ * Two of the core objects are unions rather than objects, so they carry no flat
+ * field list. The note replaces the field table in their own section.
+ */
+const UNION_NOTES: Record<string, string> = {
+  'pricing-option': `A <code>oneOf</code> across the pricing models, discriminated by <code>pricing_model</code>, so it has no flat field list. Merging the branches describes an object that cannot validate.`,
+  'account-ref': `A <code>oneOf</code> across an <code>account_id</code> form and a <code>brand</code> plus <code>operator</code> natural key, so it has no flat field list. Merging the branches describes an object that cannot validate.`,
+}
 
 const faq = [
   {
     question: 'Where are the AdCP schemas?',
     answer:
-      'Published per release under dist/schemas/<version>/ in the protocol repository, with dist/schemas/latest.json naming the current stable release. The static/schemas/source/ tree is the unreleased working branch and carries a version stamp that is not bumped until release.',
+      'Under dist/schemas/<version>/ in the protocol repository. dist/schemas/latest.json is the pointer, and it carries five keys: latest, latest_stable, channel, path and index. Read whichever release it names. static/schemas/source/ is the build input and ships neither the bundled/ copies nor manifest.json.',
   },
   {
     question: 'How do AdCP schemas reference each other?',
     answer:
-      'By absolute published path, such as /schemas/media-buy/get-products-request.json. These are URL paths rather than filesystem paths, so resolving them means stripping the /schemas/ prefix and any version segment before joining to the release directory.',
+      'By absolute, version-pinned URL path, such as /schemas/<version>/media-buy/get-products-request.json. Every reference in a published release includes the version segment and every reference in the source tree omits it, so a resolver written against one tree fetches paths that do not exist in the other.',
   },
   {
-    question: 'What is the version envelope?',
+    question: 'Should an AdCP client read index.json or manifest.json?',
     answer:
-      'A shared schema that every request composes via allOf, carrying the protocol version, context and extension fields. It is why most operations look larger than their own payload — a large part of the field count is inherited.',
+      'Both. index.json resolves the schemas and is the only file carrying both list_creative_formats variants. manifest.json is the only place the mutating flag, the specialism tags, the async response arms and error_code_policy exist. Each names operations the other omits, so the real operation list is the union of the two.',
+  },
+  {
+    question: 'Does index.json list every AdCP schema in the release?',
+    answer:
+      'No. Some schemas have no index entry and no inbound $ref from anywhere in the release, including every file in error-details/ and every file in core/async-response-refs/. Others are absent from the index but still reachable, such as the canonical format schemas two hops down from core/product-format-declaration.json.',
   },
 ]
 
@@ -54,7 +71,7 @@ const jsonLd = graph([
     url,
     title,
     description,
-    datePublished: '2026-08-09',
+    datePublished: LAST_UPDATED,
     technical: true,
     proficiencyLevel: 'Expert',
     keywords: ['adcp schemas', 'adcp json schema', 'adcp schema registry'],
@@ -72,7 +89,7 @@ const jsonLd = graph([
   jsonLd={jsonLd}
   wide
   ogType="article"
-  publishDate={new Date('2026-08-09')}
+  publishDate={new Date(LAST_UPDATED)}
   keywords={['adcp schemas', 'adcp json schema']}
 >
   <nav class="breadcrumbs" aria-label="Breadcrumb">
@@ -81,37 +98,244 @@ const jsonLd = graph([
   <h1>The AdCP schema registry</h1>
   <AnswerBox answer={answer} />
 
-  <h2>Which tree should you read?</h2>
   <p>
-    The protocol repository holds two schema trees, and they disagree. Published releases live under
-    <code>dist/schemas/&lt;version&gt;/</code>, with <code>dist/schemas/latest.json</code> naming the
-    current stable one. The working branch lives under <code>static/schemas/source/</code> and carries
-    a version stamp that is only bumped at release, so it is routinely stale.
-  </p>
-  <p>
-    Reading the working tree and trusting its stamp is the single easiest way to publish a wrong
-    AdCP version number. This site reads the published release: <strong>{adcp.version}</strong>.
+    AdCP is the Ad Context Protocol, an open standard for software agents that discover inventory
+    and buy media: a buying agent on one side of the wire, a publisher's or platform's sales agent
+    on the other. Every message they exchange has a JSON Schema file behind it, and the release {
+      adcp.version
+    } tree holds {adcp.counts?.schemaFiles} of them.
   </p>
 
-  <h2>What holds the registry together?</h2>
+  <h2>Schema trees</h2>
   <p>
-    One file, <code>index.json</code>, registers every operation in the release and points at its
-    request and response schema. Schemas reference each other by absolute published path — for
-    example
-    <code>/schemas/media-buy/get-products-request.json</code> — which is a URL path, not a filesystem
-    path. Resolving one means stripping the <code>/schemas/</code> prefix and any version segment.
+    <code>static/schemas/source/</code> is what the build reads.
+    <code>dist/schemas/&lt;version&gt;/</code> is what it writes, and
+    <code>dist/schemas/latest.json</code> points at the current stable release, currently
+    <strong>{adcp.version}</strong>. That pointer carries five keys: <code>latest</code>, <code
+      >latest_stable</code
+    >, <code>channel</code>, <code>path</code> and <code>index</code>. The source tree carries a
+    version stamp of its own, bumped only when a release is cut, so for most of a release cycle it
+    names a version that shipped weeks earlier.
   </p>
   <p>
-    Requests compose a shared version envelope through <code>allOf</code> rather than declaring those
-    fields themselves. This is why a small operation still shows a substantial field count: much of it
-    is inherited context, extension and versioning structure common to every request.
+    Two things exist only in the output tree: the dereferenced <code>bundled/</code> copies, and
+    <code>manifest.json</code>. Neither is visible when browsing the source tree on GitHub.
   </p>
 
-  <h2>The core objects</h2>
+  <h2><code>index.json</code> and <code>manifest.json</code></h2>
   <p>
-    These are the domain entities the operations pass around. They are defined once and referenced
-    everywhere, so understanding them is most of understanding the protocol.
+    The two registry files describe the same release from different angles, and each omits
+    operations the other carries. The operation list is the union of the two. Where both name the
+    same tool they point at the same request and response schema, so the disagreement is entirely
+    about what each file leaves out. Neither file references the other, and nothing in the build
+    compares them.
   </p>
+  <table>
+    <caption>AdCP {adcp.version} — what each registry file carries</caption>
+    <thead>
+      <tr>
+        <th scope="col">Fact</th>
+        <th scope="col"><code>index.json</code></th>
+        <th scope="col"><code>manifest.json</code></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th scope="row">Keyed by</th>
+        <td>protocol area, each operation pointing at a request and a response schema</td>
+        <td>tool name</td>
+      </tr>
+      <tr>
+        <th scope="row"
+          ><code>creative_approval</code>, <code>search_brands</code>, <code
+            >validate_property_delivery</code
+          ></th
+        >
+        <td>in no task list</td>
+        <td>present</td>
+      </tr>
+      <tr>
+        <th scope="row"><code>context_match</code>, <code>identity_match</code></th>
+        <td>
+          under a <code>trusted-match</code> key called <code>operations</code>, not <code
+            >tasks</code
+          >
+        </td>
+        <td>absent</td>
+      </tr>
+      <tr>
+        <th scope="row"><code>list_creative_formats</code></th>
+        <td>
+          both variants: the <code>media-buy</code> request takes <code>property_id</code> and <code
+            >publisher_domain</code
+          >, the <code>creative</code> request takes <code>account</code>, <code
+            >include_pricing</code
+          > and <code>type</code>
+        </td>
+        <td>the media-buy pair only</td>
+      </tr>
+      <tr>
+        <th scope="row"
+          ><code>mutating</code> flag, specialism tags, <code>error_code_policy</code></th
+        >
+        <td>no equivalent</td>
+        <td>present</td>
+      </tr>
+      <tr>
+        <th scope="row">Async response arms, one each for submitted, working and input-required</th>
+        <td>no equivalent</td>
+        <td>present</td>
+      </tr>
+    </tbody>
+  </table>
+  <p>
+    Nothing at the call site declares which of the two <code>list_creative_formats</code> contracts applies.
+    That comes from
+    <code>get_adcp_capabilities</code>, whose <code>supported_protocols</code> array says whether the
+    agent speaks <code>media_buy</code> or <code>creative</code>. Without that call there is no
+    fallback check: both request schemas require nothing and set <code>additionalProperties</code> to
+    <code>true</code>, so the wrong variant validates clean and the fields the receiving agent does
+    not recognise are discarded without an error.
+  </p>
+
+  <h2>How a reference resolves</h2>
+  <p>
+    Every cross-file reference in a published release is an absolute, version-pinned URL path. The
+    tree contains no relative paths. The source tree writes those same references without the
+    version segment, so a resolver configured against GitHub source and then aimed at a release
+    fetches paths that do not exist — every reference, not some of them. Resolving a published
+    reference means mapping the <code>/schemas/&lt;version&gt;/</code> prefix onto the release directory.
+  </p>
+  <CodeSample
+    title={`The same $ref in the published release and in the source tree`}
+    language="json"
+    code={`// dist/schemas/${adcp.version}/media-buy/get-products-request.json
+{ "$ref": "/schemas/${adcp.version}/core/version-envelope.json" }
+//   -> dist/schemas/${adcp.version}/core/version-envelope.json
+
+// static/schemas/source/media-buy/get-products-request.json
+{ "$ref": "/schemas/core/version-envelope.json" }
+//   -> static/schemas/source/core/version-envelope.json`}
+    sourceUrl={adcp.repository}
+  />
+  <h2>The shared envelopes</h2>
+  <p>
+    <code>core/version-envelope.json</code> declares two properties, <code>adcp_version</code> and
+    <code>adcp_major_version</code>, is referenced by 137 files, and requests and responses compose
+    it alike. <code>core/protocol-envelope.json</code> declares the rest: <code>status</code>,
+    <code>context_id</code>, <code>task_id</code>, <code>message</code>, <code>timestamp</code>,
+    <code>payload</code> and the async plumbing. 68 response schemas compose it and no request schema
+    does, so a response schema inherits those fields before declaring any of its own.
+  </p>
+
+  <h2>Schemas with no inbound reference</h2>
+  <p>
+    Some files in the release are reachable from neither registry file nor from any <code>$ref</code
+    >. Every file in <code>error-details/</code> is one, and so is every file in <code
+      >core/async-response-refs/</code
+    >, which holds one copy of each async arm the manifest already names under a different path.
+    Nothing points at either set, so nothing makes them mandatory.
+    <code>creative/creative-purged-webhook.json</code> is unreferenced for a different reason: it describes
+    a payload that arrives out of band, and a webhook body has nothing to <code>$ref</code> it.
+  </p>
+  <p>
+    Absence from <code>index.json</code> does not imply absence from the reference graph.
+    <code>formats/canonical/image.json</code> has no entry in the index, and neither do
+    <code>video_hosted</code>, <code>html5</code>, <code>audio_daast</code> or the other nine files in
+    that directory. They are reachable two hops down:
+    <code>core/product-format-declaration.json</code> refs <code>formats/canonical/image.json</code
+    >, which refs <code>formats/canonical/_base.json</code>.
+  </p>
+
+  <h2>Error detail schemas</h2>
+  <p>
+    <code>enums/error-code.json</code> defines 92 error codes. <code>error-details/</code> holds 15 schemas,
+    one per shape those errors can take. No <code>$ref</code> edge joins the two files.
+  </p>
+  <p>
+    <code>core/error.json</code> is referenced by 67 schemas, more than any of the domain objects it sits
+    alongside, and it declares <code>details</code> as a bare object of no particular shape, with no <code
+      >$ref</code
+    > and no <code>discriminator</code>. The link between a code and its detail schema lives in an <code
+      >enumDescriptions</code
+    > string, in markdown backticks. For
+    <code>VERSION_UNSUPPORTED</code>: "The error details SHOULD follow
+    <code>error-details/version-unsupported.json</code>". Other codes carry a pointer written the
+    same way. A draft-07 validator applies no constraint from <code>enumDescriptions</code>, so the
+    pointer has no effect on validation.
+  </p>
+  <p>
+    The same file carries the structured form of that pattern for a different case. Next to <code
+      >enumDescriptions</code
+    > sits an <code>enumMetadata</code> block whose <code>$comment</code> reads: "SDKs MUST consume this
+    block instead of parsing 'Recovery: X' from enumDescriptions prose." <code>enumMetadata</code> carries
+    recovery hints as structured data; the error-detail schema pointers remain in <code
+      >enumDescriptions</code
+    > prose.
+  </p>
+  <p>
+    Mapping a code to its detail schema is therefore a manual step. <code>enumDescriptions</code> names
+    six of the fifteen outright. The other nine mappings are stated nowhere; the filename and the code
+    name correspond by convention only. The map from code to detail schema exists in no release artefact,
+    so a new code or a changed mapping is not detectable from a release diff.
+  </p>
+  <h2><code>discriminator</code> under draft-07</h2>
+  <p>
+    42 schemas in the release use <code>discriminator</code> to say which branch of a <code
+      >oneOf</code
+    > applies. <code>discriminator</code> is an OpenAPI keyword, draft-07 does not define it, and a draft-07
+    validator therefore ignores it and evaluates every branch. Validation outcome is unchanged, because
+    the nine branches under <code>core/pricing-option.json</code> each pin <code>pricing_model</code
+    > with a <code>const</code>. Error output is not: an invalid <code>pricing_model</code> returns one
+    failure per branch, nine in place of the single branch failure that was intended. A client that needs
+    the intended diagnostic selects the branch on <code>pricing_model</code> itself and reports only that
+    branch's errors.
+  </p>
+
+  <h2>Bundled schemas</h2>
+  <p>
+    <code>docs/building/by-layer/L0/schemas.mdx</code> directs tools that cannot resolve
+    <code>$ref</code> to the bundled schemas, which have every reference inlined. That page states that
+    all request and response task schemas are bundled. The table on the same page names eight <code
+      >bundled/</code
+    > directories and omits <code>brand/</code>, <code>collection/</code>, <code>account/</code> and
+    <code>governance/</code>. The release ships those eight, so the sentence overstates the
+    coverage.
+  </p>
+  <p>
+    23 of the {adcp.tasks.length} operations have no bundle: every brand-protocol operation, every collection-list
+    operation, every account operation, the four governance plan operations, both serve-time operations
+    and <code>comply_test_controller</code>. None of the 20 async response arms are bundled either.
+    An integration built against brand rights or account financials without a
+    <code>$ref</code>-resolving validator has no offline schema to load for those operations.
+  </p>
+
+  <h2>The {adcp.objects.length} core objects</h2>
+  <p>
+    These are the domain nouns the operations pass around. They are not the schemas that hold the
+    reference tree together: the most-referenced files in the release are extension, envelope and
+    error scaffolding.
+    <code>media_buy_id</code> appears in schemas across the release, while
+    <code>core/media-buy.json</code> itself is referenced once, because a media buy is fetched by identifier
+    rather than passed around.
+  </p>
+  <table>
+    <caption>AdCP {adcp.version} — inbound <code>$ref</code> count per core schema</caption>
+    <thead>
+      <tr>
+        <th scope="col">Schema</th>
+        <th scope="col">Inbound references</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><th scope="row"><code>core/ext.json</code></th><td>238</td></tr>
+      <tr><th scope="row"><code>core/context.json</code></th><td>177</td></tr>
+      <tr><th scope="row"><code>core/version-envelope.json</code></th><td>137</td></tr>
+      <tr><th scope="row"><code>core/protocol-envelope.json</code></th><td>68</td></tr>
+      <tr><th scope="row"><code>core/error.json</code></th><td>67</td></tr>
+      <tr><th scope="row"><code>core/media-buy.json</code></th><td>1</td></tr>
+    </tbody>
+  </table>
   {
     adcp.objects.map((o) => (
       <section>
@@ -119,11 +343,40 @@ const jsonLd = graph([
           <code>{o.name}</code>
         </h3>
         {o.summary && <p>{o.summary}</p>}
-        <FieldTable fields={o.fields} caption={`${o.name} fields`} collapseAfter={12} />
+        {UNION_NOTES[o.slug] ? (
+          <p set:html={UNION_NOTES[o.slug]} />
+        ) : (
+          <FieldTable fields={o.fields} caption={`${o.name} fields`} collapseAfter={12} />
+        )}
         <SpecSource provenance={o.provenance} specVersion={adcp.version} />
       </section>
     ))
   }
+
+  <h2>A client author's checklist</h2>
+  <ul>
+    <li>
+      Read <code>dist/schemas/&lt;version&gt;/</code>, not <code>static/schemas/source/</code>. The
+      two trees write <code>$ref</code> differently and a resolver tuned for one returns 404 on the other.
+    </li>
+    <li>
+      Take the operation list as the union of <code>index.json</code> and <code>manifest.json</code
+      >, and resolve the schema paths through the index.
+    </li>
+    <li>
+      Call <code>get_adcp_capabilities</code> before <code>list_creative_formats</code>. Nothing
+      else identifies which of the two contracts is in force, and neither request schema rejects the
+      wrong payload.
+    </li>
+    <li>
+      Resolve <code>$ref</code> in the client rather than loading <code>bundled/</code>. For 23 of
+      the {adcp.tasks.length} operations no bundle exists.
+    </li>
+    <li>
+      Hold the error-code to <code>error-details/</code> map, all 15 entries, in client source, and diff
+      it against <code>enums/error-code.json</code> on every release.
+    </li>
+  </ul>
 
   <FaqBlock entries={faq} />
 
@@ -131,7 +384,11 @@ const jsonLd = graph([
   <ul>
     <li><a href="/">All {adcp.tasks.length} AdCP operations</a></li>
     <li><a href="/discovery/">Discovery files: adagents.json and brand.json</a></li>
-    <li><a href={`${HUB}/protocols/adcp-vs-aamp/`} rel="noopener">AdCP compared with AAMP</a></li>
+    <li>
+      <a href={`${HUB}/protocols/adcp-vs-aamp/`} rel="noopener">
+        AAMP's schemas, which ship no registry index at all
+      </a>
+    </li>
   </ul>
 
   <SpecSource provenance={adcp.provenance} specVersion={adcp.version} />

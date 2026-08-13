@@ -1,10 +1,11 @@
 ---
-title: 'Sales Agent'
-description: 'AdCP calls the seller-side agent a sales agent. AAMP calls the same role a seller agent and never once uses the phrase sales agent. One role, two vocabularies.'
-answer: "In AdCP, a sales agent is the seller-side server that exposes publisher inventory for discovery and purchase. AAMP's corpus never uses the phrase; it calls the same role a seller agent."
+title: 'Sales Agent (AdCP)'
+description: 'A sales agent is the AdCP server that exposes publisher inventory for discovery and purchase. Seven required tasks, at least one transport, and authorisation in adagents.json.'
+answer: 'A sales agent is the seller-side server that exposes publisher inventory for discovery and purchase under AdCP, a role AAMP calls a seller agent and the newer AdCP schemas do too.'
 pubDate: 2026-08-09
+updatedDate: 2026-08-09
 term: 'Sales Agent'
-alternateNames: ['sell-side agent', 'publisher agent']
+alternateNames: ['seller agent', 'sell-side agent', 'publisher agent']
 category: 'agentic'
 cluster: 'gl-roles'
 keywords:
@@ -15,99 +16,109 @@ keywords:
 citations:
   - 'https://docs.adcontextprotocol.org/docs/reference/glossary'
   - 'https://docs.adcontextprotocol.org/docs/protocol/required-tasks'
-  - 'https://github.com/adcontextprotocol/adcp/blob/f1a35aba734befa809e1fa780ad77c7edd614e96/docs/reference/glossary.mdx'
-  - 'https://github.com/adcontextprotocol/adcp/blob/f1a35aba734befa809e1fa780ad77c7edd614e96/docs/protocol/required-tasks.mdx'
-  - 'https://github.com/adcontextprotocol/adcp/blob/f1a35aba734befa809e1fa780ad77c7edd614e96/dist/schemas/latest.json'
-  - 'https://github.com/adcontextprotocol/adcp/blob/f1a35aba734befa809e1fa780ad77c7edd614e96/dist/schemas/3.1.10/adagents.json'
-  - 'https://github.com/adcontextprotocol/adcp/blob/f1a35aba734befa809e1fa780ad77c7edd614e96/dist/schemas/3.1.10/core/authorized-agent-base.json'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/docs/reference/glossary.mdx'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/docs/protocol/required-tasks.mdx'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/docs/trusted-match/specification.mdx'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/docs/protocol/architecture.mdx'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/docs/governance/property/index.mdx'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/docs/intro.mdx'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/schemas/latest.json'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/schemas/3.1.13/index.json'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/schemas/3.1.13/core/seller-agent-ref.json'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/schemas/3.1.13/adagents.json'
+  - 'https://github.com/IABTechLab/iab-agentic-primitives/blob/2fc7029/spec/jsonschema/Agent.json'
+  - 'https://github.com/IABTechLab/iab-agentic-primitives/blob/2fc7029/spec/jsonschema/Negotiation.json'
   - 'https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/docs/api/agent-discovery.md'
+  - 'https://github.com/IABTechLab/buyer-agent/blob/0c3a154/docs/api/openapi.json'
   - 'https://github.com/IABTechLab/AAMP/blob/3b20e67b568235d86c4025bec7c1301edd7466a0/README.md'
-  - 'https://github.com/adcontextprotocol/adcp/blob/f1a35aba734befa809e1fa780ad77c7edd614e96/dist/schemas/3.1.10/index.json'
 related:
   - '/agents/seller-agent/'
   - '/agents/buyer-agent/'
+  - '/realtime/trusted-match-protocol/'
   - '/agents/agent/'
   - '/agents/discovery-files/'
+  - '/agents/governance-agent/'
   - '/concepts/adcp-vs-aamp-terminology/'
-  - 'https://adcpexplorer.noetis.dev/discovery/adagents-json/'
-  - 'https://agenticadlab.noetis.dev/protocols/adcp-vs-aamp/'
-seeAlso: ['Seller Agent', 'Buyer Agent', 'Agent', 'adagents.json']
+  - '/about/sources-and-versions/'
+  - 'https://adcpexplorer.com/discovery/'
+  - 'https://agenticadlab.com/protocols/adcp-vs-aamp/'
+seeAlso: ['Seller Agent', 'Buyer Agent', 'Agent', 'adagents.json', 'Trusted Match Protocol']
 reviewState: cto-reviewed
 ---
 
-## What is a sales agent in AdCP?
+A sales agent is the seller-side server that exposes publisher inventory for discovery and purchase under AdCP. The seller is the commercial entity; the sales agent is the software it runs, and one seller may operate more than one [agent](/agents/agent/).
 
-The AdCP glossary defines a sales agent as "an MCP server that exposes publisher inventory for discovery and purchase. Handles product discovery, media buy creation, and campaign management. Examples: Publisher ad servers exposing AdCP interfaces, sales house platforms."
+AdCP's glossary keeps the two apart. The sales agent "handles product discovery, media buy creation, and campaign management", with "publisher ad servers exposing AdCP interfaces, sales house platforms" given as examples; the seller is "the AdCP participant role that provides advertising inventory... In AdCP schemas, 'seller' is the standard term for this role (not 'platform')".
 
-That definition is from `docs/reference/glossary.mdx` in the Ad Context Protocol repository, checked at commit `f1a35ab`. The version pin for everything on this page is AdCP **3.1.10**, which `dist/schemas/latest.json` reports as both `latest` and `latest_stable` on the `stable` channel.
+## What a sales agent must implement
 
-A sales agent is software, not a company. The company is the _seller_, which AdCP treats as a separate glossary term: "the AdCP participant role that provides advertising inventory." One seller can run one sales agent, or several.
+AdCP's required-tasks reference heads its Media Buy section "Sales agent (seller)" and marks thirteen tasks Required, Conditional or Optional, seven of them Required.
 
-### What must a sales agent implement?
+| Task                           | Requirement | Notes                                                    |
+| ------------------------------ | ----------- | -------------------------------------------------------- |
+| `get_products`                 | Required    | Inventory discovery                                      |
+| `get_adcp_capabilities`        | Required    | Agent capabilities; sellable formats stay product-scoped |
+| `create_media_buy`             | Required    | Campaign creation and order confirmation                 |
+| `update_media_buy`             | Required    | Budget, targeting, pause, cancel                         |
+| `get_media_buys`               | Required    | Operational state retrieval                              |
+| `get_media_buy_delivery`       | Required    | Package-level delivery metrics                           |
+| `provide_performance_feedback` | Required    | Accept buyer optimisation signals                        |
+| `sync_creatives`               | Conditional | When the sales agent hosts a creative library            |
+| `log_event`                    | Conditional | When event sources are configured                        |
+| `list_creatives`               | Optional    | Creative catalog browsing                                |
+| `sync_catalogs`                | Optional    | Product/inventory catalog sync                           |
+| `sync_event_sources`           | Optional    | Conversion tracking setup                                |
+| `sync_audiences`               | Optional    | First-party CRM audience upload                          |
 
-`docs/protocol/required-tasks.mdx` organises AdCP operations by agent role. Under Media Buy Protocol, the section is headed "Sales agent (seller)" and marks seven operations Required:
+`get_adcp_capabilities` is required of every AdCP agent rather than of sales agents specifically. The same section sets the transport rule: "Sales agents MUST also support at least one transport (MCP or A2A) and declare `media_buy` in `supported_protocols`." [MCP and A2A](/concepts/mcp-and-a2a/) are the two agent transports AdCP runs on, and a sales agent picks at least one. These tasks are the [media_buy](https://adcpexplorer.com/areas/media-buy/) subset of AdCP's operation registry.
 
-| Operation                      | Requirement | What it covers                                             |
-| ------------------------------ | ----------- | ---------------------------------------------------------- |
-| `get_adcp_capabilities`        | Required    | Runtime capability discovery, required of every AdCP agent |
-| `get_products`                 | Required    | Inventory discovery                                        |
-| `create_media_buy`             | Required    | Campaign creation and order confirmation                   |
-| `update_media_buy`             | Required    | Budget, targeting, pause, cancel                           |
-| `get_media_buys`               | Required    | Operational state retrieval                                |
-| `get_media_buy_delivery`       | Required    | Package-level delivery metrics                             |
-| `provide_performance_feedback` | Required    | Accepting buyer optimisation signals                       |
+The operators in scope are listed in `docs/protocol/architecture.mdx`: "publishers, sales houses, rep firms, SSPs, and ad networks". Buy-side-only participants call sales agents rather than operating them.
 
-`sync_creatives` and `log_event` are Conditional. `list_creatives`, `sync_catalogs`, `sync_event_sources` and `sync_audiences` are Optional. The published 3.1.10 registry carries 64 operations in total across ten protocol areas, so a sales agent implements a small, named subset rather than the whole protocol.
+## Authorisation is published in adagents.json
 
-## Is a sales agent the same thing as a seller agent?
+A publisher declares which sales agents may sell its inventory in `adagents.json`, served at `/.well-known/adagents.json` alongside the other [discovery files](/agents/discovery-files/). One entry names a URL, what it covers, and how the authorisation is scoped:
 
-Yes. A sales agent (AdCP) and a [seller agent](/agents/seller-agent/) (AAMP) are two stacks' names for the same role: the piece of software on the supply side that publishes inventory, prices it, and books the order.
+```json
+{
+  "url": "https://sales.news.example.com",
+  "authorized_for": "All news properties",
+  "authorization_type": "property_tags",
+  "property_tags": ["news"]
+}
+```
 
-I checked whether the vocabularies overlap. They do not. Case-insensitively, the string "sales agent" appears in 134 files under `docs/`, `specs/` and `static/` in the AdCP repository at commit `f1a35ab`. Across all eight IAB Tech Lab agentic repositories, the same string appears in **zero** files. The reverse also holds in a weaker form: nothing in the AAMP corpus references AdCP at all, so IAB's repositories have never had to name AdCP's term.
+`authorization_type` takes six values. Four of them scope inventory; the other two, `signal_ids` and `signal_tags`, authorise a [signal agent](/agents/signal-agent/) instead. The full field list is in [AdCP Explorer's discovery view](https://adcpexplorer.com/discovery/).
 
-| Question                      | AdCP 3.1.10                                                       | AAMP (seller-agent v2.4.1)                                        |
-| ----------------------------- | ----------------------------------------------------------------- | ----------------------------------------------------------------- |
-| Name for the sell-side agent  | Sales agent                                                       | Seller agent                                                      |
-| Where the name is defined     | `docs/reference/glossary.mdx`, `docs/protocol/required-tasks.mdx` | `seller-agent` reference implementation docs                      |
-| Occurrences of "sales agent"  | 134 files                                                         | 0 files across all eight repos                                    |
-| Occurrences of "seller agent" | 81 files, none of them normative                                  | 158 files                                                         |
-| Source type                   | Published specification with a versioned schema registry          | Reference implementation, not a ratified specification            |
-| Capability discovery          | `get_adcp_capabilities`, a runtime task                           | An [agent card](/agents/agent-card/) at `/.well-known/agent.json` |
-| Price negotiation             | No negotiation object in the protocol                             | Quote, proposal, then multi-round negotiation                     |
-| Sell-side authorisation       | `adagents.json` on the publisher domain                           | Trust status held in an [agent registry](/agents/agent-registry/) |
+## Sales agent and seller agent
 
-The counts above are greps over local checkouts, pinned to the commits listed at the foot of this page. Rerun them and you should get the same numbers.
+Both names denote the same role, and both resolve to the same identifier: the `agent_url` declared in the publisher's `adagents.json`. AdCP's prose uses "sales agent" and the AAMP repositories use [seller agent](/agents/seller-agent/); AdCP schemas added since 3.0.1 use "seller agent" as well. `core/seller-agent-ref.json`, titled "Seller Agent Reference" and stamped `x-status: experimental`, carries one required property, `agent_url`, "as declared in the property publisher's adagents.json `authorized_agents[].url`". [Trusted Match](/realtime/trusted-match-protocol/) binds every available package to one of those references at sync time.
 
-One asymmetry is worth pulling out, because it is the strongest single piece of evidence that these are one role and not two. AdCP's own prose uses "seller agent" freely: the phrase turns up in 46 files under `docs/`, including `docs/faq.mdx:141`, where AdCP describes "how a buyer agent and a seller agent negotiate, transact, and govern a media buy." Its normative glossary entry is still **Sales Agent**. So AdCP will happily call the thing a seller agent in a sentence and a sales agent in a schema. AAMP never returns the favour.
+AdCP uses the two names inconsistently across its own sources:
 
-## Why does AdCP say "sales agent" when AAMP says "seller agent"?
+| Where AdCP says it                     | What it calls the role   | What it says there                                                                       |
+| -------------------------------------- | ------------------------ | ---------------------------------------------------------------------------------------- |
+| `docs/reference/glossary.mdx`          | Sales Agent              | An MCP server exposing publisher inventory. Supply side, the publisher's own software.   |
+| `docs/trusted-match/specification.mdx` | Seller agent             | "The buyer-side agent that sold the package into a publisher."                           |
+| `dist/schemas/3.1.13/adagents.json`    | sales agents             | "Array of sales agents authorized to make inventory from this file available to buyers." |
+| `docs/governance/property/index.mdx`   | `SELLER AGENT (DSP/SSP)` | A diagram box, which reads the seller agent as whichever platform sold the package.      |
+| `docs/intro.mdx`                       | seller agent             | Describes a repository named `salesagent` as "a full-stack seller agent".                |
 
-AdCP has already spent the word "seller" on the business role. Its glossary is explicit: "In AdCP schemas, 'seller' is the standard term for this role (not 'platform')." Having named the participant _seller_, AdCP names the participant's software _sales agent_.
+The specification does not reconcile the readings. The [word pair](/concepts/adcp-vs-aamp-terminology/) is treated at length on the terminology page.
 
-AAMP does not draw that line. Its seller agent is the software and, in practice, the participant too. The AAMP hub README describes the repository as a "reference implementation of supply-side coordination and marketplace interaction" and does not define a separate business-role noun.
+"Sales agent" also predates the protocol. In media it means a rep firm or sales house selling inventory on a publisher's behalf, staffed by people, a sense that remains in common use and that AdCP's glossary entry nods to when its examples end on "sales house platforms".
 
-Neither body has published a mapping between the two terms. This page is the mapping, made from outside both. Treat it as our reading of two corpora that do not cite each other, not as a statement either standards body has endorsed.
+## AdCP and AAMP side by side
 
-## How does a publisher authorise a sales agent?
+| Question                     | AdCP 3.1.13                                                                              | AAMP                                                                                 |
+| ---------------------------- | ---------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------ |
+| Name for the sell-side agent | Sales agent                                                                              | Seller agent                                                                         |
+| Source type                  | Published specification with a versioned schema registry                                 | Reference implementations, no ratified wire spec                                     |
+| Capability discovery         | `get_adcp_capabilities`, a runtime task                                                  | An [agent card](/agents/agent-card/) at `/.well-known/agent.json`                    |
+| Price negotiation            | Pricing options and rate cards, no counter-offer surface or quote object in the registry | `Quote.json`, `Proposal.json`, `Negotiation.json` in `iab-agentic-primitives` v0.5.0 |
+| Sell-side authorisation      | `adagents.json` on the publisher domain                                                  | Trust status in an [agent registry](/agents/agent-registry/)                         |
 
-Through `adagents.json`, a file the publisher hosts at `/.well-known/adagents.json`. Its 3.1.10 schema (`$id: /schemas/3.1.10/adagents.json`, title "AdCP Agents Authorization") has two top-level variants: a pointer file carrying `authoritative_location`, or the inline file carrying the real data.
+AAMP's schemas do not use the phrase "sales agent". `iab-agentic-primitives/spec/jsonschema/Agent.json` defines `AgentType` as a five-value enum, `buyer`, `seller`, `tool_provider`, `data_provider` and `other`, defaulting to `buyer`. AAMP also has no single release number: each of its repositories versions independently, so "seller agent v2.4.1" is a per-repo tag rather than an AAMP version.
 
-The inline variant's `authorized_agents` array is described in the schema as an "array of sales agents authorized to make inventory from this file available to buyers." Each entry is discriminated on `authorization_type` and comes in six shapes: `property_ids`, `property_tags`, `inline_properties`, `publisher_properties`, `signal_ids` and `signal_tags`. The first four authorise inventory; the last two authorise a [signal agent](/agents/signal-agent/) to resell named signals from a data provider's domain.
+AdCP's buy-side counterpart is an orchestrator, the buyer-side client that drives the buy, and required-tasks is explicit that orchestrators "are not MCP/A2A servers — they call sales agent tasks." AAMP's [buyer agent](/agents/buyer-agent/) ships an HTTP API of its own, titled "Ad Buyer Agent API".
 
-Every variant inherits three fields from `core/authorized-agent-base.json`: `url` (the agent endpoint), `authorized_for` (a free-text label, 1 to 500 characters) and optional `signing_keys` that let a buyer verify signed responses against a publisher-attested key rather than trusting key discovery on the agent's own domain.
-
-One rule is easy to get wrong. An empty `authorized_agents: []` is legal, and the schema says validators "MUST NOT read it as deny-all, authorize-all, or a revocation." It means a catalog-only file for a platform that has not adopted AdCP.
-
-Field-level reference for the whole file lives on [AdCP Explorer's adagents.json page](https://adcpexplorer.noetis.dev/discovery/adagents-json/).
-
-## What a sales agent does not do
-
-A sales agent does not negotiate. AdCP 3.1.10 has pricing options and rate cards; it has no quote object, no counter-offer, and no concession model. If you need agent-to-agent price negotiation, that machinery exists on the AAMP side, in the seller agent, and it is implementation-derived rather than ratified.
-
-A sales agent also does not approve its own spend. Plan validation belongs to a [governance agent](/agents/governance-agent/), and brand identity belongs to a [brand agent](/agents/brand-agent/). AdCP splits these deliberately.
-
-## Sources and version pins
-
-- AdCP 3.1.10, `dist/schemas/latest.json` and `dist/schemas/3.1.10/index.json`, repository `adcontextprotocol/adcp` at commit `f1a35ab` (parsed 2026-08-08).
-- IAB Tech Lab `seller-agent` at tag `v2.4.1`, commit `2bb7ebc`. AAMP hub README at commit `3b20e67`.
-- AAMP has no single version number. Each repository versions independently, so "seller agent v2.4.1" is a per-repo tag, not an AAMP release.
+Related roles: plan validation belongs to a [governance agent](/agents/governance-agent/) and brand identity to a [brand agent](/agents/brand-agent/), following the separation `docs/trust.mdx` draws between the agent that spends money and the agent that approves the spend. The protocols are compared side by side at [AdCP vs AAMP](https://agenticadlab.com/protocols/adcp-vs-aamp/).

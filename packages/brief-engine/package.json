@@ -1,0 +1,15 @@
+{
+  "name": "@agenticbrief/brief-engine",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Deterministic, rule-based decomposition of a prose campaign brief into an AdCP get_products request and an AAMP CampaignBrief, with every emitted value labelled stated / derived / assumed / missing.",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./types": "./src/types.ts",
+    "./fields": "./src/fields.ts"
+  },
+  "scripts": {
+    "test": "node --test 'test/*.test.ts'"
+  }
+}

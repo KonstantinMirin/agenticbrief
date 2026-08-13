@@ -146,27 +146,28 @@ export const TRAINING_AGENTS = [
 
 export const AI_CRAWLER_AGENTS = [...RETRIEVAL_AGENTS, ...TRAINING_AGENTS] as const
 
+/**
+ * A standard robots.txt: everything allowed, sitemap declared.
+ *
+ * This used to enumerate twenty named crawlers with an `Allow: /` apiece and a
+ * comment arguing the case for letting them in. That was written while the
+ * sites were behind an auth wall, where the file was a statement of intent that
+ * no crawler could act on. Now that they are public the enumeration is dead
+ * weight: absence of a rule already means allowed, so the twenty blocks granted
+ * nothing that `User-agent: *` had not granted, including the `Google-Extended`
+ * and `Applebot-Extended` control tokens, which are opt-out switches rather
+ * than permissions. The short file has identical effect and no comment to
+ * contradict later.
+ *
+ * The agent lists above are kept: they are the documented crawler set, and a
+ * `disallow` argument here is still honoured if a site ever needs one.
+ */
 export function renderRobotsTxt(opts: { siteUrl: string; disallow?: string[] }): string {
   const out: string[] = []
   out.push('User-agent: *')
   out.push('Allow: /')
   for (const d of opts.disallow ?? []) out.push(`Disallow: ${d}`)
   out.push('')
-  out.push('# Retrieval and assistant user-agents. These are how a page gets cited;')
-  out.push('# blocking them is the one reliable way to become uncitable.')
-  for (const agent of RETRIEVAL_AGENTS) {
-    out.push(`User-agent: ${agent}`)
-    out.push('Allow: /')
-    out.push('')
-  }
-  out.push('# Training crawlers and model-grounding control tokens.')
-  out.push('# Allowed deliberately: this is a reference site, and having these')
-  out.push('# definitions in the corpus is the objective.')
-  for (const agent of TRAINING_AGENTS) {
-    out.push(`User-agent: ${agent}`)
-    out.push('Allow: /')
-    out.push('')
-  }
   out.push(`Sitemap: ${opts.siteUrl}/sitemap-index.xml`)
   out.push('')
   return out.join('\n')

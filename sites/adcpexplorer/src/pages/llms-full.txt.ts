@@ -50,7 +50,7 @@ export const GET: APIRoute = () => {
 
   const doc = renderLlmsFullTxt({
     siteName: `AdCP Explorer — Ad Context Protocol ${adcp.version}`,
-    summary: `Every field of all ${adcp.tasks.length} AdCP operations, generated from the published ${adcp.version} schema registry.`,
+    summary: `Every request and response field of all ${adcp.tasks.length} operations in Ad Context Protocol release ${adcp.version}, grouped by protocol area.`,
     generatedAt: adcp.provenance.parsedAt.slice(0, 10),
     entries,
   })

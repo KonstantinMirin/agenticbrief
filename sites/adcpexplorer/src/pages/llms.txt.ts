@@ -12,10 +12,10 @@ import { BASE, orderedAreas, tasksForArea, featuredTasks, operationUrl } from '.
 export const GET: APIRoute = () => {
   const doc = renderLlmsTxt({
     siteName: 'AdCP Explorer',
-    summary: `Field-level reference for all ${adcp.tasks.length} operations in Ad Context Protocol release ${adcp.version}, generated from the published schema registry.`,
+    summary: `Field-level reference for all ${adcp.tasks.length} operations in Ad Context Protocol release ${adcp.version}: request and response fields, required fields, and which operations write state.`,
     details: [
       `AdCP is an open standard, governed by AgenticAdvertising.org and licensed Apache 2.0, that lets advertising software agents discover, buy and measure media over MCP or A2A transports.`,
-      `Every page on this site names the release, the commit and the schema file it was generated from. Current release: ${adcp.version}, last updated ${adcp.lastUpdated}.`,
+      `Release ${adcp.version}, last updated ${adcp.lastUpdated}, registers ${adcp.tasks.length} operations across ${adcp.areas.length} schema groups. One of them, get_adcp_capabilities, is required of every conforming agent; the rest are scoped to the role an agent claims.`,
     ],
     sections: [
       {
@@ -64,13 +64,13 @@ export const GET: APIRoute = () => {
           },
           {
             title: 'AAMP Explorer',
-            url: 'https://aampexplorer.noetis.dev/',
-            note: 'the other agentic advertising stack',
+            url: 'https://aampexplorer.com/',
+            note: "IAB Tech Lab's agentic advertising stack, in the same format",
           },
           {
             title: 'AdCP specification',
             url: adcp.docsHomepage ?? adcp.homepage,
-            note: 'the normative source this site is generated from',
+            note: 'the normative specification',
           },
         ],
       },

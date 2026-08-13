@@ -16,6 +16,33 @@ const BASE = siteUrl('briefgateway')
   path="/"
   technical={false}
   breadcrumbs={[{ name: 'Brief Gateway', url: `${BASE}/` }]}
+  relatedLinks={[
+    {
+      href: '/generate/',
+      title: 'Score a brief',
+      note: 'Paste prose, get the AdCP request and the AAMP CampaignBrief, every field labelled.',
+    },
+    {
+      href: '/guides/brief-completeness-rubric/',
+      title: 'The brief completeness rubric',
+      note: 'The field map the two scores implement, concept by concept.',
+    },
+    {
+      href: '/guides/brief-preflight-checklist/',
+      title: 'The brief pre-flight checklist',
+      note: 'The decisions to settle with your team before an agent reads any of this.',
+    },
+    {
+      href: '/spec/',
+      title: 'What a protocol-conformant brief is',
+      note: 'One string typed as a string, gated by buying_mode, and what a validator lets through.',
+    },
+    {
+      href: '/examples/ctv-guaranteed-launch/',
+      title: 'A guaranteed CTV launch, filled in',
+      note: 'A worked brief as a get_products payload, with the constraint mistakes the schema accepts.',
+    },
+  ]}
 >
   <Content />
 </DocPage>

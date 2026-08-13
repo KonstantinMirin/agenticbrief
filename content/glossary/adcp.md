@@ -1,100 +1,105 @@
 ---
 title: 'Ad Context Protocol (AdCP)'
-description: 'AdCP is the Ad Context Protocol, an open advertising standard whose published 3.1.10 release registers 64 operations. Where it is defined, what it covers, what it omits.'
-answer: 'AdCP (Ad Context Protocol) is an open standard from AgenticAdvertising.org defining advertising tasks and JSON schemas for AI agents. Its published stable release, 3.1.10, registers 64 operations and runs over MCP or A2A as transport.'
+description: 'AdCP is the Ad Context Protocol, an open standard from AgenticAdvertising.org. The published 3.1.13 release registers 64 operations, and there is no deal object anywhere in it.'
+answer: 'AdCP (Ad Context Protocol) is an open advertising standard from AgenticAdvertising.org whose stable 3.1.13 release registers 64 operations across ten schema groups, carried over MCP and A2A at planning time and plain HTTP at serve time.'
 pubDate: 2026-08-09
 term: 'Ad Context Protocol'
-alternateNames: ['AdCP']
+alternateNames: ['AdCP', 'Advertising Context Protocol']
 category: protocol
-cluster: gl-adcp
+cluster: 'gl-stacks'
 keywords:
   - 'ad context protocol'
   - 'what is adcp'
   - 'adcp definition'
-  - 'adcp 3.1'
+  - 'what does adcp stand for'
+  - 'advertising context protocol'
   - 'adcp 64 operations'
 citations:
   - 'https://docs.adcontextprotocol.org/'
   - 'https://github.com/adcontextprotocol/adcp'
-  - 'https://github.com/adcontextprotocol/adcp/blob/f1a35aba734befa809e1fa780ad77c7edd614e96/dist/schemas/latest.json'
-  - 'https://github.com/adcontextprotocol/adcp/blob/f1a35aba734befa809e1fa780ad77c7edd614e96/dist/schemas/3.1.10/index.json'
-  - 'https://github.com/adcontextprotocol/adcp/blob/f1a35aba734befa809e1fa780ad77c7edd614e96/docs/reference/versions.mdx'
-  - 'https://github.com/adcontextprotocol/adcp/blob/f1a35aba734befa809e1fa780ad77c7edd614e96/docs/reference/glossary.mdx'
-  - 'https://github.com/adcontextprotocol/adcp/blob/f1a35aba734befa809e1fa780ad77c7edd614e96/docs/faq.mdx'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/schemas/latest.json'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/schemas/3.1.13/index.json'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/schemas/3.1.13/core/version-envelope.json'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/schemas/3.1.13/core/proposal.json'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/schemas/3.1.13/core/insertion-order.json'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/README.md'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/CHARTER.md'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/docs/protocol/required-tasks.mdx'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/docs/reference/versions.mdx'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/docs/reference/versioning.mdx'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/docs/reference/glossary.mdx'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/docs/faq.mdx'
   - 'https://github.com/IABTechLab/AAMP'
 related:
   - '/concepts/aamp/'
   - '/concepts/adcp-vs-aamp-terminology/'
   - '/concepts/mcp-and-a2a/'
+  - '/concepts/sponsored-intelligence/'
+  - '/negotiation/deal/'
   - '/about/sources-and-versions/'
-  - 'https://adcpexplorer.noetis.dev/'
-  - 'https://agenticadlab.noetis.dev/protocols/adcp-vs-aamp/'
-seeAlso: ['AAMP', 'MCP and A2A', 'Sponsored Intelligence', 'Sales Agent']
+  - 'https://adcpexplorer.com/'
+  - 'https://agenticadlab.com/protocols/adcp-vs-aamp/'
+seeAlso: ['AAMP', 'MCP and A2A', 'Sponsored Intelligence', 'Trusted Match Protocol', 'Deal']
+updatedDate: 2026-08-09
 reviewState: cto-reviewed
 ---
 
-## Who publishes AdCP, and where is it defined?
+AdCP, the Ad Context Protocol, is an open advertising standard published by AgenticAdvertising.org: a vocabulary of tasks a buyer's agent calls on a seller's agent to buy media. On the sell side, a sales agent is an MCP (Model Context Protocol) server exposing a publisher's inventory. The buy side is what AdCP calls an orchestrator: a client that calls sales agent tasks and exposes no server of its own.
 
-AdCP is published by AgenticAdvertising.org (AAO), an independent member organisation, under Apache 2.0. The specification surface is a JSON Schema registry plus a Mintlify documentation site, both in one repository: [`github.com/adcontextprotocol/adcp`](https://github.com/adcontextprotocol/adcp). Rendered docs are at [docs.adcontextprotocol.org](https://docs.adcontextprotocol.org/).
+The whole standard is one GitHub repository: a versioned JSON Schema registry and a documentation site, licensed Apache 2.0. `CHARTER.md` calls AgenticAdvertising.org "a pending 501(c)(6) nonprofit trade association incorporated in Delaware", and the FAQ states the relationship with the other standards body directly: "AdCP is maintained by AgenticAdvertising.org (AAO), an independent specification body — not a subsidiary or working group of IAB Tech Lab".
 
-The repository's own glossary defines AdCP in one line: "An open standard for AI-powered advertising workflows" (`docs/reference/glossary.mdx`). That is thinner than the artifact deserves. What AdCP actually publishes is a set of named operations with request and response schemas, an envelope shared by all of them, and a conformance matrix stating which operations each role must implement.
+The README names the normative surface: "The schemas in `static/schemas/source/` and the protocol documents in `docs/` define the normative AdCP contract." The acronym is expanded both ways inside that repository: `docs/` and the glossary say Ad Context Protocol, while the README's first line, `CHARTER.md`, `governance/membership-agreement.md` and the 2.0.0 release-notes entry say Advertising Context Protocol. [AAMP](/concepts/aamp/)'s acronym has four expansions in circulation.
 
-AAO states plainly that it is not part of IAB Tech Lab: "AdCP is maintained by AgenticAdvertising.org (AAO), an independent specification body, not a subsidiary or working group of IAB Tech Lab" (`docs/faq.mdx:130`).
+## AdCP 3.1.13 registers 64 operations
 
-## Which AdCP version is current, and how do you check it?
+One media buy is `get_products` to find inventory, `create_media_buy` to book it, `sync_creatives` if the seller hosts the creative library, then `get_media_buy_delivery` to read back what ran. All but the creative step are Required for a Media Buy sales agent in `docs/protocol/required-tasks.mdx`. The other 60 operations sit around that spine, registered in `dist/schemas/3.1.13/index.json` across ten schema groups.
 
-Check `dist/schemas/latest.json`. On the commit I parsed it reads:
+| Schema group           | Operations in 3.1.13 | What the group covers                                                                        |
+| ---------------------- | -------------------- | -------------------------------------------------------------------------------------------- |
+| Governance             | 22                   | Property governance, brand and content standards, and the checks run against them            |
+| Media Buy              | 11                   | Finding, booking and reporting on inventory, `get_products` through `get_media_buy_delivery` |
+| Creative               | 8                    | Building, previewing and syncing creative, and the formats it is built to                    |
+| Brand Protocol         | 6                    | Brand identity retrieval, rights discovery, acquisition and lifecycle                        |
+| Accounts               | 5                    | Account listing, usage reporting and account financials                                      |
+| Sponsored Intelligence | 4                    | Conversational brand experiences inside AI assistants                                        |
+| Protocol (shared)      | 3                    | Tasks common to every role: `get_adcp_capabilities`, `get_task_status`, `list_tasks`         |
+| Signals                | 2                    | `get_signals` and `activate_signal`                                                          |
+| Trusted Match          | 2                    | Serve-time activation of pre-negotiated packages: `context_match`, `identity_match`          |
+| Compliance             | 1                    | The compliance testing tool, `comply_test_controller`                                        |
 
-```json
-{ "latest": "3.1.10", "latest_stable": "3.1.10", "channel": "stable", "path": "/schemas/3.1.10/" }
-```
+Governance is a third of the surface on its own. Fourteen of its 22 operations are create, update, get, list and delete over three objects — property lists, collection lists and content standards, which has no delete. The other eight calibrate content against a standard, check a plan against governance, validate what actually delivered, and pull the plan audit log.
 
-That file is the version oracle. Three other version surfaces in the same repository disagree with it and with each other, which is the single most common way AdCP gets misquoted:
+AdCP launched as three protocols: Signals Activation, Curation and Media Buy. Signals Activation and Media Buy shipped, Curation is still a README row reading "Coming soon", and the two groups that landed instead, [Sponsored Intelligence](/concepts/sponsored-intelligence/) and Governance, were not on the original list.
 
-| Surface                            | Value on the parsed commit | What it means                                            |
-| ---------------------------------- | -------------------------- | -------------------------------------------------------- |
-| `dist/schemas/latest.json`         | `3.1.10`                   | The published stable release. Use this.                  |
-| `static/schemas/source/index.json` | `published_version: 3.1.1` | Unreleased `main`. The stamp only moves at release time. |
-| `package.json`                     | `3.1.1`                    | Tracks `main`, not the release.                          |
-| Wire pin in `adcp_version`         | `"3.1"`                    | Release precision only, never patch level.               |
+The groups split across two protocol layers, and the reason is latency: "Planning-time tasks use MCP and A2A transports; serve-time decisions use the Trusted Match HTTP profile where the latency budget is impression-time" (`README.md`). Seven groups sit in the negotiation layer, over [MCP or A2A](/concepts/mcp-and-a2a/), the two agent transports AdCP runs on; [Trusted Match](/realtime/trusted-match-protocol/) is alone on the serving side, on plain HTTP. The whole surface, operation by operation, is at [AdCP Explorer](https://adcpexplorer.com/).
 
-One more trap: 3.1.3 is withdrawn. The version table says so in bold, giving two reasons, an added stable schema field in a patch release and an incorrect publisher-domain filter, and directs implementers to 3.1.2 instead (`docs/reference/versions.mdx:39`). The 3.1.3 artifacts remain downloadable for auditability, so a naive "highest number wins" script will pick a release the specification tells you not to use.
+The documentation site renders from unreleased `main`, so it also describes `sync_agent_notification_configs` as a shared conditional task for every agent role. No release registers that operation.
 
-## What does AdCP 3.1.10 actually contain?
+## One file carries the version
 
-`dist/schemas/3.1.10/index.json` registers **64 operations** across ten schema groups. I counted them from the registry rather than from prose:
+`dist/schemas/latest.json` names the published release, 3.1.13. Three other surfaces in the same repository state a version, and each states a different one.
 
-| Schema group           | Operations in 3.1.10 |
-| ---------------------- | -------------------- |
-| Governance             | 22                   |
-| Media Buy              | 11                   |
-| Creative               | 8                    |
-| Brand Protocol         | 6                    |
-| Accounts               | 5                    |
-| Sponsored Intelligence | 4                    |
-| Protocol (shared)      | 3                    |
-| Signals                | 2                    |
-| Trusted Match          | 2                    |
-| Compliance             | 1                    |
+| Surface                            | Version stated | Status                                                               |
+| ---------------------------------- | -------------- | -------------------------------------------------------------------- |
+| `dist/schemas/latest.json`         | 3.1.13         | The published stable release                                         |
+| `docs/reference/versions.mdx`      | 3.1.12         | The "which version should I use" page, one patch behind the registry |
+| `static/schemas/source/index.json` | 3.1.1          | Unreleased `main`; the source stamp moves only when a release is cut |
+| Wire field `adcp_version`          | `"3.1"`        | Release precision. Patches are never negotiated                      |
 
-You will see 65 quoted. That count comes from the unreleased `main` branch, which adds `sync_agent_notification_configs` to the protocol group. It exists in no published release, so any page citing 65 is describing a branch, not a standard.
+3.1.3 shipped on 13 July 2026 and is marked "Do not use" for adding a stable schema field in a patch. Its artifacts stay downloadable for auditability, so a version directory existing in the registry does not mean that release is safe to build against.
 
-The registry also declares two protocol layers. The negotiation layer covers planning-time work (media buy, creative, signals, accounts, governance, brand, sponsored intelligence). The decisioning and serving layer holds only the Trusted Match Protocol, which uses direct HTTP rather than an agent transport.
+What a `"3.1"` pin does against a seller that speaks only 3.0 is stated two incompatible ways inside one file, `docs/reference/versioning.mdx`. One passage has the client fail with `VERSION_UNSUPPORTED`. The negotiation algorithm earlier in the same file downshifts to the highest supported release at or below the pin, which for a 3.0-only seller means serving 3.0 and proceeding. `core/version-envelope.json` sides with the downshift; [get_adcp_capabilities](https://adcpexplorer.com/operations/get-adcp-capabilities/) has the argument in full.
 
-## What is AdCP's counterpart in the AAMP stack?
+## Proposals and insertion orders, and no deal object
 
-There is no single counterpart. AdCP is one specification with one version number and one registry. AAMP is an IAB Tech Lab umbrella over eight independently versioned repositories, most of which are reference implementations rather than ratified specifications. The nearest thing to an AdCP-shaped artifact on the AAMP side is `iab-agentic-primitives`, whose README declares itself "WORK IN PROGRESS, NOT YET RELEASED" while both IAB reference agents pin it as a dependency.
+What a buyer actually handles is a proposal and, if the buy is signed, an insertion order. `core/proposal.json` is "a proposed media plan with budget allocations" whose committed form executes via `create_media_buy`, and `core/insertion-order.json` is "a signing wrapper attached to a committed proposal" that "does not introduce new deal terms". A proposal is accepted or refused rather than negotiated: price does not move across rounds, and a price that does move before signature is settled out of band.
 
-Object by object, some AdCP terms map cleanly (Product, Account) and some have no AAMP equivalent at all (Specialism, Sponsored Intelligence). The term-level mapping is on the [AdCP and AAMP terminology lookup](/concepts/adcp-vs-aamp-terminology/); the architectural comparison lives on [Agentic Ad Lab](https://agenticadlab.noetis.dev/protocols/adcp-vs-aamp/).
+The 3.1.13 release contains no deal, quote or negotiation object — no schema file and no property name. The word `deal` appears only as prose inside schema descriptions and as one value of `enums/response-type.json`, where it is one of four things a publisher can ask a Trusted Match context match to return. Multi-round price movement is an AAMP behaviour, and even there it is reference-implementation behaviour with no ratified spec, which is why [deal](/negotiation/deal/) and [quote](/negotiation/quote/) differ by stack.
 
-## What is AdCP most often confused with?
+## What AdCP is often confused with
 
-**AdCP is not ACP.** The Agentic Commerce Protocol is an OpenAI and Stripe standard for checkout and payment delegation inside AI assistants. AdCP's own glossary lists ACP as a separate entry and positions the two as different layers rather than competitors.
+Two protocols are frequently confused with AdCP and operate one layer below it. ACP is OpenAI and Stripe's Agentic Commerce Protocol; UCP is Google's Universal Commerce Protocol, built with Shopify, Walmart and Target. Both standardise checkout rather than media, and AdCP's FAQ classifies them as commerce protocols. AdCP also declines to replace the files a publisher already serves: `adagents.json` "extends the `ads.txt`/`sellers.json` relationship semantics rather than replacing them" (see [discovery files](/agents/discovery-files/)).
 
-**AdCP is not an IAB Tech Lab standard.** It coexists with OpenRTB, VAST, `ads.txt` and `sellers.json`, and its `adagents.json` file deliberately extends `ads.txt` and `sellers.json` relationship semantics, but the governance is separate.
+[AAMP](/concepts/aamp/) is the other stack rather than another layer. Term-by-term mapping, and which way the citation between the two runs, is on the [terminology lookup](/concepts/adcp-vs-aamp-terminology/); the architectural comparison is at [Agentic Ad Lab](https://agenticadlab.com/protocols/adcp-vs-aamp/).
 
-**"AdCP 3.1" is not a patch version.** Wire pins are release precision. A client pinning `"3.1"` fails with `VERSION_UNSUPPORTED` against a server that speaks only 3.0, and there is no way to pin `3.1.10` on the wire.
-
-**AdCP does not define a deal, a quote, or a negotiation object.** No file in `dist/schemas/3.1.10/` carries any of those names, and no property anywhere in the registry is named for one. The word `deal` does appear, twelve times across eight files, but only ever inside a description — except in `enums/response-type.json`, where it is one of four values a publisher can ask a Trusted Match context match to return. If you are looking for multi-round price negotiation, that vocabulary is on the AAMP side, and it comes from a reference implementation rather than a specification.
-
-Every version number and count on this page was re-derived from `dist/schemas/3.1.10/` at commit `f1a35ab`. Method and pins: [how these definitions are sourced](/about/sources-and-versions/).
+Related terms: [AAMP](/concepts/aamp/), [MCP and A2A](/concepts/mcp-and-a2a/), [Sponsored Intelligence](/concepts/sponsored-intelligence/), [Trusted Match Protocol](/realtime/trusted-match-protocol/), [deal](/negotiation/deal/).

@@ -1,8 +1,9 @@
 ---
-title: 'Audience vs Signal in AdCP — Two Objects People Constantly Conflate'
-description: 'An AdCP audience is buyer-owned CRM data uploaded via sync_audiences. A signal is a seller-side or provider-side targeting dimension discovered via get_signals.'
-answer: 'An Audience is buyer-owned CRM data uploaded to one seller account with sync_audiences. A Signal is a targeting dimension published by a seller, signal source or data provider and discovered with get_signals. Different owners, different operations.'
+title: 'Audience vs Signal'
+description: 'In AdCP an audience is buyer-uploaded CRM data whose ID cannot cross sellers. A signal is a targeting dimension someone else publishes. AAMP has neither object.'
+answer: 'An audience is buyer-owned CRM data uploaded to one seller account with sync_audiences and not portable across sellers, while a signal is a targeting dimension published by someone else and discovered with get_signals.'
 pubDate: 2026-08-09
+updatedDate: 2026-08-09
 term: 'Audience vs Signal'
 category: 'identity'
 cluster: 'gl-signals'
@@ -12,128 +13,105 @@ keywords:
   - 'adcp audience vs signal'
   - 'sync_audiences vs get_signals'
   - 'first party audience adcp'
+  - 'audience signal difference'
 citations:
   - 'https://docs.adcontextprotocol.org/docs/media-buy/task-reference/sync_audiences'
-  - 'https://github.com/adcontextprotocol/adcp/blob/f1a35aba734befa809e1fa780ad77c7edd614e96/dist/schemas/3.1.10/media-buy/sync-audiences-request.json'
-  - 'https://github.com/adcontextprotocol/adcp/blob/f1a35aba734befa809e1fa780ad77c7edd614e96/dist/schemas/3.1.10/core/audience-member.json'
-  - 'https://github.com/adcontextprotocol/adcp/blob/f1a35aba734befa809e1fa780ad77c7edd614e96/dist/schemas/3.1.10/core/targeting.json'
-  - 'https://github.com/adcontextprotocol/adcp/blob/f1a35aba734befa809e1fa780ad77c7edd614e96/dist/schemas/3.1.10/signals/get-signals-request.json'
-  - 'https://github.com/adcontextprotocol/adcp/blob/f1a35aba734befa809e1fa780ad77c7edd614e96/dist/schemas/3.1.10/enums/signal-catalog-type.json'
   - 'https://docs.adcontextprotocol.org/docs/reference/glossary'
-  - 'https://github.com/IABTechLab/agentic-audiences/blob/106ebd645668677ff8be458877a5684a5d229961/specs/v1.0/embedding-exchange.md'
-  - 'https://github.com/adcontextprotocol/adcp/blob/f1a35aba734befa809e1fa780ad77c7edd614e96/dist/schemas/3.1.10/core/signal-ref.json'
-  - 'https://github.com/adcontextprotocol/adcp/blob/f1a35aba734befa809e1fa780ad77c7edd614e96/dist/schemas/3.1.10/enums/signal-source.json'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/schemas/3.1.13/media-buy/sync-audiences-request.json'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/schemas/3.1.13/media-buy/sync-audiences-response.json'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/schemas/3.1.13/enums/audience-status.json'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/schemas/3.1.13/core/targeting.json'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/schemas/3.1.13/core/signal-ref.json'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/schemas/3.1.13/core/package-signal-targeting.json'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/schemas/3.1.13/core/signal-pricing.json'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/schemas/3.1.13/enums/signal-catalog-type.json'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/schemas/3.1.13/enums/consent-basis.json'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/schemas/3.1.13/signals/get-signals-response.json'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/schemas/3.1.13/protocol/get-adcp-capabilities-response.json'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/docs/trusted-match/migration-from-axe.mdx'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/docs/3.1.0-beta.3/media-buy/task-reference/sync_audiences.mdx'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/docs/3.1.0-beta.4/media-buy/task-reference/sync_audiences.mdx'
+  - 'https://github.com/IABTechLab/iab-agentic-primitives/blob/2fc7029fb9eca801bc94586aec398906aa6af6c0/spec/jsonschema/protocol/QuoteRequest.json'
+  - 'https://github.com/IABTechLab/iab-agentic-primitives/blob/2fc7029fb9eca801bc94586aec398906aa6af6c0/spec/fixtures/protocol/DealBookingRequest.golden.json'
+  - 'https://github.com/IABTechLab/iab-agentic-primitives/blob/2fc7029fb9eca801bc94586aec398906aa6af6c0/RECONCILIATION.md'
+  - 'https://github.com/IABTechLab/buyer-agent/blob/0c3a1545e334a0dc6acf0a6722b554cc4a4503d6/docs/api/audience_plan_wire_format.md'
+  - 'https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/src/ad_seller/models/audience_ref.py'
+  - 'https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/docs/api/openapi.json'
 related:
   - '/signals/signal-definition/'
   - '/signals/activation/'
   - '/signals/hashed-identifier/'
-  - 'https://adcpexplorer.noetis.dev/areas/signals/'
-seeAlso: ['signal-definition', 'activation', 'hashed-identifier']
+  - '/governance/audience-constraints/'
+  - 'https://adcpexplorer.com/areas/signals/'
+  - 'https://agenticadlab.com/protocols/adcp-vs-aamp/'
+seeAlso: ['signal-definition', 'activation', 'hashed-identifier', 'audience-constraints']
 reviewState: cto-reviewed
 ---
 
-## What is the difference between an audience and a signal in AdCP?
-
-AdCP draws the line by ownership and by operation, and it says so in one sentence in the `sync_audiences` reference page:
+An audience is data the buyer owns and uploads to a seller account. A signal is a named targeting dimension that somebody else publishes and the buyer discovers. AdCP's `sync_audiences` reference page draws the line in one sentence:
 
 > Audiences are distinct from signals: signals are named targeting dimensions discovered through product signal options, provider-published signal definitions, or `get_signals`; audiences are data you own and upload.
 
-An Audience is yours. You upload it. A Signal is somebody else's. You find it.
+|                            | Audience                                                                   | Signal                                                                                                                                 |
+| -------------------------- | -------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| Who owns the data          | The buyer                                                                  | A seller, signal source, or data provider                                                                                              |
+| How it enters the protocol | Uploaded with `sync_audiences`                                             | Discovered with `get_signals`                                                                                                          |
+| Protocol area              | Media Buy                                                                  | Signals                                                                                                                                |
+| Identifier                 | Buyer-assigned `audience_id`                                               | `signal_ref`, with a `scope` discriminator                                                                                             |
+| Kind                       | `audience_type`: `crm`, `suppression`, `lookalike_seed`                    | `signal_type`: `marketplace`, `custom`, `owned`                                                                                        |
+| Portable across sellers    | No, by schema                                                              | Two of three scopes resolve outside the seller                                                                                         |
+| Members                    | [Hashed emails](/signals/hashed-identifier/), hashed phones, universal IDs | Not enumerable by the buyer                                                                                                            |
+| Applied at buy time via    | `audience_include` / `audience_exclude`                                    | `signal_targeting_groups` (flat `signal_targeting` is deprecated)                                                                      |
+| Priced in the protocol     | No price field on the request or the response                              | `pricing_options[]` at discovery, resolving to `core/signal-pricing.json`: `cpm`, `percent_of_media`, `flat_fee`, `per_unit`, `custom` |
+| Needs an activation step   | No                                                                         | Often, via [`activate_signal`](/signals/activation/)                                                                                   |
 
-|                            | Audience                                    | Signal                                         |
-| -------------------------- | ------------------------------------------- | ---------------------------------------------- |
-| Who owns the data          | The buyer                                   | A seller, signal source, or data provider      |
-| How it enters the protocol | Uploaded with `sync_audiences`              | Discovered with `get_signals`                  |
-| Protocol area              | Media Buy                                   | Signals                                        |
-| Scope                      | One seller account                          | The publishing domain, source or product       |
-| Identifier                 | Buyer-assigned `audience_id`                | `signal_ref`, with a scope discriminator       |
-| Members                    | Hashed emails, hashed phones, universal IDs | Not enumerable by the buyer                    |
-| Applied at buy time via    | `audience_include` / `audience_exclude`     | `signal_targeting_groups`                      |
-| Needs an activation step   | No                                          | Often yes, via `activate_signal`               |
-| Priced                     | No                                          | Sometimes, via `pricing_options` on the signal |
+`core/package-signal-targeting.json` tells implementers not to cross the two: "Use `audience_include`/`audience_exclude` only for buyer-managed first-party audiences registered through `sync_audiences`."
 
-The operations sit in different protocol areas, which is the clearest structural evidence that AdCP treats them as different things. `sync_audiences` is a Media Buy operation. `get_signals` and `activate_signal` are the entire Signals area — 2 of the 64 operations in AdCP 3.1.10.
+## How an audience enters the protocol
 
-## What exactly is an AdCP audience?
+`sync-audiences-request.json` requires `idempotency_key` and `account`, plus one field per audience, `audience_id`; everything else is optional, including `audience_type`, which is what changes the seller's behaviour. `delete_missing: true` removes every buyer-managed audience not in the request. When a list falls under a platform minimum, sellers "MUST emit 'too_small' (not 'ready' with a low `matched_count`)" and populate `minimum_size`. The field list is in AdCP's [sync_audiences reference](https://docs.adcontextprotocol.org/docs/media-buy/task-reference/sync_audiences).
 
-An audience is a named list of people the buyer already knows about, uploaded to one seller account.
+## Portability across sellers
 
-`sync-audiences-request.json` requires two things: an `idempotency_key` and an `account`. Each audience in the request carries a buyer-assigned `audience_id`, optional `name`, `description` and `tags`, and delta arrays `add` and `remove`. AdCP's glossary defines an audience member as "a hashed identifier record representing one person in a CRM audience".
+An `audience_id` cannot cross sellers. `core/targeting.json` states the rule on `audience_include` and again on `audience_exclude`: "References `audience_id` values from `sync_audiences` on the same seller account — audience IDs are not portable across sellers." The glossary puts it as "Audiences are account-scoped." Each seller relationship requires its own upload and produces its own match rate, and the protocol offers no path to ask whether the same person was reached on two of them.
 
-Three types are allowed, and they are not interchangeable:
+What an uploaded audience does buy is a binding rule at delivery: "`audience_include` is a hard constraint — only users on the list are eligible." Lookalike expansion is the opposite, and AdCP says so: "lookalike intent expressed in the brief cannot be verified through the protocol; confirm via seller-side reporting."
 
-- `crm` — target these users.
-- `suppression` — exclude these users from delivery.
-- `lookalike_seed` — use as a seed for the seller's lookalike modelling.
+[Trusted Match](/realtime/trusted-match-protocol/) evaluates membership buyer-side per impression rather than making `audience_id` portable. The publisher sends an opaque identity token, the buyer's own Identity Match endpoint returns eligible package IDs, and the list is never uploaded. It requires a TMP router at the publisher, and all ten Trusted Match schemas carry `"x-status": "experimental"`.
 
-The schema explains why the distinction is operational rather than cosmetic: sellers "may handle audiences differently based on type (e.g., suppression lists bypass minimum size requirements on some platforms)".
+Support is a capability check on either path. `targeting.json` says "Seller must declare support in `get_adcp_capabilities`", and the declaration is a presence check on `media_buy.audience_targeting`. No object means no audiences, and no error code in 3.1.13 is scoped to unsupported audience targeting.
 
-An optional `consent_basis` field takes one of four GDPR Article 6 bases: `consent`, `legitimate_interest`, `contract`, `legal_obligation`. The schema is candid that this is "informational — not validated by the protocol", and that when it is omitted "the buyer asserts they have a lawful basis appropriate to their jurisdiction".
+Signals are only slightly more portable. A `signal_ref` carries a `scope` discriminator with three branches, `product`, `data_provider` and `signal_source`, and only `product` is confined to one seller relationship, which is where every audience already lives. The three scopes are set out under [signal definition](/signals/signal-definition/).
 
-## Why is an audience account-scoped?
+## Signal types
 
-Because it is uploaded to a seller, not to the protocol. `targeting.json` says `audience_include` "references `audience_id` values from `sync_audiences` on the same seller account".
+A signal is not always third-party data. The wire field is `signal_type`, resolving to `enums/signal-catalog-type.json`, whose title is "Signal Availability Type", and validators follow that enum:
 
-The consequence for a buyer agent running across five sellers: the same customer list has to be uploaded five times, matched five times, and reconciled five times. There is no cross-seller audience identity in AdCP, and no audience registry. The list is buyer-owned but seller-resident.
-
-There is also a footgun in the sync semantics that deserves naming. `delete_missing: true` removes every buyer-managed audience on the account that is not in the request, and the schema warns: "Do not combine with an omitted audiences array or all buyer-managed audiences will be deleted." The schema encodes a conditional requiring `audiences` when `delete_missing` is true, so the worst case is blocked, but the near miss is not.
-
-## Is audience targeting a hint or a hard rule?
-
-Hard. The `sync_audiences` page states it plainly: "`audience_include` is a hard constraint — only users on the list are eligible."
-
-Lookalike expansion is the opposite, and AdCP says so with unusual honesty. To find users similar to an audience, you describe that intent in the campaign brief and the seller decides how to expand. The documentation then adds: "lookalike intent expressed in the brief cannot be verified through the protocol; confirm via seller-side reporting."
-
-That is a standards body writing down the limit of its own guarantee. Worth quoting when someone claims agentic buying makes media measurable end to end.
-
-## Is a signal always third-party data?
-
-No, and this is where most explanations go wrong.
-
-The released enum in AdCP 3.1.10 is `signal-catalog-type.json`, titled "Signal Availability Type", and it has three values:
-
-| Value         | Definition in the schema                                                                                                                          |
+| Value         | enumDescription                                                                                                                                   |
 | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `marketplace` | "Resold third-party segments (provider authorization verifiable via the provider's adagents.json)"                                                |
-| `custom`      | "Source-native segment built on demand from models, composites, or buyer inputs — not attributable to a standing upstream provider"               |
+| `custom`      | "Source-native segment built on demand from models, composites, or buyer inputs - not attributable to a standing upstream provider"               |
 | `owned`       | "First-party segments derived from data the signal agent or seller directly owns (retailer purchase data, publisher behavioral data, telco data)" |
 
-So a signal can be first-party data. The distinction is whose first party. An `owned` signal is first-party to the seller or the signal agent — the retailer's purchase history, the publisher's behavioural data. An Audience is first-party to the buyer. That is the line, and it holds for every case.
+A signal can therefore be first-party data. `owned` means the seller or the signal agent holds it; an audience means the buyer does.
 
-The AdCP glossary uses the term "Third-Party Signal" and then defines it as "signal data licensed from external providers, also known as marketplace signals", confirming that third-party and marketplace are synonyms in this vocabulary rather than separate categories.
+`lookalike_seed` sits on the boundary. The buyer uploads the seed, the seller models on it, and the result is derived from data the seller now holds, which matches the `owned` description. AdCP does not settle it: the seed list is the audience, and the modelled segment never gets an `audience_id`.
 
-### A divergence worth knowing about
+AdCP also widened its own definition mid-release. Documentation shipped up to `3.1.0-beta.3` reads "signals are third-party data products you discover and activate"; from `3.1.0-beta.4` onward it reads "named targeting dimensions".
 
-The prose glossary at `docs/reference/glossary.mdx:340` defines Signal Type as a classification into six values: "marketplace" (third-party), "owned" (first-party), "destination" (bundled with media), "contextual", "geographical", and "temporal".
+`glossary.mdx` disagrees with the enum: it gives Signal Type six values, four of which exist nowhere in 3.1.13, while omitting `custom`. That same glossary defines Audience and ten `Signal *` compounds and has no entry for Signal itself. The field-level detail is in [signal definition](/signals/signal-definition/).
 
-The released schema enum has three: `marketplace`, `custom`, `owned`. It does not contain `destination`, `contextual`, `geographical` or `temporal`, and it contains `custom`, which the glossary does not mention.
+## Audiences and signals in AAMP
 
-I checked both files at the same commit. If you are writing a validator, follow `dist/schemas/3.1.10/enums/signal-catalog-type.json`. If you are reading the glossary, treat the six-value list as descriptive prose that the wire format does not implement.
+No signal object exists in any AAMP repository, and no CRM upload path: neither the wire contract nor either reference agent has a `signal`-shaped field.
 
-## How does a buyer find a signal?
+Audience-shaped fields do exist, and every one of them in `iab-agentic-primitives` is typed `{"type": "object", "additionalProperties": true}` or the nullable version of that, with no sub-schema behind it. `QuoteRequest.json` says why: "Audience plan slot (open object; the typed model lands with the audience-plan bead)." `RECONCILIATION.md` files it under "Explicitly out of scope (stated, not accidental)". Two incompatible shapes are already in use.
 
-`get_signals` accepts either a natural-language `signal_spec` or an array of `signal_refs`, and can be filtered by `destinations`, `countries` and a `filters` object. It has a `discovery_mode` of `brief` or `wholesale`, and returns cache tokens (`wholesale_feed_version`, `pricing_version`) so a buyer agent can skip re-fetching an unchanged catalog.
+| Source                                                                                               | What an audience plan is                                                                      |
+| ---------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
+| `iab-agentic-primitives` conformance golden vector                                                   | `{"plan_id": "ap-9", "segments": [{"id": "1001", "role": "reach"}]}`                          |
+| `buyer-agent/docs/api/audience_plan_wire_format.md` §2.1, "the authoritative wire-format definition" | `{schema_version, audience_plan_id, primary, constraints, extensions, exclusions, rationale}` |
 
-A `signal_ref` carries a `scope` discriminator with three values, which is really three different trust models:
+The two shapes share no field names, both validate against the open object, and neither has been ratified as the format.
 
-- `product` — the signal is local to the selected product.
-- `data_provider` — the signal resolves through a domain's published `adagents.json` `signals[]`, so authorization is externally verifiable.
-- `signal_source` — the signal is native to the issuing source and, per the `signal-source.json` enum, is "not externally verifiable through an upstream catalog — buyer trusts the issuing source's claim about the signal".
-
-Audiences have nothing equivalent, because there is nothing to verify. The buyer uploaded the list.
-
-## Does AAMP have an audience-versus-signal distinction?
-
-Not in a form that maps across.
-
-AAMP's control plane has no CRM upload operation and no audience object. Its `Product` and `Package` schemas in `iab-agentic-primitives` carry taxonomy targeting intents (IAB Content, Audience and Ad Product taxonomies) and an `audience_capabilities` declaration, which is a capability statement rather than a data object.
-
-AAMP's audience work lives in a separate repository, `agentic-audiences`, and it is a different model entirely: agents exchange embedding vectors, not segment identifiers or hashed lists. Its specification file is self-labelled "Draft v0.1" despite sitting under `specs/v1.0/`, its JSON Schema `$id` still points at `raw.githubusercontent.com/LiveRamp/user-context-protocol`, and four files in its specification tree are zero bytes — including `specs/v1.0/schema/agent_interface.schema.json`, which is the file that would define how a buyer agent and a seller agent actually talk to each other.
-
-So the honest counterpart entry is: no counterpart. AdCP separates buyer-uploaded audiences from discovered signals. AAMP has neither construct in its control plane, and its data plane proposes a third thing that has not been connected to either.
-
-## How is this term sourced?
-
-AdCP side, all at commit `f1a35ab`, release 3.1.10 per `dist/schemas/latest.json`: `dist/schemas/3.1.10/media-buy/sync-audiences-request.json`, `core/audience-member.json`, `core/targeting.json`, `core/signal-ref.json`, `signals/get-signals-request.json`, `enums/signal-catalog-type.json`, `enums/signal-source.json`, `enums/consent-basis.json`. Prose quoted from `docs/media-buy/task-reference/sync_audiences.mdx` and `docs/reference/glossary.mdx`.
-
-AAMP side: `IABTechLab/agentic-audiences` at commit `106ebd6` (no git tags), and `IABTechLab/iab-agentic-primitives` at commit `2fc7029`. Both are reference or draft artifacts, not ratified specifications. The zero-byte files were confirmed by byte count at that commit.
+`AudienceRef`, the one typed audience object AAMP has, points at an IAB Audience Taxonomy ID, an IAB Content Taxonomy ID, or an embedding URI. All three are data somebody else published, which by AdCP's definition makes them signals. The reference seller agent's one audience endpoint is `POST /agentic-audience/match`. The protocol-level comparison is at [AdCP vs AAMP](https://agenticadlab.com/protocols/adcp-vs-aamp/).

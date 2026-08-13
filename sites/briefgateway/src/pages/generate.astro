@@ -1,0 +1,1390 @@
+---
+/**
+ * The brief scorer.
+ *
+ * Paste prose, get the AdCP `get_products` request and the AAMP CampaignBrief
+ * that fall out of it, with every field labelled stated / derived / assumed /
+ * missing. The engine is `@agenticbrief/brief-engine`: deterministic, rule
+ * based, no network, no model. It runs at build time to produce the example
+ * below and in the browser for everything the reader types afterwards.
+ *
+ * Two structural decisions worth knowing before reading this file:
+ *
+ * 1. THE RENDERER IS MIRRORED. The block marked MIRRORED RENDERER appears
+ *    twice — once in this frontmatter, once in the client <script> — and the
+ *    two copies are the same code, differing only in the indentation Prettier
+ *    gives them (never inside a template literal, so the emitted HTML is
+ *    identical). Astro compiles frontmatter and client script as separate
+ *    modules with no shared scope, and this page may not add a file to import
+ *    from. Copying one implementation verbatim keeps the two from drifting and
+ *    makes the HTML a crawler sees for the example identical to the HTML a
+ *    browser builds for the same input.
+ *
+ * 2. NO-JS IS NOT A DEGRADED PAGE. The explanation, the example brief in the
+ *    textarea, the scores, the whole field table, the blockers and both
+ *    payloads are server-rendered at build time. Without JavaScript the reader
+ *    loses the ability to score their own text and to accept an assumption —
+ *    and nothing else. Assumptions are off in that state, as they are on first
+ *    render with JavaScript on.
+ */
+import PageLayout from '@agenticbrief/shared-ui/PageLayout.astro'
+import { siteUrl } from '@agenticbrief/shared-ui/sites'
+import {
+  breadcrumbNode,
+  faqPageNode,
+  graph,
+  softwareApplicationNode,
+  webPageNode,
+} from '@agenticbrief/seo/schema'
+import { analyze, FIELDS } from '@agenticbrief/brief-engine'
+import type { EngineAnalysis, FieldValue, Span } from '@agenticbrief/brief-engine'
+
+const BASE = siteUrl('briefgateway')
+const PATH = '/generate/'
+
+/**
+ * The canonical example. The same brief the engine's extractor suites are
+ * written against, so what this page shows is what the tests assert.
+ */
+const EXAMPLE_BRIEF =
+  'Q4 holiday campaign for a CPG snack brand. Channels: CTV plus digital display ' +
+  'and online video. Budget: $500,000 net. Market: United States. Target demo: ' +
+  'adults 25-54. Flight: November 1 - December 31, 2026. Goal: drive incremental ' +
+  'household penetration and retail sales lift. Requirements: premium CTV inventory, ' +
+  'brand safety controls, frequency cap 3 per week.'
+
+/**
+ * The reference date for relative-date derivation ("next quarter"), read once,
+ * here, at build time. It is passed explicitly rather than left to default so
+ * that the one clock read on this page is visible in the source and reported
+ * on the page itself. In the browser the reference date is the reader's today.
+ */
+const analysis = analyze(EXAMPLE_BRIEF, { now: new Date() })
+
+/* ==================================================================== *
+ * MIRRORED RENDERER — the same code as the copy in the <script> below.
+ * Change one, change both. Nothing inside a template literal is indented, so
+ * the two copies emit identical HTML.
+ * ==================================================================== */
+
+interface Ui {
+  accepted: readonly string[]
+  hideMissing: boolean
+}
+
+const GROUPS: ReadonlyArray<readonly [string, string]> = [
+  ['identity', 'Identity'],
+  ['timing', 'Timing'],
+  ['budget', 'Budget'],
+  ['geo', 'Geography'],
+  ['inventory', 'Inventory'],
+  ['creative', 'Creative'],
+  ['audience', 'Audience'],
+  ['measurement', 'Measurement'],
+  ['safety', 'Brand safety'],
+  ['governance', 'Governance'],
+]
+
+const ESCAPES: Record<string, string> = {
+  '&': '&amp;',
+  '<': '&lt;',
+  '>': '&gt;',
+  '"': '&quot;',
+  "'": '&#39;',
+}
+
+/** Everything interpolated into HTML goes through this, engine text included. */
+function esc(value: unknown): string {
+  return String(value ?? '').replace(/[&<>"']/g, (c) => ESCAPES[c] as string)
+}
+
+function cut(text: string, limit: number): string {
+  return text.length > limit ? `${text.slice(0, limit - 1)}…` : text
+}
+
+/** A field value as one line. Objects stay JSON so nothing is paraphrased. */
+function fmtValue(value: unknown): string {
+  if (value === undefined || value === null) return ''
+  if (typeof value === 'string') return value
+  if (typeof value === 'number' || typeof value === 'boolean') return String(value)
+  return JSON.stringify(value)
+}
+
+function chip(label: string): string {
+  return `<span class="chip chip-${esc(label)}">${esc(label)}</span>`
+}
+
+function fieldLabel(key: string): string {
+  return FIELDS.find((f) => f.key === key)?.label ?? key
+}
+
+function fieldOrder(key: string): number {
+  const i = FIELDS.findIndex((f) => f.key === key)
+  return i === -1 ? FIELDS.length : i
+}
+
+/** The source span, quoted with enough either side to recognise it. */
+function evidence(input: string, spans: readonly Span[]): string {
+  return spans
+    .slice(0, 3)
+    .map((s) => {
+      const before = input.slice(Math.max(0, s.start - 24), s.start)
+      const after = input.slice(s.end, Math.min(input.length, s.end + 24))
+      const head = s.start > 0 ? '…' : ''
+      const tail = s.end < input.length ? '…' : ''
+      return `<span class="quote">${head}${esc(before)}<mark>${esc(cut(s.text, 90))}</mark>${esc(after)}${tail}</span>`
+    })
+    .join('')
+}
+
+function metaLine(a: EngineAnalysis): string {
+  const ref = a.meta.options.now
+  const when = ref
+    ? `relative dates resolved against ${esc(new Date(ref).toISOString().slice(0, 10))}`
+    : 'no reference date supplied, so relative dates were left unresolved'
+  return (
+    `AdCP schema ${esc(a.meta.adcpVersion)} · ` +
+    `buying mode <code>${esc(a.meta.options.buyingMode)}</code> · ` +
+    when
+  )
+}
+
+/** The sentence the live region announces. */
+function statusLine(a: EngineAnalysis): string {
+  const t = a.scores.transactable
+  const e = a.scores.expressive
+  const blocking = a.blockers.filter((b) => b.severity === 'blocks').length
+  return (
+    `Scored. Transactable ${t.score} of ${t.of}. Expressive ${e.score} of ${e.of}. ` +
+    `${a.blockers.length} things a seller will guess or drop, ${blocking} of them blocking.`
+  )
+}
+
+function renderScores(a: EngineAnalysis): string {
+  const t = a.scores.transactable
+  const e = a.scores.expressive
+  const failed = t.checks.filter((c) => !c.passed)
+  const unused = e.of - e.score
+  return `<section class="panel" aria-labelledby="h-score">
+<h2 id="h-score">The score</h2>
+<div class="scores">
+<div class="score" data-pass="${t.ok}">
+<p class="score-name">Transactable <span class="score-kind">gate</span></p>
+<p class="score-value"><strong>${t.score}</strong> of ${t.of}</p>
+<p class="score-what">AAMP <code>CampaignBrief</code>&#39;s eight required fields, plus a <code>budget_pct</code> on every channel allocation, plus one check that the AdCP <code>get_products</code> request validates. Counted against the emitted payloads, not your sentences.</p>
+${
+  failed.length === 0
+    ? `<p class="score-pass">All ${t.of} checks pass.</p>`
+    : `<p class="score-fail">${failed.length} fail:</p><ul class="checks">${failed
+        .map((c) => `<li><strong>${esc(c.label)}</strong> — ${esc(c.reason)}</li>`)
+        .join('')}</ul>`
+}
+</div>
+<div class="score">
+<p class="score-name">Expressive <span class="score-kind">coverage, not a target</span></p>
+<p class="score-value"><strong>${e.score}</strong> of ${e.of}</p>
+<p class="score-what">AdCP <code>filters.*</code> fields your brief populates. The other ${unused} go to the seller empty, so nothing in them is filtered on. Every populated filter is a hard constraint that deletes products: <a href="/spec/brief-vs-filters/">brief vs filters</a> has the routing rule.</p>
+${
+  e.score === 0
+    ? '<p class="score-fail">No filter is populated. The seller gets the brief string and nothing to filter on.</p>'
+    : `<p class="score-used">Populated: ${e.used.map((u) => `<code>${esc(u)}</code>`).join(' ')}</p>`
+}
+</div>
+</div>
+<p class="provenance">${metaLine(a)}</p>
+<p class="provenance">Relative dates use today's date. Write absolute dates for a result that holds next week.</p>
+</section>`
+}
+
+function fieldRow(a: EngineAnalysis, key: string): string {
+  const def = FIELDS.find((f) => f.key === key)
+  if (!def) return ''
+  const fv: FieldValue<unknown> = a.fields[key] ?? { label: 'missing', spans: [] }
+  const spans = fv.spans ?? []
+  const value =
+    fv.label === 'missing'
+      ? '<span class="cell-empty">no value</span>'
+      : `<code>${esc(cut(fmtValue(fv.value), 140))}</code>`
+  let why = ''
+  if (fv.label === 'stated') {
+    why = evidence(a.input, spans)
+  } else if (fv.label === 'derived' || fv.label === 'assumed') {
+    why = `<span class="rule">${esc(fv.rule ?? '')}</span>${
+      spans.length > 0 ? evidence(a.input, spans) : ''
+    }`
+  } else {
+    why = `<span class="muted">${esc(def.consequence)}</span>`
+  }
+  if (fv.note) why += `<span class="note">${esc(fv.note)}</span>`
+  return `<tr data-label="${esc(fv.label)}">
+<td><code>${esc(def.key)}</code></td>
+<td>${esc(def.label)}</td>
+<td>${value}</td>
+<td>${chip(fv.label)}</td>
+<td>${why}</td>
+</tr>`
+}
+
+function renderFields(a: EngineAnalysis, ui: Ui): string {
+  const counts = a.scores.labels
+  const body = GROUPS.map(([group, name]) => {
+    const keys = FIELDS.filter((f) => f.group === group).map((f) => f.key)
+    return `<tbody><tr class="group-row"><th colspan="5" scope="colgroup">${esc(name)}</th></tr>${keys
+      .map((k) => fieldRow(a, k))
+      .join('')}</tbody>`
+  }).join('')
+  return `<section class="panel fields" aria-labelledby="h-fields">
+<h2 id="h-fields">Every field, and where it came from</h2>
+<p>${counts.stated} stated, ${counts.derived} derived, ${counts.assumed} assumed, ${counts.missing} missing, of ${a.scores.fieldsTotal} the two protocols can express between them.</p>
+<input type="checkbox" id="hide-missing" class="toggle"${ui.hideMissing ? ' checked' : ''} />
+<label for="hide-missing" class="toggle-label">Hide the fields with no value</label>
+<figure class="comparison">
+<table class="field-table">
+<caption>One row per concept, including the ones this brief says nothing about.</caption>
+<thead><tr><th scope="col">Field</th><th scope="col">What it is</th><th scope="col">Value</th><th scope="col">Label</th><th scope="col">Evidence</th></tr></thead>
+${body}
+</table>
+</figure>
+</section>`
+}
+
+function renderAssumptions(a: EngineAnalysis, ui: Ui): string {
+  const keys = [...new Set([...Object.keys(a.offered), ...ui.accepted])].sort(
+    (x, y) => fieldOrder(x) - fieldOrder(y),
+  )
+  const applied = keys.filter((k) => ui.accepted.includes(k)).length
+  const items = keys
+    .map((key) => {
+      const fv = a.offered[key] ?? a.fields[key]
+      if (!fv) return ''
+      const on = ui.accepted.includes(key)
+      return `<div class="assumption${on ? ' is-on' : ''}">
+<input type="checkbox" class="accept" id="assume-${esc(key)}" data-assume="${esc(key)}"${on ? ' checked' : ''} />
+<label for="assume-${esc(key)}"><strong>${esc(fieldLabel(key))}</strong> = <code>${esc(cut(fmtValue(fv.value), 140))}</code></label>
+<p class="rule">${esc(fv.rule ?? '')}</p>
+<p class="assumption-state">${
+        on
+          ? 'Accepted. It is in both payloads below, labelled assumed everywhere it appears.'
+          : 'Not accepted, so it is in nothing below.'
+      }</p>
+</div>`
+    })
+    .join('')
+  return `<section class="panel assumptions" aria-labelledby="h-assume">
+<h2 id="h-assume">Assumptions — ${applied === 0 ? 'none applied' : `${applied} applied`}</h2>
+<p>Values the engine could pick and has not. Accept one and both payloads are emitted again with it in, labelled <code>assumed</code>. Accept nothing and nothing here reaches a seller. Scoring a brief again clears every acceptance.</p>
+${
+  keys.length === 0
+    ? '<p class="muted">Nothing to offer for this brief. Every value below came from your words.</p>'
+    : items
+}
+<noscript><p class="muted">JavaScript is off, so these boxes do nothing and no assumption is applied.</p></noscript>
+</section>`
+}
+
+function renderBlockers(a: EngineAnalysis): string {
+  const item = (b: EngineAnalysis['blockers'][number]): string =>
+    `<li><span class="chip chip-sev-${esc(b.severity)}">${esc(b.severity)}</span> <strong>${esc(
+      b.field ? fieldLabel(b.field) : 'The request',
+    )}</strong> — ${esc(b.detail)} <span class="muted">${esc(b.consequence)}</span></li>`
+  const of = (severity: string) => a.blockers.filter((b) => b.severity === severity)
+  const blocks = of('blocks')
+  const drops = of('drops')
+  const degrades = of('degrades')
+  return `<section class="panel" aria-labelledby="h-blockers">
+<h2 id="h-blockers">What a seller will guess or drop</h2>
+<p>${a.blockers.length} in all: ${blocks.length} stop the brief constructing, ${drops.length} are read here and travel in neither payload, ${degrades.length} leave a field empty for the seller to fill however it likes.</p>
+${
+  blocks.length > 0
+    ? `<h3>Blocks — nothing ships</h3><ul class="blockers">${blocks.map(item).join('')}</ul>`
+    : ''
+}
+${
+  drops.length > 0
+    ? `<h3>Drops — read here, carried in neither payload</h3><ul class="blockers">${drops
+        .map(item)
+        .join('')}</ul>`
+    : ''
+}
+${
+  degrades.length > 0
+    ? `<details><summary>Degrades — ${degrades.length} fields the seller fills for you</summary><ul class="blockers">${degrades
+        .map(item)
+        .join('')}</ul></details>`
+    : ''
+}
+</section>`
+}
+
+function renderPane(opts: {
+  id: string
+  heading: string
+  note: string
+  payload: unknown
+  omitted: EngineAnalysis['omitted']['adcp']
+}): string {
+  const json = JSON.stringify(opts.payload, null, 2)
+  return `<section class="pane" aria-labelledby="h-${esc(opts.id)}">
+<div class="pane-head">
+<h3 id="h-${esc(opts.id)}">${opts.heading}</h3>
+<button type="button" class="copy" data-copy="${esc(opts.id)}-json">Copy ${esc(opts.id.toUpperCase())} JSON</button>
+</div>
+<p class="pane-note">${opts.note}</p>
+<pre id="${esc(opts.id)}-json"><code>${esc(json)}</code></pre>
+<details>
+<summary>${opts.omitted.length} fields left out of this payload, and what that costs</summary>
+<ul class="omitted">${opts.omitted
+    .map(
+      (o) =>
+        `<li><code>${esc(o.field)}</code> ${chip(o.label)} <span class="muted">${esc(o.reason)}</span></li>`,
+    )
+    .join('')}</ul>
+</details>
+</section>`
+}
+
+function renderOutputs(a: EngineAnalysis): string {
+  return `<section class="panel" aria-labelledby="h-out">
+<h2 id="h-out">What gets sent</h2>
+<div class="panes">
+${renderPane({
+  id: 'adcp',
+  heading: 'AdCP <code>get_products</code> request',
+  note: 'Structured filters plus the residual prose, which AdCP carries as one unvalidated string.',
+  payload: a.adcp,
+  omitted: a.omitted.adcp,
+})}
+${renderPane({
+  id: 'aamp',
+  heading: 'AAMP <code>CampaignBrief</code>',
+  note: 'IAB Tech Lab buyer agent, models/campaign_brief.py — eight required fields, cross-field validators.',
+  payload: a.aamp,
+  omitted: a.omitted.aamp,
+})}
+</div>
+</section>`
+}
+
+function renderResults(a: EngineAnalysis, ui: Ui): string {
+  return (
+    renderScores(a) +
+    renderFields(a, ui) +
+    renderAssumptions(a, ui) +
+    renderBlockers(a) +
+    renderOutputs(a)
+  )
+}
+
+/* ==================================================================== *
+ * END MIRRORED RENDERER
+ * ==================================================================== */
+
+const initialUi: Ui = { accepted: [], hideMissing: false }
+const initialResults = renderResults(analysis, initialUi)
+const initialStatus = statusLine(analysis)
+
+const TITLE = 'Score a campaign brief'
+const DESCRIPTION =
+  'Paste a campaign brief and see the AdCP get_products request and AAMP CampaignBrief it produces, ' +
+  'with every field labelled stated, derived, assumed or missing. Free, no account, runs in your browser.'
+
+const FAQ = [
+  {
+    question: 'Why does it refuse to fill in the channel split?',
+    answer:
+      'Because a split is a commitment and nothing in your text implies one. Values the engine could pick are listed under Assumptions with the rule that produced them, and they reach neither payload until you accept them.',
+  },
+  {
+    question: 'Will a higher score get me better inventory?',
+    answer:
+      'Unproven. The score counts which values reach a protocol field. Three sales agents in the public AdCP registry answer an anonymous get_products, and one of them returns the same four products whatever the brief says.',
+  },
+  {
+    question: 'Which AAMP CampaignBrief does it emit?',
+    answer:
+      'The one in models/campaign_brief.py, with eight required fields and cross-field validators. The IAB Tech Lab buyer-agent repository defines a second, incompatible CampaignBrief in models/flow_state.py and ships no adapter between them.',
+  },
+]
+
+const BREADCRUMBS = [
+  { name: 'Brief Gateway', url: `${BASE}/` },
+  { name: 'Score a brief', url: `${BASE}${PATH}` },
+]
+
+const jsonLd = graph([
+  webPageNode({
+    url: `${BASE}${PATH}`,
+    siteUrl: BASE,
+    title: TITLE,
+    description: DESCRIPTION,
+    breadcrumb: breadcrumbNode(`${BASE}${PATH}`, BREADCRUMBS),
+  }),
+  breadcrumbNode(`${BASE}${PATH}`, BREADCRUMBS),
+  softwareApplicationNode({
+    url: `${BASE}${PATH}`,
+    name: 'Brief Gateway brief scorer',
+    description: DESCRIPTION,
+  }),
+  faqPageNode(`${BASE}${PATH}`, FAQ),
+])
+---
+
+<PageLayout
+  site="briefgateway"
+  title={TITLE}
+  description={DESCRIPTION}
+  path={PATH}
+  wide
+  eyebrow="Tool"
+  answer={`Paste a campaign brief and get the AdCP get_products request and the AAMP CampaignBrief it produces, every value labelled stated, derived, assumed or missing, against ${analysis.scores.expressive.of} typed AdCP filter fields and the AAMP required set.`}
+  breadcrumbs={BREADCRUMBS}
+  faq={FAQ}
+  jsonLd={jsonLd}
+  related={[
+    {
+      href: '/guides/brief-preflight-checklist/',
+      title: 'The brief pre-flight checklist',
+      note: 'The questions to settle with your team before an agent reads any of this.',
+    },
+    {
+      href: '/guides/brief-completeness-rubric/',
+      title: 'The brief completeness rubric',
+      note: 'The published field map this tool scores against, and the two protocols behind it.',
+    },
+    {
+      href: '/spec/brief-vs-filters/',
+      title: 'Brief vs filters',
+      note: 'Which parts of a brief belong in prose and which belong in a validated field.',
+    },
+  ]}
+>
+  <p class="lead-note muted">
+    Rule-based and deterministic: same words in, same payloads out. Nothing is sent anywhere, no
+    account, no email. Paste the brief, read the two scores, then work down the list of what a
+    seller will guess or drop.
+  </p>
+
+  <section class="panel tool" aria-labelledby="h-input">
+    <h2 id="h-input">Paste the brief</h2>
+    <label class="input-label" for="brief-input">
+      Your campaign brief, in whatever prose you already write it in
+    </label>
+    <textarea
+      id="brief-input"
+      name="brief"
+      rows="8"
+      spellcheck="false"
+      aria-describedby="input-help">{EXAMPLE_BRIEF}</textarea
+    >
+    <p id="input-help" class="muted">
+      Pre-filled with a worked example. The results below are its output. Replace it with yours and
+      score it. Scoring again clears any accepted assumptions.
+    </p>
+    <div class="actions">
+      <button type="button" id="score" class="primary">Score this brief</button>
+      <button type="button" id="restore" class="secondary">Restore the example</button>
+    </div>
+    <noscript>
+      <p class="muted">
+        JavaScript is off, so neither button does anything. Everything below is the real output for
+        the brief in the box, produced by the same engine when this page was built.
+      </p>
+    </noscript>
+  </section>
+
+  <section class="panel" aria-labelledby="h-labels">
+    <h2 id="h-labels">The four labels</h2>
+    <dl class="labels">
+      <dt><span class="chip chip-stated">stated</span></dt>
+      <dd>You said it. The exact words are quoted back with the value.</dd>
+      <dt><span class="chip chip-derived">derived</span></dt>
+      <dd>
+        Unambiguously implied, and the rule that fired is printed next to it. <q>United States</q> to
+        <code>countries: ["US"]</code> is a derivation. A channel split is not.
+      </dd>
+      <dt><span class="chip chip-assumed">assumed</span></dt>
+      <dd>
+        The engine picked it. Off by default and listed on its own; it reaches neither payload until
+        you tick its box.
+      </dd>
+      <dt><span class="chip chip-missing">missing</span></dt>
+      <dd>Not present and not derivable. The seller will guess it or drop it.</dd>
+    </dl>
+    <p class="muted">
+      A value can be read correctly, labelled <code>stated</code>, and still reach neither payload,
+      because neither protocol has a field to carry it.
+    </p>
+  </section>
+
+  <p id="score-status" class="results-status" role="status" aria-live="polite">{initialStatus}</p>
+
+  <div id="results" tabindex="-1" set:html={initialResults} />
+
+  <section class="panel" aria-labelledby="h-limits">
+    <h2 id="h-limits">What it will not do</h2>
+    <ul>
+      <li>
+        The transactable score covers the request-level rules this engine is capable of breaking.
+        Full JSON Schema validation against the AdCP release does not run in your browser, so a
+        payload that clears it here can still fail a seller's validator.
+      </li>
+    </ul>
+  </section>
+
+  <section class="panel" aria-labelledby="h-next">
+    <h2 id="h-next">Before you send it</h2>
+    <ol>
+      <li>
+        Clear the blocks first. Those are values a required field wants and does not have, so
+        nothing downstream runs.
+      </li>
+      <li>
+        Read the drops. You wrote those, and neither protocol has anywhere to put them — say them to
+        your counterparty in a channel that is not this one.
+      </li>
+      <li>
+        Settle the assumptions with the people who have to agree. <a
+          href="/guides/brief-preflight-checklist/">The pre-flight checklist</a
+        > is the list of questions to put to them.
+      </li>
+    </ol>
+    <p>
+      The field map behind the two scores is published as <a
+        href="/guides/brief-completeness-rubric/">the completeness rubric</a
+      >, concept by concept.
+    </p>
+  </section>
+</PageLayout>
+
+<!--
+  Global rather than scoped: the client renderer writes its HTML with innerHTML,
+  and Astro's scoping attribute is only applied to elements present in this
+  template. Every selector below is namespaced under an id or a class this page
+  owns, so nothing leaks into the shared stylesheet's territory.
+-->
+<style is:global>
+  .lead-note {
+    font-size: 0.95rem;
+    margin-bottom: 2rem;
+  }
+
+  .panel {
+    margin: 0 0 2.5rem;
+  }
+
+  .panel > h2 {
+    margin-top: 0;
+  }
+
+  /* ---------- input ---------- */
+
+  .tool .input-label {
+    display: block;
+    font-weight: 700;
+    margin-bottom: 0.4rem;
+  }
+
+  .tool textarea {
+    width: 100%;
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    line-height: 1.6;
+    padding: 0.8rem;
+    color: var(--fg);
+    background: var(--bg-subtle);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    resize: vertical;
+  }
+
+  .tool .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin: 0.4rem 0 0;
+  }
+
+  button.primary,
+  button.secondary,
+  button.copy {
+    font: inherit;
+    font-size: 0.9rem;
+    padding: 0.5rem 0.9rem;
+    border-radius: var(--radius);
+    border: 1px solid var(--accent);
+    cursor: pointer;
+  }
+
+  button.primary {
+    background: var(--accent);
+    color: var(--bg);
+    font-weight: 700;
+  }
+
+  button.secondary,
+  button.copy {
+    background: var(--bg-subtle);
+    color: var(--fg);
+    border-color: var(--border);
+  }
+
+  button.copy[data-state='done'] {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  /* ---------- labels legend ---------- */
+
+  dl.labels {
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    gap: 0.5rem 1rem;
+    align-items: baseline;
+  }
+
+  dl.labels dd {
+    margin: 0;
+  }
+
+  /* ---------- chips ---------- */
+
+  .chip {
+    display: inline-block;
+    font-family: var(--font-sans);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding: 0.1rem 0.4rem;
+    border-radius: 3px;
+    border: 1px solid currentColor;
+    white-space: nowrap;
+  }
+
+  .chip-stated,
+  .chip-sev-blocks {
+    color: #1a7f37;
+  }
+
+  .chip-derived {
+    color: #2f6feb;
+  }
+
+  .chip-assumed,
+  .chip-sev-drops {
+    color: #9a6700;
+  }
+
+  .chip-missing,
+  .chip-sev-degrades {
+    color: var(--fg-muted);
+  }
+
+  .chip-sev-blocks {
+    color: #cf222e;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    .chip-stated {
+      color: #57cc7f;
+    }
+
+    .chip-derived {
+      color: #8ab4f8;
+    }
+
+    .chip-assumed,
+    .chip-sev-drops {
+      color: #d4a72c;
+    }
+
+    .chip-sev-blocks {
+      color: #ff8182;
+    }
+  }
+
+  /* ---------- scores ---------- */
+
+  .scores {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1rem;
+  }
+
+  .score {
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--bg-subtle);
+    padding: 1rem 1.1rem;
+  }
+
+  .score-name {
+    margin: 0;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--fg-muted);
+  }
+
+  .score-kind {
+    font-weight: 400;
+    letter-spacing: 0.04em;
+    text-transform: none;
+  }
+
+  .score-value {
+    margin: 0.1rem 0 0.5rem;
+    font-family: var(--font-serif);
+    font-size: 1.1rem;
+    color: var(--fg-muted);
+  }
+
+  .score-value strong {
+    font-size: 2.4rem;
+    color: var(--fg);
+  }
+
+  .score-what,
+  .score-used,
+  .score-pass,
+  .score-fail {
+    margin: 0 0 0.5rem;
+    font-size: 0.9rem;
+  }
+
+  .score-used code {
+    font-size: 0.8rem;
+  }
+
+  .score-fail {
+    font-weight: 700;
+  }
+
+  .score .checks {
+    margin: 0;
+    padding-left: 1.1rem;
+    font-size: 0.88rem;
+  }
+
+  .score .checks li {
+    margin-bottom: 0.35rem;
+  }
+
+  .provenance {
+    margin: 0.8rem 0 0;
+    font-size: 0.82rem;
+    color: var(--fg-muted);
+  }
+
+  .provenance + .provenance {
+    margin-top: 0.3rem;
+  }
+
+  /* ---------- field table ---------- */
+
+  .fields .toggle {
+    margin-right: 0.35rem;
+  }
+
+  .fields .toggle-label {
+    font-size: 0.9rem;
+  }
+
+  .field-table td:first-child {
+    white-space: normal;
+  }
+
+  .field-table td:nth-child(3) code {
+    word-break: break-word;
+  }
+
+  .field-table .group-row th {
+    background: var(--bg-inset);
+    font-family: var(--font-sans);
+    font-size: 0.78rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--fg-muted);
+  }
+
+  .field-table tr[data-label='missing'] td {
+    color: var(--fg-muted);
+  }
+
+  #hide-missing:checked ~ .comparison tr[data-label='missing'] {
+    display: none;
+  }
+
+  .quote,
+  .rule,
+  .note {
+    display: block;
+    font-size: 0.85rem;
+    margin-top: 0.2rem;
+  }
+
+  .quote {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--fg-muted);
+  }
+
+  .quote mark {
+    background: var(--accent-soft);
+    color: var(--fg);
+    padding: 0 0.15em;
+    border-radius: 2px;
+    box-shadow: inset 0 -1px 0 var(--accent);
+  }
+
+  .note {
+    color: var(--fg-muted);
+    font-style: italic;
+  }
+
+  /* ---------- assumptions ---------- */
+
+  .assumptions {
+    border: 1px dashed var(--border);
+    border-radius: var(--radius);
+    padding: 1.1rem 1.25rem;
+    background: var(--bg-subtle);
+  }
+
+  .assumption {
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    gap: 0.2rem 0.6rem;
+    padding: 0.7rem 0;
+    border-top: 1px solid var(--border);
+  }
+
+  .assumption label {
+    align-self: baseline;
+  }
+
+  .assumption .rule,
+  .assumption .assumption-state {
+    grid-column: 2;
+    margin: 0;
+    font-size: 0.85rem;
+    color: var(--fg-muted);
+  }
+
+  .assumption.is-on .assumption-state {
+    color: #9a6700;
+    font-weight: 700;
+  }
+
+  /* ---------- blockers ---------- */
+
+  ul.blockers {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1rem;
+  }
+
+  ul.blockers li {
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.92rem;
+  }
+
+  /* ---------- output panes ---------- */
+
+  .panes {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+    gap: 1.2rem;
+  }
+
+  .pane {
+    min-width: 0;
+  }
+
+  .pane-head {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    align-items: baseline;
+    justify-content: space-between;
+  }
+
+  .pane-head h3 {
+    margin: 0;
+  }
+
+  .pane-note {
+    font-size: 0.85rem;
+    color: var(--fg-muted);
+    margin: 0.3rem 0 0.5rem;
+  }
+
+  .pane pre {
+    max-height: 26rem;
+    overflow: auto;
+  }
+
+  ul.omitted {
+    list-style: none;
+    padding: 0;
+    margin: 0.5rem 0 0;
+    font-size: 0.85rem;
+  }
+
+  ul.omitted li {
+    padding: 0.35rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  /* ---------- status ---------- */
+
+  .results-status {
+    font-weight: 700;
+    border-left: 4px solid var(--accent);
+    padding: 0.4rem 0 0.4rem 0.8rem;
+    margin: 0 0 1.5rem;
+  }
+
+  #results:focus {
+    outline: 2px solid var(--accent-bright);
+    outline-offset: 4px;
+  }
+</style>
+
+<script>
+  /**
+   * The client half. Imports the same engine the frontmatter ran at build time,
+   * so the browser reproduces the server's output for the server's input.
+   */
+  import { analyze, FIELDS } from '@agenticbrief/brief-engine'
+  import type { EngineAnalysis, FieldValue, Span } from '@agenticbrief/brief-engine'
+
+  /* ==================================================================== *
+   * MIRRORED RENDERER — the same code as the copy in the frontmatter above.
+   * Change one, change both. Nothing inside a template literal is indented,
+   * so the two copies emit identical HTML.
+   * ==================================================================== */
+
+  interface Ui {
+    accepted: readonly string[]
+    hideMissing: boolean
+  }
+
+  const GROUPS: ReadonlyArray<readonly [string, string]> = [
+    ['identity', 'Identity'],
+    ['timing', 'Timing'],
+    ['budget', 'Budget'],
+    ['geo', 'Geography'],
+    ['inventory', 'Inventory'],
+    ['creative', 'Creative'],
+    ['audience', 'Audience'],
+    ['measurement', 'Measurement'],
+    ['safety', 'Brand safety'],
+    ['governance', 'Governance'],
+  ]
+
+  const ESCAPES: Record<string, string> = {
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#39;',
+  }
+
+  /** Everything interpolated into HTML goes through this, engine text included. */
+  function esc(value: unknown): string {
+    return String(value ?? '').replace(/[&<>"']/g, (c) => ESCAPES[c] as string)
+  }
+
+  function cut(text: string, limit: number): string {
+    return text.length > limit ? `${text.slice(0, limit - 1)}…` : text
+  }
+
+  /** A field value as one line. Objects stay JSON so nothing is paraphrased. */
+  function fmtValue(value: unknown): string {
+    if (value === undefined || value === null) return ''
+    if (typeof value === 'string') return value
+    if (typeof value === 'number' || typeof value === 'boolean') return String(value)
+    return JSON.stringify(value)
+  }
+
+  function chip(label: string): string {
+    return `<span class="chip chip-${esc(label)}">${esc(label)}</span>`
+  }
+
+  function fieldLabel(key: string): string {
+    return FIELDS.find((f) => f.key === key)?.label ?? key
+  }
+
+  function fieldOrder(key: string): number {
+    const i = FIELDS.findIndex((f) => f.key === key)
+    return i === -1 ? FIELDS.length : i
+  }
+
+  /** The source span, quoted with enough either side to recognise it. */
+  function evidence(input: string, spans: readonly Span[]): string {
+    return spans
+      .slice(0, 3)
+      .map((s) => {
+        const before = input.slice(Math.max(0, s.start - 24), s.start)
+        const after = input.slice(s.end, Math.min(input.length, s.end + 24))
+        const head = s.start > 0 ? '…' : ''
+        const tail = s.end < input.length ? '…' : ''
+        return `<span class="quote">${head}${esc(before)}<mark>${esc(cut(s.text, 90))}</mark>${esc(after)}${tail}</span>`
+      })
+      .join('')
+  }
+
+  function metaLine(a: EngineAnalysis): string {
+    const ref = a.meta.options.now
+    const when = ref
+      ? `relative dates resolved against ${esc(new Date(ref).toISOString().slice(0, 10))}`
+      : 'no reference date supplied, so relative dates were left unresolved'
+    return (
+      `AdCP schema ${esc(a.meta.adcpVersion)} · ` +
+      `buying mode <code>${esc(a.meta.options.buyingMode)}</code> · ` +
+      when
+    )
+  }
+
+  /** The sentence the live region announces. */
+  function statusLine(a: EngineAnalysis): string {
+    const t = a.scores.transactable
+    const e = a.scores.expressive
+    const blocking = a.blockers.filter((b) => b.severity === 'blocks').length
+    return (
+      `Scored. Transactable ${t.score} of ${t.of}. Expressive ${e.score} of ${e.of}. ` +
+      `${a.blockers.length} things a seller will guess or drop, ${blocking} of them blocking.`
+    )
+  }
+
+  function renderScores(a: EngineAnalysis): string {
+    const t = a.scores.transactable
+    const e = a.scores.expressive
+    const failed = t.checks.filter((c) => !c.passed)
+    const unused = e.of - e.score
+    return `<section class="panel" aria-labelledby="h-score">
+<h2 id="h-score">The score</h2>
+<div class="scores">
+<div class="score" data-pass="${t.ok}">
+<p class="score-name">Transactable <span class="score-kind">gate</span></p>
+<p class="score-value"><strong>${t.score}</strong> of ${t.of}</p>
+<p class="score-what">AAMP <code>CampaignBrief</code>&#39;s eight required fields, plus a <code>budget_pct</code> on every channel allocation, plus one check that the AdCP <code>get_products</code> request validates. Counted against the emitted payloads, not your sentences.</p>
+${
+  failed.length === 0
+    ? `<p class="score-pass">All ${t.of} checks pass.</p>`
+    : `<p class="score-fail">${failed.length} fail:</p><ul class="checks">${failed
+        .map((c) => `<li><strong>${esc(c.label)}</strong> — ${esc(c.reason)}</li>`)
+        .join('')}</ul>`
+}
+</div>
+<div class="score">
+<p class="score-name">Expressive <span class="score-kind">coverage, not a target</span></p>
+<p class="score-value"><strong>${e.score}</strong> of ${e.of}</p>
+<p class="score-what">AdCP <code>filters.*</code> fields your brief populates. The other ${unused} go to the seller empty, so nothing in them is filtered on. Every populated filter is a hard constraint that deletes products: <a href="/spec/brief-vs-filters/">brief vs filters</a> has the routing rule.</p>
+${
+  e.score === 0
+    ? '<p class="score-fail">No filter is populated. The seller gets the brief string and nothing to filter on.</p>'
+    : `<p class="score-used">Populated: ${e.used.map((u) => `<code>${esc(u)}</code>`).join(' ')}</p>`
+}
+</div>
+</div>
+<p class="provenance">${metaLine(a)}</p>
+<p class="provenance">Relative dates use today's date. Write absolute dates for a result that holds next week.</p>
+</section>`
+  }
+
+  function fieldRow(a: EngineAnalysis, key: string): string {
+    const def = FIELDS.find((f) => f.key === key)
+    if (!def) return ''
+    const fv: FieldValue<unknown> = a.fields[key] ?? { label: 'missing', spans: [] }
+    const spans = fv.spans ?? []
+    const value =
+      fv.label === 'missing'
+        ? '<span class="cell-empty">no value</span>'
+        : `<code>${esc(cut(fmtValue(fv.value), 140))}</code>`
+    let why = ''
+    if (fv.label === 'stated') {
+      why = evidence(a.input, spans)
+    } else if (fv.label === 'derived' || fv.label === 'assumed') {
+      why = `<span class="rule">${esc(fv.rule ?? '')}</span>${
+        spans.length > 0 ? evidence(a.input, spans) : ''
+      }`
+    } else {
+      why = `<span class="muted">${esc(def.consequence)}</span>`
+    }
+    if (fv.note) why += `<span class="note">${esc(fv.note)}</span>`
+    return `<tr data-label="${esc(fv.label)}">
+<td><code>${esc(def.key)}</code></td>
+<td>${esc(def.label)}</td>
+<td>${value}</td>
+<td>${chip(fv.label)}</td>
+<td>${why}</td>
+</tr>`
+  }
+
+  function renderFields(a: EngineAnalysis, ui: Ui): string {
+    const counts = a.scores.labels
+    const body = GROUPS.map(([group, name]) => {
+      const keys = FIELDS.filter((f) => f.group === group).map((f) => f.key)
+      return `<tbody><tr class="group-row"><th colspan="5" scope="colgroup">${esc(name)}</th></tr>${keys
+        .map((k) => fieldRow(a, k))
+        .join('')}</tbody>`
+    }).join('')
+    return `<section class="panel fields" aria-labelledby="h-fields">
+<h2 id="h-fields">Every field, and where it came from</h2>
+<p>${counts.stated} stated, ${counts.derived} derived, ${counts.assumed} assumed, ${counts.missing} missing, of ${a.scores.fieldsTotal} the two protocols can express between them.</p>
+<input type="checkbox" id="hide-missing" class="toggle"${ui.hideMissing ? ' checked' : ''} />
+<label for="hide-missing" class="toggle-label">Hide the fields with no value</label>
+<figure class="comparison">
+<table class="field-table">
+<caption>One row per concept, including the ones this brief says nothing about.</caption>
+<thead><tr><th scope="col">Field</th><th scope="col">What it is</th><th scope="col">Value</th><th scope="col">Label</th><th scope="col">Evidence</th></tr></thead>
+${body}
+</table>
+</figure>
+</section>`
+  }
+
+  function renderAssumptions(a: EngineAnalysis, ui: Ui): string {
+    const keys = [...new Set([...Object.keys(a.offered), ...ui.accepted])].sort(
+      (x, y) => fieldOrder(x) - fieldOrder(y),
+    )
+    const applied = keys.filter((k) => ui.accepted.includes(k)).length
+    const items = keys
+      .map((key) => {
+        const fv = a.offered[key] ?? a.fields[key]
+        if (!fv) return ''
+        const on = ui.accepted.includes(key)
+        return `<div class="assumption${on ? ' is-on' : ''}">
+<input type="checkbox" class="accept" id="assume-${esc(key)}" data-assume="${esc(key)}"${on ? ' checked' : ''} />
+<label for="assume-${esc(key)}"><strong>${esc(fieldLabel(key))}</strong> = <code>${esc(cut(fmtValue(fv.value), 140))}</code></label>
+<p class="rule">${esc(fv.rule ?? '')}</p>
+<p class="assumption-state">${
+          on
+            ? 'Accepted. It is in both payloads below, labelled assumed everywhere it appears.'
+            : 'Not accepted, so it is in nothing below.'
+        }</p>
+</div>`
+      })
+      .join('')
+    return `<section class="panel assumptions" aria-labelledby="h-assume">
+<h2 id="h-assume">Assumptions — ${applied === 0 ? 'none applied' : `${applied} applied`}</h2>
+<p>Values the engine could pick and has not. Accept one and both payloads are emitted again with it in, labelled <code>assumed</code>. Accept nothing and nothing here reaches a seller. Scoring a brief again clears every acceptance.</p>
+${
+  keys.length === 0
+    ? '<p class="muted">Nothing to offer for this brief. Every value below came from your words.</p>'
+    : items
+}
+<noscript><p class="muted">JavaScript is off, so these boxes do nothing and no assumption is applied.</p></noscript>
+</section>`
+  }
+
+  function renderBlockers(a: EngineAnalysis): string {
+    const item = (b: EngineAnalysis['blockers'][number]): string =>
+      `<li><span class="chip chip-sev-${esc(b.severity)}">${esc(b.severity)}</span> <strong>${esc(
+        b.field ? fieldLabel(b.field) : 'The request',
+      )}</strong> — ${esc(b.detail)} <span class="muted">${esc(b.consequence)}</span></li>`
+    const of = (severity: string) => a.blockers.filter((b) => b.severity === severity)
+    const blocks = of('blocks')
+    const drops = of('drops')
+    const degrades = of('degrades')
+    return `<section class="panel" aria-labelledby="h-blockers">
+<h2 id="h-blockers">What a seller will guess or drop</h2>
+<p>${a.blockers.length} in all: ${blocks.length} stop the brief constructing, ${drops.length} are read here and travel in neither payload, ${degrades.length} leave a field empty for the seller to fill however it likes.</p>
+${
+  blocks.length > 0
+    ? `<h3>Blocks — nothing ships</h3><ul class="blockers">${blocks.map(item).join('')}</ul>`
+    : ''
+}
+${
+  drops.length > 0
+    ? `<h3>Drops — read here, carried in neither payload</h3><ul class="blockers">${drops
+        .map(item)
+        .join('')}</ul>`
+    : ''
+}
+${
+  degrades.length > 0
+    ? `<details><summary>Degrades — ${degrades.length} fields the seller fills for you</summary><ul class="blockers">${degrades
+        .map(item)
+        .join('')}</ul></details>`
+    : ''
+}
+</section>`
+  }
+
+  function renderPane(opts: {
+    id: string
+    heading: string
+    note: string
+    payload: unknown
+    omitted: EngineAnalysis['omitted']['adcp']
+  }): string {
+    const json = JSON.stringify(opts.payload, null, 2)
+    return `<section class="pane" aria-labelledby="h-${esc(opts.id)}">
+<div class="pane-head">
+<h3 id="h-${esc(opts.id)}">${opts.heading}</h3>
+<button type="button" class="copy" data-copy="${esc(opts.id)}-json">Copy ${esc(opts.id.toUpperCase())} JSON</button>
+</div>
+<p class="pane-note">${opts.note}</p>
+<pre id="${esc(opts.id)}-json"><code>${esc(json)}</code></pre>
+<details>
+<summary>${opts.omitted.length} fields left out of this payload, and what that costs</summary>
+<ul class="omitted">${opts.omitted
+      .map(
+        (o) =>
+          `<li><code>${esc(o.field)}</code> ${chip(o.label)} <span class="muted">${esc(o.reason)}</span></li>`,
+      )
+      .join('')}</ul>
+</details>
+</section>`
+  }
+
+  function renderOutputs(a: EngineAnalysis): string {
+    return `<section class="panel" aria-labelledby="h-out">
+<h2 id="h-out">What gets sent</h2>
+<div class="panes">
+${renderPane({
+  id: 'adcp',
+  heading: 'AdCP <code>get_products</code> request',
+  note: 'Structured filters plus the residual prose, which AdCP carries as one unvalidated string.',
+  payload: a.adcp,
+  omitted: a.omitted.adcp,
+})}
+${renderPane({
+  id: 'aamp',
+  heading: 'AAMP <code>CampaignBrief</code>',
+  note: 'IAB Tech Lab buyer agent, models/campaign_brief.py — eight required fields, cross-field validators.',
+  payload: a.aamp,
+  omitted: a.omitted.aamp,
+})}
+</div>
+</section>`
+  }
+
+  function renderResults(a: EngineAnalysis, ui: Ui): string {
+    return (
+      renderScores(a) +
+      renderFields(a, ui) +
+      renderAssumptions(a, ui) +
+      renderBlockers(a) +
+      renderOutputs(a)
+    )
+  }
+
+  /* ==================================================================== *
+   * END MIRRORED RENDERER
+   * ==================================================================== */
+
+  const input = document.getElementById('brief-input') as HTMLTextAreaElement | null
+  const results = document.getElementById('results')
+  const status = document.getElementById('score-status')
+  const scoreButton = document.getElementById('score')
+  const restoreButton = document.getElementById('restore')
+
+  if (input && results && status && scoreButton) {
+    /** The brief the rendered results belong to, and the UI state over it. */
+    const example = input.value
+    let text = input.value
+    let accepted: string[] = []
+    let hideMissing = false
+    /** The one clock read in this page. The engine never reads one. */
+    const REFERENCE_DATE = new Date()
+
+    /**
+     * Re-analyze and repaint. `accepted` is passed to the engine, which is the
+     * only route by which an assumed value reaches a payload — the UI cannot
+     * smuggle one in, because it never writes a value, only a key.
+     *
+     * `focusKey` puts the caret back on the checkbox that caused the repaint;
+     * without it a keyboard user is returned to the top of the document every
+     * time they accept an assumption.
+     */
+    const paint = (focusKey?: string): void => {
+      // The reference date is read ONCE, here in the page, and passed in. The
+      // engine reads no clock: omit `now` and 'next quarter' stays missing.
+      // Reading it once per session also means the same paste analyses the
+      // same way for as long as the tab is open.
+      const a = analyze(text, { assume: accepted, now: REFERENCE_DATE })
+      results.innerHTML = renderResults(a, { accepted, hideMissing })
+      status.textContent = statusLine(a)
+      if (focusKey) {
+        const box = results.querySelector<HTMLInputElement>(
+          `input[data-assume="${CSS.escape(focusKey)}"]`,
+        )
+        box?.focus()
+      }
+    }
+
+    scoreButton.addEventListener('click', () => {
+      text = input.value
+      // A new brief invalidates every acceptance: the offers are recomputed
+      // from the new words, and silently carrying an accept across inputs is
+      // the same defect as inventing the value in the first place.
+      accepted = []
+      paint()
+      results.focus()
+    })
+
+    restoreButton?.addEventListener('click', () => {
+      input.value = example
+      input.focus()
+    })
+
+    // Ctrl/Cmd + Enter from the textarea scores it.
+    input.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter' && (event.metaKey || event.ctrlKey)) {
+        event.preventDefault()
+        scoreButton.dispatchEvent(new MouseEvent('click'))
+      }
+    })
+
+    // Delegated, because every control below is replaced on each repaint.
+    results.addEventListener('change', (event) => {
+      const target = event.target as HTMLElement | null
+      if (!(target instanceof HTMLInputElement)) return
+      if (target.id === 'hide-missing') {
+        hideMissing = target.checked
+        return
+      }
+      const key = target.dataset.assume
+      if (!key) return
+      accepted = target.checked ? [...accepted, key] : accepted.filter((k) => k !== key)
+      paint(key)
+    })
+
+    results.addEventListener('click', (event) => {
+      const button = (event.target as HTMLElement | null)?.closest<HTMLButtonElement>('[data-copy]')
+      if (!button) return
+      const pre = document.getElementById(button.dataset.copy ?? '')
+      if (!pre) return
+      // Remembered on the element, so a second click while the button still
+      // says "Copied" restores the real label rather than that one.
+      if (!button.dataset.label) button.dataset.label = button.textContent ?? 'Copy'
+      const label = button.dataset.label
+      const say = (message: string, ms: number): void => {
+        button.textContent = message
+        window.setTimeout(() => {
+          button.textContent = label
+          delete button.dataset.state
+        }, ms)
+      }
+      // Undefined on an insecure origin, where reading it is fine and calling
+      // it throws synchronously.
+      if (!navigator.clipboard) {
+        say('Select the JSON and copy it — no clipboard here', 2600)
+        return
+      }
+      navigator.clipboard.writeText(pre.textContent ?? '').then(
+        () => {
+          button.dataset.state = 'done'
+          say('Copied', 1600)
+        },
+        () => say('Select the JSON and copy it — the clipboard was refused', 2600),
+      )
+    })
+  }
+</script>

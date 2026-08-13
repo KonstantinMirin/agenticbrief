@@ -5,6 +5,8 @@
 export * from './schemas'
 
 export interface PublishableEntry {
+  /** Astro collection entry id — the stable tiebreaker for equal-dated sorts. */
+  id?: string
   data: { draft?: boolean; reviewState?: string; pubDate: Date; updatedDate?: Date }
 }
 
@@ -27,11 +29,15 @@ export function publishedOnly<T extends PublishableEntry>(entries: T[]): T[] {
 }
 
 export function byDateDesc<T extends PublishableEntry>(entries: T[]): T[] {
-  return [...entries].sort(
-    (a, b) =>
+  return [...entries].sort((a, b) => {
+    const delta =
       (b.data.updatedDate ?? b.data.pubDate).valueOf() -
-      (a.data.updatedDate ?? a.data.pubDate).valueOf(),
-  )
+      (a.data.updatedDate ?? a.data.pubDate).valueOf()
+    // Most entries share a pubDate, and getCollection hands them over in
+    // filesystem order — so without a tiebreaker two builds of the same commit
+    // emit index pages, llms.txt and rss.xml in different orders.
+    return delta !== 0 ? delta : String(a.id).localeCompare(String(b.id))
+  })
 }
 
 /** Reading time in whole minutes, at 220 wpm. */

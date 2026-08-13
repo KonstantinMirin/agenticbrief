@@ -1,12 +1,13 @@
 ---
-title: 'Mutation (ARTF) — the Bidstream Patch Object, Field by Field'
-description: "A mutation is ARTF's unit of change: an intent, an operation, a path and one typed payload, proposed to an orchestrator that may reject it. From the v1.0 protobuf."
-answer: "A mutation is ARTF's proposed change to an OpenRTB bid request or bid response. It carries an intent, an operation, a path and one of five typed payloads. The orchestrator may accept or reject it."
+title: 'Mutation (ARTF): the OpenRTB bidstream patch object'
+description: "ARTF's Mutation carries an intent, an operation, a path and one of five typed payloads. The v1.0 repository ships six definitions of it, and the copies disagree."
+answer: "A mutation is ARTF's proposed change to an OpenRTB bid request or response, carrying an intent, an operation, a path and at most one of five typed payloads, which the orchestrator may accept or reject."
 pubDate: 2026-08-09
+updatedDate: 2026-08-09
 term: 'Mutation (ARTF)'
 category: 'protocol'
 cluster: 'gl-realtime'
-alternateNames: ['ARTF mutation', 'OpenRTB patch', 'bidstream mutation']
+alternateNames: ['ARTF mutation', 'OpenRTB patch', 'bidstream mutation', 'OpenRTB Patch Protocol']
 keywords:
   - 'artf mutation'
   - 'openrtb patch protocol'
@@ -16,33 +17,35 @@ citations:
   - 'https://github.com/IABTechLab/agentic-rtb-framework/blob/7f481614ba228f8fab5b08df2e13ed540d4a1954/rust/proto/agenticrtbframework.proto'
   - 'https://github.com/IABTechLab/agentic-rtb-framework/blob/7f481614ba228f8fab5b08df2e13ed540d4a1954/proto/agenticrtbframework.proto'
   - 'https://github.com/IABTechLab/agentic-rtb-framework/blob/7f481614ba228f8fab5b08df2e13ed540d4a1954/Agentic_Real_Time_Framework_Version_1_0_FINAL.md'
+  - 'https://github.com/IABTechLab/agentic-rtb-framework/blob/7f481614ba228f8fab5b08df2e13ed540d4a1954/pkg/pb/artf/agenticrtbframework.pb.go'
+  - 'https://github.com/IABTechLab/agentic-rtb-framework/blob/7f481614ba228f8fab5b08df2e13ed540d4a1954/rust/src/com.iabtechlab.bidstream.mutation.v1.rs'
   - 'https://github.com/IABTechLab/agentic-rtb-framework/blob/7f481614ba228f8fab5b08df2e13ed540d4a1954/docs/00-EXAMPLE.md'
-  - 'https://github.com/IABTechLab/agentic-rtb-framework/blob/7f481614ba228f8fab5b08df2e13ed540d4a1954/samples/bid-shading.json'
-  - 'https://iabtechlab.com/standards/aamp-agentic-advertising-management-protocols/'
+  - 'https://github.com/IABTechLab/agentic-rtb-framework/blob/7f481614ba228f8fab5b08df2e13ed540d4a1954/internal/handlers/handlers.go'
   - 'https://github.com/IABTechLab/agentic-rtb-framework/blob/7f481614ba228f8fab5b08df2e13ed540d4a1954/rust/proto/agenticrtbframeworkservices.proto'
-  - 'https://github.com/adcontextprotocol/adcp/blob/f1a35aba734befa809e1fa780ad77c7edd614e96/dist/schemas/3.1.10/index.json'
+  - 'https://github.com/IABTechLab/agentic-rtb-framework/blob/7f481614ba228f8fab5b08df2e13ed540d4a1954/Makefile'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/docs/faq.mdx'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/schemas/3.1.13/index.json'
+  - 'https://iabtechlab.com/standards/artf/'
 related:
   - '/realtime/artf-intent/'
   - '/realtime/trusted-match-protocol/'
-  - 'https://aampexplorer.noetis.dev/repos/agentic-rtb-framework/'
-  - 'https://agenticadlab.noetis.dev/protocols/adcp-vs-aamp/'
+  - '/realtime/'
+  - '/about/sources-and-versions/'
+  - 'https://aampexplorer.com/repos/agentic-rtb-framework/'
+  - 'https://agenticadlab.com/protocols/adcp-vs-aamp/'
 seeAlso: ['artf-intent', 'trusted-match-protocol']
 reviewState: cto-reviewed
 ---
 
-## What is a mutation in ARTF?
+A mutation is a proposed change to an OpenRTB bid request or bid response, sent by an in-path agent back to the orchestrator that called it. ARTF's name for the mechanism is the OpenRTB Patch Protocol, and the framework document treats a mutation as a request throughout: "Participant responses may request in-flight modifications via patch objects that include desired mutations which the orchestrator may accept or reject at their discretion."
 
-A mutation is a proposed change to an OpenRTB bid request or bid response, sent by an in-path agent back to the orchestrator that called it.
+No `Patch` message exists in the `.proto` files; the patch object of that sentence is prose, and what travels on the wire is `RTBResponse.mutations[]`, a flat repeated field.
 
-The framework document calls the mechanism the OpenRTB Patch Protocol and is explicit that a mutation is a request, not an instruction: "Participant responses may request in-flight modifications via patch objects that include desired mutations which the orchestrator may accept or reject at their discretion."
+ARTF v1.0 is a published IAB Tech Lab framework document, past a public comment period that closed 15 January 2026. It is not a ratified interoperability standard, and `v1.0` is a git tag on the ARTF repository.
 
-That sentence carries the whole design. An ARTF agent never mutates anything. It asks. The orchestrator decides. Everything else in the message is a way of making the ask machine-readable enough that the orchestrator can decide quickly.
+## The Mutation message
 
-The message is defined in `rust/proto/agenticrtbframework.proto`, package `com.iabtechlab.bidstream.mutation.v1`, in `agentic-rtb-framework` at tag `v1.0`.
-
-## What fields does a Mutation carry?
-
-Four, and the fourth is a `oneof`.
+The canonical message lives in `rust/proto/agenticrtbframework.proto`, package `com.iabtechlab.bidstream.mutation.v1`.
 
 | Field    | Number  | Type        | Comment in the proto                                                                                |
 | -------- | ------- | ----------- | --------------------------------------------------------------------------------------------------- |
@@ -51,98 +54,61 @@ Four, and the fourth is a `oneof`.
 | `path`   | 3       | string      | "The semantic business domain of where the operation will be applied"                               |
 | `value`  | 100-104 | `oneof`     | "The structure of value depends on the specified intent"                                            |
 
-The `oneof value` block has five branches, and field numbers 100 and up are reserved for them by convention stated in the proto itself:
+The `oneof value` block has five branches — `ids` at 100, `adjust_deal` at 101, `adjust_bid` at 102, `metrics` at 103 and `content_data` at 104 — so a mutation carries one payload at most. Numbers 1000 to 1999 are reserved for experimental and test payloads, matching the [Intent enum](/realtime/artf-intent/).
 
-| Branch         | Field number | Type                |
-| -------------- | ------------ | ------------------- |
-| `ids`          | 100          | `IDsPayload`        |
-| `adjust_deal`  | 101          | `AdjustDealPayload` |
-| `adjust_bid`   | 102          | `AdjustBidPayload`  |
-| `metrics`      | 103          | `MetricsPayload`    |
-| `content_data` | 104          | `DataPayload`       |
+`op` takes `OPERATION_ADD`, `OPERATION_REMOVE` or `OPERATION_REPLACE`, plus the `OPERATION_UNSPECIFIED` zero value proto3 requires. Those are JSON Patch's verbs without copy, move and test. Neither reference agent uses all three: `internal/handlers/handlers.go` emits `ADD` and `REPLACE` only.
 
-Field numbers 1000 to 1999 are reserved for experimental payloads, matching the same reservation on the `Intent` enum.
+## The five payloads
 
-Because `value` is a `oneof`, a mutation carries exactly zero or one payload. Every field on `Mutation` is a proto3 singular field with no `required` semantics, so a syntactically valid mutation can arrive with an unspecified intent, no operation and no payload. Validation is the receiver's problem.
+`IDsPayload` is a repeated string, `AdjustBidPayload` a `price` double, and `MetricsPayload` and `DataPayload` repeated OpenRTB objects. `AdjustDealPayload` carries a `bidfloor` double and a `Margin`, which holds a `value` double and a `calculation_type` of `CPM` or `PERCENT`.
 
-## What operations can a mutation perform?
+`DataPayload` diverges across the repository. Both protos and the Rust bindings have it; the Go bindings and `docs/00-EXAMPLE.md` do not, and the Go handler is a stub returning nil with a comment pointing at `make bindings`, a target that runs `protoc` over two files not in the repository root.
 
-Three, plus the zero placeholder that proto3 requires:
+## The margin discriminator
 
-| Value | Name                    |
-| ----- | ----------------------- |
-| 0     | `OPERATION_UNSPECIFIED` |
-| 1     | `OPERATION_ADD`         |
-| 2     | `OPERATION_REMOVE`      |
-| 3     | `OPERATION_REPLACE`     |
+`Margin.CalculationType` has no `UNSPECIFIED` member and `CPM` is the zero value. An omitted discriminator decodes as an absolute adjustment, and a margin of 5 decodes as five CPM whether or not the sender set the field. A deliberate CPM cannot be distinguished from an unset field on the wire.
 
-Add, remove, replace. The same three verbs as JSON Patch, minus copy, move and test. The proto notes that "more operations can be added in the future".
+## Atomicity and ordering
 
-## What does the path field actually address?
+The specification is explicit: "Each patch is atomic. A mutation must be accepted in whole or rejected in whole. Multiple patches may be independently accepted or rejected - there are no transactions or any ordering guarantees across mutations."
 
-The proto describes `path` as "the semantic business domain of where the operation will be applied", which is vaguer than a JSON Pointer and deliberately so. The repository's example documentation pairs each intent with the path shape it expects:
+Activating a deal and changing its floor are two mutations — `ACTIVATE_DEALS` carrying an `IDsPayload`, `ADJUST_DEAL_FLOOR` carrying an `AdjustDealPayload` — and the `oneof` allows one payload per mutation, so an orchestrator can take one and drop the other.
 
-| Intent               | Expected payload    | Path example                   |
-| -------------------- | ------------------- | ------------------------------ |
-| `ACTIVATE_SEGMENTS`  | `IDsPayload`        | `/user/data/segment`           |
-| `ACTIVATE_DEALS`     | `IDsPayload`        | `/imp/{id}`                    |
-| `SUPPRESS_DEALS`     | `IDsPayload`        | `/imp/{id}`                    |
-| `ADJUST_DEAL_FLOOR`  | `AdjustDealPayload` | `/imp/{id}/pmp/deals/{dealId}` |
-| `ADJUST_DEAL_MARGIN` | `AdjustDealPayload` | `/imp/{id}/pmp/deals/{dealId}` |
-| `BID_SHADE`          | `AdjustBidPayload`  | `/seatbid/{seat}/bid/{bidId}`  |
-| `ADD_METRICS`        | `MetricsPayload`    | `/imp/{id}/metric`             |
+No accept, reject or acknowledgement message exists in any of the three protos, and the transport is one unary method, `rpc GetMutations (RTBRequest) returns (RTBResponse)`. The specification leaves the return path open: "Whether and how orchestrators will communicate choices to accept or reject patches to agent providers is left to the parties."
 
-The paths are OpenRTB object paths with template segments. There is no formal grammar for them in the specification, and no schema constrains the string. Two implementations can disagree about whether `{id}` is an impression index or an impression ID and both will compile.
+## The path field
 
-## What are the payload types?
+A path is a string such as `/imp/{id}/pmp/deals/{dealId}`. In the specification's own words, paths "identify business level entities rather than specific JSON locations". `docs/00-EXAMPLE.md` pairs each intent with a shape:
 
-Small and specific. That is the point.
+| Intent                                    | Expected payload    | Path example                   |
+| ----------------------------------------- | ------------------- | ------------------------------ |
+| `ACTIVATE_SEGMENTS`                       | `IDsPayload`        | `/user/data/segment`           |
+| `ACTIVATE_DEALS`, `SUPPRESS_DEALS`        | `IDsPayload`        | `/imp/{id}`                    |
+| `ADJUST_DEAL_FLOOR`, `ADJUST_DEAL_MARGIN` | `AdjustDealPayload` | `/imp/{id}/pmp/deals/{dealId}` |
+| `BID_SHADE`                               | `AdjustBidPayload`  | `/seatbid/{seat}/bid/{bidId}`  |
+| `ADD_METRICS`                             | `AddMetricsPayload` | `/imp/{id}/metric`             |
 
-| Payload             | Fields                                                           |
-| ------------------- | ---------------------------------------------------------------- |
-| `IDsPayload`        | `id` — a repeated string, "list of IDs"                          |
-| `AdjustDealPayload` | `bidfloor` (double), `margin` (`Margin`)                         |
-| `Margin`            | `value` (double), plus a `CalculationType` of `CPM` or `PERCENT` |
-| `AdjustBidPayload`  | `price` (double), "the adjusted bid price"                       |
-| `MetricsPayload`    | repeated OpenRTB metric objects                                  |
-| `DataPayload`       | repeated OpenRTB data objects                                    |
+Seven intents are documented; the enum carries eight plus the zero placeholder, and the undocumented one is `ADD_CIDS`. The [intent vocabulary](/realtime/artf-intent/) is its own entry.
 
-`Margin.CalculationType` is the one to notice: `CPM` means an absolute margin adjustment, `PERCENT` means a relative one. A receiver that ignores the discriminator will apply a 5 as five cents or five percent with equal confidence.
+No grammar constrains that string and no schema validates it, so two implementations can disagree about whether `{id}` is an impression index or an impression ID and both will compile. A mutation can land on the wrong impression, and no message in the protos reports back what the orchestrator did with it. The repository's own Go agent already diverges: for `ADJUST_DEAL_FLOOR` it emits `/imp/{impID}/pmp/deals`, dropping the `{dealId}` segment.
 
-## How does a mutation get back to the orchestrator?
+## Which definition of Mutation to build against
 
-Inside an `RTBResponse`, which has three fields: `id` echoing the request, `mutations[]`, and a `Metadata` object carrying `api_version` and `model_version`.
+`rust/proto/agenticrtbframework.proto` is the only self-consistent copy in the repository. The root proto matches it column for column except on the import: it asks for `com/iabtechlab/openrtb/v2.6/openrtb.proto`, no file sits at that path under `proto/`, so it cannot resolve its own import.
 
-The request side is `RTBRequest`, carrying `lifecycle`, `id`, `tmax`, the OpenRTB `bid_request` or `bid_response`, an `originator`, `applicable_intents[]` and `ext`. `tmax` is described as the "maximum time in milliseconds the exchange allows for mutations to be received including latency to avoid timeout" — the agent's entire budget, latency included.
+| Definition                         | `intent` / `op` type            | Payload branches | Intents            |
+| ---------------------------------- | ------------------------------- | ---------------- | ------------------ |
+| Tagged v1.0 specification document | `string`                        | 4                | prose strings only |
+| Root `proto/` (edition 2023)       | enum                            | 5                | 9                  |
+| `rust/proto/` (proto3)             | enum                            | 5                | 9                  |
+| Checked-in Go bindings             | `*Intent` / `*Operation`, `req` | 4                | 8                  |
+| Checked-in Rust bindings           | `i32`, no presence              | 5                | 9                  |
+| `docs/00-EXAMPLE.md`               | enum                            | 4                | 8                  |
 
-`lifecycle` has two real values, `LIFECYCLE_PUBLISHER_BID_REQUEST` and `LIFECYCLE_DSP_BID_RESPONSE`, so an agent knows which side of the auction it is sitting on. `Originator.Type` has four: `PUBLISHER`, `SSP`, `EXCHANGE`, `DSP`.
+`AddMetricsPayload`, the metrics branch in the specification document and in `docs/00-EXAMPLE.md`, is not a message any proto defines; the message is `MetricsPayload`, and the Go bindings generate the branch as `Mutation_AddMetrics`. The bindings disagree on `intent`, `op` and `path` as well: the Rust bindings type them `i32`, `i32` and `String` with no presence, so a mutation carrying no intent decodes cleanly as `INTENT_UNSPECIFIED`, while the Go bindings mark the same three fields required in the proto2 style and make them pointers, so the same bytes come back as a decode error.
 
-The transport is a single gRPC method, declared in `agenticrtbframeworkservices.proto`: `service RTBExtensionPoint { rpc GetMutations (RTBRequest) returns (RTBResponse); }`. One call, one response, one deadline.
+The tagged specification document assigns `ext = 3` and `tmax = 6` where the proto assigns `tmax = 3` and `originator = 6`, so a doc-conformant encoder and a proto-conformant decoder mis-parse each other. It declares `repeated mutation mutations = 2;` with a type name that resolves to nothing, and gives worked JSON with intent strings like `expireDeals` that are not enum members under any spelling. The `v1.0` tag points at this document.
 
-## What should implementers know before parsing the proto?
+## AdCP has no counterpart
 
-Three things, all verified at commit `7f48161`.
-
-**There are two copies of the proto and they are not identical.** `proto/agenticrtbframework.proto` opens with `edition = "2023";`. `rust/proto/agenticrtbframework.proto` opens with `syntax = "proto3";`. Most Node and JavaScript protobuf parsers reject the edition form, so the Rust copy is the one that parses with ordinary tooling.
-
-**The two copies disagree about one field type.** `MetricsPayload.metric` is `com.iabtechlab.openrtb.v2.BidRequest.Metric` in the root copy and `com.iabtechlab.openrtb.v2.BidRequest.Imp.Metric` in the Rust copy. OpenRTB 2.6 nests `Metric` under `Imp`, so the Rust copy is the correct one and the root copy will not resolve.
-
-**The root copy's OpenRTB import path does not exist in its own tree.** It imports `com/iabtechlab/openrtb/v2.6/openrtb.proto`, while the file under `proto/` sits at `com/iabtechlab/openrtb/v2/openrtb.proto`. Only the Rust tree has a file at the imported path. The README also states that the OpenRTB 2.6 proto must be downloaded manually from IAB's OpenRTB repository.
-
-There is also a documentation drift worth naming. The intent-to-payload table in `docs/00-EXAMPLE.md` names the metrics payload `AddMetricsPayload`. No such message exists. Both proto copies call it `MetricsPayload`. The same table stops at intent value 7 and omits `ADD_CIDS`, which is value 8 in both protos.
-
-None of these is fatal. All of them cost an implementer an afternoon if nobody wrote them down.
-
-## Is there an AdCP counterpart to a mutation?
-
-No. AdCP has no bidstream mutation surface at all.
-
-The nearest AdCP construct by position is the Trusted Match Protocol, and it is a different kind of object. TMP's `context_match` returns offers and `identity_match` returns eligible package IDs. Neither returns a patch, neither addresses a path inside another party's payload, and neither is expressed as a proposed change an orchestrator may reject. TMP asks a question and gets an answer. ARTF proposes an edit and gets a verdict.
-
-That is the cleanest single illustration of how differently the two stacks understand serve time.
-
-## How is this term sourced?
-
-ARTF: `rust/proto/agenticrtbframework.proto`, `proto/agenticrtbframework.proto`, `agenticrtbframeworkservices.proto`, `Agentic_Real_Time_Framework_Version_1_0_FINAL.md`, `docs/00-EXAMPLE.md` and `samples/` in `IABTechLab/agentic-rtb-framework` at commit `7f48161`, tag `v1.0-1-g7f48161`. ARTF is an IAB Tech Lab framework document with two reference implementations, not a ratified interoperability standard, and AAMP has no single version number covering it.
-
-AdCP: absence verified against the operation registry at `dist/schemas/3.1.10/index.json` in `adcontextprotocol/adcp` at commit `f1a35ab`. None of the 64 published operations mutates a bid request or bid response.
+AdCP's FAQ answers "Does AdCP replace OpenRTB?" with "No. AdCP and OpenRTB operate at different layers and are complementary." No AdCP operation touches the bidstream: none of the 64 published tasks is auction-shaped, and the release defines no bid request, bid response or bid floor. AdCP's nearest real-time surface is the [Trusted Match Protocol](/realtime/trusted-match-protocol/), a request-and-response identity check with no patch mechanism in it.

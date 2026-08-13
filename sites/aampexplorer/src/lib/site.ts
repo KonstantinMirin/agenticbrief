@@ -48,35 +48,35 @@ export type Maturity = 'substantial' | 'partial' | 'thin'
 export const MATURITY: Record<string, { level: Maturity; note: string }> = {
   'iab-agentic-primitives': {
     level: 'substantial',
-    note: 'The canonical wire contract: versioned JSON Schema for the shared objects and the request/response protocol, imported by both reference agents. Not listed in the AAMP hub README.',
+    note: 'The wire contract both reference agents pin: 48 versioned JSON Schemas for the shared objects and the request/response protocol, plus an OpenAPI document. Its own README opens with WORK IN PROGRESS — NOT YET RELEASED.',
   },
   'seller-agent': {
     level: 'substantial',
-    note: 'The largest machine-readable surface in the corpus: an OpenAPI 3.1 document with 74 paths and 91 component schemas, plus a changelog and tagged releases.',
+    note: 'The largest machine-readable surface in the corpus: an OpenAPI 3.1 document with 74 paths carrying 87 operations, 91 component schemas, a changelog, and tags through v2.4.1. Its prose guides contradict the OpenAPI and each other.',
   },
   'agentic-rtb-framework': {
     level: 'substantial',
-    note: 'The only component that is unambiguously a specification: a prose document plus a protobuf contract, with two independent implementations and five worked request samples.',
+    note: 'The only specification here that is tagged and marked FINAL: a v1.0 prose document, a protobuf contract, Go and Rust implementations, and five worked request samples.',
   },
   'buyer-agent': {
     level: 'partial',
-    note: 'Large prose documentation set, but its OpenAPI covers only the buyer’s own inbound API rather than the buyer-to-seller protocol.',
+    note: "58 files of documentation, the largest prose set in AAMP, over an OpenAPI that describes only the buyer's own 13 inbound paths. The buyer-to-seller protocol it implements is specified somewhere else.",
   },
   'agentic-direct': {
     level: 'partial',
-    note: 'One rich artifact — a manifest carrying 40 OpenDirect, AdCOM and OpenRTB object definitions — inside a demo-grade repository whose own README misdescribes that file as OpenAPI.',
+    note: 'One real artifact inside a demo: opendirect.json, a manifest of 40 OpenDirect, AdCOM and OpenRTB object definitions. Its README calls that file an OpenAPI spec twice, the file has no openapi key, and the MCP server it feeds answers every tool call with generateMockResponse.',
   },
   'agentic-audiences': {
     level: 'partial',
-    note: 'A readable draft specification and a detailed taxonomy, but the schema that would connect it to the rest of AAMP is a zero-byte file, and it is self-described as one vendor’s initial proposal.',
+    note: "A readable draft and a detailed embedding taxonomy, described by its own README as LiveRamp's initial proposal. The schema that would connect it to the rest of AAMP is a zero-byte file, and so are the two example payloads and the roadmap.",
   },
   AAMP: {
     level: 'thin',
-    note: 'A README listing six repositories. It omits the wire-contract repository and gives an expansion of the acronym that two of its own children contradict.',
+    note: 'A 270-word README. It lists six of the eight repositories, omits the wire contract, and gives an expansion of the acronym that two of the repositories it lists contradict.',
   },
   'registry-agent-example': {
     level: 'thin',
-    note: 'A 22-line sample agent that consumes an external registry. It defines no registry contract, and the repositories that describe one state it is not finalised.',
+    note: 'A 22-line agent that points an MCP client at the registry defined in agent-registry, a repository outside AAMP.',
   },
 }
 
@@ -106,7 +106,22 @@ export function objectsForPlane(plane: string) {
   return aamp.objects.filter((o) => (o as { plane?: string }).plane === plane)
 }
 
-/** The gaps worth putting on a page, separated from parser bookkeeping. */
+/**
+ * The file-level gaps, separated from parser bookkeeping.
+ *
+ * Four entries are dropped here because they are tallies or restatements
+ * rather than gaps in a file, and each is already carried in prose by the page
+ * that owns the subject: the acronym expansions belong to
+ * /what-does-aamp-stand-for/ (which lists four with file and line, where the
+ * parser sees three), the per-repository version dump belongs to /versions/,
+ * and the hub README's omission of the wire contract is stated on / and
+ * /repos/.
+ */
 export function editorialGaps(): string[] {
-  return aamp.gaps.filter((g) => !/^package\.json is at|^Repo not present locally/.test(g))
+  return aamp.gaps.filter(
+    (g) =>
+      !/^package\.json is at|^Repo not present locally|^The corpus expands the AAMP acronym|^AAMP has no single version number|^The AAMP hub README does not list/.test(
+        g,
+      ),
+  )
 }

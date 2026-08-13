@@ -1,9 +1,39 @@
+# dependencies
 node_modules/
+
+# build output
 dist/
 .astro/
 .turbo/
+.cache/
+
+# editorial working files.
+#
+# Voice briefs, rewrite ledgers, per-page AI-detection and CTO-review artefacts,
+# triage decisions and research notes. This is the process, not the product: it
+# quotes absolute paths from the machine it was written on, and it argues about
+# positioning in terms that were never written for a reader of the sites. The
+# published corpus is content/ and sites/.
+drafts/
+
+# generated caches
+scripts/.glossary-sections.json
+
+# os / editor
 .DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/
+
+# logs
 *.log
+npm-debug.log*
+
+# secrets. None are committed; these patterns exist so that none ever are.
 .env
 .env.*
 !.env.example
+*.pem
+*.key
+credentials.json

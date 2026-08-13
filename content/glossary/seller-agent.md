@@ -1,97 +1,104 @@
 ---
 title: 'Seller Agent'
-description: "A seller agent is AAMP's supply-side agent, defined by IAB Tech Lab's seller-agent reference implementation rather than by a ratified specification. AdCP calls the same role a sales agent."
-answer: "A seller agent is the supply-side agent in IAB Tech Lab's AAMP work: it publishes a media kit, prices inventory by buyer tier, negotiates, and books deals. AdCP calls the same role a sales agent."
+description: "A seller agent is AAMP's supply-side agent: it publishes a media kit, prices by buyer tier, negotiates and books deals. AdCP's glossary calls the same role a sales agent."
+answer: "A seller agent is AAMP's supply-side agent: it publishes a media kit, prices by buyer tier, negotiates and books deals. AdCP's glossary calls the same role a sales agent while its schemas ship a seller_agent field."
 pubDate: 2026-08-09
+updatedDate: 2026-08-09
 term: 'Seller Agent'
-alternateNames: ['supply-side agent', 'publisher agent']
+alternateNames: ['supply-side agent', 'publisher agent', 'sell-side agent']
 category: 'agentic'
 cluster: 'gl-roles'
 keywords:
   - 'seller agent advertising'
+  - 'what is a seller agent'
   - 'iab seller agent'
   - 'aamp seller agent'
-  - 'what is a seller agent'
 citations:
+  - 'https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/README.md'
   - 'https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/docs/api/agent-discovery.md'
   - 'https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/docs/api/openapi.json'
   - 'https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/docs/api/quotes.md'
-  - 'https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/README.md'
-  - 'https://github.com/IABTechLab/AAMP/blob/3b20e67b568235d86c4025bec7c1301edd7466a0/README.md'
-  - 'https://github.com/IABTechLab/iab-agentic-primitives/blob/2fc7029fb9eca801bc94586aec398906aa6af6c0/README.md'
-  - 'https://docs.adcontextprotocol.org/docs/reference/glossary'
+  - 'https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/docs/architecture/overview.md'
+  - 'https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/docs/integration/negotiation.md'
+  - 'https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/docs/reference/endpoints.md'
   - 'https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/pyproject.toml'
+  - 'https://github.com/IABTechLab/iab-agentic-primitives/blob/2fc7029fb9eca801bc94586aec398906aa6af6c0/README.md'
+  - 'https://github.com/IABTechLab/iab-agentic-primitives/blob/2fc7029fb9eca801bc94586aec398906aa6af6c0/spec/jsonschema/Agent.json'
+  - 'https://github.com/IABTechLab/AAMP/blob/3b20e67b568235d86c4025bec7c1301edd7466a0/README.md'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/docs/trusted-match/specification.mdx'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/docs/trusted-match/buyer-guide.mdx'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/docs/reference/glossary.mdx'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/schemas/3.1.13/core/seller-agent-ref.json'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/schemas/3.1.13/trusted-match/available-package.json'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/schemas/3.1.13/brand.json'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/schemas/3.1.13/enums/media-buy-valid-action.json'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/schemas/3.1.13/pricing-options/cpm-option.json'
+  - 'https://docs.adcontextprotocol.org/docs/reference/glossary'
+  - 'https://docs.adcontextprotocol.org/docs/trusted-match/specification'
 related:
   - '/agents/sales-agent/'
   - '/agents/buyer-agent/'
   - '/agents/agent-card/'
   - '/agents/agent-registry/'
+  - '/agents/discovery-files/'
   - '/negotiation/trust-status/'
-  - 'https://aampexplorer.noetis.dev/repos/reference-agents/'
-  - 'https://aampexplorer.noetis.dev/negotiation/'
-seeAlso: ['Sales Agent', 'Buyer Agent', 'Agent Card', 'Trust Status']
+  - '/negotiation/access-tier/'
+  - '/negotiation/quote/'
+  - '/realtime/trusted-match-protocol/'
+  - '/about/sources-and-versions/'
+  - 'https://aampexplorer.com/repos/seller-agent/'
+  - 'https://aampexplorer.com/negotiation/'
+seeAlso: ['Sales Agent', 'Buyer Agent', 'Agent Card', 'Trust Status', 'Access Tier']
 reviewState: cto-reviewed
 ---
 
-## What is a seller agent?
+A seller agent is supply-side software that publishes a catalog of inventory, prices it by the buyer's verified identity tier, evaluates proposals, runs a bounded price negotiation, and mints a deal ID for DSP activation. No ratified specification defines the role. IAB Tech Lab's reference seller agent is the working definition, and it calls itself "an AI-powered inventory management system for publishers and SSPs ... using IAB Tech Lab standards (OpenDirect 2.1, Deals API v1.0, sellers.json)".
 
-A seller agent is the supply-side software in IAB Tech Lab's AAMP work. It publishes a catalog of inventory, prices that inventory according to who is asking, evaluates proposals, runs a bounded price negotiation, and mints a deal ID the buyer can activate in a DSP.
+Seller agent and sales agent name the same job. AdCP's glossary has no entry for Seller Agent and defines [Sales Agent](/agents/sales-agent/) instead, while its documentation uses both words and its schemas ship a `seller_agent` field. The phrase "sales agent" does not appear in the IAB Tech Lab repositories. The term is tied to neither protocol: Magnite's SpringServe implementation is AdCP over MCP, announced as "Why We Built a Seller Agent Into SpringServe", and that post does not mention IAB Tech Lab.
 
-The definition comes from a codebase, not a standard. `IABTechLab/seller-agent` describes itself as "an AI-powered inventory management system for publishers and SSPs to automate programmatic deal negotiation, booking, and distribution using IAB Tech Lab standards (OpenDirect 2.1, Deals API v1.0, sellers.json)", and its README opens with the banner `> **V2 — Feature Complete**`. Every seller agent term on this page is sourced from that reference implementation. None of it is a ratified specification.
+## What the seller agent exposes
 
-Version pin: tag `v2.4.1`, commit `2bb7ebc`. AAMP itself has no single version. Each repository in the umbrella versions independently, which the AAMP hub README states directly: "Each repository uses independent semantic versioning."
+`GET /.well-known/agent.json` needs no authentication and declares five skills: `discovery`, `pricing`, `proposals`, `negotiation` and `deals`. Those cover searching and browsing inventory, media kits and packages; pricing by buyer identity; accepting and evaluating proposals including counter-offers; running automated multi-round price negotiation; and minting OpenRTB-compatible deal IDs for DSP activation. The [agent card](/agents/agent-card/) entry sets the file out field by field.
 
-### Is a seller agent the same as a sales agent?
+The card lists `supported_deal_types` as `pg`, `pmp`, `preferred_deal`, `private_auction`; the shared primitives schema documents the same field as `'PG'`, `'PD'`, `'PA'`. Nothing in either repository reconciles the two spellings. `capabilities.protocols` lists `opendirect21` and nothing else, and the discovery guide calls A2A "designed but not yet served". What ships today is REST and MCP, and nothing else in AAMP carries a buyer from discovery to a deal ID.
 
-Yes, and the naming split is the more interesting half of the question. AdCP's normative term for this role is **sales agent**, and the string "sales agent" does not appear anywhere in IAB's eight agentic repositories. The evidence, the counts and the comparison table live on our [sales agent page](/agents/sales-agent/), which is the page to read if that is the question you arrived with.
+## Pricing by buyer tier
 
-## What does a seller agent actually expose?
+Price depends on the buyer's [access tier](/negotiation/access-tier/), which registry [trust status](/negotiation/trust-status/) caps. The buyer presents identity, the seller derives a tier, and the buyer's "effective tier is the minimum of their trust-based ceiling and their claimed identity tier". Of the five trust values only `registered` is automatic; the rest are operator decisions in the [agent registry](/agents/agent-registry/).
 
-The seller agent publishes a generated OpenAPI 3.1.0 document at `docs/api/openapi.json` with **74 paths and 91 component schemas**. That is the largest machine-readable API surface anywhere in the AAMP corpus. Its generated reference pages report 88 REST endpoints, 46 MCP tools and 22 canonical event types.
+Tier then picks the negotiation strategy. The strategy name describes the seller's stance, so `aggressive` is the least generous of the four.
 
-The public entry point is the [agent card](/agents/agent-card/) at `GET /.well-known/agent.json`, which needs no authentication and returns identity plus five declared skills:
+| Access tier  | Strategy     | Rounds | Concession cap per round | Cap across the negotiation |
+| ------------ | ------------ | ------ | ------------------------ | -------------------------- |
+| `public`     | `aggressive` | 3      | 3%                       | 8%                         |
+| `advertiser` | `premium`    | 6      | 6%                       | 20%                        |
 
-| Skill id      | What the seller agent claims it can do                        |
-| ------------- | ------------------------------------------------------------- |
-| `discovery`   | Search and browse inventory, media kits and packages          |
-| `pricing`     | Return pricing based on buyer identity, with volume discounts |
-| `proposals`   | Accept and evaluate proposals, including counter-offers       |
-| `negotiation` | Run automated multi-round price negotiation                   |
-| `deals`       | Mint OpenRTB-compatible deal IDs for DSP activation           |
+Two tiers sit between those two, and [AAMP Explorer](https://aampexplorer.com/negotiation/) has the full table.
 
-The same card carries `capabilities.protocols`, `inventory_types` (populated from the live product catalog) and `supported_deal_types`, which are `pg`, `pmp`, `preferred_deal` and `private_auction`.
+`POST /proposals/{proposal_id}/counter` submits a counter-offer. Beside it sit `GET /proposals/{proposal_id}/negotiation` and a [quote](/negotiation/quote/) endpoint pair, quotes being "non-binding price offers" with a 24-hour TTL. The canonical negotiation surface, `POST /api/v1/negotiations/messages`, lists `idempotency_key` among the two required properties of `NegotiationMessage` and documents it as "Same key -> same response, no duplicate side effects". The negotiation router contains no idempotency handling: the key is required by the schema on every message and honoured on none.
 
-Note what the card says about transport. `capabilities.protocols` lists `opendirect21`, and the field documentation adds that `a2a` "will be listed once an inbound A2A server ships." The discovery guide is blunter still: A2A is "designed but not yet served." A seller agent today is reached over REST and MCP.
+## What a seller agent needs around it
 
-## How does a seller agent decide what price to show?
+The seller agent sits in front of the ad server rather than replacing it. An `AdServerClient` connector fronts the real one (Google Ad Manager, FreeWheel, or a CSV adapter for demos), and the agent keeps its own state in SQLite or Redis. What it adds is the selling. `POST /api/v1/deals/distribute` "routes the deal to the appropriate SSP based on routing rules": PubMatic over MCP, Index Exchange and Magnite over REST. `POST /api/v1/deals/push` sends deal terms straight to buyer DSPs over IAB Deals API v1.0. `GET /api/v1/supply-chain` parses a sellers.json into an OpenRTB-compatible schain. The ad server, the SSP relationship and the sellers.json entry are all assumed to be in place already.
 
-By tier, and the tier is capped by trust. A buyer agent presents an identity; the seller derives an access tier from it (`public`, `seat`, `agency`, `advertiser`); and the registry-verified [trust status](/negotiation/trust-status/) of that buyer sets a ceiling the buyer cannot claim past. The seller-agent docs put it plainly: the effective tier "is the minimum of their trust-based ceiling and their claimed identity tier."
+## Seller agent in AdCP
 
-Trust status itself takes five values: `unknown`, `registered`, `approved`, `preferred` and `blocked`. Only `registered` is automatic, awarded when the agent is found in the AAMP [agent registry](/agents/agent-registry/). The other three non-default states are operator actions.
+AdCP models no negotiation surface: its media-buy action enum runs to 21 values and none is a negotiation. It registers that the haggling happens, since `pricing-options/cpm-option.json` says declared adjustments tell "buyer agents which adjustments are available before negotiation", and it does not model the negotiation itself.
 
-Negotiation strategy is then selected from the tier, with a per-round concession cap and a round limit that both widen as the tier improves. The quantified four-row table is published once, on [AAMP Explorer's negotiation page](https://aampexplorer.noetis.dev/negotiation/), and cited rather than reproduced here.
+AdCP's Trusted Match specification defines the term once, in its definitions table:
 
-A quote is the object that carries a price: the seller-agent quotes documentation describes quotes as "non-binding price offers from the seller" with a 24-hour TTL, later converted into deals. AdCP has no equivalent object.
+> **Seller agent** | The buyer-side agent that sold the package into a publisher. Identified by the agent URL declared in the publisher's `adagents.json` `authorized_agents[].url`.
 
-## Where does a seller agent's wire contract come from?
+That places the role on both sides of the trade at once, since `adagents.json` is a publisher's sell-side [authorization file](/agents/discovery-files/). Two other AdCP documents disagree: the Trusted Match buyer guide calls the counterparty "the publisher's sales agent", and `brand.json` describes its own `seller_agent_url` field as the "URL of the sales agent that sells inventory for this collection". The two available readings, an editorial slip or a platform-side reseller distinct from the publisher's own sales agent, are set out on [sales agent](/agents/sales-agent/).
 
-Not from the seller agent repository. `seller-agent/pyproject.toml` pins `iab-agentic-primitives[client] @ git+https://github.com/IABTechLab/iab-agentic-primitives.git@v0.5.0`, and that library is the canonical home for the shared types: `Money`, `Product`, `Quote`, `Deal`, `Negotiation`, `Avails`, the error envelope, the access tier and trust status enums.
+The field is required whichever reading wins. `seller_agent` sits on `trusted-match/available-package.json` next to `package_id` and `media_buy_id`, carries `x-status: experimental` like [Trusted Match](/realtime/trusted-match-protocol/) itself, and holds an `agent_url` copied from the publisher's `adagents.json` plus an `id` "Reserved for a future registry-assigned stable seller identifier. Not used today". The field records which agent sold a package; no operation reads it.
 
-The library's own README opens with this:
+## Where the wire contract lives
 
-> **WORK IN PROGRESS — NOT YET RELEASED.** This library is under active construction as part of the buyer/seller agent remediation. APIs, schemas, and package layout are unstable and will change without notice.
+The shared types are not in the seller repository. `pyproject.toml` pins `iab-agentic-primitives[client] @ git+https://github.com/IABTechLab/iab-agentic-primitives.git@v0.5.0`, and that library holds `Quote`, `Negotiation`, `Proposal`, `MediaKit`, `Deal` and `Agent`. Its own README says it is unstable, [not yet released](https://aampexplorer.com/versions/) and not to be depended on in production; both shipping agents depend on it anyway, by git URL, at runtime, and it is not among the repositories the AAMP hub README lists.
 
-Two consequences follow, and both are worth stating out loud. First, the seller agent's object model is pinned to a dependency that says it is not released. Second, `iab-agentic-primitives` is not listed among the six repositories in the AAMP hub README, so a reader working from the hub will never find it.
+Each AAMP repository versions independently, and the seller repository's own [version numbers disagree with each other](https://aampexplorer.com/versions/), so `v2.4.1` is a repository tag rather than an AAMP release.
 
-## What a seller agent is not
+## Roles AAMP does not define
 
-It is not a specification. It is a working Python service with generated documentation, and IAB Tech Lab has not published a normative seller-side wire specification distinct from it. Anyone writing "AAMP requires X" about seller behaviour is describing one implementation at one tag.
-
-It also has no counterpart to AdCP's separation of concerns. AdCP splits identity into a [brand agent](/agents/brand-agent/) and policy into a [governance agent](/agents/governance-agent/); neither phrase appears anywhere in the AAMP corpus. The seller agent holds inventory, pricing, negotiation and booking in one service.
-
-## Sources and version pins
-
-- `IABTechLab/seller-agent` at tag `v2.4.1`, commit `2bb7ebc`. Agent card, trust lifecycle and tier mapping from `docs/api/agent-discovery.md`; quote semantics from `docs/api/quotes.md`; path and schema counts from `docs/api/openapi.json`.
-- `IABTechLab/iab-agentic-primitives` at `v0.5.0-1-g2fc7029`, commit `2fc7029`.
-- AAMP hub README at commit `3b20e67`, which lists six repositories and does not list `iab-agentic-primitives`.
-- AdCP terminology from `docs/reference/glossary.mdx` at commit `f1a35ab`, AdCP 3.1.10.
+AAMP has no brand agent, no governance agent, no signal agent and no creative agent. Three of those jobs still get done, as endpoints rather than agents. Identity is `PUT /registry/agents/{agent_id}/trust`, an operator raising or blocking a trust status by hand. Policy is `POST /approvals/{approval_id}/decide`, a human decision stamped with the principal from the authenticated API key. Signal is `POST /agentic-audience/match`, whose own description calls the score "mock-quality (deterministic from sha256 of `identifier`)" with the real embedding model deferred to a later epic. The fourth job has no endpoint: AAMP has no creative agent and nothing equivalent to AdCP's creative operations.

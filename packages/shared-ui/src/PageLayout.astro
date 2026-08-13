@@ -9,6 +9,7 @@ import BaseLayout from './BaseLayout.astro'
 import AnswerBox from './AnswerBox.astro'
 import FaqBlock from './FaqBlock.astro'
 import RelatedLinks from './RelatedLinks.astro'
+import EngagementCta from './EngagementCta.astro'
 import type { SiteKey } from './sites'
 
 export interface Props {
@@ -70,5 +71,6 @@ const {
     <slot />
     <FaqBlock entries={faq} />
     <RelatedLinks links={related} />
+    <EngagementCta site={site} />
   </article>
 </BaseLayout>

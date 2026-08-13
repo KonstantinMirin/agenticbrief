@@ -8,35 +8,38 @@
  *
  * The mapping lives here rather than in frontmatter for one reason: it must be
  * exhaustive and collision-free across the whole site, and that is a property
- * of the set, not of any one file. A term the map does not know about still
- * renders — under /terms/ — instead of vanishing from the build.
+ * of the set, not of any one file. An unmapped published term fails the build
+ * rather than rendering at an untitled path.
  */
 
 export const SECTIONS = {
   concepts: {
     title: 'Concepts and standards',
-    summary: 'The protocols themselves, what they run on, and what the category is called.',
+    summary:
+      'The protocols themselves, the transports they run on, and the names the category is given.',
   },
   agents: {
     title: 'Agent roles, identity and discovery',
-    summary: 'The actors: who buys, who sells, who vouches for whom, and how they find each other.',
+    summary:
+      'The parties to an agentic trade, the identity each one publishes, and the directories that list them.',
   },
   'media-buying': {
     title: 'Buying objects and campaign lifecycle',
-    summary: 'The things a campaign is made of once an agent has agreed to buy it.',
+    summary:
+      'A bought campaign breaks into a media buy, its packages and the products behind them.',
   },
   signals: {
     title: 'Signals, audiences and identity',
-    summary: 'Targeting data: where it comes from, who owns it, and how it is activated.',
+    summary: 'Targeting data, who owns it, and the call that makes it usable on a destination.',
   },
   realtime: {
     title: 'Real-time execution and bidstream agents',
-    summary: 'What happens at serve time, in the milliseconds an impression is decided.',
+    summary: 'These terms run at serve time, while an impression is being decided.',
   },
   negotiation: {
     title: 'Deals, pricing and negotiation',
     summary:
-      'How price is agreed. Almost entirely AAMP vocabulary — AdCP has no negotiation protocol.',
+      'How a price is agreed and booked: quotes, deals, negotiation rounds, access tiers and trust status.',
   },
   governance: {
     title: 'Governance, privacy and compliance',
@@ -44,7 +47,8 @@ export const SECTIONS = {
   },
   about: {
     title: 'About',
-    summary: 'How these definitions are sourced and version-pinned.',
+    summary:
+      'Which specification each definition comes from, and the terms this glossary leaves out on purpose.',
   },
 } as const
 
@@ -112,8 +116,10 @@ export const SECTION_OF: Record<string, SectionKey> = {
   'sources-and-versions': 'about',
 }
 
-export function sectionFor(slug: string): SectionKey | 'terms' {
-  return SECTION_OF[slug] ?? 'terms'
+export function sectionFor(slug: string): SectionKey {
+  const section = SECTION_OF[slug]
+  if (!section) throw new Error(`glossary term "${slug}" has no section in SECTION_OF`)
+  return section
 }
 
 export function pathFor(slug: string): string {

@@ -1,99 +1,111 @@
 ---
 title: 'AAMP (Agentic Advertising Management Protocols)'
-description: "AAMP is IAB Tech Lab's umbrella for eight independently versioned agentic advertising repositories. What it contains, why it has no version, and what is implementation not specification."
-answer: "AAMP is IAB Tech Lab's umbrella for its agentic advertising work: eight independently versioned GitHub repositories spanning a control plane, a bidstream mutation framework and an embedding exchange. AAMP has no single version number."
+description: "AAMP is IAB Tech Lab's umbrella over nine separately versioned agentic advertising repositories: a control plane, a bidstream mutation framework and an embedding exchange. It has no version."
+answer: "AAMP is IAB Tech Lab's umbrella label for nine separately versioned agentic advertising repositories, spanning a control plane, a bidstream mutation framework and an embedding exchange. It has no version: each repository tags independently."
 pubDate: 2026-08-09
 term: 'AAMP'
 alternateNames:
   - 'Agentic Advertising Management Protocols'
+  - 'Agentic Advertising Marketplace Protocol'
   - 'IAB Agent & API Management Protocol'
   - 'Agent-to-Agent Marketplace Protocol'
 category: protocol
-cluster: gl-aamp
+cluster: 'gl-stacks'
 keywords:
   - 'aamp protocol'
+  - 'what is aamp in advertising'
   - 'aamp definition'
-  - 'aamp umbrella'
   - 'aamp components'
   - 'iab tech lab aamp'
 citations:
   - 'https://github.com/IABTechLab/AAMP'
+  - 'https://github.com/IABTechLab/AAMP/blob/3b20e67b568235d86c4025bec7c1301edd7466a0/README.md'
   - 'https://iabtechlab.com/standards/aamp-agentic-advertising-management-protocols/'
   - 'https://github.com/IABTechLab/iab-agentic-primitives'
-  - 'https://github.com/IABTechLab/seller-agent'
-  - 'https://github.com/IABTechLab/buyer-agent'
-  - 'https://github.com/IABTechLab/agentic-rtb-framework'
+  - 'https://github.com/IABTechLab/iab-agentic-primitives/blob/2fc7029fb9eca801bc94586aec398906aa6af6c0/README.md'
+  - 'https://github.com/IABTechLab/iab-agentic-primitives/blob/2fc7029fb9eca801bc94586aec398906aa6af6c0/src/iab_agentic_primitives/registry_client.py'
+  - 'https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/pyproject.toml'
+  - 'https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/src/ad_seller/clients/agent_registry_client.py'
+  - 'https://github.com/IABTechLab/buyer-agent/blob/0c3a1545e334a0dc6acf0a6722b554cc4a4503d6/pyproject.toml'
+  - 'https://github.com/IABTechLab/agentic-real-time-framework'
+  - 'https://github.com/IABTechLab/agentic-real-time-framework/blob/7f481614ba228f8fab5b08df2e13ed540d4a1954/Agentic_Real_Time_Framework_Version_1_0_FINAL.md'
   - 'https://github.com/IABTechLab/agentic-audiences'
   - 'https://github.com/IABTechLab/agentic-direct'
+  - 'https://github.com/IABTechLab/agentic-mobile'
   - 'https://github.com/IABTechLab/registry-agent-example'
 related:
   - '/concepts/adcp/'
   - '/concepts/adcp-vs-aamp-terminology/'
   - '/concepts/opendirect/'
+  - '/concepts/mcp-and-a2a/'
+  - '/negotiation/quote/'
+  - '/realtime/artf-intent/'
+  - '/agents/agent-registry/'
   - '/about/sources-and-versions/'
-  - 'https://aampexplorer.noetis.dev/what-does-aamp-stand-for/'
-  - 'https://aampexplorer.noetis.dev/versions/'
-  - 'https://agenticadlab.noetis.dev/protocols/aamp/'
-seeAlso: ['Ad Context Protocol', 'OpenDirect 2.1', 'Seller Agent', 'Buyer Agent']
+  - 'https://aampexplorer.com/what-does-aamp-stand-for/'
+  - 'https://aampexplorer.com/versions/'
+  - 'https://aampexplorer.com/repos/'
+  - 'https://agenticadlab.com/protocols/aamp/'
+  - 'https://agenticadlab.com/protocols/adcp-vs-aamp/'
+seeAlso:
+  [
+    'Ad Context Protocol',
+    'OpenDirect 2.1',
+    'ARTF',
+    'Agentic Audiences',
+    'Seller Agent',
+    'Buyer Agent',
+  ]
+updatedDate: 2026-08-09
 reviewState: cto-reviewed
 ---
 
-## Who publishes AAMP, and where is it defined?
+AAMP is IAB Tech Lab's umbrella label over nine separately versioned repositories of agentic advertising work. The repositories describe one media transaction carried out machine to machine: a buyer's agent finds a seller, asks what inventory is available (avails), negotiates a quote across several rounds and books the deal.
 
-AAMP is published by IAB Tech Lab. Its definition lives in a single README at [`github.com/IABTechLab/AAMP`](https://github.com/IABTechLab/AAMP), which is the entire repository apart from a licence file. The README opens:
+The control plane — everything that happens before a campaign runs: discovery, negotiation and booking — is defined by the wire contract in `iab-agentic-primitives` and implemented by the reference agents and the OpenDirect wrapper that speak it. [ARTF](/realtime/artf-intent/) is the bidstream mutation framework, the one part that runs at serve time. `agentic-audiences` is the embedding exchange.
 
-> AAMP is the umbrella initiative under which all of Tech Lab's Agentic work is being developed in partnership with the advertising ecosystem. AAMP (Agentic Advertising Management Protocols) is an open-sourceframework [sic] developed under IAB Tech Lab to support the evolution of agentic transactions within digital advertising ecosystems.
+The hub repository, `github.com/IABTechLab/AAMP`, holds a README and a licence file, and that README carries the release model: "Each repository uses independent semantic versioning." There is no AAMP version number, so a dependency declaration names one repository at a tag and the others move on their own schedule.
 
-That README also sets the release model, and it is the sentence that matters most for anyone citing AAMP: "Each repository uses independent semantic versioning." AAMP is a governance label over a set of repositories, not a document you can read end to end.
+The hub expands the acronym as Agentic Advertising Management Protocols. Three other expansions appear inside the corpus, including in the wire contract both reference agents import; [AAMP Explorer has the file and line for each](https://aampexplorer.com/what-does-aamp-stand-for/).
 
-The corpus does not agree with itself on what the acronym expands to. The hub README says Agentic Advertising Management Protocols; other files in the same corpus say something else. AAMP Explorer publishes [the enumeration with file and line numbers](https://aampexplorer.noetis.dev/what-does-aamp-stand-for/). This page uses the hub expansion because the hub is the naming authority, not because the contradiction is settled.
+## Nine repositories carry the label
 
-## What version is AAMP?
+Nine repositories carry the label: the hub, the six the hub lists, and two named only in the code or on the standards page. Supporting AAMP means a different thing in each one.
 
-There is no AAMP version. Asking for one produces a wrong answer in every direction.
+| Repository                     | What it publishes                                                                                                                           | What supporting it means                                                                                 | On the hub README?                      |
+| ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- | --------------------------------------- |
+| `AAMP`                         | The umbrella README and a licence                                                                                                           | Nothing to implement                                                                                     | it is the hub                           |
+| `iab-agentic-primitives`       | 48 JSON Schemas and a 13-operation OpenAPI, the wire contract both agents import                                                            | Speaking the buyer-to-seller wire contract, at v0.5.0, unreleased                                        | **no**                                  |
+| `seller-agent`                 | Supply-side reference implementation; 74 OpenAPI paths, 87 operations                                                                       | Answering for a publisher: avails, quotes, negotiation, booking                                          | yes                                     |
+| `buyer-agent`                  | Demand-side reference implementation, Python                                                                                                | Running the same control plane from the demand side                                                      | yes                                     |
+| `agentic-direct`               | MCP/A2A wrapper over OpenDirect 2.1; handlers call `generateMockResponse`                                                                   | Booking against [OpenDirect 2.1](/concepts/opendirect/) over [MCP, A2A and REST](/concepts/mcp-and-a2a/) | yes                                     |
+| `agentic-rtb-framework` (ARTF) | The released v1.0 specification and a protobuf contract                                                                                     | Changing a bid at serve time: ARTF v1.0, protobuf, one entry point                                       | yes, under its old name                 |
+| `agentic-audiences`            | Draft v0.1 embedding exchange from LiveRamp, filed under `specs/v1.0/`, where `specs/v1.0/schema/agent_interface.schema.json` is zero bytes | Exchanging audience embeddings                                                                           | yes                                     |
+| `registry-agent-example`       | Example client that registers an agent and verifies it                                                                                      | Registering and verifying an agent against an API with no published specification                        | yes                                     |
+| `agentic-mobile`               | `spec v1.0.0-draft` over MCP and A2A, untagged                                                                                              | Mobile in-app workflows                                                                                  | **no**, but named on the standards page |
 
-Each repository tags on its own schedule. The three repositories that carry normative artifacts rather than demo code sit at very different maturity points:
+ARTF v1.0 was released on 12 November 2025 as a Tech Lab standard, and it is the only ratified standard among the repositories with published code. The rest publish drafts or reference implementations; `agentic-direct`'s MCP handlers call `generateMockResponse`. No repository records a production adopter. ARTF's contributor list names Index Exchange, The Trade Desk, OpenX and Chalice, and `agentic-audiences` arrived as LiveRamp's proposal.
 
-| Repository                     | Version at the parsed commit | What it publishes                                             |
-| ------------------------------ | ---------------------------- | ------------------------------------------------------------- |
-| `agentic-rtb-framework` (ARTF) | `v1.0-1-g7f48161`            | A 534-line prose specification plus a protobuf contract       |
-| `iab-agentic-primitives`       | `v0.5.0-1-g2fc7029`          | JSON Schema and OpenAPI for the buyer-to-seller wire contract |
-| `agentic-audiences`            | untagged, `106ebd6`          | An embedding exchange spec self-labelled "Draft v0.1"         |
+Those repositories publish 143 operations. One runs at serve time, `GetMutations` in ARTF; the other 142 sit in the control plane: discovery, avails, quotes, multi-round negotiation and deal booking. AdCP's FAQ [characterises AAMP as agentic bidding](https://agenticadlab.com/protocols/adcp-vs-aamp/).
 
-The reference implementations version separately again: `seller-agent` at `v2.4.1`, `buyer-agent` at `v2.3.0-24-g0c3a154`. The full eight-repository matrix is on [AAMP Explorer](https://aampexplorer.noetis.dev/versions/).
+## The official lists and the code name different repositories
 
-Never write "AAMP 2.3". No artifact carries that number. It is a reading of the buyer or seller agent tag applied to the whole umbrella, and it implies a coordinated release that the hub README explicitly says does not exist.
+The standards page names Agentic Mobile, Agentic Ad Object and Agentic Guardrails. Two of those three have no public repository: `IABTechLab/agentic-ad-object` and `IABTechLab/agentic-guardrails` return 404 on GitHub, and neither string appears in the published code. Agentic Mobile is real and public, since 18 November 2025, and the hub README does not mention it.
 
-## Is AAMP a ratified specification?
+`seller-agent/pyproject.toml` and `buyer-agent/pyproject.toml` share a line.
 
-Mostly no, and this matters for every AAMP term defined on this site.
+```toml
+"iab-agentic-primitives[client] @ git+https://github.com/IABTechLab/iab-agentic-primitives.git@v0.5.0",
+```
 
-Of the eight repositories, one is a 270-word README, one is a 22-line sample agent, one is a demo-grade MCP and A2A wrapper, two are reference implementations in Python, and three carry specification-shaped artifacts. Two of those three are unfinished: `agentic-audiences` ships four zero-byte files in its specification tree, including `specs/v1.0/schema/agent_interface.schema.json`, the schema that would connect it to the rest of AAMP; `iab-agentic-primitives` opens its README with a banner.
+Both reference agents hard-pin `iab-agentic-primitives` at an exact tag, and it appears on neither official list. Its own README states that it is unreleased, unstable and subject to change without notice.
 
-> **WORK IN PROGRESS — NOT YET RELEASED.** This library is under active construction as part of the buyer/seller agent remediation. APIs, schemas, and package layout are unstable and will change without notice. It is **not yet an official IAB Tech Lab release** and should not be depended on for production use until this notice is removed.
+The hub README has not been edited since 16 April 2026, and the two agents it lists have since diverged: seller-agent v2.4.1 landed on 5 August, and buyer-agent's newest tag is v2.3.0 from 22 July. The [version matrix](https://aampexplorer.com/versions/) tracks the drift.
 
-Both reference agents pin that library as their canonical wire contract. The AAMP hub README does not list it among the AAMP repositories.
+The [agent registry](/agents/agent-registry/) has no published specification behind it either. Seller-agent v2.4.1 ships two registry clients: `AampApiRegistryClient`, which talks to a live IAB registry over Bearer JWT when `AAMP_REGISTRY_URL` is set, and a legacy stub, "stubbed pending the public AAMP API specification", which is what an unconfigured deployment gets.
 
-**So: every AAMP term on this glossary is sourced from a reference implementation or a work-in-progress library, not from a ratified specification.** Words like access tier, trust status, quote and negotiation round describe how IAB Tech Lab's own agents behave today. They are documented, they are consistent across the two agent repositories, and they can change on the next minor tag without a deprecation process.
+Terms taken from AAMP — [quote](/negotiation/quote/), negotiation round, [trust status](/negotiation/trust-status/) — describe how IAB Tech Lab's own agents behave at a tag, and any of them can change on the next minor without deprecation.
 
-## What does the AAMP corpus actually contain?
+[AdCP](/concepts/adcp/) is the other stack rather than a counterpart to the umbrella: one repository, one stable release, 64 registered operations. AAMP is a label over repositories that share no type with each other, so there is nothing to line up at the umbrella level. AdCP's FAQ names AAMP, and [no file published under AAMP names AdCP](https://agenticadlab.com/protocols/adcp-vs-aamp/); object by object the comparison is tractable, which is what the [terminology lookup](/concepts/adcp-vs-aamp-terminology/) does.
 
-Parsing all eight repositories yields 143 operations and 82 distinct objects, spread across three planes that share no type with one another:
-
-- **Control plane.** Planning and transaction time. Discovery, avails, quotes, multi-round negotiation, deal booking and change requests, built on IAB OpenDirect 2.1 and carried over MCP, A2A and REST. Lives in `agentic-direct`, `buyer-agent`, `seller-agent` and `iab-agentic-primitives`.
-- **Real-time plane.** Serve time. ARTF lets a host platform call in-path agents that return mutations to an OpenRTB bid request or response.
-- **Data plane.** Signal exchange. `agentic-audiences` defines an embedding envelope carrying consent, TTL and attestation metadata.
-
-No file in the corpus maps an ARTF deal identifier to a seller-agent `Deal`, or an `agentic-audiences` embedding to a buyer-agent audience segment. The planes are assembled only inside the two reference agents, and they are assembled as an application.
-
-## What is AAMP's counterpart in AdCP?
-
-None at the umbrella level. AdCP is one specification with one registry and one version oracle; AAMP is a portfolio. The comparison only becomes tractable one object at a time, which is what the [AdCP and AAMP terminology lookup](/concepts/adcp-vs-aamp-terminology/) does.
-
-## What is AAMP most often confused with?
-
-**AAMP is not AAO.** AgenticAdvertising.org stewards AdCP. IAB Tech Lab stewards AAMP. The initialisms are close and the two bodies are unrelated.
-
-**The AAMP registry is not finalised.** Both agent repositories document a registry API and point at `AAMPRegistryClient`, and the seller agent's own guide says that client "will be updated once the AAMP spec is finalized". The one repository named for the registry, `registry-agent-example`, is a 22-line sample that consumes an external MCP server and defines nothing.
-
-**AAMP does not reference AdCP anywhere.** Grepping all eight repositories for AdCP naming returns no substantive hits. Any comparison between the two stacks, including the ones on this site, is made from outside both of them.
+Repository-by-repository detail is in [AAMP Explorer](https://aampexplorer.com/repos/). Related terms: [quote](/negotiation/quote/), [deal](/negotiation/deal/), [agent registry](/agents/agent-registry/), [OpenDirect 2.1](/concepts/opendirect/), [ARTF intent](/realtime/artf-intent/).

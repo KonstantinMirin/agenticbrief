@@ -22,37 +22,64 @@ import {
   operationUrl,
   UNRELEASED,
   VERSION_LABEL,
+  LAST_UPDATED,
 } from '../lib/site'
 
 const areas = orderedAreas()
 const totalOps = adcp.tasks.length
 
-const answer = `The Ad Context Protocol (AdCP) is an open standard that lets advertising software agents discover, buy and measure media by calling ${totalOps} defined operations over MCP or A2A. It is governed by AgenticAdvertising.org and licensed Apache 2.0.`
+// Counts derived from the parsed registry.
+const serveTimeOps = tasksForArea('trusted-match').length
+const taskTransportOps = totalOps - serveTimeOps
+const governanceOps = tasksForArea('governance').length
+const distinctNames = new Set(adcp.tasks.map((t) => t.name)).size
+const mutatingOps = adcp.tasks.filter((t) => t.mutatesState).length
+const experimentalOps = adcp.tasks.filter((t) => t.status === 'experimental').length
+const unlayeredOps = areas
+  .filter((a) => !a.layer)
+  .reduce((n, a) => n + tasksForArea(a.key).length, 0)
+
+// The envelope is the set of response fields that nearly every operation
+// repeats, derived from the registry rather than hand-listed.
+const responseFieldUse = new Map<string, number>()
+for (const task of adcp.tasks) {
+  for (const name of new Set(task.responseFields.map((f) => f.name))) {
+    responseFieldUse.set(name, (responseFieldUse.get(name) ?? 0) + 1)
+  }
+}
+const envelope = new Set(
+  [...responseFieldUse.entries()].filter(([, n]) => n >= totalOps * 0.9).map(([name]) => name),
+)
+const envelopeFields = envelope.size
+
+const REQUIRED_TASKS_DOC =
+  'https://github.com/adcontextprotocol/adcp/blob/main/docs/protocol/required-tasks.mdx'
+
+const answer = `The Ad Context Protocol (AdCP) is an open standard for buying and selling advertising between software agents. Release ${adcp.version} defines ${totalOps} operations: ${taskTransportOps} called over MCP or A2A, ${serveTimeOps} over a serve-time HTTP profile.`
 
 const faq = [
   {
     question: 'What version of AdCP is current?',
-    answer: `The current published stable release is ${adcp.version}. The protocol repository's working branch runs ahead of it, so a version number read from the source tree is not a shipped version.`,
+    answer: `${adcp.version}, last updated ${LAST_UPDATED}.`,
   },
   {
     question: 'How many operations does AdCP define?',
-    answer: `${totalOps}, across ${areas.length} areas, in the ${adcp.version} release. They divide into a planning-time negotiation layer and a serve-time decisioning layer.`,
+    answer: `${totalOps} in release ${adcp.version}, spread over ${areas.length} areas and ${distinctNames} distinct names, because one name is registered twice. ${mutatingOps} write state and ${experimentalOps} are marked experimental.`,
   },
   {
     question: 'Is AdCP the same as MCP?',
-    answer:
-      'No. MCP is a transport, a way for a client to call tools on a server. AdCP is a domain vocabulary that runs over MCP or A2A, defining which advertising operations exist and what their payloads contain.',
+    answer: `No. MCP is a transport, a way for a client to call tools on a server. AdCP is a domain vocabulary that says which advertising operations exist and what their payloads contain: ${taskTransportOps} of its ${totalOps} operations run over MCP or A2A, and the ${serveTimeOps} serve-time operations use a direct HTTP profile instead. An agent declares its transport in get_adcp_capabilities and the declaration applies to every operation it serves. A sales agent MUST support at least one of MCP or A2A, and a call that works over one works the same over the other.`,
   },
   {
     question: 'Who governs AdCP?',
     answer:
-      'AgenticAdvertising.org, a member organisation formed in October 2025. The specification is Apache 2.0 licensed and developed in public on GitHub.',
+      'AgenticAdvertising.org, a pending 501(c)(6) trade association incorporated in Delaware, with four equally weighted voting classes: brands, agencies, publishers and technology providers. The specification is Apache 2.0 and developed in public on GitHub. The reference sell-side implementation is maintained by Prebid.',
   },
 ]
 
 const url = `${BASE}/`
-const title = `AdCP Explorer — every Ad Context Protocol operation, ${adcp.version}`
-const description = `Reference for all ${totalOps} Ad Context Protocol operations in release ${adcp.version}, generated from the published schema registry and stamped with the commit it came from.`
+const title = `AdCP Explorer — all ${totalOps} operations in Ad Context Protocol ${adcp.version}`
+const description = `All ${totalOps} Ad Context Protocol operations in release ${adcp.version}, grouped by area, with request and response fields, which operations write state and which are experimental.`
 
 const jsonLd = graph([
   organizationNode(),
@@ -63,7 +90,7 @@ const jsonLd = graph([
     url,
     title,
     description,
-    datePublished: '2026-08-08',
+    datePublished: LAST_UPDATED,
     technical: true,
     proficiencyLevel: 'Expert',
     dependencies: 'Model Context Protocol (MCP) or A2A transport',
@@ -95,45 +122,192 @@ const jsonLd = graph([
   <AnswerBox answer={answer} term="Ad Context Protocol (AdCP)" />
 
   <p>
-    Every operation on this site is generated from the published AdCP schema registry rather than
-    transcribed from it. Each page names the release, the commit and the schema file it came from,
-    so any claim here can be checked against the specification in one click.
+    Release {adcp.version} registers {totalOps} operations across {areas.length} area groups, under {
+      distinctNames
+    } distinct names. One of them is required of every conforming agent: <code
+      >get_adcp_capabilities</code
+    >. Every other operation is conditional on the role an agent claims, so no agent implements all {
+      totalOps
+    }.
   </p>
 
-  <h2>Which release does this document?</h2>
+  <h2>The {totalOps} operations by area</h2>
+
+  <table>
+    <caption>AdCP {adcp.version} — operations per area</caption>
+    <thead>
+      <tr>
+        <th scope="col">Area</th>
+        <th scope="col">Operations</th>
+        <th scope="col">What it covers</th>
+      </tr>
+    </thead>
+    <tbody>
+      {
+        areas.map((area) => (
+          <tr>
+            <th scope="row">
+              <a href={`/areas/${area.key}/`}>{area.title}</a>
+            </th>
+            <td>{tasksForArea(area.key).length}</td>
+            <td>{area.summary}</td>
+          </tr>
+        ))
+      }
+    </tbody>
+  </table>
+
+  <p class="muted">
+    <code>list_creative_formats</code> is registered twice, once under media buy and once under creative,
+    with a different request schema each time. Both variants are set out on <a href="/schemas/"
+      >the schema registry page</a
+    >.
+  </p>
 
   <p>
-    <strong>{VERSION_LABEL}</strong>, last updated {adcp.lastUpdated}. AdCP publishes releases under
-    <code>dist/schemas/</code> in its repository. The working branch runs ahead of the last release and
-    carries a version stamp that is only bumped at release time, so a number read from the source tree
-    is not a shipped version. This site reads the published release.
+    Governance is the largest area at {governanceOps} operations, most of it create, read, update and
+    delete over property lists, collections and the content standards those properties are judged against.
+    {mutatingOps} of the {totalOps} write state; the rest are reads. {experimentalOps} are marked experimental,
+    including both serve-time operations. An experimental operation may change surface between 3.x releases
+    on at least six weeks' notice, and a seller that implements one declares its feature id in <code
+      >experimental_features</code
+    > on <code>get_adcp_capabilities</code>.
+  </p>
+
+  <h2>What a buyer implements and what a seller implements</h2>
+
+  <p>
+    Conformance is scoped by role, not by the {totalOps}-operation total. Every conforming agent
+    implements <code>get_adcp_capabilities</code>. The Required rows on the specification's <a
+      href={REQUIRED_TASKS_DOC}
+      rel="noopener">requirements page</a
+    > add the following on top of it.
+  </p>
+
+  <table>
+    <caption>AdCP {adcp.version} — Required operations per role</caption>
+    <thead>
+      <tr>
+        <th scope="col">Role</th>
+        <th scope="col">Required operations</th>
+        <th scope="col">Notes</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th scope="row">Every conforming agent</th>
+        <td>1</td>
+        <td><code>get_adcp_capabilities</code>, whatever role is claimed</td>
+      </tr>
+      <tr><th scope="row">Sales agent</th><td>7</td><td></td></tr>
+      <tr>
+        <th scope="row">Governance agent</th>
+        <td>14</td>
+        <td>campaign, property and collection lists</td>
+      </tr>
+      <tr><th scope="row">Content standards agent</th><td>4</td><td></td></tr>
+      <tr><th scope="row">Signal agent</th><td>2</td><td></td></tr>
+      <tr>
+        <th scope="row">Brand agent</th>
+        <td>1</td>
+        <td>3 more for a brand agent that also runs Sponsored Intelligence</td>
+      </tr>
+      <tr>
+        <th scope="row">Creative agent</th>
+        <td>1</td>
+        <td>
+          <code>list_creative_formats</code>; every other row in the creative table is Conditional
+          or Optional
+        </td>
+      </tr>
+      <tr>
+        <th scope="row">Buy-side orchestrator</th>
+        <td>0</td>
+        <td>not an MCP or A2A server; it calls a sales agent's operations</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>Orchestrator conformance is five numbered rules on the same page:</p>
+
+  <ol>
+    <li>Authenticate.</li>
+    <li>Send the fields the request schemas require.</li>
+    <li>Handle asynchronous replies and webhook delivery.</li>
+    <li>Use <code>media_buy_id</code> on every later call.</li>
+    <li>Respect <code>creative_deadline</code>.</li>
+  </ol>
+
+  <h2>Every operation by name</h2>
+
+  {
+    areas.map((area) => (
+      <>
+        <h3 id={`area-${area.key}`}>
+          <a href={`/areas/${area.key}/`}>{area.title}</a>
+        </h3>
+        <ul class="task-list">
+          {tasksForArea(area.key).map((task) => (
+            <li>
+              <a class="task-name" href={operationUrl(task)}>
+                <code>{task.name}</code>
+              </a>
+              <br />
+              {task.summary}
+            </li>
+          ))}
+        </ul>
+      </>
+    ))
+  }
+
+  <p>
+    <code>enums/task-type.json</code> lists two names, <code>search_brands</code> and <code
+      >media_buy_delivery</code
+    >, that are not registered as operations in {adcp.version}. In the other direction, <code
+      >property/validate-property-delivery-request.json</code
+    > ships inside {adcp.version} with no group claiming it. The enum file is documentation, maintained
+    alongside the schemas rather than derived from them; the authoritative operation list is the set of
+    task maps in the release's <code>index.json</code> and the request and response schemas they name.
+  </p>
+
+  <h2>Release {adcp.version}</h2>
+
+  <p>
+    <strong>{VERSION_LABEL}</strong>, last updated {LAST_UPDATED}. Releases ship as complete schema
+    trees under <code>dist/schemas/&lt;version&gt;/</code>.
   </p>
 
   {
     UNRELEASED.length > 0 && (
       <p>
-        The working branch adds {UNRELEASED.length} operation
-        {UNRELEASED.length === 1 ? '' : 's'} that {UNRELEASED.length === 1 ? 'has' : 'have'} not
-        shipped in any release:{' '}
+        {UNRELEASED.length} operation
+        {UNRELEASED.length === 1 ? '' : 's'} {UNRELEASED.length === 1 ? 'is' : 'are'} registered
+        ahead of release, with request and response schemas in no published release:{' '}
         {UNRELEASED.map((n, i) => (
           <>
             {i > 0 && ', '}
             <code>{n}</code>
           </>
         ))}
-        . {UNRELEASED.length === 1 ? 'It is' : 'They are'} excluded from the {adcp.version}{' '}
-        reference below.
+        . {UNRELEASED.length === 1 ? 'It is not' : 'They are not'} in the {adcp.version} counts. The{' '}
+        {adcp.version} documentation bundle ships a task page for{' '}
+        {UNRELEASED.length === 1 ? 'it' : 'them'} under{' '}
+        <code>dist/docs/{adcp.version}/protocol/</code>, linking request and response schemas at{' '}
+        <code>/schemas/{adcp.version}/protocol/</code> that the {adcp.version} schema tree does not
+        contain, so those links resolve to nothing.
       </p>
     )
   }
 
-  <h2>What are the two AdCP protocol layers?</h2>
+  <h2>Protocol layers</h2>
 
   <p>
-    AdCP separates operations that run while a campaign is being planned from the two that run while
-    an impression is being decided. The separation is structural rather than stylistic: the
-    serve-time layer is built so that content context and user identity never arrive in the same
-    request.
+    A layer is a grouping of schema groups declared in <code>protocol_layers</code> in the release's{
+      ' '
+    }
+    <code>index.json</code>. Layer membership is not an input to conformance: Required and
+    Conditional rows are keyed by role.
   </p>
 
   <dl>
@@ -166,52 +340,40 @@ const jsonLd = graph([
     }
   </dl>
 
-  <h2>How are the {totalOps} operations organised?</h2>
+  <p>
+    The layer list does not cover the registry. It names <code>brand</code>, a schema group that
+    holds no operations, and omits <code>protocol</code>, <code>brand-protocol</code> and <code
+      >compliance</code
+    >, which hold {unlayeredOps} operations between them. <code>get_adcp_capabilities</code> is registered
+    under <code>protocol</code>, which the layer list does not name.
+  </p>
 
-  <table>
-    <caption>AdCP {adcp.version} — operations per area</caption>
-    <thead>
-      <tr>
-        <th scope="col">Area</th>
-        <th scope="col">Operations</th>
-        <th scope="col">What it covers</th>
-      </tr>
-    </thead>
-    <tbody>
-      {
-        areas.map((area) => (
-          <tr>
-            <th scope="row">
-              <a href={`/areas/${area.key}/`}>{area.title}</a>
-            </th>
-            <td>{tasksForArea(area.key).length}</td>
-            <td>{area.summary}</td>
-          </tr>
-        ))
-      }
-    </tbody>
-  </table>
+  <p>
+    The serve-time layer is {serveTimeOps} operations, <code>context_match</code> and <code
+      >identity_match</code
+    >. Their request schemas are the most tightly constrained in the registry; the MUST NOT rules
+    and the correlation gap between them are set out on the <a href="/areas/trusted-match/"
+      >trusted match area page</a
+    >.
+  </p>
 
-  {
-    areas.map((area) => (
-      <>
-        <h3 id={`area-${area.key}`}>
-          <a href={`/areas/${area.key}/`}>{area.title}</a>
-        </h3>
-        <ul class="task-list">
-          {tasksForArea(area.key).map((task) => (
-            <li>
-              <a class="task-name" href={operationUrl(task)}>
-                <code>{task.name}</code>
-              </a>
-              <br />
-              {task.summary}
-            </li>
-          ))}
-        </ul>
-      </>
-    ))
-  }
+  <h2>The shared response envelope</h2>
+
+  <p>
+    Response schemas compose <code>core/protocol-envelope.json</code>, so {envelopeFields} of the rows
+    in an operation's response table are shared with every other operation: <code>status</code>, <code
+      >task_id</code
+    >, <code>context</code>, <code>push_notification_config</code> and the rest. The envelope also carries
+    asynchrony: <code>status</code> can come back <code>submitted</code>, <code>working</code> or <code
+      >input-required</code
+    > on any call, and seven operations ship a dedicated async-arm schema for that case — <code
+      >get_products</code
+    >, <code>create_media_buy</code>, <code>update_media_buy</code>, <code>build_creative</code>, <code
+      >get_signals</code
+    >, <code>sync_creatives</code> and <code>sync_catalogs</code>. Everywhere else the unfinished
+    case is handled against the generic envelope. <a href="/schemas/">The schema registry page</a> covers
+    the envelope files themselves.
+  </p>
 
   <FaqBlock entries={faq} />
 
@@ -220,16 +382,19 @@ const jsonLd = graph([
     <li>
       <a href={`${HUB}/protocols/adcp-vs-aamp/`} rel="noopener"
         >AdCP compared with IAB Tech Lab's AAMP</a
-      > — the two stacks side by side
+      >
     </li>
     <li>
-      <a href="https://aampexplorer.noetis.dev/" rel="noopener">AAMP Explorer</a> — the same treatment
-      for the other camp
+      <a href="https://aampexplorer.com/" rel="noopener">AAMP Explorer</a>. Field reference for IAB
+      Tech Lab's AAMP schemas.
     </li>
-    <li><a href="/schemas/">The AdCP schema registry</a> — how the schemas are organised</li>
     <li>
-      <a href="/discovery/">Discovery files</a> — <code>adagents.json</code> and
-      <code>brand.json</code>
+      <a href="/schemas/">The AdCP schema registry</a>. How schemas are indexed, referenced and
+      resolved.
+    </li>
+    <li>
+      <a href="/discovery/">Discovery files</a>. <code>adagents.json</code> and
+      <code>brand.json</code> are the two well-known files AdCP expects a domain to publish.
     </li>
   </ul>
 

@@ -31,7 +31,7 @@ export function GET(context: APIContext) {
 
   return rss({
     title: `AdCP Explorer — Ad Context Protocol ${adcp.version}`,
-    description: `Field-level reference for all ${adcp.tasks.length} AdCP operations, generated from the published schema registry.`,
+    description: `Field-level reference for all ${adcp.tasks.length} operations in Ad Context Protocol release ${adcp.version}, by protocol area.`,
     site: context.site!,
     items,
     customData: '<language>en-us</language>',

@@ -621,7 +621,7 @@ const spec = {
     'The expansion above is the one used by the AAMP hub README. Two other expansions appear elsewhere in the same corpus.',
   version: 'per-repository; see components',
   governance: 'IAB Tech Lab',
-  license: 'Apache-2.0 (per repository)',
+  license: 'Mixed — Apache-2.0, AGPL-3.0, CC BY; one repo ships no licence file',
   homepage: 'https://iabtechlab.com/standards/aamp-agentic-advertising-management-protocols/',
   repository: REPOS.AAMP.gh,
   summary:

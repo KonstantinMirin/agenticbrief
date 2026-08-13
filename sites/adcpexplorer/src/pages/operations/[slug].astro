@@ -23,7 +23,15 @@ import {
   breadcrumbNode,
   faqPageNode,
 } from '@agenticbrief/seo/schema'
-import { BASE, HUB, featuredTasks, areaTitle, tasksForArea, operationUrl } from '../../lib/site'
+import {
+  BASE,
+  HUB,
+  featuredTasks,
+  areaTitle,
+  tasksForArea,
+  operationUrl,
+  LAST_UPDATED,
+} from '../../lib/site'
 
 export function getStaticPaths() {
   return featuredTasks().map((task) => ({ params: { slug: task.slug }, props: { task } }))
@@ -34,12 +42,86 @@ const path = `/operations/${task.slug}/`
 const url = `${BASE}${path}`
 const area = areaTitle(task.area)
 
-const title = `${task.name} — AdCP ${area} operation reference`
-const description = `Field-level reference for the AdCP ${task.name} operation in release ${adcp.version}: ${task.requestFields.length} request fields, ${task.responseFields.length} response fields, generated from the published schema.`
-
-const answer = `${task.name} is an operation in the ${area} area of the Ad Context Protocol. ${task.summary}`
-
 const requiredRequest = task.requestFields.filter((f) => f.required)
+
+/**
+ * The shared response envelope, derived rather than hand-listed.
+ *
+ * A response field name that appears in 40+ of the registered schemas is
+ * envelope, and the gap either side of that line is wide: the envelope names
+ * appear 62-64 times, the next most common response field name appears 32.
+ * Defined upstream in core/version-envelope.json and core/protocol-envelope.json.
+ */
+const responseFieldFrequency = new Map<string, number>()
+for (const t of adcp.tasks) {
+  for (const f of t.responseFields) {
+    responseFieldFrequency.set(f.name, (responseFieldFrequency.get(f.name) ?? 0) + 1)
+  }
+}
+const envelopeNames = new Set(
+  [...responseFieldFrequency.entries()].filter(([, n]) => n >= 40).map(([name]) => name),
+)
+const carriesFullEnvelope = adcp.tasks.filter((t) =>
+  [...envelopeNames].every((n) => t.responseFields.some((f) => f.name === n)),
+).length
+const envelopeOnlyOps = adcp.tasks.filter((t) =>
+  t.responseFields.every((f) => envelopeNames.has(f.name)),
+).length
+const bodyFields = task.responseFields.filter((f) => !envelopeNames.has(f.name))
+const requiredResponse = task.responseFields.filter((f) => f.required)
+
+const requiredRequestNames = requiredRequest.map((f) => f.name).join(', ')
+const requiredRequestSentence =
+  requiredRequest.length === 0
+    ? `The request schema declares no required array, so none of the ${task.requestFields.length} request fields carries a top-level required flag.`
+    : requiredRequest.length === 1
+      ? `One of the ${task.requestFields.length} request fields carries a top-level required flag: ${requiredRequestNames}.`
+      : `${requiredRequest.length} of the ${task.requestFields.length} request fields carry a top-level required flag: ${requiredRequestNames}.`
+
+const mutatingOps = adcp.tasks.filter((t) => t.mutatesState).length
+const requiresIdempotencyKey = task.requestFields.some(
+  (f) => f.name === 'idempotency_key' && f.required,
+)
+const mutationSentence = task.mutatesState
+  ? `${task.name} writes state. Its request schema is one of the ${mutatingOps} in the ${adcp.tasks.length}-entry registry flagged x-mutates-state: true.${
+      requiresIdempotencyKey
+        ? ' A repeated call is deduplicated only by idempotency_key, which this request requires.'
+        : ' Its request schema does not require idempotency_key.'
+    }`
+  : `${task.name} reads. ${mutatingOps} of the ${adcp.tasks.length} registered operations are flagged x-mutates-state and its request schema is not one of them, so repeating the call is side-effect free.`
+
+const firstBodyFields = bodyFields.slice(0, 3).map((f) => f.name)
+const firstBodyFieldList =
+  firstBodyFields.length > 1
+    ? `${firstBodyFields.slice(0, -1).join(', ')} and ${firstBodyFields[firstBodyFields.length - 1]}`
+    : firstBodyFields[0]
+
+const bodyFieldSentence =
+  bodyFields.length === 0
+    ? `Not one of the ${task.responseFields.length} rows below belongs to ${task.name} itself.`
+    : bodyFields.length === 1
+      ? `Just one of the ${task.responseFields.length} rows below belongs to ${task.name} itself: ${firstBodyFieldList}.`
+      : bodyFields.length <= 3
+        ? `Only ${bodyFields.length} of the ${task.responseFields.length} rows below belong to ${task.name} itself: ${firstBodyFieldList}.`
+        : `Only ${bodyFields.length} of the ${task.responseFields.length} rows below belong to ${task.name} itself, beginning with ${firstBodyFieldList}.`
+
+const requiredResponseSentence =
+  requiredResponse.length === 0
+    ? 'No response field is marked required.'
+    : requiredResponse.length === 1
+      ? `One field in the whole response is marked required: ${requiredResponse[0].name}.`
+      : `${requiredResponse.length} fields in the whole response are marked required: ${requiredResponse.map((f) => f.name).join(', ')}.`
+
+/** Label for a code sample, taken from the language the docs tree tagged it with. */
+const sampleKind = (language: string) =>
+  language === 'json' ? 'wire payload' : `${language} SDK or CLI call`
+
+const title = `${task.name} — AdCP ${adcp.version} ${area} operation reference`
+const description = `Field reference for the AdCP ${task.name} operation in release ${adcp.version}: ${task.requestFields.length} request fields, ${task.responseFields.length} response fields, ${requiredRequest.length} of them required, with the shared protocol envelope marked.`
+
+const answer = `${task.name} is an operation in the ${area} area of AdCP ${adcp.version}${
+  task.status === 'experimental' ? ', flagged x-status: experimental in its own schema' : ''
+}. ${task.summary}`
 
 const faq = [
   {
@@ -47,15 +129,15 @@ const faq = [
     answer: task.summary,
   },
   {
-    question: `Which fields are required in a ${task.name} request?`,
+    question: `Which fields does a ${task.name} request require?`,
     answer:
       requiredRequest.length > 0
-        ? `${requiredRequest.length} of the ${task.requestFields.length} request fields are required: ${requiredRequest.map((f) => f.name).join(', ')}.`
-        : `The published ${adcp.version} schema marks no request field as required at the top level; requirements are expressed inside the referenced sub-objects.`,
+        ? `${requiredRequestSentence} AdCP also constrains requests with top-level if/then, anyOf, oneOf and dependencies blocks that no required array captures, so an unmarked field can still be mandatory in the mode being called.`
+        : `The published ${adcp.version} schema declares no required array on the ${task.name} request. Constraints can still apply: a top-level if, anyOf, oneOf or dependencies rule fires in one mode only, and a flat field table cannot render it.`,
   },
   {
-    question: `Which AdCP version defines ${task.name}?`,
-    answer: `This reference is generated from AdCP ${adcp.version}, the current published stable release.`,
+    question: `Which AdCP version do these ${task.name} field tables describe?`,
+    answer: `AdCP ${adcp.version}, the current published release, last updated ${LAST_UPDATED}. The documentation tree is versioned separately from the schema tree in the same repository, so a doc page and a schema file can describe the same field differently.`,
   },
 ]
 
@@ -75,7 +157,7 @@ const jsonLd = graph([
     url,
     title,
     description,
-    datePublished: '2026-08-08',
+    datePublished: LAST_UPDATED,
     technical: true,
     proficiencyLevel: 'Expert',
     section: area,
@@ -97,7 +179,7 @@ const siblings = tasksForArea(task.area).filter((t) => t.name !== task.name)
   jsonLd={jsonLd}
   wide
   ogType="article"
-  publishDate={new Date('2026-08-08')}
+  publishDate={new Date(LAST_UPDATED)}
   keywords={[task.name, `adcp ${task.name}`, 'ad context protocol']}
 >
   <nav class="breadcrumbs" aria-label="Breadcrumb">
@@ -113,23 +195,92 @@ const siblings = tasksForArea(task.area).filter((t) => t.name !== task.name)
 
   <AnswerBox answer={answer} />
 
-  <h2>What does <code>{task.name}</code> take?</h2>
+  <h2><code>{task.name}</code> request fields</h2>
+  <p>
+    The required column reflects the top-level <code>required</code> array only. {
+      requiredRequestSentence
+    } A top-level <code>if</code>, <code>anyOf</code>, <code>oneOf</code> or <code
+      >dependencies</code
+    > block can make an unmarked field mandatory in the mode being called, and a flat table cannot render
+    a rule that fires in one mode only. Those branches are visible in the request schema itself.
+  </p>
   <FieldTable fields={task.requestFields} caption={`${task.name} request`} />
 
-  <h2>What does <code>{task.name}</code> return?</h2>
+  <p>
+    {mutationSentence} AdCP's release notes describe <code>x-mutates-state</code> as a non-normative tooling
+    hint that agents do not validate, so it is the registry's classification of the operation rather than
+    a contract, and it is the only machine-readable answer in the registry to whether an operation is
+    safe to retry.
+  </p>
+
+  <h2><code>{task.name}</code> response fields</h2>
+  {
+    bodyFields.length === 0 && (
+      <p>
+        The response schema for <code>{task.name}</code> declares the envelope and keeps its result
+        in a top-level <code>oneOf</code>, <code>anyOf</code> or <code>if</code>, which a table of
+        flat rows cannot represent. The branch names are in the response schema. {envelopeOnlyOps}{' '}
+        of the {adcp.tasks.length} operations are shaped that way.
+      </p>
+    )
+  }
+  <p>
+    The first {envelopeNames.size} rows are the shared protocol envelope from <code
+      >core/version-envelope.json</code
+    > and <code>core/protocol-envelope.json</code>. {bodyFieldSentence}
+    {requiredResponseSentence}
+  </p>
   <FieldTable fields={task.responseFields} caption={`${task.name} response`} />
+
+  <h2>The shared protocol envelope</h2>
+  <p>
+    {carriesFullEnvelope} of AdCP's {adcp.tasks.length} registered operations carry every one of the {
+      envelopeNames.size
+    } envelope fields. <code>report_plan_outcome</code> and <code>check_governance</code> compose <code
+      >core/version-envelope.json</code
+    > only, so they carry the version pair and none of the task fields.
+  </p>
+  <p>
+    <code>status</code> resolves to <code>enums/task-status.json</code>, which admits nine values:
+    submitted, working, input-required, completed, canceled, failed, rejected, auth-required,
+    unknown. The envelope marks it required on every response, and a synchronous call emits <code
+      >completed</code
+    > rather than omitting it. When it returns submitted or working instead, <code>task_id</code> is the
+    polling handle and
+    <code>push_notification_config</code> is the webhook the agent echoes back to confirm the callback.
+    Webhooks are A2A and REST only: MCP sends progress notifications and defines no webhook.
+  </p>
+  <p>
+    <code>payload</code> appears in the response field table typed <code>object</code>. <code
+      >core/protocol-envelope.json</code
+    > describes it as a documentary construct and states that it is not a required wire field. Body fields
+    are siblings of the envelope fields: on MCP at the root of the tool response, on A2A in <code
+      >task.artifacts[0].parts[].DataPart</code
+    >, on REST at the root of the JSON body. An accessor that reads <code>response.payload</code> finds
+    nothing there.
+  </p>
+
+  <h2>Field lists are not published over the wire</h2>
+  <p>
+    AdCP's integration guide, <code>docs/protocol/calling-an-agent.mdx</code>, states that its MCP
+    servers no longer publish per-tool parameter schemas: a <code>tools/list</code> call returns an empty
+    properties object for every tool, and the guide directs clients not to infer shape from it. A client
+    author reads the schema registry instead of the tool list.
+  </p>
 
   {
     task.examples.length > 0 && (
       <>
-        <h2>Worked examples</h2>
+        <h2>
+          Example <code>{task.name}</code> calls
+        </h2>
         <p>
-          Taken verbatim from the AdCP documentation for this operation. They are reproduced rather
-          than rewritten so that they stay checkable against the source.
+          The field tables above come from the {adcp.version} schema release and these blocks come
+          from the documentation tree, which is versioned separately, so the two can disagree.
         </p>
         {task.examples.map((ex) => (
           <CodeSample
-            title={ex.title}
+            title={`${ex.title} — ${sampleKind(ex.language)}`}
             language={ex.language}
             code={ex.code}
             sourceUrl={task.provenance.sourceUrl}
@@ -149,8 +300,6 @@ const siblings = tasksForArea(task.area).filter((t) => t.name !== task.name)
           <a href={operationUrl(t)}>
             <code>{t.name}</code>
           </a>
-          <br />
-          {t.summary}
         </li>
       ))
     }
@@ -159,7 +308,9 @@ const siblings = tasksForArea(task.area).filter((t) => t.name !== task.name)
   <h2>Related</h2>
   <ul>
     <li><a href={`/areas/${task.area}/`}>The full {area} reference</a></li>
-    <li><a href="/">All {adcp.tasks.length} AdCP operations</a></li>
+    <li>
+      <a href="/">All {adcp.tasks.length} entries in the AdCP {adcp.version} registry</a>
+    </li>
     <li>
       <a href={`${HUB}/protocols/adcp-vs-aamp/`} rel="noopener"
         >Does AAMP have an equivalent operation?</a

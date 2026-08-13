@@ -1,6 +1,6 @@
 ---
 import { SITES, SITE_KEYS, siteUrl, type SiteKey } from './sites'
-import { org } from './org'
+import { org, author, POSTINDUSTRIA } from './org'
 
 export interface Props {
   site: SiteKey
@@ -41,7 +41,13 @@ const year = new Date().getFullYear()
     </div>
   </div>
   <div class="footer-legal">
-    <p>© {year} {org.name}. {org.legalNote}</p>
+    <p>
+      © {year}
+      {org.name}. Built by <a href={POSTINDUSTRIA} rel="noopener">{author.company.name}</a>, where {
+        author.name
+      } is {author.role}.
+    </p>
+    <p>{org.legalNote}</p>
     <p class="muted">{org.editorialPolicy}</p>
   </div>
 </footer>

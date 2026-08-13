@@ -14,7 +14,7 @@ import { sitemapConfig } from '@agenticbrief/seo/sitemap'
 //  - no partytown/analytics: nothing is loaded from a third party until the
 //    portfolio has an analytics decision of its own.
 export default defineConfig({
-  site: 'https://aampexplorer.noetis.dev',
+  site: 'https://aampexplorer.com',
   trailingSlash: 'ignore',
   build: { format: 'directory' },
   integrations: [mdx(), sitemap(sitemapConfig())],

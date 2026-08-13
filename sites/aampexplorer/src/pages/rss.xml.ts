@@ -13,7 +13,8 @@ export function GET(context: APIContext) {
     items: [
       {
         title: 'What does AAMP stand for?',
-        description: 'Four expansions of one acronym, all inside the same corpus.',
+        description:
+          'Agentic Advertising Management Protocols, and the other expansions of the acronym written into the same repositories.',
         link: '/what-does-aamp-stand-for/',
         pubDate,
       },

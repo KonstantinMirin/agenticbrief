@@ -1,0 +1,32 @@
+---
+import { getCollection, render } from 'astro:content'
+import DocPage from '@agenticbrief/shared-ui/DocPage.astro'
+import { publishedOnly } from '@agenticbrief/content-utils'
+import { BASE, EXPLICIT } from '../../lib/feed'
+
+// The guides collection on this site globs `brief-*` out of content/guides.
+// A few of those have hand-built routes of their own (spec/brief-vs-filters);
+// everything else lands here. The same EXPLICIT map drives pathFor(), so the
+// router, RSS and llms.txt cannot disagree about where a page lives.
+export async function getStaticPaths() {
+  const entries = publishedOnly(await getCollection('guides')).filter((e) => !(e.id in EXPLICIT))
+  return entries.map((entry) => ({ params: { slug: entry.id }, props: { entry } }))
+}
+
+const { entry } = Astro.props
+const { Content } = await render(entry)
+---
+
+<DocPage
+  site="briefgateway"
+  entry={entry}
+  path={`/guides/${entry.id}/`}
+  technical={false}
+  section="Guides"
+  breadcrumbs={[
+    { name: 'Brief Gateway', url: `${BASE}/` },
+    { name: entry.data.title, url: `${BASE}/guides/${entry.id}/` },
+  ]}
+>
+  <Content />
+</DocPage>

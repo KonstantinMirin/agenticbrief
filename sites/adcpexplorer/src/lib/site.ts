@@ -2,11 +2,11 @@
  * Site-local helpers for AdCP Explorer.
  *
  * The page tree deliberately does NOT put every one of the 64 operations on its
- * own page. Measured across the published 3.1.10 registry, the median operation
- * carries 25 request+response fields and much of that is the shared envelope,
- * so per-operation pages would be 64 near-identical documents differing by a
- * filter object. That is the thin-content pattern the strategy explicitly rules
- * out.
+ * own page. Re-measured across data/adcp-specs.json at the published 3.1.13
+ * registry, the median operation carries 25 request+response fields and much of
+ * that is the shared envelope, so per-operation pages would be 64
+ * near-identical documents differing by a filter object. That is the
+ * thin-content pattern the strategy explicitly rules out.
  *
  * Instead:
  *   - Area pages carry the full reference for every operation in that area,
@@ -96,3 +96,14 @@ export const UNRELEASED: string[] =
   (adcp as { unreleased?: { addedInMain?: string[] } }).unreleased?.addedInMain ?? []
 
 export const VERSION_LABEL = (adcp as { versionLabel?: string }).versionLabel ?? adcp.version
+
+/**
+ * The release date, narrowed to a string once.
+ *
+ * `lastUpdated` is optional on the parsed-spec type because the AAMP side has
+ * no release date to carry, so every page that fed it to `datePublished` or to
+ * `new Date()` failed `astro check` on `string | undefined`. The parser always
+ * writes it for AdCP; the fallback keeps the type honest rather than asserting
+ * it away, and an empty string renders as no date instead of "Invalid Date".
+ */
+export const LAST_UPDATED: string = adcp.lastUpdated ?? ''

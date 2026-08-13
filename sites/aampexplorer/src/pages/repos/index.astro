@@ -2,7 +2,8 @@
 import BaseLayout from '@agenticbrief/shared-ui/BaseLayout.astro'
 import AnswerBox from '@agenticbrief/shared-ui/AnswerBox.astro'
 import SpecSource from '@agenticbrief/shared-ui/SpecSource.astro'
-import { aamp } from '@agenticbrief/protocol-data'
+import FaqBlock from '@agenticbrief/shared-ui/FaqBlock.astro'
+import { aamp, adcp } from '@agenticbrief/protocol-data'
 import {
   graph,
   organizationNode,
@@ -11,15 +12,45 @@ import {
   webPageNode,
   articleNode,
   breadcrumbNode,
+  faqPageNode,
 } from '@agenticbrief/seo/schema'
 import { BASE, MATURITY, componentsByMaturity } from '../../lib/site'
 
 const components = componentsByMaturity()
+const count = (level: string) => components.filter((c) => MATURITY[c.name]?.level === level).length
+const untagged = components.filter((c) => !c.version?.startsWith('v')).length
+
+function displayVersion(v: string | undefined): string {
+  if (!v) return 'untagged'
+  const tag = /^(v[\d.]+)/.exec(v)
+  if (tag) return tag[1]
+  return v.length === 7 || v.length === 8 ? 'untagged' : v
+}
 const path = '/repos/'
 const url = `${BASE}${path}`
-const title = 'Every AAMP component, and what each one actually defines'
-const description = `The ${components.length} repositories that make up IAB Tech Lab's AAMP, ranked by how much specification each actually contains rather than by billing order.`
-const answer = `AAMP is made of ${components.length} repositories. Three carry real specification, three carry partial or draft material, and two define nothing normative at all.`
+const title = 'AAMP repositories, ranked by what each one defines'
+const description = `The ${components.length} repositories behind IAB Tech Lab's AAMP, ranked by how much specification each one holds. ${count('substantial')} define schemas another implementer has to conform to. ${count('thin')} define nothing.`
+const answer = `AAMP is ${components.length} independently versioned IAB Tech Lab repositories rather than one protocol: ${count('substantial')} check in a contract another implementer has to match, ${count('partial')} check in part of one, ${count('thin')} define nothing, and none is stamped "AAMP 2.3".`
+
+const faq = [
+  {
+    question: 'How many repositories are in AAMP?',
+    answer: `${components.length}, of which seven hold code. The hub README names six and skips the one both agents actually pin: iab-agentic-primitives, at v0.5.0, on a byte-identical dependency line in buyer-agent/pyproject.toml:21 and seller-agent/pyproject.toml:37.`,
+  },
+  {
+    question: 'Which AAMP repository is the specification?',
+    answer:
+      'No single repository is the specification. agentic-rtb-framework ships Agentic_Real_Time_Framework_Version_1_0_FINAL.md and a protobuf contract; iab-agentic-primitives ships 48 JSON Schemas under an unreleased notice. The other six are reference implementations, drafts and a README.',
+  },
+  {
+    question: 'Where is the AAMP source code?',
+    answer: `Under github.com/IABTechLab, spread across ${components.length} repositories that share no version and no release. The repository named AAMP holds a 270-word README; the code is in the other seven, plus agent-registry, which is not one of the ${components.length}.`,
+  },
+  {
+    question: 'Is AAMP 2.3 a version of these repositories?',
+    answer: `No. The only 2.3 in the corpus is a v2.3.0 tag the buyer and seller agents each cut on 22 July 2026, numbering two repositories out of ${components.length}; the seller agent has shipped five releases since and is at v2.4.1. Nothing carries a framework-level AAMP version string.`,
+  },
+]
 
 const jsonLd = graph([
   organizationNode(),
@@ -38,6 +69,7 @@ const jsonLd = graph([
     technical: true,
     keywords: ['aamp components', 'aamp repositories'],
   }),
+  faqPageNode(url, faq),
 ])
 ---
 
@@ -54,32 +86,197 @@ const jsonLd = graph([
   <nav class="breadcrumbs" aria-label="Breadcrumb">
     <ol><li><a href="/">AAMP Explorer</a></li><li><span>Components</span></li></ol>
   </nav>
-  <h1>AAMP components</h1>
+  <h1>AAMP repositories, ranked by what they define</h1>
   <AnswerBox answer={answer} />
   <p>
-    Ordered by substance, not by the order the hub README lists them. A component that defines
-    nothing is listed last and labelled, rather than given equal billing.
+    AAMP is Agentic Advertising Management Protocols, in the hub README's own expansion of it. The
+    scope is a buyer's software and a seller's software trading media with nobody in the loop:
+    discovery, price negotiation, booking, mutation of the real-time bidstream. It arrives as {
+      components.length
+    } repositories that share no version and no type system, not as one specification.
   </p>
-  <ul class="task-list">
-    {
-      components.map((c) => (
-        <li>
-          <a class="task-name" href={`/repos/${c.name}/`}>
-            {c.name}
-          </a>{' '}
-          <span class="badge">{MATURITY[c.name]?.level ?? 'unassessed'}</span>{' '}
-          <code>{c.version}</code>
-          <br />
-          {MATURITY[c.name]?.note ?? c.purpose}
-          {!c.listedInHub && (
-            <>
-              <br />
-              <span class="muted">Not listed in the AAMP hub README.</span>
-            </>
-          )}
-        </li>
-      ))
-    }
+  <h2>Where to start, by what is being built</h2>
+  <figure class="comparison">
+    <table>
+      <caption>Where to start in AAMP, by implementation target</caption>
+      <thead>
+        <tr>
+          <th scope="col">Implementation target</th>
+          <th scope="col">Read</th>
+          <th scope="col">Why</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th scope="row">An agent that talks to someone else's agent</th>
+          <td><a href="/repos/iab-agentic-primitives/"><code>iab-agentic-primitives</code></a></td>
+          <td>The contract both reference agents import, under an unreleased warning.</td>
+        </tr>
+        <tr>
+          <th scope="row">Anything in the bidstream</th>
+          <td><a href="/repos/agentic-rtb-framework/"><code>agentic-rtb-framework</code></a></td>
+          <td>Tagged v1.0 and marked FINAL, with Go and Rust implementations to check against.</td>
+        </tr>
+        <tr>
+          <th scope="row">An assessment of a vendor's claim</th>
+          <td><a href="/repos/seller-agent/"><code>seller-agent</code></a></td>
+          <td
+            >Its OpenAPI is the fullest picture of what a working agent exposes, and unlike the
+            guides it does not contradict itself.</td
+          >
+        </tr>
+        <tr>
+          <th scope="row">An RFP that says "AAMP support"</th>
+          <td><a href="/versions/">The version matrix</a></td>
+          <td
+            >A claim resolves to a named repository at a named tag or to nothing: {untagged} of the {
+              components.length
+            } repositories have no tag to name.</td
+          >
+        </tr>
+        <tr>
+          <th scope="row">Audience or signal work</th>
+          <td><a href="/repos/agentic-audiences/"><code>agentic-audiences</code></a></td>
+          <td
+            >One vendor's draft, untagged, with the schema that would connect it to the rest of AAMP
+            checked in at zero bytes.</td
+          >
+        </tr>
+      </tbody>
+    </table>
+  </figure>
+
+  <p>
+    The hub README lists six of the {components.length} and numbers them, and its ordering does not correspond
+    to what the repositories contain: it ranks a mock server first, as repository 1, Core Orchestration,
+    and leaves out the wire contract both reference agents pin.
+  </p>
+  <p>
+    <code>iab-agentic-primitives</code> is the wire: the shared object schemas and the request/response
+    protocol. <code>buyer-agent</code> and <code>seller-agent</code> sit at either end of that wire, demand
+    side and supply side, and both are running applications rather than documents.
+    <code>agentic-rtb-framework</code> (ARTF) is a separate track. It operates in the bidstream, the serve-time
+    auction traffic, not in the control plane where deals are negotiated and booked.
+    <code>agentic-audiences</code> and <code>agentic-direct</code> are side proposals: an embedding-exchange
+    draft from one vendor, and a demo wrapping IAB's pre-agentic object models (OpenDirect for direct
+    deals, AdCOM for the ad objects, OpenRTB for bidding).
+  </p>
+  <p>
+    The registry all of this depends on to find an agent is in none of them. It lives in
+    <code>agent-registry</code>, a repository outside AAMP, and the corpus does not agree on where
+    it is hosted; the two default hostnames are on <a href="/">the homepage</a>.
+  </p>
+
+  <h2 id="ranking-test">
+    The ranking test: what a repository obliges another implementer to match
+  </h2>
+  <p>
+    The test is whether a repository defines messages another party sends, rather than only what it
+    receives. A versioned JSON Schema, an OpenAPI document or a protobuf contract counts; client
+    code and README prose do not. Substantial means the repository defines a contract, partial means
+    it defines part of one, and thin means it defines nothing another implementation could conform
+    to. Path counts inform the grade but do not determine it.
+  </p>
+  <p>
+    The two reference agents fall either side of that line on their OpenAPI documents. The seller
+    agent's 74 paths, carrying 87 operations, describe the whole negotiation round trip: proposals,
+    counters, quotes, rate cards, change requests, so the document functions as the specification
+    for the buyer side. The buyer agent's 13 paths, carrying 14 operations, describe only what it
+    accepts: bookings, product search, reports, health. None of them is a message to a seller.
+  </p>
+
+  <figure class="comparison">
+    <table>
+      <caption
+        >All {components.length} AAMP repositories on 12 August 2026, ordered by how much specification
+        each one carries. Untagged means the repository has no git tag and its only version is a commit
+        SHA.</caption
+      >
+      <thead>
+        <tr>
+          <th scope="col">Repository</th>
+          <th scope="col">Version</th>
+          <th scope="col">Kind</th>
+          <th scope="col">Substance</th>
+          <th scope="col">What it defines</th>
+        </tr>
+      </thead>
+      <tbody>
+        {
+          components.map((c) => (
+            <tr>
+              <th scope="row">
+                <a href={`/repos/${c.name}/`}>{c.name}</a>
+              </th>
+              <td>
+                <code>{displayVersion(c.version)}</code>
+              </td>
+              <td>{c.kind.replace(/-/g, ' ')}</td>
+              <td>
+                <span class="badge">{MATURITY[c.name]?.level ?? 'unassessed'}</span>
+              </td>
+              <td>
+                {MATURITY[c.name]?.note ?? c.purpose}
+                {!c.listedInHub && ' Not listed in the AAMP hub README.'}
+              </td>
+            </tr>
+          ))
+        }
+      </tbody>
+    </table>
+  </figure>
+
+  <p>
+    The oldest tag anywhere here was cut in July 2026, and <code>iab-agentic-primitives</code> carries
+    the shape that goes with that age: a versioned schema set under an unreleased warning, with reference
+    code running ahead of the document it implements. In <code>agentic-audiences</code> the corresponding
+    file, <code>specs/v1.0/schema/agent_interface.schema.json</code>, is checked in at zero bytes.
+  </p>
+
+  <h2>Conformance</h2>
+  <p>
+    <code>iab-agentic-primitives</code>, the repository whose README says it is not released, ships
+    the only conformance suite in the corpus: 46 golden fixtures under <code>spec/fixtures/</code>,
+    canonical payloads that its own <code>spec/README.md</code> says every implementation must round-trip,
+    and a runner, <code>python -m iab_agentic_primitives.conformance</code>, which exits non-zero
+    with a gap report when a check fails.
+  </p>
+  <p>
+    The runner's docstring describes itself as the command both agent repositories call in CI.
+    Neither <code>buyer-agent/.github/workflows/</code> nor
+    <code>seller-agent/.github/workflows/</code> mentions conformance, and no Python file in either repository
+    imports the package, so nothing in the corpus runs it. Each agent carries a local
+    <code>test_opendirect_wire_conformance.py</code> instead, which checks one implementation against
+    its own reading. ARTF, the only repository here tagged FINAL, has no vectors at all, and the word
+    conformance appears nowhere in it.
+  </p>
+
+  <h2>The AAMP 2.3 announcement</h2>
+  <p>
+    IAB Tech Lab announced AAMP 2.3 in July 2026, and no repository carries a framework-level AAMP
+    version string. The tag, manifest and changelog state of each repository is set out on <a
+      href="/versions/">the version matrix</a
+    >. AdCP, the other agentic buying protocol, answers the same question from a single file: <code
+      >dist/schemas/latest.json</code
+    >
+    reads {adcp.version}.
+  </p>
+
+  <FaqBlock entries={faq} />
+
+  <h2>Related</h2>
+  <ul>
+    <li>
+      <a href="/versions/">What version is AAMP?</a> works through the repositories one at a time.
+    </li>
+    <li>
+      <a href="/what-does-aamp-stand-for/">What does AAMP stand for?</a> Agentic Advertising Management
+      Protocols, and the other expansions in the corpus.
+    </li>
+    <li>
+      <a href="/negotiation/">Price negotiation in AAMP</a> — the quote, counter and booking sequence.
+    </li>
   </ul>
+
   <SpecSource provenance={aamp.provenance} />
 </BaseLayout>

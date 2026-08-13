@@ -1,101 +1,121 @@
 ---
-title: 'Package (AdCP) — the Line Item, and Why Only One Field Is Required'
-description: "A package is AdCP's line item: one product inside a media buy, with its own budget, pacing and creative. 29 fields, one required. Plus the AAMP false friend."
-answer: 'A package is one product inside an AdCP media buy, carrying its own budget, pacing, flight dates, format selection and creative assignments. AdCP 3.1.10 defines 29 fields on it and requires exactly one, package_id.'
+title: 'Package (AdCP): the line item'
+description: 'An AdCP package is one product inside a media buy, the equivalent of a line item, with its own budget, pacing, flight dates, format selection and creative assignments.'
+answer: 'An AdCP package is one product inside a media buy, the equivalent of a line item in an ad server, carrying its own budget, pacing, flight dates, format selection and creative assignments.'
 pubDate: 2026-08-09
+updatedDate: 2026-08-09
 term: 'Package'
 category: 'programmatic'
 cluster: 'gl-objects'
-alternateNames: ['line item', 'AdCP package']
+alternateNames: ['line item', 'AdCP package', 'package object']
 keywords:
   - 'adcp package vs line item'
   - 'adcp package'
+  - 'adcp package schema'
   - 'package definition advertising'
   - 'line item agentic advertising'
 citations:
-  - 'https://github.com/adcontextprotocol/adcp/blob/f1a35aba734befa809e1fa780ad77c7edd614e96/dist/schemas/3.1.10/core/package.json'
-  - 'https://github.com/adcontextprotocol/adcp/blob/f1a35aba734befa809e1fa780ad77c7edd614e96/dist/schemas/3.1.10/core/targeting.json'
-  - 'https://github.com/adcontextprotocol/adcp/blob/f1a35aba734befa809e1fa780ad77c7edd614e96/dist/schemas/3.1.10/core/canonical-format-kind.json'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/schemas/3.1.13/core/package.json'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/schemas/3.1.13/media-buy/package-request.json'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/schemas/3.1.13/media-buy/package-update.json'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/schemas/3.1.13/trusted-match/available-package.json'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/schemas/3.1.13/core/media-buy.json'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/schemas/3.1.13/core/targeting.json'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/schemas/3.1.13/core/canonical-format-kind.json'
+  - 'https://github.com/adcontextprotocol/adcp/blob/a0fd0b5f97e9297acbd4b234f27fb440bf22d31e/dist/schemas/3.1.13/enums/pacing.json'
   - 'https://docs.adcontextprotocol.org/docs/reference/glossary'
+  - 'https://docs.adcontextprotocol.org/docs/media-buy/task-reference/create_media_buy'
   - 'https://github.com/IABTechLab/iab-agentic-primitives/blob/2fc7029fb9eca801bc94586aec398906aa6af6c0/spec/jsonschema/Line.json'
   - 'https://github.com/IABTechLab/iab-agentic-primitives/blob/2fc7029fb9eca801bc94586aec398906aa6af6c0/spec/jsonschema/Package.json'
+  - 'https://github.com/IABTechLab/iab-agentic-primitives/blob/2fc7029fb9eca801bc94586aec398906aa6af6c0/spec/jsonschema/Assignment.json'
+  - 'https://github.com/IABTechLab/iab-agentic-primitives/blob/2fc7029fb9eca801bc94586aec398906aa6af6c0/spec/jsonschema/events/event_type.values.json'
+  - 'https://github.com/IABTechLab/agentic-direct/blob/915bda98f4de986aa0bbafe1d64df52fae974e62/opendirect.json'
 related:
+  - '/media-buying/'
   - '/media-buying/media-buy/'
   - '/media-buying/product/'
-  - 'https://adcpexplorer.noetis.dev/areas/media-buy/'
-  - 'https://agenticadlab.noetis.dev/protocols/adcp-vs-aamp/'
-seeAlso: ['media-buy', 'product']
+  - '/concepts/adcp-vs-aamp-terminology/'
+  - 'https://adcpexplorer.com/operations/create-media-buy/'
+  - 'https://agenticadlab.com/protocols/adcp-vs-aamp/'
+seeAlso: ['media-buy', 'product', 'opendirect', 'audience-vs-signal', 'trusted-match-protocol']
 reviewState: cto-reviewed
 ---
 
-## What is a package in AdCP?
+A package in AdCP is one product inside a [media buy](/media-buying/media-buy/), and it is what other ad systems call a line item. `dist/schemas/3.1.13/core/package.json` describes itself in one line: "A specific product within a media buy (line item)". Each package names a single [product](/media-buying/product/) and carries its own budget, pacing, flight dates, format selection, targeting overlay and creative assignments, so a campaign running three products is one buy holding three packages.
 
-A package is one product bought inside one media buy. The schema at `/schemas/3.1.10/core/package.json` summarises it as "A specific product within a media buy (line item)", and AdCP's own glossary is blunter still: a line item is "the basic unit of inventory in ad servers like Google Ad Manager, represented as packages in AdCP".
+## What a package carries
 
-So the answer to the question everyone asks first is yes. An AdCP package is the line item. The name changed, the concept did not.
+| Group             | Fields                                                                                                                            | Note                                                                                                                             |
+| ----------------- | --------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| Identity          | `package_id`, `product_id`                                                                                                        | Only `package_id` is required                                                                                                    |
+| Money             | `budget`, `pricing_option_id`, `bid_price`, `price_breakdown`, `impressions`                                                      | `bid_price` is "the exact bid/price to honor unless the selected pricing option has max_bid=true", in which case it is a ceiling |
+| Pacing and flight | `pacing`, `start_time`, `end_time`, `paused`, `canceled`, `cancellation`                                                          | `pacing` is `even`, `asap` or `front_loaded`, and `even` is the documented default                                               |
+| Creative          | `format_ids`, `format_option_refs`, `format_kind`, `params`, `creative_assignments`, `format_ids_to_provide`, `creative_deadline` | Three selectors may co-exist; precedence is defined in prose, not in the schema                                                  |
+| Targeting         | `targeting_overlay`, `catalogs`                                                                                                   | Restriction overlays only                                                                                                        |
+| Commitments       | `measurement_terms`, `performance_standards`, `committed_metrics`, `optimization_goals`                                           | `committed_metrics` is "the binding reporting contract for this package"                                                         |
+| Bookkeeping       | `agency_estimate_number`, `context`, `ext`                                                                                        |                                                                                                                                  |
 
-A package carries 29 properties in AdCP 3.1.10. Exactly one of them is required: `package_id`.
+Three of those fields decide what the package spends. `budget` is a plain number in the media buy's currency, `pacing` sets how it is spent across the flight, and `bid_price` sets the unit price — fixed, unless the selected pricing option carries `max_bid=true`, in which case the same number is a ceiling.
 
-## Why does a package require only one field?
+## Targeting is an overlay, not the buy
 
-Because a package is created by reference, not by declaration. The buyer names a `product_id`, and the seller fills in everything the product already implies: pricing, formats, measurement terms, allowed actions. The package schema describes the shape of a package that has been returned by a seller, not a form the buyer has to complete.
+`core/targeting.json` states the division: "Optional restriction overlays for media buys. Most targeting should be expressed in the brief and handled by the publisher." The buyer describes the audience in the brief, the seller selects the inventory, and the package layer only narrows what the seller selected. Its 28 properties, none required, are functional restrictions: geography, age verification, device platform, language, keyword targeting.
 
-That has a practical consequence. JSON Schema validation will accept a package that is nothing but an ID, so validity tells a buyer agent almost nothing about whether the package is usable. Every meaningful precondition — did the seller echo the pricing option I selected, did it accept my format, did it commit to the metrics I asked for — has to be checked in application code.
+Three are marked `deprecated: true`: `axe_include_segment`, `axe_exclude_segment` and `signal_targeting`, whose replacement `signal_targeting_groups` is where grouped include and exclude composition moved. `audience_include` and `audience_exclude` take IDs minted by `sync_audiences` on the same seller account, and those IDs do not travel to another seller — the practical half of the [audience versus signal](/signals/audience-vs-signal/) distinction.
 
-## What are the main package fields?
+## How a package is created
 
-| Field group       | Fields                                                                                                                            | Notes                                                                                                            |
-| ----------------- | --------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
-| Identity          | `package_id`, `product_id`                                                                                                        | Only `package_id` is required                                                                                    |
-| Money             | `budget`, `pricing_option_id`, `bid_price`, `price_breakdown`, `impressions`                                                      | `bid_price` is the exact price to honour unless the pricing option sets `max_bid`, in which case it is a ceiling |
-| Pacing and flight | `pacing`, `start_time`, `end_time`, `paused`, `canceled`, `cancellation`                                                          | `pacing` is a three-value enum                                                                                   |
-| Creative          | `format_ids`, `format_option_refs`, `format_kind`, `params`, `creative_assignments`, `format_ids_to_provide`, `creative_deadline` | Three parallel format paths, see below                                                                           |
-| Targeting         | `targeting_overlay`, `catalogs`                                                                                                   | Restriction overlays, not the primary targeting surface                                                          |
-| Commitments       | `measurement_terms`, `performance_standards`, `committed_metrics`, `optimization_goals`                                           | `committed_metrics` is "the binding reporting contract for this package"                                         |
-| Bookkeeping       | `agency_estimate_number`, `context`, `ext`                                                                                        |                                                                                                                  |
+AdCP 3.1.13 ships four package schemas with different required-field sets.
 
-`pacing` takes `even`, `asap` or `front_loaded`. Nothing else.
+| Schema                                 | Direction                | Properties              | Required         | Accepts unknown keys |
+| -------------------------------------- | ------------------------ | ----------------------- | ---------------- | -------------------- |
+| `core/package.json`                    | seller to buyer          | 29                      | 1 (`package_id`) | yes                  |
+| `media-buy/package-request.json`       | buyer to seller          | 24                      | 3                | yes                  |
+| `media-buy/package-update.json`        | buyer to seller          | 21, 7 of them forbidden | 1                | yes                  |
+| `trusted-match/available-package.json` | seller to match provider | 5                       | 3                | no                   |
 
-## Why does a package have three different ways to select a creative format?
+The one sent on `create_media_buy` is `package-request.json`, and three fields make a complete package:
 
-Because AdCP 3.1 introduced a new format model without removing the old one, and then added a shortcut. All three live on the package at once:
+```json
+{
+  "product_id": "prod_ctv_primetime",
+  "budget": 50000,
+  "pricing_option_id": "po_cpm_guaranteed"
+}
+```
 
-| Path             | Field                    | Schema description                                                                       |
-| ---------------- | ------------------------ | ---------------------------------------------------------------------------------------- |
-| Legacy           | `format_ids`             | "Legacy named-format IDs supplied for this package on create_media_buy"                  |
-| 3.1 structured   | `format_option_refs`     | "Structured 3.1+ format option references supplied for this package on create_media_buy" |
-| Direct canonical | `format_kind` + `params` | "Direct canonical selector supplied for this package on create_media_buy"                |
+A package is created by reference: the buyer names a product and the seller fills in whatever that product already implies — pricing, formats, measurement terms, allowed actions. The request schema has no `package_id` property at all, because the seller mints the ID and returns it on the 29-property `core/package.json` object, which a buyer reads and never constructs.
 
-`format_kind` draws from a 13-value enum: `image`, `html5`, `display_tag`, `image_carousel`, `video_hosted`, `video_vast`, `audio_hosted`, `audio_daast`, `sponsored_placement`, `native_in_feed`, `responsive_creative`, `agent_placement`, `custom`.
+`required` is not the whole obligation. `product_id` sits outside `required`, but its description carries a MUST: "sellers MUST echo the request package's product_id on every response package object that represents that requested package". One level up, `core/media-buy.json` lists `packages` in `required` but sets no `minItems`, so a media buy with zero packages validates clean.
 
-None of the three is required, and the schema does not encode an exclusivity rule between them at the package level. A buyer agent that populates two of them is producing a schema-valid package with an ambiguous meaning.
+`update_media_buy` uses both request shapes in a single payload. Existing packages go through `packages[]` as `package-update` objects, new ones through `new_packages[]` as full `package-request` objects. A package added mid-flight is a create, so its immutable fields are set then and freeze from that point.
 
-## What is targeting_overlay, and why is it called an overlay?
+`available-package.json` has five properties and is the only package object in the registry that rejects unknown keys. It is synced to [Trusted Match](/realtime/trusted-match-protocol/) providers, AdCP's serve-time layer, when the buy is created, so a match provider knows which packages exist on it; nothing sends it per request.
 
-Because in AdCP, targeting is mostly not the buyer's job. The `targeting.json` schema opens by saying so: "Most targeting should be expressed in the brief and handled by the publisher. These fields are for functional restrictions."
+## Immutable fields after create
 
-The overlay exists for constraints that are functional rather than strategic: geographic restriction for regulatory or test reasons, age restriction for alcohol and gambling, device platform for app compatibility, language, keyword targeting on search and retail media surfaces. It also carries `audience_include` and `audience_exclude`, which reference first-party CRM audiences uploaded through `sync_audiences` on the same seller account.
+`package-update.json` has a root-level `not.anyOf` that rejects any payload containing `product_id`, `format_ids`, `format_option_refs`, `format_kind`, `params`, `capability_ids` or `pricing_option_id`. Its own description calls them "fully-immutable fields" and says the rule is "schema-enforced via the `not` constraint at the root of this object".
 
-Two deprecated fields still sit in that overlay: `axe_include_segment` and `axe_exclude_segment`, both marked "Deprecated: Use TMP provider fields instead".
+Product, pricing option and every format selector are therefore fixed at create. Changing the creative format on a live package means cancelling it and creating a replacement, which the seller mints as a new package under a new `package_id`. One rule in that description never made it into the constraint: `committed_metrics` is append-only, and sellers must reject edits to existing entries.
 
-## What is the AAMP counterpart to a package?
+## Format selection
 
-This is the trap. AAMP has an object literally named `Package`, and it is not the counterpart.
+All three selectors can sit on one package and none is required: `format_ids` for "legacy named-format IDs", `format_option_refs` for "structured 3.1+ format option references", and `format_kind` plus `params` as the "direct canonical selector". `format_kind` draws from a 13-value enum: `image`, `html5`, `display_tag`, `image_carousel`, `video_hosted`, `video_vast`, `audio_hosted`, `audio_daast`, `sponsored_placement`, `native_in_feed`, `responsive_creative`, `agent_placement`, `custom`.
 
-| Object         | Source                                                | Summary in the schema                                          | Maps to   |
-| -------------- | ----------------------------------------------------- | -------------------------------------------------------------- | --------- |
-| AdCP `Package` | `dist/schemas/3.1.10/core/package.json`               | "A specific product within a media buy (line item)"            | post-sale |
-| AAMP `Line`    | `iab-agentic-primitives/spec/jsonschema/Line.json`    | "Individual product booking within an order (OpenDirect Line)" | post-sale |
-| AAMP `Package` | `iab-agentic-primitives/spec/jsonschema/Package.json` | "Curated inventory package for media kit discovery"            | pre-sale  |
+Precedence is defined in the [`create_media_buy` task reference](https://docs.adcontextprotocol.org/docs/media-buy/task-reference/create_media_buy): "Selector precedence is deterministic: `format_option_refs[]` wins when present; otherwise direct `format_kind`/`params` is used; otherwise the package defaults to all product options." Deprecated `format_ids[]` is interpreted only on a negotiated legacy compatibility path.
 
-An AdCP Package maps to an AAMP `Line`. An AAMP `Package` is a discovery-time construct closer to an AdCP Product — something a seller publishes in a media kit so buyers can find it, carrying `is_featured`, `seasonal_label`, `tags` and a `PackageLayer`.
+Because that rule lives in a task reference rather than in a constraint, two implementations reading `dist/schemas/` alone can disagree about which format was bought, and both payloads validate. The `pricing_option_id` that comes back carries no echo MUST and is not required on the response, so nothing ties it to the one that went out.
 
-The two post-sale objects also disagree about strictness in the opposite direction from what you would expect. AdCP's Package has 29 fields and requires 1. AAMP's Line has 13 fields and requires 8: `line_id`, `order_id`, `product_id`, `name`, `start_date`, `end_date`, `rate` and `quantity`. The richer schema is the more permissive one.
+## AAMP's Package and Line
 
-The reason is architectural rather than sloppy. AAMP's Line is an OpenDirect insertion-order line, filled in by a booking system. AdCP's Package is the seller's reply to a buyer that already agreed to a product, so most of its content is inherited rather than stated.
+AdCP's package maps to AAMP's `Line`, "Individual product booking within an order (OpenDirect Line)", which says of itself that it "is the only execution unit on the wire". The object AAMP calls `Package` is something else: a "Curated inventory package for media kit discovery. A curation layer on top of products", carrying `is_featured`, `seasonal_label`, `tags` and a `layer` enum of `synced`, `curated` or `dynamic` — a pre-sale object, closer to an AdCP product. The library is [unreleased](https://aampexplorer.com/versions/) and the AAMP hub README does not list it.
 
-## How is this term sourced?
+AdCP's package has 29 properties and 1 required. AAMP's `Line` has 13 properties and 8 required: `line_id`, `order_id`, `product_id`, `name`, `start_date`, `end_date`, `rate` and `quantity`. AdCP's package requires one field because the seller fills the rest from the referenced product; `Line` requires eight because it is an [OpenDirect](/concepts/opendirect/) booking line that a booking system supplies.
 
-AdCP side: `dist/schemas/3.1.10/core/package.json`, `core/targeting.json` and `core/canonical-format-kind.json`, from `adcontextprotocol/adcp` at commit `f1a35ab`, release 3.1.10. Line item wording quoted from `docs/reference/glossary.mdx`.
+The two objects also diverge below the field names.
 
-AAMP side: `spec/jsonschema/Line.json` and `spec/jsonschema/Package.json` from `IABTechLab/iab-agentic-primitives` at commit `2fc7029`. That repository is marked "WORK IN PROGRESS — NOT YET RELEASED" by its own README and is absent from the AAMP hub README. AAMP terms on this site come from reference implementations, not from a ratified specification.
+- `Line.targeting` is `{"type": "object", "additionalProperties": true}`, nullable and defaulting to null, against AdCP's 28 typed properties.
+- `events/event_type.values.json` defines four pacing events — `pacing.snapshot_taken`, `pacing.deviation_detected` and two reallocation events — while no property named `pacing` exists anywhere in `spec/jsonschema/`.
+- Creative binding sits in a separate `Assignment` object. An AAMP buyer books the line, then makes a second call before anything can run; AdCP keeps `creative_assignments[]` on the package.
+
+The full crosswalk, object by object, is at [AdCP vs AAMP terminology](/concepts/adcp-vs-aamp-terminology/).

@@ -3,7 +3,7 @@ import { toFeedItems } from '@agenticbrief/content-utils/feeds'
 
 export const BASE = siteUrl('briefgateway')
 
-const EXPLICIT: Record<string, string> = {
+export const EXPLICIT: Record<string, string> = {
   'index-generator': '/',
   spec: '/spec/',
   'brief-vs-filters': '/spec/brief-vs-filters/',
@@ -11,8 +11,15 @@ const EXPLICIT: Record<string, string> = {
   'adcp-brief-vs-aamp-campaign-brief': '/compare/adcp-brief-vs-aamp-campaign-brief/',
 }
 
+/**
+ * Two collections share this function. The guides collection globs `brief-*`
+ * out of content/guides and renders under /guides/; the briefs collection holds
+ * worked examples and renders under /examples/. The prefix is the discriminator
+ * because it is also the glob, so the two cannot drift apart.
+ */
 export function pathFor(id: string): string {
-  return EXPLICIT[id] ?? `/examples/${id}/`
+  if (id in EXPLICIT) return EXPLICIT[id]
+  return id.startsWith('brief-') ? `/guides/${id}/` : `/examples/${id}/`
 }
 
 export async function feedPaths(getCollection: any, publishedOnly: any, byDateDesc: any) {
