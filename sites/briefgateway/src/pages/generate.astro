@@ -38,20 +38,21 @@ import {
 } from '@agenticbrief/seo/schema'
 import { analyze, FIELDS } from '@agenticbrief/brief-engine'
 import type { EngineAnalysis, FieldValue, Span } from '@agenticbrief/brief-engine'
+import { EXAMPLE_BRIEF } from '../lib/example-brief'
+import '../styles/briefgateway.css'
 
 const BASE = siteUrl('briefgateway')
 const PATH = '/generate/'
 
-/**
- * The canonical example. The same brief the engine's extractor suites are
- * written against, so what this page shows is what the tests assert.
+/*
+ * The canonical example — the same brief the engine's extractor suites are
+ * written against, so what this page shows is what the tests assert. It moved
+ * to `../lib/example-brief` when the homepage started printing the same
+ * paragraph and the same classification; see that file for why. The string
+ * itself is unchanged, and only this frontmatter reads it — the mirrored
+ * client renderer below takes its input from the textarea, so nothing about
+ * the two-copy arrangement changes.
  */
-const EXAMPLE_BRIEF =
-  'Q4 holiday campaign for a CPG snack brand. Channels: CTV plus digital display ' +
-  'and online video. Budget: $500,000 net. Market: United States. Target demo: ' +
-  'adults 25-54. Flight: November 1 - December 31, 2026. Goal: drive incremental ' +
-  'household penetration and retail sales lift. Requirements: premium CTV inventory, ' +
-  'brand safety controls, frequency cap 3 per week.'
 
 /**
  * The reference date for relative-date derivation ("next quarter"), read once,
@@ -464,57 +465,61 @@ const jsonLd = graph([
     seller will guess or drop.
   </p>
 
-  <section class="panel tool" aria-labelledby="h-input">
-    <h2 id="h-input">Paste the brief</h2>
-    <label class="input-label" for="brief-input">
-      Your campaign brief, in whatever prose you already write it in
-    </label>
-    <textarea
-      id="brief-input"
-      name="brief"
-      rows="8"
-      spellcheck="false"
-      aria-describedby="input-help">{EXAMPLE_BRIEF}</textarea
-    >
-    <p id="input-help" class="muted">
-      Pre-filled with a worked example. The results below are its output. Replace it with yours and
-      score it. Scoring again clears any accepted assumptions.
-    </p>
-    <div class="actions">
-      <button type="button" id="score" class="primary">Score this brief</button>
-      <button type="button" id="restore" class="secondary">Restore the example</button>
-    </div>
-    <noscript>
-      <p class="muted">
-        JavaScript is off, so neither button does anything. Everything below is the real output for
-        the brief in the box, produced by the same engine when this page was built.
+  <div class="bench">
+    <section class="panel tool" aria-labelledby="h-input">
+      <h2 id="h-input">Paste the brief</h2>
+      <label class="input-label" for="brief-input">
+        Your campaign brief, in whatever prose you already write it in
+      </label>
+      <div class="field">
+        <textarea
+          id="brief-input"
+          name="brief"
+          rows="8"
+          spellcheck="false"
+          aria-describedby="input-help">{EXAMPLE_BRIEF}</textarea
+        >
+      </div>
+      <p id="input-help" class="muted">
+        Pre-filled with a worked example. The results below are its output. Replace it with yours
+        and score it. Scoring again clears any accepted assumptions.
       </p>
-    </noscript>
-  </section>
+      <div class="actions">
+        <button type="button" id="score" class="primary">Score this brief</button>
+        <button type="button" id="restore" class="secondary">Restore the example</button>
+      </div>
+      <noscript>
+        <p class="muted">
+          JavaScript is off, so neither button does anything. Everything below is the real output
+          for the brief in the box, produced by the same engine when this page was built.
+        </p>
+      </noscript>
+    </section>
 
-  <section class="panel" aria-labelledby="h-labels">
-    <h2 id="h-labels">The four labels</h2>
-    <dl class="labels">
-      <dt><span class="chip chip-stated">stated</span></dt>
-      <dd>You said it. The exact words are quoted back with the value.</dd>
-      <dt><span class="chip chip-derived">derived</span></dt>
-      <dd>
-        Unambiguously implied, and the rule that fired is printed next to it. <q>United States</q> to
-        <code>countries: ["US"]</code> is a derivation. A channel split is not.
-      </dd>
-      <dt><span class="chip chip-assumed">assumed</span></dt>
-      <dd>
-        The engine picked it. Off by default and listed on its own; it reaches neither payload until
-        you tick its box.
-      </dd>
-      <dt><span class="chip chip-missing">missing</span></dt>
-      <dd>Not present and not derivable. The seller will guess it or drop it.</dd>
-    </dl>
-    <p class="muted">
-      A value can be read correctly, labelled <code>stated</code>, and still reach neither payload,
-      because neither protocol has a field to carry it.
-    </p>
-  </section>
+    <section class="panel" aria-labelledby="h-labels">
+      <h2 id="h-labels">The four labels</h2>
+      <dl class="labels">
+        <dt><span class="chip chip-stated">stated</span></dt>
+        <dd>You said it. The exact words are quoted back with the value.</dd>
+        <dt><span class="chip chip-derived">derived</span></dt>
+        <dd>
+          Unambiguously implied, and the rule that fired is printed next to it. <q>United States</q> to
+          <code>countries: ["US"]</code> is a derivation. A channel split is not.
+        </dd>
+        <dt><span class="chip chip-assumed">assumed</span></dt>
+        <dd>
+          The engine picked it. Off by default and listed on its own; it reaches neither payload
+          until you tick its box.
+        </dd>
+        <dt><span class="chip chip-missing">missing</span></dt>
+        <dd>Not present and not derivable. The seller will guess it or drop it.</dd>
+      </dl>
+      <p class="muted">
+        A value can be read correctly, labelled <code>stated</code>, and still reach neither
+        payload, because neither protocol has a field to carry it.
+      </p>
+    </section>
+  </div>
 
   <p id="score-status" class="results-status" role="status" aria-live="polite">{initialStatus}</p>
 
@@ -563,74 +568,304 @@ const jsonLd = graph([
   owns, so nothing leaks into the shared stylesheet's territory.
 -->
 <style is:global>
+  /* ==================================================================
+   * /generate/ is a CONFIGURE surface (design-research §4.2): no hero,
+   * form first, density over decoration. What this pass changed is the
+   * COMPOSITION, not the controls — the page's three grey rounded panels
+   * (the legend, the two score cards) were card hierarchy on a site whose
+   * separation mechanic is hairline-exclusive. They are now rules and
+   * space, and the ONE tinted region left is the machine's own readout.
+   * The editorial devices are the same two the rest of the site uses:
+   * the sheet rule at every section open (editorial-references §2.1/§2.3)
+   * and the Mono/Sans machine-vs-human split (§2.7).
+   * ================================================================== */
+
   .lead-note {
-    font-size: 0.95rem;
-    margin-bottom: 2rem;
+    font-size: 1rem; /* 16px */
+    margin-bottom: 0;
   }
 
+  /* No bottom margin: §2.9's rhythm is carried by the BREAK (the rule and
+     its 64px of space above), not by a padding box on every region. */
   .panel {
-    margin: 0 0 2.5rem;
+    margin: 0;
   }
 
+  /* THE SECTION OPEN. Identical device to `main.wide article > h2` in
+     briefgateway.css: the rule is an absolutely-positioned pseudo stretched
+     across `article` (the positioning context set in that file), so it runs
+     the full 1180px sheet while the heading text stays in the column.
+     Applies to every `.panel` the client renderer injects into #results as
+     well, because it is a class rule and not a source-order rule. */
   .panel > h2 {
+    position: static;
+    max-width: 38rem; /* ≈32ch at the 32px Heading 02 size */
+    margin: var(--break-space-above) 0 var(--break-space-below);
+    padding-top: var(--break-space-lead);
+  }
+
+  .panel > h2::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 1px;
+    margin-top: calc(-1 * var(--break-space-lead));
+    background: var(--rule-sheet); /* #c6c6c6 — decorative divider, 1.71:1 on #ffffff */
+  }
+
+  /* PROSE RUNS THE COLUMN, EVIDENCE RUNS THE SHEET — the same law
+     briefgateway.css applies to every doc page, applied here to the
+     regions the client renderer injects. Without it the explanatory
+     paragraph under each result heading ran the full 1180px sheet at
+     roughly 100ch, which is the widest prose anywhere in the portfolio and
+     sat directly under a 66ch-capped page. `.scores`, `.panes` and
+     `figure.comparison` are deliberately absent: those are evidence and
+     they keep the sheet. */
+  .panel > p,
+  .panel > ul,
+  .panel > ol,
+  .panel > details,
+  .assumptions > .assumption {
+    max-width: var(--measure);
+  }
+
+  /* ---------- bench: the Configure two-column composition (spec §6.1) ----------
+     <1056px: single column, 48px gap, legend after the form (grid's default
+     implicit single track). >=1056px: control column (--form-column, 640px)
+     beside the reference legend (240-360px). */
+  .bench {
+    display: grid;
+    gap: 48px;
+    margin-top: var(--break-space-above);
+  }
+
+  @media (min-width: 1056px) {
+    .bench {
+      grid-template-columns: minmax(0, var(--form-column)) minmax(240px, 360px);
+      gap: 0 32px;
+      align-items: start;
+    }
+  }
+
+  /* Both bench panels open on the SAME column rule at the same y, so the
+     control column and the reference legend read as one bench rather than
+     as a form beside a card. Column rule, not sheet rule: these two sit
+     inside the grid, and the sheet rule means "a section of the document"
+     (briefgateway.css §2). */
+  .bench > .panel {
+    margin: 0;
+    border-top: 1px solid var(--rule-column); /* #e0e0e0 — decorative divider */
+    padding-top: var(--break-space-lead);
+  }
+
+  .bench > .panel > h2 {
     margin-top: 0;
+    padding-top: 0;
+  }
+
+  .bench > .panel > h2::before {
+    content: none;
+  }
+
+  /* ---------- mobile re-layout — Tell 10 (adversarial review, mobile
+     source order) ----------
+     At <=671px the primary control (the textarea) sank below the eyebrow,
+     h1, AnswerBox and a 5-line lead-note — roughly 930-965px down, below
+     the fold on every common phone, on the portfolio's single most
+     valuable Configure surface. `order` is visual only: it does not touch
+     DOM order, so the AnswerBox keeps its source-order precedence for
+     answer extraction and no copy moves, is added, or is reworded — the
+     only repair shape a styling-only pass permits. Everything not given an
+     explicit order here keeps its natural relative position (flex sorts
+     ties by document order), so AnswerBox -> lead-note -> score-status ->
+     results -> the closing panels -> FAQ/related/engagement are unchanged
+     relative to each other; only the eyebrow/h1 pair and `.bench` move
+     ahead of them. */
+  @media (max-width: 671px) {
+    article:has(.bench) {
+      display: flex;
+      flex-direction: column;
+    }
+
+    article:has(.bench) > .eyebrow,
+    article:has(.bench) > h1 {
+      order: -2;
+    }
+
+    article:has(.bench) > .bench {
+      order: -1;
+    }
+  }
+
+  /* The reference legend. WAS an #f4f4f4 rounded box — i.e. a card, and the
+     one on this page that carried no machine output at all, so it broke the
+     ground law (a tint means "the program produced this"). It is now
+     apparatus: a rule, a kicker and space. Its heading drops from Heading 04
+     to the label primitive, which is what tells a reader at a glance that
+     the right-hand column is a legend and the left-hand one is the tool —
+     the hierarchy the card was faking (§2.1). */
+  .bench > .panel:not(.tool) > h2 {
+    font-family: var(--machine-face);
+    font-size: var(--label-size); /* 13px */
+    font-weight: var(--label-weight); /* 400 — Plex Mono has no other weight */
+    line-height: var(--label-lh);
+    letter-spacing: var(--track-label); /* +1px */
+    text-transform: var(--label-transform);
+    /* [computed] #525252 on #ffffff = 7.81:1 */
+    color: var(--fg-muted);
+    margin-bottom: var(--break-space-below);
   }
 
   /* ---------- input ---------- */
 
   .tool .input-label {
     display: block;
-    font-weight: 700;
-    margin-bottom: 0.4rem;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.16px;
+    margin-bottom: 8px;
+  }
+
+  /* Linear reset + Stripe Elements state layer (spec §6.2, §6.4). The field
+     wrapper carries the ring/border; the textarea itself is bare. */
+  .tool .field {
+    background: var(--field-bg);
+    border: 1px solid var(--field-border);
+    border-radius: var(--site-radius);
+    box-shadow: var(--field-shadow-resting);
+    padding: 12px 16px;
+    transition: box-shadow var(--motion-fast) var(--motion-ease);
+  }
+
+  .tool .field:hover {
+    border-color: var(--cds-text-secondary);
+  }
+
+  .tool .field:focus-within {
+    box-shadow: var(--field-shadow-focus);
+  }
+
+  /* Specified and ready; nothing sets `data-invalid` yet — wiring it needs
+     three lines in the frozen <script> region, out of scope for this design
+     pass (spec §6.3, §10 item 3). */
+  .tool .field[data-invalid] {
+    box-shadow: var(--field-shadow-invalid);
+    border-color: var(--status-error);
   }
 
   .tool textarea {
+    appearance: none;
+    background: transparent;
+    border: none;
+    outline: none;
     width: 100%;
-    font-family: var(--font-mono);
-    font-size: 0.9rem;
-    line-height: 1.6;
-    padding: 0.8rem;
-    color: var(--fg);
-    background: var(--bg-subtle);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
+    padding: 0;
     resize: vertical;
+    font-family: var(--font-mono);
+    /* 16px — ruling 1, non-negotiable. WAS 0.9rem (14.4px), below the iOS
+       Safari auto-zoom threshold, on the one field a user types into. */
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--fg);
+  }
+
+  .tool textarea::placeholder {
+    color: var(--cds-text-placeholder);
+  }
+
+  /* MUST-FIX (adversarial review #2): briefgateway.css's sitewide
+     `:focus-visible { box-shadow: var(--focus-ring) }` is unscoped, and
+     nothing zeroes the bare textarea's own box-shadow, so tabbing into it
+     painted two concentric rings — the wrapping `.field`'s state ring
+     (`:focus-within`, above) and this rule's own, in two different greys.
+     The wrapper already carries the ring; the textarea itself takes none. */
+  .tool textarea:focus-visible {
+    box-shadow: none;
+  }
+
+  #input-help {
+    font-size: 14px;
+    margin-top: 8px;
   }
 
   .tool .actions {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.6rem;
-    margin: 0.4rem 0 0;
+    gap: 12px;
+    margin: 16px 0 0;
   }
+
+  /* ---------- buttons — three variants, no more (spec §6.8) ---------- */
 
   button.primary,
   button.secondary,
   button.copy {
-    font: inherit;
-    font-size: 0.9rem;
-    padding: 0.5rem 0.9rem;
-    border-radius: var(--radius);
-    border: 1px solid var(--accent);
+    font-family: inherit;
+    font-weight: 600; /* was 700 on .primary — the chassis ships 300/400/600 only */
+    border-radius: var(--site-radius);
     cursor: pointer;
+    transition:
+      background var(--motion-fast) var(--motion-ease),
+      box-shadow var(--motion-fast) var(--motion-ease),
+      transform var(--motion-fast) var(--motion-ease);
+  }
+
+  button.primary,
+  button.secondary {
+    min-height: 48px;
+    padding: 0 16px;
+    font-size: 16px;
+  }
+
+  button.copy {
+    min-height: 44px;
+    padding: 0 12px;
+    font-size: 14px;
+    letter-spacing: 0.16px;
   }
 
   button.primary {
-    background: var(--accent);
-    color: var(--bg);
-    font-weight: 700;
+    background: var(--btn-primary-bg);
+    color: var(--btn-primary-fg);
+    border: 1px solid var(--btn-primary-bg);
+  }
+
+  button.primary:hover {
+    background: var(--btn-primary-bg-hover); /* #ffffff on #393939 = 11.55:1 */
   }
 
   button.secondary,
   button.copy {
-    background: var(--bg-subtle);
+    background: transparent;
     color: var(--fg);
-    border-color: var(--border);
+    border: 1px solid var(--field-border);
+  }
+
+  button.secondary:hover,
+  button.copy:hover {
+    background: var(--bg-subtle);
   }
 
   button.copy[data-state='done'] {
-    border-color: var(--accent);
-    color: var(--accent);
+    color: var(--status-success);
+    border-color: currentColor;
+  }
+
+  button:active {
+    transform: scale(0.97);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    button.primary,
+    button.secondary,
+    button.copy {
+      transition: none;
+    }
+
+    button:active {
+      transform: none;
+    }
   }
 
   /* ---------- labels legend ---------- */
@@ -638,111 +873,129 @@ const jsonLd = graph([
   dl.labels {
     display: grid;
     grid-template-columns: max-content 1fr;
-    gap: 0.5rem 1rem;
+    gap: 12px 16px;
     align-items: baseline;
+    font-size: 16px;
   }
 
   dl.labels dd {
     margin: 0;
   }
 
-  /* ---------- chips ---------- */
+  /* ---------- chips — the verdict vocabulary (spec §6.6) ----------
+     A chip is the program's verdict on the reader's own words, so it is in
+     the machine face (§2.7) — but LOWERCASE, where every sibling's chip is
+     uppercase mono (adcp version tags, aamp licence chips). Lowercase is
+     how the published copy writes the four labels, and it keeps the chip
+     row from shouting over the values it is labelling. */
 
   .chip {
     display: inline-block;
-    font-family: var(--font-sans);
-    font-size: 0.7rem;
-    font-weight: 700;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    padding: 0.1rem 0.4rem;
-    border-radius: 3px;
+    font-family: var(--machine-face);
+    font-size: 12px;
+    font-weight: var(--machine-weight); /* 400 — Plex Mono has no other weight */
+    letter-spacing: 0.32px; /* Caption 01 tracking law */
+    text-transform: none;
+    padding: 2px 6px;
+    border-radius: var(--radius-2); /* 2px, not whatisagenticbuying's 3px */
     border: 1px solid currentColor;
     white-space: nowrap;
   }
 
-  .chip-stated,
-  .chip-sev-blocks {
-    color: #1a7f37;
+  .chip-stated {
+    color: var(--status-success);
   }
 
   .chip-derived {
-    color: #2f6feb;
+    color: var(--status-info); /* was #2f6feb — the last stock blue in the portfolio */
   }
 
-  .chip-assumed,
-  .chip-sev-drops {
-    color: #9a6700;
+  .chip-assumed {
+    color: var(--status-warning);
   }
 
-  .chip-missing,
-  .chip-sev-degrades {
-    color: var(--fg-muted);
+  .chip-missing {
+    color: var(--status-neutral);
   }
 
   .chip-sev-blocks {
-    color: #cf222e;
+    color: var(--status-error);
   }
 
-  @media (prefers-color-scheme: dark) {
-    .chip-stated {
-      color: #57cc7f;
-    }
-
-    .chip-derived {
-      color: #8ab4f8;
-    }
-
-    .chip-assumed,
-    .chip-sev-drops {
-      color: #d4a72c;
-    }
-
-    .chip-sev-blocks {
-      color: #ff8182;
-    }
+  .chip-sev-drops {
+    color: var(--status-warning);
   }
 
-  /* ---------- scores ---------- */
+  .chip-sev-degrades {
+    color: var(--status-neutral);
+  }
 
+  /* ---------- scores — Monitor secondary (spec §6.5) ---------- */
+
+  /* ONE instrument, not two cards. The two scores used to be two separate
+     rounded #f4f4f4 boxes side by side — the shape design-research §4.3
+     tell 3 describes, and the only place on this page that read as a
+     feature grid. They are now a single readout panel divided by one 1px
+     seam: the same information, one object. This is also why `align-items`
+     goes back to stretch — the old `start` existed to stop an empty card
+     looking empty, and there is no second card any more; the unused height
+     is now part of the instrument. The tint is legitimate here and only
+     here in this region: it IS machine output (THE GROUND LAW). */
   .scores {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1px;
+    background: var(--rule-sheet); /* the seam — #c6c6c6, 1.55:1 on the #f4f4f4 panel */
+    border-radius: var(--site-radius);
+    overflow: hidden;
+    align-items: stretch;
   }
 
   .score {
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    background: var(--bg-subtle);
-    padding: 1rem 1.1rem;
+    background: var(--bg-subtle); /* #f4f4f4 — machine ground */
+    border: none;
+    box-shadow: none; /* rings are STATE; this is structure */
+    border-radius: 0;
+    padding: 20px;
   }
 
   .score-name {
     margin: 0;
-    font-size: 0.8rem;
-    font-weight: 700;
-    letter-spacing: 0.12em;
+    font-family: var(--machine-face);
+    font-size: 13px;
+    font-weight: var(--machine-weight); /* 400 */
+    letter-spacing: var(--track-label);
     text-transform: uppercase;
+    /* [computed] #525252 on #f4f4f4 = 7.10:1 */
     color: var(--fg-muted);
   }
 
   .score-kind {
     font-weight: 400;
-    letter-spacing: 0.04em;
+    letter-spacing: 0;
     text-transform: none;
   }
 
   .score-value {
-    margin: 0.1rem 0 0.5rem;
-    font-family: var(--font-serif);
-    font-size: 1.1rem;
+    margin: 4px 0 12px;
+    font-family: var(--machine-face);
+    font-variant-numeric: tabular-nums;
+    font-size: 1.125rem;
+    /* [computed] #525252 on #f4f4f4 = 7.10:1 */
     color: var(--fg-muted);
   }
 
+  /* 40px, deliberately below the h1's 48px, so the score never becomes the
+     loudest thing on the page (slop tell 6). */
   .score-value strong {
-    font-size: 2.4rem;
+    font-size: 2.5rem;
+    font-weight: 400;
+    line-height: 1.19;
     color: var(--fg);
+  }
+
+  .score[data-pass='true'] .score-value strong {
+    color: var(--status-success);
   }
 
   .score-what,
@@ -757,8 +1010,13 @@ const jsonLd = graph([
     font-size: 0.8rem;
   }
 
+  .score-pass {
+    color: var(--status-success);
+  }
+
   .score-fail {
-    font-weight: 700;
+    color: var(--status-error);
+    font-weight: 600; /* was 700 */
   }
 
   .score .checks {
@@ -771,9 +1029,16 @@ const jsonLd = graph([
     margin-bottom: 0.35rem;
   }
 
+  /* A colophon: what the engine read, when, against which clock. Sourcing,
+     not claim, so it takes the metadata face (§2.7, NYT's credit line). */
   .provenance {
     margin: 0.8rem 0 0;
-    font-size: 0.82rem;
+    font-family: var(--machine-face);
+    font-size: var(--machine-size); /* 13px */
+    letter-spacing: var(--machine-track);
+    line-height: var(--machine-lh);
+    font-variant-numeric: tabular-nums;
+    /* [computed] #525252 on #ffffff = 7.81:1 */
     color: var(--fg-muted);
   }
 
@@ -785,13 +1050,27 @@ const jsonLd = graph([
 
   .fields .toggle {
     margin-right: 0.35rem;
+    /* 24x24, not 20x20 — nice-to-have #11, WCAG 2.5.8 target-size minimum
+       for the box itself. */
+    width: 24px;
+    height: 24px;
+    accent-color: var(--cds-text-primary);
   }
 
   .fields .toggle-label {
-    font-size: 0.9rem;
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px; /* hit target */
+    font-size: 16px;
+    cursor: pointer;
   }
 
-  .field-table td:first-child {
+  /* `.fields` prefix, not the bare `.field-table td:first-child` this used
+     to be: global.css declares the identical selector with
+     `white-space: nowrap` and its bundle is linked LAST, so at equal
+     specificity the override silently lost and every field key in the
+     table was still unbreakable. Verified against the built CSS. */
+  .fields .field-table td:first-child {
     white-space: normal;
   }
 
@@ -799,12 +1078,20 @@ const jsonLd = graph([
     word-break: break-word;
   }
 
+  /* The ten group bands are the table's real navigation; they take the
+     label primitive (spec §6.7). */
   .field-table .group-row th {
-    background: var(--bg-inset);
-    font-family: var(--font-sans);
-    font-size: 0.78rem;
-    letter-spacing: 0.12em;
+    background: var(--bg-inset); /* #e0e0e0 — a band inside the machine's own table */
+    /* briefgateway.css zeroes the left padding on every cell so the table
+       reads as ruled columns rather than a boxed grid; the group band is
+       the one filled cell on the page and needs its inset back. */
+    padding: 10px 12px;
+    font-family: var(--machine-face);
+    font-size: 13px;
+    font-weight: var(--machine-weight); /* 400 */
+    letter-spacing: var(--track-label);
     text-transform: uppercase;
+    /* [computed] #525252 on #e0e0e0 = 5.92:1 */
     color: var(--fg-muted);
   }
 
@@ -820,22 +1107,39 @@ const jsonLd = graph([
   .rule,
   .note {
     display: block;
-    font-size: 0.85rem;
     margin-top: 0.2rem;
   }
 
+  /* `.rule` is the derivation rule that fired — the program explaining
+     itself — so it is in the machine face. `.note` is an editorial aside
+     written by a human and stays in the reading face (§2.7): the split is
+     only useful if it is applied to the actual boundary. */
+  .rule {
+    font-family: var(--machine-face);
+    font-size: var(--machine-size); /* 13px */
+    letter-spacing: var(--machine-track);
+    line-height: var(--machine-lh);
+  }
+
+  .note {
+    font-size: 0.85rem;
+  }
+
   .quote {
-    font-family: var(--font-mono);
-    font-size: 0.78rem;
+    font-family: var(--machine-face);
+    font-size: 14px; /* Code 01 — was 0.78rem (12.5px) */
+    letter-spacing: 0.16px;
+    /* [computed] #525252 on #ffffff = 7.81:1 · on #f4f4f4 = 7.10:1 */
     color: var(--fg-muted);
   }
 
+  /* The underline marks the exact characters the extractor read — a machine
+     classification of the reader's own text, so it takes --status-info. */
   .quote mark {
-    background: var(--accent-soft);
+    background: transparent;
     color: var(--fg);
-    padding: 0 0.15em;
-    border-radius: 2px;
-    box-shadow: inset 0 -1px 0 var(--accent);
+    padding: 0;
+    box-shadow: inset 0 -2px 0 var(--status-info);
   }
 
   .note {
@@ -845,23 +1149,53 @@ const jsonLd = graph([
 
   /* ---------- assumptions ---------- */
 
+  /* An assumption is an OFFER the reader acts on, not output the program
+     has produced — it has a checkbox, and nothing in it reaches a payload
+     until a human ticks it. So it does not take the machine ground (THE
+     GROUND LAW, token file): it was an #f4f4f4 rounded box wrapping the
+     section's own h2 and intro prose, which also meant the section rule
+     landed on the box's edge. The list is now bracketed by two column
+     hairlines with a hairline between each offer — the same apparatus
+     treatment the page tail uses.
+     (Two passes ago this was 1px DASHED, the only dashed box on the site;
+     dashed reads as unfinished. That is still true and still fixed.) */
   .assumptions {
-    border: 1px dashed var(--border);
-    border-radius: var(--radius);
-    padding: 1.1rem 1.25rem;
-    background: var(--bg-subtle);
+    border: none;
+    background: none;
+    border-radius: 0;
+    padding: 0;
   }
 
   .assumption {
     display: grid;
     grid-template-columns: max-content 1fr;
     gap: 0.2rem 0.6rem;
-    padding: 0.7rem 0;
-    border-top: 1px solid var(--border);
+    padding: 12px 0;
+    border-top: 1px solid var(--rule-column);
+  }
+
+  .assumptions > .assumption:last-of-type {
+    border-bottom: 1px solid var(--rule-column);
+  }
+
+  /* It IS a field: accepting an assumption is data entry. */
+  .assumption:focus-within {
+    box-shadow: var(--field-shadow-focus);
+    border-radius: var(--site-radius);
   }
 
   .assumption label {
     align-self: baseline;
+    display: flex;
+    align-items: center;
+    min-height: 44px; /* hit target */
+  }
+
+  .assumption .accept {
+    /* 24x24, not 20x20 — nice-to-have #11, WCAG 2.5.8 target-size minimum. */
+    width: 24px;
+    height: 24px;
+    accent-color: var(--cds-text-primary);
   }
 
   .assumption .rule,
@@ -873,8 +1207,8 @@ const jsonLd = graph([
   }
 
   .assumption.is-on .assumption-state {
-    color: #9a6700;
-    font-weight: 700;
+    color: var(--status-warning);
+    font-weight: 600; /* was 700 */
   }
 
   /* ---------- blockers ---------- */
@@ -896,7 +1230,7 @@ const jsonLd = graph([
   .panes {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
-    gap: 1.2rem;
+    gap: 24px;
   }
 
   .pane {
@@ -915,13 +1249,28 @@ const jsonLd = graph([
     margin: 0;
   }
 
+  /* Caption for the payload below it — terse, at the figure, in the
+     metadata face (§2.13 + §2.7). */
   .pane-note {
-    font-size: 0.85rem;
+    font-family: var(--machine-face);
+    font-size: var(--machine-size); /* 13px */
+    letter-spacing: var(--machine-track);
+    line-height: var(--machine-lh);
+    /* [computed] #525252 on #ffffff = 7.81:1 */
     color: var(--fg-muted);
     margin: 0.3rem 0 0.5rem;
   }
 
+  /* The two payload panes are esc()'d plain text, not Shiki output, so they
+     carry no syntax colour — that would need a JS edit this pass must not
+     make. `--site-radius` here overrides global.css's plain `pre` rule
+     (var(--code-radius, var(--radius-2)), i.e. 2px) at equal-or-higher
+     specificity. */
   .pane pre {
+    background: var(--bg-subtle);
+    border: none;
+    border-radius: var(--site-radius);
+    padding: 16px;
     max-height: 26rem;
     overflow: auto;
   }
@@ -938,17 +1287,47 @@ const jsonLd = graph([
     border-bottom: 1px solid var(--border);
   }
 
-  /* ---------- status ---------- */
-
-  .results-status {
-    font-weight: 700;
-    border-left: 4px solid var(--accent);
-    padding: 0.4rem 0 0.4rem 0.8rem;
-    margin: 0 0 1.5rem;
+  details > summary {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    font-size: 16px;
+    color: var(--fg);
   }
 
+  /* ---------- status — the Configure -> Monitor boundary (spec §6.4) ----------
+     The engine reporting on what it just did, so it is the machine's voice
+     (§2.7) — and that is now the whole boundary marker. The rule it used to
+     carry is gone: the very next thing on the page is "The score", whose
+     own sheet rule draws the boundary, and two hairlines 24px apart is
+     rhythm noise, not hierarchy. The portfolio's only >2px left rule
+     (ruling 5) and the 700 weight were deleted in an earlier pass and stay
+     deleted. */
+  .results-status {
+    margin: var(--break-space-above) 0 0;
+    max-width: var(--measure);
+    font-family: var(--machine-face);
+    font-size: 1rem; /* 16px */
+    font-weight: var(--machine-weight); /* 400 */
+    line-height: var(--machine-lh);
+    letter-spacing: var(--machine-track);
+    /* [computed] #161616 on #ffffff = 18.10:1 */
+    color: var(--fg);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* The last section on the page needs a floor under it; every other
+     region's space comes from the next break. */
+  .panel[aria-labelledby='h-next'] {
+    margin-bottom: var(--break-space-above);
+  }
+
+  /* was var(--accent-bright) = #525252. Keep :focus, not :focus-visible —
+     the script focuses this container programmatically and Chrome will not
+     match :focus-visible for a script-driven focus(). */
   #results:focus {
-    outline: 2px solid var(--accent-bright);
+    outline: 2px solid var(--cds-text-primary);
     outline-offset: 4px;
   }
 </style>

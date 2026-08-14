@@ -1,0 +1,19 @@
+{
+  "name": "@agenticbrief/design-tokens",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Carbon Chassis, No IBM Blue — the shared --cds-* token chassis (IBM Carbon's layer-ramp theming, 8px grid, IBM Plex type) plus six per-site :root[data-site] override files, plus self-hosted IBM Plex Sans/Mono/Serif @font-face + woff2. No JS, no build step: consumers import the .css files directly.",
+  "type": "module",
+  "exports": {
+    "./tokens.css": "./src/tokens.css",
+    "./fonts.css": "./src/fonts.css",
+    "./index.css": "./src/index.css",
+    "./sites/agenticadlab.css": "./src/sites/agenticadlab.css",
+    "./sites/briefgateway.css": "./src/sites/briefgateway.css",
+    "./sites/adcpexplorer.css": "./src/sites/adcpexplorer.css",
+    "./sites/aampexplorer.css": "./src/sites/aampexplorer.css",
+    "./sites/adtechglossary.css": "./src/sites/adtechglossary.css",
+    "./sites/whatisagenticbuying.css": "./src/sites/whatisagenticbuying.css",
+    "./public-fonts/*": "./public-fonts/*"
+  }
+}

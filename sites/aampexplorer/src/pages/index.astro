@@ -1,8 +1,9 @@
 ---
-import BaseLayout from '@agenticbrief/shared-ui/BaseLayout.astro'
+import PageLayout from '@agenticbrief/shared-ui/PageLayout.astro'
 import AnswerBox from '@agenticbrief/shared-ui/AnswerBox.astro'
 import SpecSource from '@agenticbrief/shared-ui/SpecSource.astro'
-import FaqBlock from '@agenticbrief/shared-ui/FaqBlock.astro'
+import IllustrationPlaceholder from '@agenticbrief/shared-ui/IllustrationPlaceholder.astro'
+import PlaneRail from '../components/PlaneRail.astro'
 import { aamp } from '@agenticbrief/protocol-data'
 import {
   graph,
@@ -14,6 +15,8 @@ import {
   faqPageNode,
 } from '@agenticbrief/seo/schema'
 import { BASE, HUB, ADCP_SITE, MATURITY, componentsByMaturity, editorialGaps } from '../lib/site'
+import { ILLUSTRATIONS } from '../lib/illustrations'
+import '../styles/aampexplorer.css'
 
 const components = componentsByMaturity()
 const substantial = components.filter((c) => MATURITY[c.name]?.level === 'substantial')
@@ -62,18 +65,37 @@ const jsonLd = graph([
   }),
   faqPageNode(url, faq),
 ])
+
+const related = [
+  {
+    href: `${HUB}/protocols/adcp-vs-aamp/`,
+    title: 'AdCP compared with AAMP',
+    note: 'the two stacks side by side, on the hub',
+  },
+  {
+    href: ADCP_SITE,
+    title: 'AdCP Explorer',
+    note: 'the same file-level treatment of the other stack',
+  },
+  { href: '/repos/', title: 'Every AAMP repository in detail' },
+  { href: '/versions/', title: 'What each repository is tagged at' },
+  { href: '/negotiation/', title: 'Price negotiation between AAMP agents' },
+]
 ---
 
-<BaseLayout
+<PageLayout
   site="aampexplorer"
   title={title}
+  heading="AAMP Explorer"
   description={description}
   path="/"
   jsonLd={jsonLd}
-  wide
   keywords={['aamp', 'iab tech lab aamp', 'agentic advertising management protocols']}
+  layout="reference"
+  faq={faq}
+  related={related}
 >
-  <h1>AAMP Explorer</h1>
+  <PlaneRail slot="nav" />
 
   <AnswerBox answer={answer} term="AAMP" />
 
@@ -168,7 +190,7 @@ const jsonLd = graph([
   <dl>
     {
       aamp.layers.map((layer) => (
-        <div class="faq-item">
+        <div class="faq-item" id={`plane-${layer.id}`}>
           <dt>{layer.title}</dt>
           <dd>{layer.description}</dd>
         </div>
@@ -214,6 +236,23 @@ const jsonLd = graph([
     a specification document; <code>agentic-direct</code> ships an MCP demo and
     <code>registry-agent-example</code> 22 lines of sample code.
   </p>
+
+  {
+    /* DEV-ONLY illustration slot (user decision, light-only pass): production
+       ships no visible placeholder box. The prompt stays catalogued in
+       src/lib/illustrations.ts and /srv/ws/out/illustration-prompts-aampexplorer.md;
+       the slot renders under `astro dev` so the composition is visible locally. */
+  }
+  {
+    import.meta.env.DEV && (
+      <IllustrationPlaceholder
+        slug={ILLUSTRATIONS.dependencyReality.slug}
+        ratio={ILLUSTRATIONS.dependencyReality.ratio}
+        alt={ILLUSTRATIONS.dependencyReality.alt}
+        prompt={ILLUSTRATIONS.dependencyReality.prompt}
+      />
+    )
+  }
 
   <p>
     No repository outside <code>agentic-rtb-framework</code> imports or references ARTF. The only external
@@ -275,28 +314,11 @@ const jsonLd = graph([
           <a href={`/repos/${c.name}/`}>
             <strong>{c.name}</strong>
           </a>{' '}
-          — {MATURITY[c.name].note}
+          <span class="chip chip-substantial">substantial</span> — {MATURITY[c.name].note}
         </li>
       ))
     }
   </ul>
 
-  <FaqBlock entries={faq} />
-
-  <h2>Related</h2>
-  <ul>
-    <li>
-      <a href={`${HUB}/protocols/adcp-vs-aamp/`} rel="noopener">AdCP compared with AAMP</a> — the two
-      stacks side by side, on the hub
-    </li>
-    <li>
-      <a href={ADCP_SITE} rel="noopener">AdCP Explorer</a> — the same file-level treatment of the other
-      stack
-    </li>
-    <li><a href="/repos/">Every AAMP repository in detail</a></li>
-    <li><a href="/versions/">What each repository is tagged at</a></li>
-    <li><a href="/negotiation/">Price negotiation between AAMP agents</a></li>
-  </ul>
-
   <SpecSource provenance={aamp.provenance} />
-</BaseLayout>
+</PageLayout>

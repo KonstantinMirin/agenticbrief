@@ -18,6 +18,7 @@ import {
 } from '@agenticbrief/seo/schema'
 import { siteUrl } from '@agenticbrief/shared-ui/sites'
 import { ELSEWHERE, EXPLICIT_ROUTES } from '../lib/feed'
+import '../styles/agenticadlab.css'
 
 const BASE = siteUrl('agenticadlab')
 
@@ -159,140 +160,146 @@ const jsonLd = graph([
   wide
   keywords={['agentic advertising protocols', 'agentic advertising', 'adcp vs aamp']}
 >
-  <h1>Agentic Ad Lab</h1>
-  <AnswerBox answer={answer} />
+  <header class="hub-hero">
+    <h1>Agentic Ad Lab</h1>
+    <AnswerBox answer={answer} />
+  </header>
 
-  <p>
-    Commit this year's engineering time to AdCP. The {adcp.fullName} is {adcp.tasks.length} operations
-    at one release, {adcp.version}, in one registry you can freeze, diff and re-test next quarter:
-    discover inventory, book it, send creative, check the rules. AAMP, IAB Tech Lab's {
-      aamp.fullName
-    }, is
-    {aamp.components.length} repositories across {aamp.layers.length} planes — one for planning and booking,
-    one for mutating a bid request mid-auction, one for exchanging audience embeddings — that tag on their
-    own schedules and share no data type. That is a reasonable way to ship a large standard fast. It is
-    not a way to write a contract clause, and the clause is what your procurement team will ask you for.
-  </p>
+  <div class="hub-page">
+    <p>
+      Commit this year's engineering time to AdCP. The {adcp.fullName} is {adcp.tasks.length} operations
+      at one release, {adcp.version}, in one registry you can freeze, diff and re-test next quarter:
+      discover inventory, book it, send creative, check the rules. AAMP, IAB Tech Lab's {
+        aamp.fullName
+      }, is
+      {aamp.components.length} repositories across {aamp.layers.length} planes — one for planning and
+      booking, one for mutating a bid request mid-auction, one for exchanging audience embeddings — that
+      tag on their own schedules and share no data type. That is a reasonable way to ship a large standard
+      fast. It is not a way to write a contract clause, and the clause is what your procurement team will
+      ask you for.
+    </p>
 
-  <p>
-    Anthony Katsur's own umbrella is {aamp.components.length} repositories of standards proliferation.
-    He runs IAB Tech Lab and he calls proliferation a real cost to the industry; he is right about the
-    cost, and the buyer pays it rather than either standards body. The acknowledgement runs one way: AdCP's
-    FAQ names AAMP, and no AAMP repository mentions AdCP. Silence across
-    {aamp.components.length} repositories is a decision somebody made.
-  </p>
+    <p>
+      Anthony Katsur's own umbrella is {aamp.components.length} repositories of standards proliferation.
+      He runs IAB Tech Lab and he calls proliferation a real cost to the industry; he is right about the
+      cost, and the buyer pays it rather than either standards body. The acknowledgement runs one way:
+      AdCP's FAQ names AAMP, and no AAMP repository mentions AdCP. Silence across
+      {aamp.components.length} repositories is a decision somebody made.
+    </p>
 
-  <p>
-    That FAQ draws the line as "AAMP is agentic bidding; AdCP is agentic buying" and concludes that
-    the two compose. The transports do compose. The object models do not, and AAMP's own seller
-    agent is the proof: its OpenAPI document publishes proposals, a negotiation sub-resource, deals
-    and an order lifecycle under <code>/api/v1</code>, which is the campaign layer AdCP claims for
-    itself. AdCP calls that role the sales agent, AAMP calls it the seller agent, and shipping one
-    gets you no closer to shipping the other. The two have never had to interoperate, so I don't buy
-    it.
-  </p>
+    <p>
+      That FAQ draws the line as "AAMP is agentic bidding; AdCP is agentic buying" and concludes
+      that the two compose. The transports do compose. The object models do not, and AAMP's own
+      seller agent is the proof: its OpenAPI document publishes proposals, a negotiation
+      sub-resource, deals and an order lifecycle under <code>/api/v1</code>, which is the campaign
+      layer AdCP claims for itself. AdCP calls that role the sales agent, AAMP calls it the seller
+      agent, and shipping one gets you no closer to shipping the other. The two have never had to
+      interoperate, so I don't buy it.
+    </p>
 
-  <p>
-    Money has already moved, some of it through AdCP and some through raw MCP with no buy-side spec
-    involved at all. Butler/Till and PubMatic bought CTV for a beverage brand from a
-    natural-language brief across two flights from December 2025, NBCUniversal and RPA transacted
-    NFL playoff inventory agent to agent over MCP, Boostr's seller agent closed a campaign-level buy
-    at Vox Media, and Omnicom told investors in April that live client buys are running on
-    agent-to-agent infrastructure. I keep a{' '}
-    <a href="/guides/who-is-running-agentic-buys/">dated ledger of who has actually transacted</a>,
-    with the vendor claims marked as vendor claims, because almost every number published so far
-    came from the company that sold the campaign.
-  </p>
+    <p>
+      Money has already moved, some of it through AdCP and some through raw MCP with no buy-side
+      spec involved at all. Butler/Till and PubMatic bought CTV for a beverage brand from a
+      natural-language brief across two flights from December 2025, NBCUniversal and RPA transacted
+      NFL playoff inventory agent to agent over MCP, Boostr's seller agent closed a campaign-level
+      buy at Vox Media, and Omnicom told investors in April that live client buys are running on
+      agent-to-agent infrastructure. I keep a{' '}
+      <a href="/guides/who-is-running-agentic-buys/">dated ledger of who has actually transacted</a
+      >, with the vendor claims marked as vendor claims, because almost every number published so
+      far came from the company that sold the campaign.
+    </p>
 
-  <p>
-    What has not arrived is scale, and the arithmetic there is brutal. Michael Barrett, Magnite's
-    chief executive, collected the most optimistic 2027 forecasts anyone would give him at Cannes
-    and they put the entire agentic market at 600 to 700 million dollars; Magnite by itself
-    processes roughly 9 billion dollars of ad spend a year. The whole market next year is four weeks
-    of one company's pipe.
-  </p>
+    <p>
+      What has not arrived is scale, and the arithmetic there is brutal. Michael Barrett, Magnite's
+      chief executive, collected the most optimistic 2027 forecasts anyone would give him at Cannes
+      and they put the entire agentic market at 600 to 700 million dollars; Magnite by itself
+      processes roughly 9 billion dollars of ad spend a year. The whole market next year is four
+      weeks of one company's pipe.
+    </p>
 
-  <p>
-    Prototype against AdCP now, while being wrong costs a sprint rather than a renewal. Put the
-    integration into the contracts you sign for next year rather than the budget you defend this
-    one. Keep AAMP off the roadmap until an advertiser's money goes through it, and re-open the
-    question the week IAB Tech Lab publishes a normative document for its buyer/seller control
-    plane.
-  </p>
+    <p>
+      Prototype against AdCP now, while being wrong costs a sprint rather than a renewal. Put the
+      integration into the contracts you sign for next year rather than the budget you defend this
+      one. Keep AAMP off the roadmap until an advertiser's money goes through it, and re-open the
+      question the week IAB Tech Lab publishes a normative document for its buyer/seller control
+      plane.
+    </p>
 
-  <h2>What a buyer can pin</h2>
-  <table>
-    <caption>Version and licence are where the two stop being comparable.</caption>
-    <thead><tr><th scope="col"></th><th scope="col">AdCP</th><th scope="col">AAMP</th></tr></thead>
-    <tbody>
-      <tr><th scope="row">Governance</th><td>{adcp.governance}</td><td>{aamp.governance}</td></tr>
-      <tr
-        ><th scope="row">Version</th><td>{adcp.version} (published stable)</td><td
-          >No single version: four repositories tag their own, four have never cut a release</td
-        ></tr
+    <h2>What a buyer can pin</h2>
+    <table>
+      <caption>Version and licence are where the two stop being comparable.</caption>
+      <thead><tr><th scope="col"></th><th scope="col">AdCP</th><th scope="col">AAMP</th></tr></thead
       >
-      <tr
-        ><th scope="row">Shape</th><td
-          >One registry: {adcp.tasks.length} operations across {adcp.areas.length} areas</td
-        ><td
-          >{aamp.components.length} repositories across {aamp.layers.length} planes; one shared schema
-          package, imported by two of them</td
-        ></tr
-      >
-      <tr><th scope="row">Licence</th><td>{adcp.license}</td><td>{aamp.license}</td></tr>
-      <tr
-        ><th scope="row">Reference</th><td
-          ><a href="https://adcpexplorer.com/" rel="noopener">AdCP Explorer</a></td
-        ><td><a href="https://aampexplorer.com/" rel="noopener">AAMP Explorer</a></td></tr
-      >
-    </tbody>
-  </table>
+      <tbody>
+        <tr><th scope="row">Governance</th><td>{adcp.governance}</td><td>{aamp.governance}</td></tr>
+        <tr
+          ><th scope="row">Version</th><td>{adcp.version} (published stable)</td><td
+            >No single version: four repositories tag their own, four have never cut a release</td
+          ></tr
+        >
+        <tr
+          ><th scope="row">Shape</th><td
+            >One registry: {adcp.tasks.length} operations across {adcp.areas.length} areas</td
+          ><td
+            >{aamp.components.length} repositories across {aamp.layers.length} planes; one shared schema
+            package, imported by two of them</td
+          ></tr
+        >
+        <tr><th scope="row">Licence</th><td>{adcp.license}</td><td>{aamp.license}</td></tr>
+        <tr
+          ><th scope="row">Reference</th><td
+            ><a href="https://adcpexplorer.com/" rel="noopener">AdCP Explorer</a></td
+          ><td><a href="https://aampexplorer.com/" rel="noopener">AAMP Explorer</a></td></tr
+        >
+      </tbody>
+    </table>
 
-  <FaqBlock entries={faq} />
+    <FaqBlock entries={faq} />
 
-  <h2>The order the questions arrive in</h2>
-  <p>
-    Which stack, how much autonomy, which vendor, and what any of it does to your team. The
-    comparison settles the first one and is the page to read if you read nothing else. The rest are
-    below in the order the questions actually arrive.
-  </p>
-  <ul class="task-list">
-    {
-      PICKS.map((p) => (
-        <li>
-          <a class="task-name" href={p.href}>
-            {p.name}
-          </a>
-          <br />
-          {p.blurb}
-        </li>
-      ))
-    }
-    <li>
-      <a class="task-name" href="/protocols/">What version each standard is on</a>,{' '}
-      <a href="/protocols/aamp/">what IAB Tech Lab has published</a>,{' '}
-      <a href="/guides/agent-discovery-files/">the discovery files</a>, and{' '}
-      <a href="https://adcpexplorer.com/guides/adcp-registry-measured/" rel="noopener"
-        >every agent in the public AdCP registry, probed</a
-      ><br />
-      These are the reference pages, for the tab you keep open while writing code.
-    </li>
-  </ul>
+    <h2>The order the questions arrive in</h2>
+    <p>
+      Which stack, how much autonomy, which vendor, and what any of it does to your team. The
+      comparison settles the first one and is the page to read if you read nothing else. The rest
+      are below in the order the questions actually arrive.
+    </p>
+    <ul class="task-list">
+      {
+        PICKS.map((p) => (
+          <li>
+            <a class="task-name" href={p.href}>
+              {p.name}
+            </a>
+            <br />
+            {p.blurb}
+          </li>
+        ))
+      }
+      <li>
+        <a class="task-name" href="/protocols/">What version each standard is on</a>,{' '}
+        <a href="/protocols/aamp/">what IAB Tech Lab has published</a>,{' '}
+        <a href="/guides/agent-discovery-files/">the discovery files</a>, and{' '}
+        <a href="https://adcpexplorer.com/guides/adcp-registry-measured/" rel="noopener"
+          >every agent in the public AdCP registry, probed</a
+        ><br />
+        These are the reference pages, for the tab you keep open while writing code.
+      </li>
+    </ul>
 
-  <h2>Protocol integration work</h2>
-  <p>
-    I also do this for money, which is the reason the reading above is free. AdCP and AAMP
-    implementation reviews, agent readiness audits before you point a partner at your endpoint,
-    adagents.json and brand.json validation, and buyer or seller agent builds. Every SDK on either
-    side stops before your pricing, your inventory and your creative review policy, and that half is
-    the one you pay for.
-    <a href="/services/">What that covers, and how it's scoped</a>.
-  </p>
-  <p>
-    The reading and the audits are mine. Builds are delivered by <a
-      href={POSTINDUSTRIA}
-      rel="noopener">Postindustria</a
-    >, where I am CEO, so an engagement that needs a team has one behind it.
-  </p>
-  <PortfolioNav exclude="agenticadlab" heading="The rest of the lab" />
+    <h2>Protocol integration work</h2>
+    <p>
+      I also do this for money, which is the reason the reading above is free. AdCP and AAMP
+      implementation reviews, agent readiness audits before you point a partner at your endpoint,
+      adagents.json and brand.json validation, and buyer or seller agent builds. Every SDK on either
+      side stops before your pricing, your inventory and your creative review policy, and that half
+      is the one you pay for.
+      <a href="/services/">What that covers, and how it's scoped</a>.
+    </p>
+    <p>
+      The reading and the audits are mine. Builds are delivered by <a
+        href={POSTINDUSTRIA}
+        rel="noopener">Postindustria</a
+      >, where I am CEO, so an engagement that needs a team has one behind it.
+    </p>
+    <PortfolioNav exclude="agenticadlab" heading="The rest of the lab" />
+  </div>
 </BaseLayout>

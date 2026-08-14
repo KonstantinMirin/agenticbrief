@@ -1,0 +1,39 @@
+/**
+ * @agenticbrief/design-tokens — single import entry point.
+ *
+ * Import order matters and is fixed (spec §11.3):
+ *   1. fonts.css          — self-hosted `@font-face` for IBM Plex Sans
+ *                           (variable, 300-600) / Mono (400) / Serif (300),
+ *                           latin subset (spec §8.3-8.5). Declared FIRST:
+ *                           `@font-face` is a global registration, but the
+ *                           family names it defines must be in scope before
+ *                           anything below references them by name, and a
+ *                           page that skips this import (there is none, but
+ *                           belt-and-braces) still gets a correct fallback
+ *                           chain from tokens.css alone.
+ *   2. tokens.css        — the chassis: --cds-* role tokens, type scale,
+ *                           spacing, grid, elevation, the alias block.
+ *   3. sites/*.css        — all six site override files, every one of them,
+ *                           unconditionally. Only ONE ever matches at
+ *                           runtime, via `:root[data-site="<key>"]`
+ *                           (specificity 0,2,0, always stronger than this
+ *                           file's bare `:root` at 0,1,0 — order among the
+ *                           six site blocks below is therefore irrelevant
+ *                           to correctness, kept alphabetical for
+ *                           reviewability). A page with no `data-site`
+ *                           attribute falls through to tokens.css's
+ *                           defensive defaults instead of any one site.
+ *
+ * Consuming site (Phase C, not done by this package):
+ *   import '@agenticbrief/design-tokens/index.css'
+ *   ...and set <html lang="en" data-site={site}> in BaseLayout.astro.
+ */
+
+@import './fonts.css';
+@import './tokens.css';
+@import './sites/adcpexplorer.css';
+@import './sites/adtechglossary.css';
+@import './sites/agenticadlab.css';
+@import './sites/aampexplorer.css';
+@import './sites/briefgateway.css';
+@import './sites/whatisagenticbuying.css';

@@ -17,14 +17,30 @@ const year = new Date().getFullYear()
       <h2>Elsewhere in the lab</h2>
       <ul class="portfolio-links">
         {
-          others.map((key) => (
-            <li>
-              <a href={siteUrl(key)} rel="noopener">
-                {SITES[key].name}
-              </a>
-              <span class="muted"> — {SITES[key].tagline}</span>
-            </li>
-          ))
+          /* `name` and `href` are destructured to locals so the anchor below
+             fits inside printWidth 100 and Prettier leaves it on ONE line.
+             That is load-bearing, not cosmetic: broken across lines JSX emits
+             `<a> Brief Gateway </a>`, and the leading/trailing spaces sit
+             INSIDE the anchor, so the underline overshoots the word at both
+             ends on every one of the 114 pages. Keep it one line. */
+          others.map((key) => {
+            const { name, tagline } = SITES[key]
+            const href = siteUrl(key)
+            return (
+              <li>
+                {/* set:html, not a child expression. Prettier's Astro plugin
+                    ALWAYS breaks element children onto their own lines
+                    regardless of printWidth, and JSX then emits
+                    `<a> Brief Gateway </a>` — spaces INSIDE the anchor, so the
+                    underline overshoots the word at both ends on 114 pages.
+                    An element with no children cannot acquire that whitespace.
+                    `name` is a static string from our own sites.ts, never user
+                    input, so there is nothing here to sanitise. */}
+                <a href={href} rel="noopener" set:html={name} />
+                <span class="muted"> — {tagline}</span>
+              </li>
+            )
+          })
         }
       </ul>
     </div>
@@ -43,11 +59,61 @@ const year = new Date().getFullYear()
   <div class="footer-legal">
     <p>
       © {year}
-      {org.name}. Built by <a href={POSTINDUSTRIA} rel="noopener">{author.company.name}</a>, where {
-        author.name
-      } is {author.role}.
+      {org.name}. Built by{' '}
+      {
+        /* Same one-line rule as the portfolio links above, and here it was
+          visible as prose: broken across lines this emitted
+          `Built by  Postindustria , where` — a space before the comma, which
+          at 390px orphaned the comma onto its own line. The brand mark is the
+          one element that must look identical on all six sites. */
+      }
+      <a class="brand-mark-link" href={POSTINDUSTRIA} rel="noopener">{author.company.name}</a>,
+      where {author.name} is {author.role}.
     </p>
     <p>{org.legalNote}</p>
     <p class="muted">{org.editorialPolicy}</p>
   </div>
 </footer>
+
+<style>
+  /*
+   * The Postindustria mark — spec §9.1: an understated credibility signal,
+   * identical on all six sites, never in the site accent, never bold, never
+   * an icon or logo. `--fg-muted` already resolves to each site's own
+   * text-secondary pair (verified contrast ≥4.5:1 on every footer ground,
+   * spec §9.1), so this is the one token, unchanged per site, the spec asks
+   * for — no new custom property needed.
+   *
+   * Underline only on hover/focus: at rest it reads as text, not a link,
+   * which is the point — a citation, not a call to action.
+   */
+  .brand-mark-link {
+    color: var(--fg-muted);
+    text-decoration: none;
+    text-underline-offset: 2px;
+    border-radius: var(--radius-2, 2px);
+  }
+
+  .brand-mark-link:visited {
+    color: var(--fg-muted);
+  }
+
+  .brand-mark-link:hover,
+  .brand-mark-link:focus-visible {
+    text-decoration: underline;
+  }
+
+  .brand-mark-link:focus-visible {
+    outline: none;
+    box-shadow: var(--focus-ring);
+  }
+
+  /* Every interactive link in the footer takes the neutral ring, not the
+     browser default outline — IBM Blue's own focus treatment is deleted
+     portfolio-wide (spec ruling 8; §6.3b neutral ring). */
+  .portfolio-links a:focus-visible {
+    outline: none;
+    box-shadow: var(--focus-ring);
+    border-radius: var(--radius-2, 2px);
+  }
+</style>

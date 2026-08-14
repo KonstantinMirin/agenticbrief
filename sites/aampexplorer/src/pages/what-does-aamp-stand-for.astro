@@ -1,8 +1,8 @@
 ---
-import BaseLayout from '@agenticbrief/shared-ui/BaseLayout.astro'
+import PageLayout from '@agenticbrief/shared-ui/PageLayout.astro'
 import AnswerBox from '@agenticbrief/shared-ui/AnswerBox.astro'
-import FaqBlock from '@agenticbrief/shared-ui/FaqBlock.astro'
 import SpecSource from '@agenticbrief/shared-ui/SpecSource.astro'
+import PlaneRail from '../components/PlaneRail.astro'
 import { aamp } from '@agenticbrief/protocol-data'
 import {
   graph,
@@ -17,6 +17,7 @@ import {
   definedTermSetNode,
 } from '@agenticbrief/seo/schema'
 import { BASE, HUB } from '../lib/site'
+import '../styles/aampexplorer.css'
 
 const GH = 'https://github.com/IABTechLab'
 
@@ -73,6 +74,13 @@ const breadcrumbs = [
   { name: 'What does AAMP stand for?', url },
 ]
 
+const related = [
+  { href: '/', title: 'What AAMP contains, repository by repository' },
+  { href: '/versions/', title: 'Why AAMP has no single version number' },
+  { href: '/repos/', title: 'Every AAMP repository, ranked by what it defines' },
+  { href: `${HUB}/protocols/adcp-vs-aamp/`, title: 'AdCP compared with AAMP' },
+]
+
 const jsonLd = graph([
   organizationNode(),
   personNode(),
@@ -104,21 +112,23 @@ const jsonLd = graph([
 ])
 ---
 
-<BaseLayout
+<PageLayout
   site="aampexplorer"
   title={title}
+  heading="What does AAMP stand for?"
   description={description}
   path={path}
   jsonLd={jsonLd}
-  wide
   ogType="article"
   publishDate={new Date('2026-08-09')}
   keywords={['what does aamp stand for', 'aamp acronym']}
+  layout="reference"
+  breadcrumbs={breadcrumbs}
+  faq={faq}
+  related={related}
 >
-  <nav class="breadcrumbs" aria-label="Breadcrumb">
-    <ol><li><a href="/">AAMP Explorer</a></li><li><span>What does AAMP stand for?</span></li></ol>
-  </nav>
-  <h1>What does AAMP stand for?</h1>
+  <PlaneRail slot="nav" />
+
   <AnswerBox answer={answer} term="AAMP" />
 
   <p>
@@ -176,15 +186,5 @@ const jsonLd = graph([
     defines the term.
   </p>
 
-  <FaqBlock entries={faq} />
-
-  <h2>Related</h2>
-  <ul>
-    <li><a href="/">What AAMP contains, repository by repository</a></li>
-    <li><a href="/versions/">Why AAMP has no single version number</a></li>
-    <li><a href="/repos/">Every AAMP repository, ranked by what it defines</a></li>
-    <li><a href={`${HUB}/protocols/adcp-vs-aamp/`} rel="noopener">AdCP compared with AAMP</a></li>
-  </ul>
-
   <SpecSource provenance={aamp.provenance} />
-</BaseLayout>
+</PageLayout>

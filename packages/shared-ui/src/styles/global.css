@@ -1,46 +1,54 @@
 /*
  * Portfolio-wide stylesheet.
  *
- * Follows the blog's approach — one hand-written stylesheet, system-ish font
- * stack, CSS custom properties for theming, no framework. Reference sites are
- * read, not browsed, so the priorities are legibility, table rendering and
- * a fast first paint over visual novelty.
+ * Follows the blog's approach — one hand-written stylesheet, no framework.
+ * Reference sites are read, not browsed, so the priorities are legibility,
+ * table rendering and a fast first paint over visual novelty.
+ *
+ * ---------------------------------------------------------------------------
+ * TOKENS: this file declares NO custom properties. It only consumes them.
+ * ---------------------------------------------------------------------------
+ * Every value lives in @agenticbrief/design-tokens ("Carbon Chassis, No IBM
+ * Blue"), imported immediately before this file by BaseLayout.astro. The
+ * former `:root` block and its `@media (prefers-color-scheme: dark)` twin were
+ * deleted from the top of this file when that package landed: a `:root` here,
+ * after the tokens, would out-cascade nothing and out-order everything, and
+ * per-site theming would silently do nothing (design-research.md §7.7 risk 1).
+ * DARK MODE IS REMOVED, PORTFOLIO-WIDE (orchestrator decision: light-only
+ * design, see /srv/ws/out/design-system-spec.md §10 ruling 4, marked VOID).
+ * No `sites/<key>.css` file carries a `@media (prefers-color-scheme: dark)`
+ * block any more, including `whatisagenticbuying`, which used to be dark by
+ * default and is now reset to a neutral light ground pending its own
+ * redesign (see that file's TODO banner). Do not reintroduce a dark block,
+ * global or per-site.
+ *
+ * ALIAS, NOT WHOLESALE MIGRATION — one approach, applied consistently:
+ * this file keeps consuming the repo's existing short names (`--bg`,
+ * `--bg-subtle`, `--bg-inset`, `--fg`, `--fg-muted`, `--border`, `--accent`,
+ * `--accent-soft`, `--font-sans/mono/serif`, `--measure`, `--radius`), which
+ * tokens.css now defines as aliases onto the `--cds-*` chassis (spec §4.6).
+ * `--cds-*` and the scale tokens (`--type-*`, `--space-*`, `--label-*`,
+ * `--radius-*`) are referenced DIRECTLY only where no alias exists. Reason for
+ * the alias route: briefgateway's `generate.astro` `<style is:global>` block
+ * consumes the same short names and must not be touched, so a wholesale rename
+ * here would desync the two.
+ *
+ * HOOKS this file reads that tokens.css does NOT define. A site file may set
+ * any of them inside its own `:root[data-site="…"]` block; every one has a
+ * fallback, so leaving it unset is the documented default:
+ *   --measure-max   length form of --measure   (set by adcpexplorer)
+ *   --card-radius   .card corner              (set by adcpexplorer)
+ *   --code-radius   inline <code> AND pre      (unset -> 2px everywhere except
+ *                   (block code) corner         adtechglossary, which sets 0 —
+ *                                                its exclusive 0-radius law,
+ *                                                spec ruling 7; see sites/
+ *                                                adtechglossary.css)
+ *   --heading-font  h1–h4 family               (unset — falls back to serif)
+ *   --link-color / --link-visited  hyperlink   (set by adtechglossary)
+ * Tokens deliberately NOT consumed here: `--lh-prose` (1.75 is adcpexplorer's
+ * alone per §7.1 — reading it globally would give all six sites 1.75) and the
+ * `--elev-*` / focus-ring / chrome tokens, which belong to the components.
  */
-
-:root {
-  --font-serif: Newsreader, Georgia, 'Times New Roman', serif;
-  --font-sans:
-    'Source Sans 3', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial,
-    sans-serif;
-  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-
-  --bg: #ffffff;
-  --bg-subtle: #f6f8fa;
-  --bg-inset: #eef2f6;
-  --fg: #1a1a1a;
-  --fg-muted: #5a6773;
-  --border: #d8dee4;
-  --accent: #1e3a5f;
-  --accent-bright: #2f6feb;
-  --accent-soft: #e8eef4;
-
-  --measure: 68ch;
-  --radius: 6px;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #12171d;
-    --bg-subtle: #171d24;
-    --bg-inset: #1c242d;
-    --fg: #e8ecf0;
-    --fg-muted: #93a1af;
-    --border: #2b3540;
-    --accent: #7aa7d9;
-    --accent-bright: #8ab4f8;
-    --accent-soft: #1a2733;
-  }
-}
 
 *,
 *::before,
@@ -58,8 +66,27 @@ body {
   background: var(--bg);
   color: var(--fg);
   font-family: var(--font-sans);
-  font-size: 18px;
-  line-height: 1.65;
+  /*
+   * ORCHESTRATOR FIX (B2), the structural half.
+   *
+   * Setting `--label-weight: 400` in the chassis fixes the label primitive, but
+   * it does not stop a site file hardcoding `font-weight: 600` on a mono
+   * selector — which several already did, and which any future agent could do
+   * again. This makes the failure mode impossible rather than merely absent:
+   * IBM Plex Mono self-hosts weight 400 only, so a request for 600 now
+   * DEGRADES to the real 400 instead of Chrome painting a distorted fake.
+   *
+   * Safe for Sans: it is a variable font with a 300-600 axis, so 600 is real
+   * and 700 already clamps to the axis cap (measured: identical ink at 600 and
+   * 700). Nothing in the portfolio loses a genuine weight.
+   *
+   * Inherited, so it covers every element including pseudo-elements.
+   */
+  font-synthesis-weight: none;
+  /* 18px / 1.65 — protected portfolio-wide (spec ruling 10). The tokens carry
+     exactly the values this file used to hard-code. */
+  font-size: var(--body-size);
+  line-height: var(--lh-body);
   text-rendering: optimizeLegibility;
   /*
    * This corpus writes repository paths into running prose, not only into
@@ -86,8 +113,14 @@ main {
   padding: 2.5rem 1.25rem 4rem;
 }
 
+/*
+ * `--measure` is per-site. adcpexplorer's is a GRID TRACK (`minmax(0, 48rem)`,
+ * spec §7.2) for its 4/8/4 layout, which is invalid as a `max-width` and would
+ * compute to `none` — an uncapped prose column. That site therefore also ships
+ * `--measure-max`, the same cap as a length; the other five fall through.
+ */
 main.prose {
-  max-width: var(--measure);
+  max-width: var(--measure-max, var(--measure));
 }
 
 main.wide {
@@ -130,7 +163,9 @@ main.wide {
   display: inline-flex;
   align-items: center;
   gap: 0.6rem;
-  font-weight: 700;
+  /* 600, not 700, everywhere in this file: the chassis ships 300/400/600 only
+     and weight 700 is intentionally absent (ibm.md:107, spec §3.3). */
+  font-weight: 600;
   font-size: 1.05rem;
   text-decoration: none;
   color: var(--fg);
@@ -158,35 +193,90 @@ main.wide {
   text-decoration: none;
 }
 
+/*
+ * `--accent`, not `--accent-bright`. `--accent-bright` aliases
+ * `--site-accent-strong`, which on adcpexplorer is `#18e299` — 1.70:1, marked
+ * FILL ONLY, never text. `--accent` is the text-safe member of every site's
+ * pair (spec §6.2, contrast verified in each site file).
+ */
 .site-header nav a:hover,
 .site-header nav a[aria-current='page'] {
-  color: var(--accent-bright);
+  color: var(--accent);
 }
 
 /* ---------- typography ---------- */
+
+/*
+ * h1–h4 read the Carbon type roles (spec §3.3, adopted verbatim), so a site
+ * re-scales its whole heading ramp by overriding `--type-heading-0N-*` in its
+ * own token file — no edit to this stylesheet. `--heading-font` is the family
+ * hook: unset it stays serif, as today.
+ */
+h2,
+h3,
+h4 {
+  font-family: var(--heading-font, var(--font-sans));
+}
+
+/*
+ * ORCHESTRATOR FIX — this default was `var(--font-serif)` and `--heading-font`
+ * is defined nowhere in the repo, so EVERY h1-h4 on ALL SIX sites resolved to
+ * Plex Serif. That was inert at HEAD (`--font-serif` was Newsreader, which
+ * never loaded, so headings fell through to Georgia) and the font pass turned
+ * it live: five sites that were never assigned Serif got a serif heading voice,
+ * +15KB of unused webfont each, a guaranteed FOUT on the above-the-fold h1
+ * (they preload Sans only), and synthetic bold at h2-h4 (only weight 300 Serif
+ * is supplied). §8.1 assigns Serif to agenticadlab ALONE.
+ *
+ * Sans is now the default for the whole ramp. h1 additionally reads
+ * `--display-font`, which agenticadlab already defines (agenticadlab.css:44)
+ * and which had zero consumers repo-wide — so the display voice it was
+ * specced for now actually ships, at h1 only, leaving h2-h4 Sans per §3.3.
+ */
+h1 {
+  font-family: var(--display-font, var(--heading-font, var(--font-sans)));
+}
 
 h1,
 h2,
 h3,
 h4 {
-  font-family: var(--font-serif);
-  line-height: 1.25;
-  margin: 2.2rem 0 0.7rem;
   text-wrap: balance;
+  margin: 2.2rem 0 0.7rem;
 }
 
 h1 {
-  font-size: 2.3rem;
+  font-size: var(--type-heading-01-size);
+  /* `--display-weight` pairs with `--display-font` above: agenticadlab supplies
+     only weight 300 Serif, so without this h1 would ask for a weight it cannot
+     render and get a synthetic-bold fake. Sites without a display voice fall
+     through to the Carbon Heading 01 weight unchanged. */
+  font-weight: var(--display-weight, var(--type-heading-01-weight));
+  line-height: var(--type-heading-01-lh);
+  letter-spacing: var(--type-heading-01-tracking);
   margin-top: 0.5rem;
 }
 
 h2 {
-  font-size: 1.6rem;
+  font-size: var(--type-heading-02-size);
+  font-weight: var(--type-heading-02-weight);
+  line-height: var(--type-heading-02-lh);
+  letter-spacing: var(--type-heading-02-tracking);
   padding-top: 0.5rem;
 }
 
 h3 {
-  font-size: 1.25rem;
+  font-size: var(--type-heading-03-size);
+  font-weight: var(--type-heading-03-weight);
+  line-height: var(--type-heading-03-lh);
+  letter-spacing: var(--type-heading-03-tracking);
+}
+
+h4 {
+  font-size: var(--type-heading-04-size);
+  font-weight: var(--type-heading-04-weight);
+  line-height: var(--type-heading-04-lh);
+  letter-spacing: var(--type-heading-04-tracking);
 }
 
 p,
@@ -196,30 +286,49 @@ dl {
   margin: 0 0 1.1rem;
 }
 
+/*
+ * Links take `--accent` (text-safe on every site) unless the site ships a
+ * dedicated hyperlink pair — adtechglossary does, because its amber accent
+ * marks headings and chips while blue/purple mark actual links (Wikipedia
+ * live, spec §7.2). Never `--accent-bright`: see the nav rule above.
+ */
 a {
-  color: var(--accent-bright);
+  color: var(--link-color, var(--accent));
   text-underline-offset: 2px;
+}
+
+a:visited {
+  color: var(--link-visited, var(--link-color, var(--accent)));
 }
 
 .muted {
   color: var(--fg-muted);
 }
 
+/* The HashiCorp wayfinding-label primitive (spec §6.1): mono, uppercase, with
+   letter-spacing as the per-site variable. */
 .eyebrow {
-  font-size: 0.8rem;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
+  font-family: var(--font-mono);
+  font-size: var(--label-size);
+  font-weight: var(--label-weight);
+  line-height: var(--label-lh);
+  letter-spacing: var(--track-label);
+  text-transform: var(--label-transform);
   color: var(--fg-muted);
   margin-bottom: 0.4rem;
 }
 
 code {
   font-family: var(--font-mono);
+  /* em-relative on purpose: inline code inherits the size of whatever it sits
+     in, including headings, so the absolute `--type-code-01-size` is wrong
+     here. `pre` below takes the absolute role. */
   font-size: 0.88em;
   background: var(--bg-inset);
   padding: 0.12em 0.35em;
-  border-radius: 4px;
+  /* a fixed chassis step, not `--radius`: a five-character inline chip at
+     adcpexplorer's 24px chrome pill reads as a defect, not as a pill. */
+  border-radius: var(--code-radius, var(--radius-2));
 }
 
 /*
@@ -237,45 +346,129 @@ code {
   overflow-wrap: anywhere;
 }
 
+/*
+ * §9.6's flat panel, reconciled: this rule used to carry the pre-Carbon
+ * `--bg-inset` + 1px border + Code 01 (14px) look while `CodeSample.astro`'s
+ * scoped `.code-sample pre` already implemented the flat Carbon panel — two
+ * code-block treatments shipping on the same page. Now both read the same
+ * background/border/type recipe (one-step `--bg-subtle` shift, no border,
+ * Code 02 16px). Markdown-authored fenced code (guides/glossary/briefs/
+ * comparisons, rendered by Shiki) goes through this bare selector, not
+ * through the component, so this is the one place both paths converge.
+ *
+ * `astro.config.mjs` sets `shikiConfig.theme: 'css-variables'` on all six
+ * sites (spec ruling 12) — one identical line, not six diverging theme
+ * names (§12's "otherwise identical" concern for these files). That mode
+ * makes Shiki emit its inline `style="background-color:...;color:..."` as
+ * `var(--astro-code-*)` lookups instead of literal hex, so the declarations
+ * below — not a hardcoded theme — are what actually paints every fenced
+ * code block. They resolve through the same `--bg-subtle`, `--fg`,
+ * `--fg-muted` and `--accent` aliases every other component reads, so Shiki
+ * output follows each site's own light canvas automatically, with no
+ * per-site Shiki config and no seventh, unmanaged colour palette. `--accent`
+ * as syntax colour is verified >=4.5:1 against every site's `--bg-subtle`.
+ * (Dark mode is removed portfolio-wide; the tightest pair this used to name
+ * — whatisagenticbuying 4.79:1, aampexplorer's dark-mode content column
+ * 4.81:1 — no longer exists as a live state. aampexplorer's code panel is
+ * still permanently dark by design, independent of OS theme; see its
+ * `--code-*` overrides.)
+ * `token-inserted`/`token-deleted` (diff fences) are deliberately left
+ * unset — no `diff` fence exists in the corpus today, and an unset
+ * `var()` here falls back to the inherited foreground rather than failing.
+ */
 pre {
   font-family: var(--font-mono);
-  font-size: 0.85rem;
-  line-height: 1.55;
-  background: var(--bg-inset);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 1rem;
+  font-size: var(--type-code-02-size); /* Code 02, 16px — blocks, not the 14px inline role */
+  font-weight: var(--type-code-02-weight);
+  line-height: var(--type-code-02-lh);
+  letter-spacing: var(--type-code-02-tracking);
+  background: var(--bg-subtle); /* one-step layer shift, not the deeper --bg-inset */
+  border: none;
+  border-radius: var(--code-radius, var(--radius-2));
+  padding: var(--space-05);
   overflow-x: auto;
+
+  /*
+   * ORCHESTRATOR RULING on the ruling-12 deviation.
+   *
+   * `theme: 'css-variables'` is KEPT — it is better than six diverging Shiki
+   * theme names and it makes syntax colour token-driven. But it did cost a real
+   * axis: aampexplorer's light-mode code panel became `#f4f4f4`, identical to
+   * adcpexplorer's, on §7.3's acid-test pair.
+   *
+   * The fix is a hook, not a revert. These four `--code-*` variables let a site
+   * repaint its code panel from its OWN token file, so the css-variables
+   * architecture survives AND the differentiation comes back. Unset, every site
+   * behaves exactly as before.
+   *
+   * NOTE for any site setting these: the panel ground changes, so the syntax
+   * accent must be re-measured against it. A site's light-mode accent is NOT
+   * automatically legible on a dark code panel — aampexplorer's #6c3aa6 scores
+   * 2.01:1 on #161616, which is why it sets `--code-accent` to its on-dark pair.
+   */
+  --astro-code-background: var(--code-bg, var(--bg-subtle));
+  --astro-code-foreground: var(--code-fg, var(--fg));
+  --astro-code-token-comment: var(--code-muted, var(--fg-muted));
+  --astro-code-token-constant: var(--code-fg, var(--fg));
+  --astro-code-token-parameter: var(--code-fg, var(--fg));
+  --astro-code-token-punctuation: var(--code-muted, var(--fg-muted));
+  --astro-code-token-string: var(--code-muted, var(--fg-muted));
+  --astro-code-token-string-expression: var(--code-accent, var(--accent));
+  --astro-code-token-keyword: var(--code-accent, var(--accent));
+  --astro-code-token-function: var(--code-accent, var(--accent));
+  --astro-code-token-link: var(--code-accent, var(--accent));
 }
 
 pre code {
   background: none;
   padding: 0;
+  /*
+   * Without this, `pre`'s §9.6 Code 02 (16px) size is dead for the actual text:
+   * the generic `code { font-size: 0.88em }` cascades onto the inner <code> and
+   * block code renders at ~14.08px. Inline code keeps 0.88em; only code inside
+   * a `pre` resets to the block size its container already declares.
+   */
+  font-size: 1em;
 }
 
+/* 1px, not the old 3px: no left rule in the portfolio may exceed 2px, and the
+   one 2px exemption is adcpexplorer's TOC active marker (spec ruling 5). */
 blockquote {
   margin: 1.4rem 0;
   padding: 0.2rem 0 0.2rem 1.1rem;
-  border-left: 3px solid var(--border);
+  border-left: 1px solid var(--border);
   color: var(--fg-muted);
 }
 
 /* ---------- answer box ---------- */
 
+/*
+ * The 4px accent rail is DELETED portfolio-wide (spec §9.7, ruling 5 — it is
+ * slop tell #4 and a Phase D grep gate). Precedence is now carried by Carbon's
+ * own device: a one-step layer shift plus the label below. Separation is per
+ * site via `--answerbox-shadow` (a ring on agenticadlab and briefgateway,
+ * `none` elsewhere). Only the token-level substitution is done here; the
+ * component's full §9.7 treatment belongs to the AnswerBox owner.
+ *
+ * Structural precedence is unchanged: the box still renders before body prose
+ * (AnswerBox.astro's docblock — a deliberate GEO decision).
+ */
 .answer-box {
   margin: 0 0 1.8rem;
-  padding: 1.1rem 1.25rem;
+  padding: var(--answerbox-padding);
   background: var(--accent-soft);
-  border-left: 4px solid var(--accent);
-  border-radius: 0 var(--radius) var(--radius) 0;
+  border-radius: var(--answerbox-radius);
+  box-shadow: var(--answerbox-shadow);
 }
 
 .answer-term {
   margin: 0 0 0.3rem;
-  font-weight: 700;
-  font-size: 0.85rem;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+  font-family: var(--font-mono);
+  font-size: var(--answerbox-label-size);
+  font-weight: var(--answerbox-label-weight, var(--label-weight));
+  line-height: var(--label-lh);
+  letter-spacing: var(--answerbox-label-track);
+  text-transform: var(--answerbox-label-transform, var(--label-transform));
   color: var(--fg-muted);
 }
 
@@ -322,7 +515,7 @@ td {
 
 thead th {
   background: var(--bg-subtle);
-  font-weight: 700;
+  font-weight: 600;
 }
 
 tbody th[scope='row'] {
@@ -367,7 +560,7 @@ tbody th[scope='row'] {
 }
 
 .faq dt {
-  font-weight: 700;
+  font-weight: 600;
   margin-bottom: 0.3rem;
 }
 
@@ -417,7 +610,7 @@ tbody th[scope='row'] {
 .card-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 1rem;
+  gap: var(--space-05);
   list-style: none;
   padding: 0;
   margin: 1.2rem 0 0;
@@ -425,7 +618,9 @@ tbody th[scope='row'] {
 
 .card {
   border: 1px solid var(--border);
-  border-radius: var(--radius);
+  /* adcpexplorer ships `--card-radius: 2px` as a deliberate exception to its
+     24px chrome pill (spec §7.2); everyone else takes the site radius. */
+  border-radius: var(--card-radius, var(--radius));
   padding: 1rem 1.1rem;
   background: var(--bg-subtle);
 }
@@ -463,7 +658,7 @@ tbody th[scope='row'] {
 
 .term-list .term-name,
 .task-list .task-name {
-  font-weight: 700;
+  font-weight: 600;
 }
 
 .task-list code {
@@ -478,12 +673,12 @@ tbody th[scope='row'] {
 
 .badge {
   display: inline-block;
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.05em;
+  font-size: var(--type-caption-01-size);
+  font-weight: 600;
+  letter-spacing: var(--type-caption-01-tracking);
   text-transform: uppercase;
   padding: 0.1rem 0.4rem;
-  border-radius: 3px;
+  border-radius: var(--radius-2);
   background: var(--bg-inset);
   color: var(--fg-muted);
   border: 1px solid var(--border);
@@ -502,11 +697,14 @@ tbody th[scope='row'] {
  * button, no colour that competes with the body. It reads as the last section
  * of the page rather than as an advertisement pasted under it, which is the
  * only register the persona study left available.
+ *
+ * The rule is 1px rather than the old 3px — see blockquote above, no left rule
+ * over 2px survives (spec ruling 5). The quiet register is unchanged.
  */
 .engagement {
   margin: 3.5rem 0 0;
   padding: 1.25rem 0 0.25rem 1.25rem;
-  border-left: 3px solid var(--accent-soft);
+  border-left: 1px solid var(--border);
   font-size: 0.95rem;
 }
 
@@ -518,7 +716,7 @@ tbody th[scope='row'] {
 
 .engagement p {
   margin: 0 0 0.7rem;
-  max-width: var(--measure);
+  max-width: var(--measure-max, var(--measure));
 }
 
 .engagement .cta-primary {
@@ -574,12 +772,15 @@ tbody th[scope='row'] {
     font-size: 17px;
   }
 
+  /* One role down the Carbon ramp rather than a bespoke mobile size: h1 takes
+     Heading 02 and h2 takes Heading 03, so a site that re-scales the ramp gets
+     its mobile sizes for free. */
   h1 {
-    font-size: 1.85rem;
+    font-size: var(--type-heading-02-size);
   }
 
   h2 {
-    font-size: 1.4rem;
+    font-size: var(--type-heading-03-size);
   }
 
   main {
@@ -607,10 +808,44 @@ tbody th[scope='row'] {
    * clamps the table to the column and crushes the cells instead of letting
    * them scroll. The overflow moves inside the table and the page stops moving.
    */
-  main table {
-    display: block;
-    width: auto;
-    max-width: 100%;
-    overflow-x: auto;
-  }
+}
+
+/*
+ * ORCHESTRATOR FIX (B1) — table containment LIFTED OUT of the 640px query.
+ *
+ * This rule used to live inside `@media (max-width: 640px)`, which was correct
+ * when every page was one flow column: below 640px was the only place a table
+ * could outgrow its container. The Phase C grids broke that assumption —
+ * adcpexplorer's 4/8/4 narrows `article` to 466px at a 672px viewport while its
+ * tables keep a 662px min-content width, so 7 of 23 pages overflowed the PAGE
+ * horizontally between 641px and 900px (worst: /areas/media-buy/ at +176px).
+ * agenticadlab regressed the same way (+30px at 672). Production is clean at
+ * both widths, so this was a new regression, not an inherited one.
+ *
+ * Containment is now unconditional: a table scrolls inside itself at ANY
+ * viewport, so no future grid change can push the page sideways again.
+ *
+ * display:block makes the table its own scroll container. width:auto is
+ * required with it — the base rule sets width:100%, which on a block box
+ * clamps the table to the column and crushes the cells instead of letting them
+ * scroll. The overflow moves inside the table and the page stops moving.
+ */
+main table {
+  display: block;
+  width: auto;
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+/*
+ * The other half of B1's root cause. A grid/flex item defaults to
+ * `min-width: auto`, i.e. it refuses to shrink below its content's min-content
+ * width — so a wide table forces its whole track wider and drags the page with
+ * it, no matter what the track was declared as. `min-width: 0` lets the track
+ * honour its declared span, and the table (above) absorbs the overflow.
+ */
+main .doc-grid > *,
+main .doc-content,
+main article {
+  min-width: 0;
 }

@@ -1,8 +1,9 @@
 ---
-import BaseLayout from '@agenticbrief/shared-ui/BaseLayout.astro'
+import PageLayout from '@agenticbrief/shared-ui/PageLayout.astro'
 import AnswerBox from '@agenticbrief/shared-ui/AnswerBox.astro'
-import FaqBlock from '@agenticbrief/shared-ui/FaqBlock.astro'
 import SpecSource from '@agenticbrief/shared-ui/SpecSource.astro'
+import IllustrationPlaceholder from '@agenticbrief/shared-ui/IllustrationPlaceholder.astro'
+import PlaneRail from '../components/PlaneRail.astro'
 import { aamp, adcp } from '@agenticbrief/protocol-data'
 import {
   graph,
@@ -15,6 +16,8 @@ import {
   faqPageNode,
 } from '@agenticbrief/seo/schema'
 import { BASE, HUB } from '../lib/site'
+import { ILLUSTRATIONS } from '../lib/illustrations'
+import '../styles/aampexplorer.css'
 
 const SELLER = 'https://github.com/IABTechLab/seller-agent/blob/main/docs'
 
@@ -83,6 +86,22 @@ const breadcrumbs = [
   { name: 'Negotiation', url },
 ]
 
+const related = [
+  {
+    href: '/repos/seller-agent/',
+    title: 'The seller agent, where the concession table is published',
+  },
+  {
+    href: '/repos/iab-agentic-primitives/',
+    title: 'The shared contract that keeps that table off the wire',
+  },
+  {
+    href: 'https://adtechglossary.com/negotiation/',
+    title: 'Negotiation vocabulary, term by term',
+  },
+  { href: `${HUB}/protocols/adcp-vs-aamp/`, title: 'AdCP compared with AAMP' },
+]
+
 const jsonLd = graph([
   organizationNode(),
   personNode(),
@@ -103,21 +122,23 @@ const jsonLd = graph([
 ])
 ---
 
-<BaseLayout
+<PageLayout
   site="aampexplorer"
   title={title}
+  heading="Price negotiation in AAMP"
   description={description}
   path={path}
   jsonLd={jsonLd}
-  wide
   ogType="article"
   publishDate={new Date('2026-08-09')}
   keywords={['agent to agent deal negotiation', 'aamp negotiation']}
+  layout="reference"
+  breadcrumbs={breadcrumbs}
+  faq={faq}
+  related={related}
 >
-  <nav class="breadcrumbs" aria-label="Breadcrumb">
-    <ol><li><a href="/">AAMP Explorer</a></li><li><span>Negotiation</span></li></ol>
-  </nav>
-  <h1>Price negotiation in AAMP</h1>
+  <PlaneRail slot="nav" />
+
   <AnswerBox answer={answer} />
 
   <p>
@@ -185,6 +206,23 @@ const jsonLd = graph([
       >routers/deals.py</code
     > keys a replay off <code>idempotency:deal:&#123;key&#125;</code>.
   </p>
+
+  {
+    /* DEV-ONLY illustration slot (user decision, light-only pass): production
+       ships no visible placeholder box. The prompt stays catalogued in
+       src/lib/illustrations.ts and /srv/ws/out/illustration-prompts-aampexplorer.md;
+       the slot renders under `astro dev` so the composition is visible locally. */
+  }
+  {
+    import.meta.env.DEV && (
+      <IllustrationPlaceholder
+        slug={ILLUSTRATIONS.negotiationHandshake.slug}
+        ratio={ILLUSTRATIONS.negotiationHandshake.ratio}
+        alt={ILLUSTRATIONS.negotiationHandshake.alt}
+        prompt={ILLUSTRATIONS.negotiationHandshake.prompt}
+      />
+    )
+  }
 
   <h2>The per-round cap binds before the gap share does</h2>
   <p>
@@ -338,26 +376,6 @@ const jsonLd = graph([
     AAMP negotiation between two parties.
   </p>
 
-  <FaqBlock entries={faq} />
-
-  <h2>Related</h2>
-  <ul>
-    <li>
-      <a href="/repos/seller-agent/">The seller agent, where the concession table is published</a>
-    </li>
-    <li>
-      <a href="/repos/iab-agentic-primitives/"
-        >The shared contract that keeps that table off the wire</a
-      >
-    </li>
-    <li>
-      <a href="https://adtechglossary.com/negotiation/" rel="noopener"
-        >Negotiation vocabulary, term by term</a
-      >
-    </li>
-    <li><a href={`${HUB}/protocols/adcp-vs-aamp/`} rel="noopener">AdCP compared with AAMP</a></li>
-  </ul>
-
   <SpecSource
     provenance={{
       repo: 'https://github.com/IABTechLab/seller-agent',
@@ -367,4 +385,4 @@ const jsonLd = graph([
       sourceUrl: `${SELLER}/integration/negotiation.md`,
     }}
   />
-</BaseLayout>
+</PageLayout>

@@ -3,11 +3,28 @@ import { getEntry, render } from 'astro:content'
 import DocPage from '@agenticbrief/shared-ui/DocPage.astro'
 import { siteUrl } from '@agenticbrief/shared-ui/sites'
 import { graph, softwareApplicationNode } from '@agenticbrief/seo/schema'
+import IllustrationPlaceholder from '@agenticbrief/shared-ui/IllustrationPlaceholder.astro'
+import Specimen from '../components/Specimen.astro'
+import { illustrationPrompt } from '../lib/illustration-style'
+import '../styles/briefgateway.css'
 
 const entry = await getEntry('briefs', 'index-generator')
 if (!entry) throw new Error('content/briefs/index-generator.md is missing')
 const { Content } = await render(entry)
 const BASE = siteUrl('briefgateway')
+
+// Catalogue entry: illustration-prompts.md:484-520 ("briefgateway — Home").
+const PIPELINE_PROMPT = illustrationPrompt(`
+Left-to-right pipeline, three zones. ZONE 1 (left): rectangle wireframe of a
+text box, text inside "Paste your creative brief". ZONE 2 (center):
+rectangle, text "Score + gaps", with three short horizontal bars beneath it
+at different lengths (a minimal wireframe bar-score, NOT a literal
+progress-bar widget with rounded corners or gloss). ZONE 3 (right):
+rectangle, text "AdCP-ready fields". Arrow from Zone 1 to Zone 2 labeled
+"score"; arrow from Zone 2 to Zone 3 labeled "fix gaps". The accent
+highlight (#0057c2) is on Zone 2's border only — the score step is the one
+thing this tool adds.
+`)
 ---
 
 <DocPage
@@ -44,5 +61,30 @@ const BASE = siteUrl('briefgateway')
     },
   ]}
 >
+  {
+    /* DEV-ONLY (user decision): production ships clean, with no visible
+       placeholder box. The slot still renders under `astro dev` so the
+       reserved space is visible while designing, and the prompt stays
+       catalogued in /srv/ws/out/illustration-prompts-briefgateway.md. */
+    import.meta.env.DEV && (
+      <div class="illustration-cap-640">
+        <IllustrationPlaceholder
+          prompt={PIPELINE_PROMPT}
+          alt="Wireframe diagram: a pasted brief text box flows into a score-and-gaps stage, then into AdCP-ready fields."
+          slug="briefgateway/index/brief-to-score-pipeline"
+          ratio="16 / 9"
+        />
+      </div>
+    )
+  }
+  {
+    /* The site's idea, on the site's front page: the worked example the
+       generator is loaded with, run through the real engine at build time,
+       with every span it classified marked in the hue of the verdict it
+       returned — and the four labels tallied in the right-hand field that was
+       previously 568px of nothing. See components/Specimen.astro for why every
+       string in it is either engine vocabulary or already published here. */
+  }
+  <Specimen />
   <Content />
 </DocPage>

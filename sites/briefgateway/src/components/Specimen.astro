@@ -1,0 +1,582 @@
+---
+/**
+ * THE SPECIMEN — the homepage's structural device.
+ *
+ * ── WHY IT EXISTS ──────────────────────────────────────────────────────
+ * This site's one design idea is that COLOUR APPEARS ONLY WHERE A PROGRAM
+ * HAS CLASSIFIED THE READER'S OWN TEXT: the four verdict hues, bound to
+ * `stated` / `derived` / `assumed` / `missing`, and nothing else anywhere.
+ * Until this component existed that idea was invisible until the reader
+ * clicked through to `/generate/`, so the homepage was a white column with
+ * ~421 chromatic pixels and no structural device at all — the portfolio's
+ * weakest distinctness score, and interchangeable below the H1 with
+ * whatisagenticbuying's white column (Phase D review, S1 and pair 9).
+ *
+ * So the homepage now RUNS THE ENGINE. Everything below is computed at build
+ * time by `@agenticbrief/brief-engine` from the same worked example
+ * `/generate/` is pre-filled with. Nothing here is a mock-up of the product;
+ * it is the product, printed. If the extractors change, this changes.
+ *
+ * ── NO INVENTED COPY ───────────────────────────────────────────────────
+ * Every fixed string in this file is either engine vocabulary or already
+ * published on this site, quoted verbatim:
+ *   'The generator is loaded with this paragraph'
+ *        content/briefs/index-generator.md:60 (the homepage's own words)
+ *   'The four labels'
+ *        content/briefs/index-generator.md:138 (h2) and generate.astro (h2)
+ *   'What a seller will guess or drop'
+ *        generate.astro renderBlockers() (h2)
+ *   'of {n} the two protocols can express between them.'
+ *        generate.astro renderFields(), same sentence, same numbers
+ *   'none applied'
+ *        generate.astro renderAssumptions() ('Assumptions — none applied')
+ *   '{n} in all'
+ *        generate.astro renderBlockers()
+ *   stated / derived / assumed / missing, blocks / drops / degrades,
+ *   `offered`, and every field key
+ *        packages/brief-engine (Label, Blocker.severity, BriefAnalysis.offered,
+ *        FIELDS[].key)
+ * The paragraph itself is the reader-facing worked example, imported from
+ * ../lib/example-brief so it cannot drift from `/generate/`'s textarea.
+ *
+ * ── WHY IT DOES NOT TOUCH /generate/ ───────────────────────────────────
+ * `/generate/` is 1769 lines with three synchronised regions and a mirrored
+ * renderer. Its chip recipe is declared inside its own `<style is:global>`,
+ * which is emitted only into that page, so this component could not reuse
+ * those rules even if it wanted to. Rather than hoist them into the shared
+ * site stylesheet — where they would then be at the same specificity as
+ * `/generate/`'s own copy, with load order deciding the winner — the recipe
+ * is DUPLICATED here under `sp-`-prefixed class names inside a scoped
+ * `<style>` block. Nothing this file declares can reach `/generate/`, or any
+ * other page. The one edit made to `/generate/` was replacing its
+ * EXAMPLE_BRIEF literal with an import of the identical string.
+ *
+ * ── WHY THE MARK IS A TEXT-DECORATION AND NOT A BOX ────────────────────
+ * `/generate/` already marks classified characters with a 2px underline
+ * (`.quote mark`, an inset box-shadow in `--status-info`) because it only
+ * ever has ONE label to express there. Here four labels share one paragraph,
+ * so the underline additionally carries a per-label STYLE — solid / dashed /
+ * dotted / wavy — and each mark is followed by its field key in the machine
+ * face. Label is therefore never conveyed by hue alone (WCAG 1.4.1), and
+ * every mark also carries a visually-hidden label word for AT.
+ *
+ * NO DARK MODE (light-only portfolio, user decision 2026-08-14).
+ */
+import { analyze, LABEL_PRECEDENCE } from '@agenticbrief/brief-engine'
+import type { Label } from '@agenticbrief/brief-engine'
+import { EXAMPLE_BRIEF } from '../lib/example-brief'
+
+/* The one clock read on this page, passed explicitly for the same reason
+   `/generate/` passes it: the worked example carries absolute dates, so no
+   derivation on this page depends on it, and it is visible in the source. */
+const analysis = analyze(EXAMPLE_BRIEF, { now: new Date() })
+
+interface Mark {
+  start: number
+  end: number
+  text: string
+  label: Label
+  /** The field key the extractor assigned these characters to. */
+  key: string
+}
+
+/*
+ * Every span the engine recorded, including the assumption candidates it
+ * offered and did not apply. `brief_prose` is excluded: its span is the whole
+ * input (AdCP `brief` / AAMP `description` carry the paragraph verbatim), so
+ * marking it would underline the entire specimen and say nothing.
+ */
+const candidates: Mark[] = []
+for (const [key, fv] of Object.entries(analysis.fields)) {
+  if (key === 'brief_prose') continue
+  for (const s of fv.spans ?? []) {
+    candidates.push({ start: s.start, end: s.end, text: s.text, label: fv.label, key })
+  }
+}
+for (const [key, fv] of Object.entries(analysis.offered)) {
+  for (const s of fv.spans ?? []) {
+    candidates.push({ start: s.start, end: s.end, text: s.text, label: fv.label, key })
+  }
+}
+
+/*
+ * Spans may overlap — `budget_total` reads "$500,000" while the `currency`
+ * assumption candidate reads the "$" inside it. Resolve exactly the way the
+ * assembler resolves a key collision: LABEL_PRECEDENCE first (stated >
+ * derived > assumed > missing), then the longer span, then the key, so the
+ * order is total and the output is deterministic. The loser is dropped from
+ * the paragraph, not relabelled — it is still counted in the tally beside it.
+ */
+candidates.sort(
+  (a, b) =>
+    a.start - b.start ||
+    LABEL_PRECEDENCE[b.label] - LABEL_PRECEDENCE[a.label] ||
+    b.end - b.start - (a.end - a.start) ||
+    a.key.localeCompare(b.key),
+)
+
+const marks: Mark[] = []
+let cursor = 0
+for (const c of candidates) {
+  if (c.start >= cursor && c.end > c.start) {
+    marks.push(c)
+    cursor = c.end
+  }
+}
+
+/*
+ * The paragraph, as one HTML string.
+ *
+ * Built here and set with `set:html` rather than mapped in the template
+ * because the marks are INLINE: an Astro template puts a newline and its
+ * indentation between `</mark>` and the gloss that follows it, and those
+ * render as real spaces — the underline picks up a trailing space and the
+ * sentence gains a gap before its full stop. A string has no whitespace it
+ * did not ask for. Everything interpolated goes through `esc`, engine text
+ * included, exactly as `/generate/` does it.
+ */
+const ESCAPES: Record<string, string> = {
+  '&': '&amp;',
+  '<': '&lt;',
+  '>': '&gt;',
+  '"': '&quot;',
+  "'": '&#39;',
+}
+function esc(value: unknown): string {
+  return String(value ?? '').replace(/[&<>"']/g, (c) => ESCAPES[c] as string)
+}
+
+/* The gloss names the concept, and `channels` reads three spans of this
+   brief in a row. Printing it three times is noise, not evidence, so a key
+   is glossed on its FIRST span only; the repeats keep the hue and the
+   underline style, which is what says they are the same verdict. */
+const glossed = new Set<string>()
+
+let proseHtml = ''
+let at = 0
+for (const m of marks) {
+  if (m.start > at) proseHtml += esc(EXAMPLE_BRIEF.slice(at, m.start))
+  proseHtml +=
+    `<mark class="sp-mark sp-mark-${esc(m.label)}">` +
+    `<span class="sp-vh">${esc(m.label)}: </span>${esc(m.text)}</mark>`
+  if (!glossed.has(m.key)) {
+    glossed.add(m.key)
+    proseHtml += `<span class="sp-key sp-key-${esc(m.label)}">${esc(m.key)}</span>`
+  }
+  at = m.end
+}
+if (at < EXAMPLE_BRIEF.length) proseHtml += esc(EXAMPLE_BRIEF.slice(at))
+
+/* ---- the tallies, straight off the analysis ---- */
+
+const counts = analysis.scores.labels
+const offeredCount = Object.keys(analysis.offered).length
+
+const LABEL_ROWS: ReadonlyArray<{ label: Label; count: number; note?: string }> = [
+  { label: 'stated', count: counts.stated },
+  { label: 'derived', count: counts.derived },
+  {
+    label: 'assumed',
+    count: counts.assumed,
+    // 'none applied' is generate.astro's own h2 text for this state; `offered`
+    // is the engine's name for the list the candidate is sitting in.
+    note: counts.assumed === 0 ? `none applied · ${offeredCount} offered` : undefined,
+  },
+  { label: 'missing', count: counts.missing },
+]
+
+const SEVERITIES = ['blocks', 'drops', 'degrades'] as const
+const SEVERITY_ROWS = SEVERITIES.map((severity) => ({
+  severity,
+  count: analysis.blockers.filter((b) => b.severity === severity).length,
+}))
+
+/* The two scores, in the `N of M` form `/generate/` prints them in. They sit
+   under the paragraph rather than in the readout because they are the verdict
+   ON that paragraph, and because the left column would otherwise run ~150px
+   shorter than the panel beside it — the same dead-space defect this whole
+   band exists to remove. */
+const SCORE_ROWS = [
+  { name: 'transactable', score: analysis.scores.transactable },
+  { name: 'expressive', score: analysis.scores.expressive },
+] as const
+---
+
+<figure class="specimen">
+  <figcaption class="sp-caption">The generator is loaded with this paragraph</figcaption>
+
+  <div class="sp-body">
+    <div class="sp-source">
+      <p class="sp-prose" set:html={proseHtml} />
+      <dl class="sp-scores">
+        {
+          SCORE_ROWS.map((row) => (
+            <div class="sp-score">
+              <dt>{row.name}</dt>
+              <dd>
+                <span class="sp-count">{row.score.score}</span> of {row.score.of}
+              </dd>
+            </div>
+          ))
+        }
+      </dl>
+    </div>
+
+    <div class="sp-read">
+      <p class="sp-kicker">The four labels</p>
+      <dl class="sp-tally">
+        {
+          LABEL_ROWS.map((row) => (
+            <>
+              <dt>
+                <span class={`sp-chip sp-chip-${row.label}`}>{row.label}</span>
+              </dt>
+              <dd>
+                <span class="sp-count">{row.count}</span>
+                {row.note && <span class="sp-note">{row.note}</span>}
+              </dd>
+            </>
+          ))
+        }
+      </dl>
+      <p class="sp-foot">
+        of {analysis.scores.fieldsTotal} the two protocols can express between them.
+      </p>
+
+      <p class="sp-kicker sp-kicker-second">What a seller will guess or drop</p>
+      <dl class="sp-tally">
+        {
+          SEVERITY_ROWS.map((row) => (
+            <>
+              <dt>
+                <span class={`sp-chip sp-chip-sev-${row.severity}`}>{row.severity}</span>
+              </dt>
+              <dd>
+                <span class="sp-count">{row.count}</span>
+              </dd>
+            </>
+          ))
+        }
+      </dl>
+      <p class="sp-foot">{analysis.blockers.length} in all.</p>
+    </div>
+  </div>
+</figure>
+
+<style>
+  /* ==================================================================
+   * Scoped to this component. Nothing here reaches `/generate/`, and the
+   * `sp-` prefix means nothing here can collide with that page's own
+   * `.chip` / `.quote mark` rules even if the scoping attribute were
+   * removed. Every ratio is [computed] against a ground this component
+   * actually paints on: the white sheet #ffffff and the machine ground
+   * #f4f4f4 (THE GROUND LAW, packages/design-tokens/src/sites/
+   * briefgateway.css). No other ground exists here.
+   * ================================================================== */
+
+  .specimen {
+    /* The band runs the full 1180px drawing sheet while its left half holds
+       the reading measure — the site's structural signature, used here for
+       the first time on the homepage. It opens on a sheet rule like every
+       other section (briefgateway.css §2); the deck's closing column rule is
+       suppressed in briefgateway.css so the two do not stack into an empty
+       band (Phase D, S7 on whatisagenticbuying). */
+    max-width: var(--sheet-width);
+    margin: var(--break-space-above) 0 0;
+    padding: var(--break-space-lead) 0 0;
+    border-top: 1px solid var(--rule-sheet); /* #c6c6c6 — decorative divider, 1.71:1 on #ffffff */
+  }
+
+  /* §2.1's Monocle eyebrow: weight, tracking and one hairline. No box. */
+  .sp-caption {
+    margin: 0 0 var(--break-space-below);
+    font-family: var(--machine-face);
+    font-size: var(--label-size); /* 13px */
+    font-weight: var(--label-weight); /* 400 — Plex Mono has no other weight */
+    line-height: var(--label-lh);
+    letter-spacing: var(--track-label); /* +1px, this site's value */
+    text-transform: uppercase;
+    color: var(--cds-text-secondary); /* [computed] #525252 on #ffffff = 7.81:1 */
+  }
+
+  /* Asymmetric, not a two-up. The left track is the reading measure; the
+     right track is the field that used to be 568px of nothing. */
+  .sp-body {
+    display: grid;
+    grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+    gap: 40px;
+    align-items: start;
+  }
+
+  /* ---- the reader's own text, on the white sheet, in the human face ---- */
+
+  .sp-prose {
+    margin: 0;
+    font-size: 1.25rem; /* 20px — between body (18px) and the deck (22px) */
+    line-height: 1.8; /* room for the underlines; body is 1.65 */
+    color: var(--cds-text-primary); /* [computed] #161616 on #ffffff = 18.10:1 */
+  }
+
+  /* The verdict on the paragraph above, in the `N of M` form /generate/ uses.
+     One column hairline, no box — this is still the white sheet. */
+  .sp-scores {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 48px;
+    margin: 24px 0 0;
+    padding-top: 16px;
+    border-top: 1px solid var(--rule-column); /* #e0e0e0 — decorative divider */
+  }
+
+  .sp-score dt {
+    font-family: var(--machine-face);
+    font-size: var(--label-size); /* 13px */
+    letter-spacing: var(--track-label); /* +1px */
+    text-transform: uppercase;
+    color: var(--cds-text-secondary); /* [computed] #525252 on #ffffff = 7.81:1 */
+  }
+
+  .sp-score dd {
+    margin: 2px 0 0;
+    font-family: var(--machine-face);
+    font-size: 1rem; /* 16px */
+    font-variant-numeric: tabular-nums;
+    color: var(--cds-text-secondary); /* [computed] 7.81:1 on #ffffff */
+  }
+
+  /* The number is the value; its denominator is chrome. */
+  .sp-score .sp-count {
+    font-size: 1.5rem; /* 24px */
+    line-height: 1.1;
+    color: var(--cds-text-primary); /* [computed] 18.10:1 on #ffffff */
+  }
+
+  /* THE MARK. The exact characters an extractor read, underlined in the hue
+     of the verdict it returned. Hue is never the only channel: the underline
+     STYLE differs per label, the field key follows in the machine face, and
+     a visually-hidden label word precedes the text for AT (WCAG 1.4.1).
+     The underline carries information, so it is measured as non-text
+     contrast (1.4.11, >=3:1) — all four clear 4.99:1 on #ffffff.
+
+     Every selector in this group is `:global()` INSIDE `.sp-prose`, which is
+     not a loophole: Astro stamps its scoping attribute onto elements the
+     template declares, and these elements come from `set:html`, so a plain
+     `.sp-mark` would compile to a selector nothing on the page matches (the
+     first cut of this file shipped the browser's default yellow `mark`
+     highlight for exactly that reason). `.sp-prose` itself IS stamped, so the
+     compiled rule is `.sp-prose[data-astro-cid-…] .sp-mark` — as tightly
+     bounded as the rest of the block, and unreachable from any other page. */
+  .sp-prose :global(.sp-mark) {
+    background: none;
+    color: var(--cds-text-primary); /* [computed] 18.10:1 on #ffffff */
+    padding: 0;
+    text-decoration-line: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.22em;
+    text-decoration-skip-ink: none;
+  }
+
+  .sp-prose :global(.sp-mark-stated) {
+    text-decoration-color: var(--status-success); /* [computed] #0e6027 on #ffffff = 7.72:1 */
+    text-decoration-style: solid;
+  }
+
+  .sp-prose :global(.sp-mark-derived) {
+    text-decoration-color: var(--status-info); /* [computed] #0057c2 on #ffffff = 6.68:1 */
+    text-decoration-style: dashed;
+  }
+
+  .sp-prose :global(.sp-mark-assumed) {
+    text-decoration-color: var(--status-warning); /* [computed] #8e6a00 on #ffffff = 4.99:1 */
+    text-decoration-style: dotted;
+  }
+
+  /* There is deliberately no `.sp-mark-missing` / `.sp-key-missing`. A
+     `missing` field is one the engine found nothing to read for, and the
+     assembler's invariant is `label: 'missing' => spans is empty`
+     (packages/brief-engine/src/types.ts), so no run of characters in any
+     brief can ever carry that label. Declaring the rule would be 1,209-dead-
+     declarations territory (Phase D, S12). `assumed` keeps its rule: an
+     offered candidate does have spans, and in this particular brief the "$"
+     it read simply loses the overlap to `budget_total`'s "$500,000". */
+
+  /* The gloss: which concept those characters became. Machine face, because
+     the field key is the program's word, not the buyer's. */
+  .sp-prose :global(.sp-key) {
+    margin-left: 0.25em;
+    font-family: var(--machine-face);
+    font-size: var(--type-caption-01-size); /* 12px */
+    letter-spacing: var(--type-caption-01-tracking); /* +0.32px, tracking law */
+    white-space: nowrap;
+  }
+
+  .sp-prose :global(.sp-key-stated) {
+    color: var(--status-success); /* [computed] 7.72:1 on #ffffff */
+  }
+
+  .sp-prose :global(.sp-key-derived) {
+    color: var(--status-info); /* [computed] 6.68:1 on #ffffff */
+  }
+
+  .sp-prose :global(.sp-key-assumed) {
+    color: var(--status-warning); /* [computed] 4.99:1 on #ffffff */
+  }
+
+  .sp-prose :global(.sp-vh) {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  /* ---- the readout: machine output, so it takes the machine ground ----
+     THE GROUND LAW. These are counts a program produced, which is the one
+     thing a tint is allowed to mean on this site — the same reason
+     `/generate/`'s `.scores` instrument is tinted and its prose is not. */
+  .sp-read {
+    background: var(--cds-layer-01); /* #f4f4f4 */
+    border-radius: var(--site-radius); /* 6px */
+    padding: 20px; /* the `.score` readout's padding on /generate/ */
+  }
+
+  .sp-kicker {
+    margin: 0 0 12px;
+    font-family: var(--machine-face);
+    font-size: var(--label-size); /* 13px */
+    font-weight: var(--label-weight); /* 400 */
+    line-height: var(--label-lh);
+    letter-spacing: var(--track-label); /* +1px */
+    text-transform: uppercase;
+    color: var(--cds-text-secondary); /* [computed] #525252 on #f4f4f4 = 7.10:1 */
+  }
+
+  .sp-kicker-second {
+    margin-top: 24px;
+    padding-top: 16px;
+    border-top: 1px solid var(--rule-sheet); /* #c6c6c6 — 1.55:1 on #f4f4f4, decorative */
+  }
+
+  /* A fixed first track, not `max-content`: the two tallies are separate
+     `dl`s, so `max-content` sizes each against its own longest chip and the
+     counts land at two different x positions inside one instrument. 5rem
+     clears `degrades`, the longest chip either group has. */
+  .sp-tally {
+    display: grid;
+    grid-template-columns: minmax(5rem, max-content) 1fr;
+    gap: 8px 12px;
+    align-items: baseline;
+    margin: 0;
+  }
+
+  .sp-tally dd {
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0 8px;
+  }
+
+  .sp-count {
+    font-family: var(--machine-face);
+    font-size: 1rem; /* 16px — the count is the value, so it out-sizes its chip */
+    font-variant-numeric: tabular-nums;
+    color: var(--cds-text-primary); /* [computed] #161616 on #f4f4f4 = 16.45:1 */
+  }
+
+  .sp-note,
+  .sp-foot {
+    font-family: var(--machine-face);
+    font-size: var(--type-caption-01-size); /* 12px */
+    letter-spacing: var(--type-caption-01-tracking); /* +0.32px */
+    line-height: var(--machine-lh);
+    color: var(--cds-text-secondary); /* [computed] #525252 on #f4f4f4 = 7.10:1 */
+  }
+
+  .sp-foot {
+    margin: 10px 0 0;
+  }
+
+  /* ---- chips: the verdict vocabulary, duplicated from /generate/ ----
+     Same recipe, same tokens, same 2px radius, same lowercase. See the
+     header note for why this is a deliberate copy rather than a shared
+     class. Border is `currentColor`, so it is a UI boundary at the same
+     ratio as its text: worst case #8e6a00 on #f4f4f4 = 4.53:1 (>=3:1). */
+  .sp-chip {
+    display: inline-block;
+    font-family: var(--machine-face);
+    font-size: 12px;
+    font-weight: var(--machine-weight); /* 400 */
+    letter-spacing: 0.32px; /* Caption 01 tracking law */
+    text-transform: none;
+    padding: 2px 6px;
+    border-radius: var(--radius-2); /* 2px */
+    border: 1px solid currentColor;
+    white-space: nowrap;
+  }
+
+  .sp-chip-stated {
+    color: var(--status-success); /* [computed] #0e6027 on #f4f4f4 = 7.02:1 */
+  }
+
+  .sp-chip-derived {
+    color: var(--status-info); /* [computed] #0057c2 on #f4f4f4 = 6.08:1 */
+  }
+
+  .sp-chip-assumed {
+    color: var(--status-warning); /* [computed] #8e6a00 on #f4f4f4 = 4.53:1 */
+  }
+
+  .sp-chip-missing {
+    color: var(--status-neutral); /* [computed] #525252 on #f4f4f4 = 7.10:1 */
+  }
+
+  .sp-chip-sev-blocks {
+    color: var(--status-error); /* [computed] #da1e28 on #f4f4f4 = 4.55:1 */
+  }
+
+  .sp-chip-sev-drops {
+    color: var(--status-warning); /* [computed] #8e6a00 on #f4f4f4 = 4.53:1 */
+  }
+
+  .sp-chip-sev-degrades {
+    color: var(--status-neutral); /* [computed] #525252 on #f4f4f4 = 7.10:1 */
+  }
+
+  /* ---- narrow ----------------------------------------------------------
+     1055px is where the portfolio's rails collapse; below it the sheet is
+     no longer wide enough to hold a 66ch column AND a readout, so the
+     readout goes under the paragraph it describes. The band keeps its rule
+     and its kicker, so the device survives to 390px — which is the half of
+     pair 9 that has to hold at every width. */
+  @media (max-width: 1055px) {
+    .sp-body {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 28px;
+    }
+
+    .sp-source,
+    .sp-read {
+      max-width: var(--column-max);
+    }
+  }
+
+  @media (max-width: 671px) {
+    .sp-prose {
+      font-size: 1.0625rem; /* 17px */
+      line-height: 1.75;
+    }
+
+    .sp-scores {
+      gap: 8px 32px;
+    }
+
+    .sp-read {
+      padding: 16px;
+    }
+  }
+</style>

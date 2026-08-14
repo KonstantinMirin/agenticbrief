@@ -1,0 +1,672 @@
+/**
+ * adcpexplorer — site-owned rules with no token hook (design brief §9).
+ *
+ * Everything here is scoped under `:root[data-site='adcpexplorer']`
+ * (specificity (0,2,*)) so it always outranks the frozen `global.css`
+ * ((0,1,*)) regardless of import order, and touches nothing outside this
+ * site. Imported once per page from frontmatter.
+ *
+ * ---------------------------------------------------------------------
+ * THE EDITORIAL MOVE (light-only elevation pass; see the banner in
+ * packages/design-tokens/src/sites/adcpexplorer.css for the full statement)
+ *
+ *   editorial-references.md §2.7's functional type-role split, executed
+ *   with IBM Plex Mono as this site's EVIDENCE FACE — every sourced
+ *   artefact is mono, all running prose is Plex Sans, so type family alone
+ *   separates the protocol's vocabulary from ours — hung on §2.9's
+ *   asymmetric, rule-anchored section rhythm.
+ *
+ * Ranked application of editorial-references §2 (type and rhythm BEFORE
+ * colour; hierarchy through scale, weight, space and rule, never through
+ * boxes and shadows). Sections §A-§F below are new in this pass:
+ *
+ *   §A  section rhythm      §2.3 hairline + §2.9 asymmetric whitespace
+ *   §B  the evidence face   §2.7 type-role split (the dominant new layer)
+ *   §C  terse captions,     §2.13 methodology deferred to an end colophon
+ *       method deferred
+ *   §D  the kicker + its    §2.1 kicker/eyebrow + §2.8's short-rule half
+ *       40px mark
+ *   §E  measure held        §2.5 the 48rem cap, now actually enforced on
+ *                           `<section>`-wrapped prose too
+ *   §F  the capsule as a    axis 2, this site's dominant differentiator
+ *       system
+ *
+ * Nothing below adds a card, a shadow, a gradient, a second hue or a
+ * second ground. There is no colour-scheme media query in this file or in
+ * this site's token file, and none may be added.
+ * ------------------------------------------------------------------- */
+
+/* ---------------------------------------------------------------------
+ * §4.1 — container width, derived not chosen.
+ *
+ * `main.wide` is hardcoded 1180px in the frozen global.css. With 16 columns
+ * and 32px gutters that yields a 554px content track — narrower than the
+ * 48rem cap, so the measure differentiator would be theatre. Carbon's own
+ * grid max (--grid-max-width, 1584px) gives a 756px track at 8/16 columns,
+ * 12px inside the 48rem ceiling. All three caps move together or the
+ * wordmark stops aligning with the nav rail.
+ * ------------------------------------------------------------------- */
+:root[data-site='adcpexplorer'] main.wide,
+:root[data-site='adcpexplorer'] .header-inner,
+:root[data-site='adcpexplorer'] .footer-inner,
+:root[data-site='adcpexplorer'] .footer-legal {
+  max-width: var(--site-max-width);
+}
+
+/* ---------------------------------------------------------------------
+ * Nav-tree rail — sticky fix + disclosure relabel (MUST-FIX 3, 4, 5).
+ *
+ * PageLayout's `.doc-grid` uses `align-items: start`, so `.doc-nav`'s row
+ * height equals `.docs-tree`'s own natural height and DocsTree's `position:
+ * sticky` (>=1056px, DocsTree.astro) has no room to travel — it scrolls off
+ * with the page instead of sticking. `align-self: stretch` on this site's
+ * own `.doc-nav` overrides that per-item, and the `height: 100%` chain lets
+ * the sticky rail inside actually use the stretched space. (Same mechanism
+ * aampexplorer's `.doc-grid > .doc-nav` uses for its own reasons — this is
+ * the plumbing fix, not the look; adcpexplorer's `.doc-nav` gets no
+ * background/border from it, unlike aampexplorer's chrome band.)
+ *
+ * Separately: PageLayout's shared `<summary>On this page</summary>` cannot
+ * be relabelled through a prop, and wrapping the whole-site reference tree
+ * under the same label TocRail uses for the real, page-local TOC is a
+ * wayfinding bug on every viewport <1056px (the only place either control is
+ * visible). Hidden here at every width; `.doc-nav-body` is forced
+ * permanently open so hiding the summary doesn't also hide the tree.
+ * DocsTree.astro supplies its own `<details>`/`<summary>AdCP reference</
+ * summary>`, suppressed as a control except <672px, where it becomes the
+ * real 44px accordion toggle.
+ * ------------------------------------------------------------------- */
+:root[data-site='adcpexplorer'] .doc-grid > .doc-nav {
+  align-self: stretch;
+}
+
+:root[data-site='adcpexplorer'] .doc-nav-disclosure,
+:root[data-site='adcpexplorer'] .doc-nav-body {
+  height: 100%;
+}
+
+/* `>` is load-bearing here: a plain descendant selector would also match
+   every per-area `<summary>` DocsTree nests inside this wrapper (and its own
+   outer `<summary>AdCP reference</summary>`), hiding the whole tree's
+   controls instead of just PageLayout's own direct-child summary. */
+:root[data-site='adcpexplorer'] .doc-nav-disclosure > summary {
+  display: none;
+}
+
+:root[data-site='adcpexplorer'] .doc-nav-disclosure > .doc-nav-body {
+  display: block;
+}
+
+/* ---------------------------------------------------------------------
+ * REGRESSION FIX, found by screenshotting this pass rather than by reading
+ * the CSS: on desktop the entire 4-of-16 nav rail — this site's dominant
+ * STRUCTURAL feature, a quarter of the page — was rendering BLANK.
+ *
+ * `display: block` on a child of a closed `<details>` no longer reveals
+ * anything. Chrome (verified live here on 151.0.7922.34, and the same in
+ * every Chromium since ~131) stopped implementing closed-`<details>` via
+ * the old UA rule `details:not([open]) > *:not(summary) { display: none }`
+ * and now hides a `::details-content` pseudo-element with
+ * `content-visibility: hidden` + `block-size: 0`. A descendant's own
+ * `display` cannot escape that, so BOTH the rule above and PageLayout's
+ * own `@media (min-width: 672px) { .doc-nav-disclosure:not([open])
+ * .doc-nav-body { display: block } }` were silently dead.
+ *
+ * Reduced test case, run against this exact binary: a closed `<details>`
+ * whose body has `display: block` renders nothing; add the two
+ * declarations below and it renders. Kept alongside the `display` rule
+ * above rather than replacing it — that rule is still what older engines
+ * (and any engine without `::details-content`) need, and an unknown
+ * pseudo-element makes a browser drop the whole rule it appears in, which
+ * is why this is its own rule and not merged into the one above.
+ *
+ * Unconditional, matching the intent of the rules above it: PageLayout's
+ * shared "On this page" summary is suppressed at every width here, so this
+ * outer disclosure has no control and must never be able to close.
+ * DocsTree's own inner disclosure keeps the real collapse behaviour and
+ * carries the matching fix in its own file, scoped to >=672px.
+ * ------------------------------------------------------------------- */
+:root[data-site='adcpexplorer'] .doc-nav-disclosure::details-content {
+  content-visibility: visible;
+  block-size: auto;
+}
+
+/* ---------------------------------------------------------------------
+ * §E — MEASURE HELD AT THE 48rem CAP (editorial-references §2.5: "measure
+ * held at the 48rem cap", the one site whose measure is a hard length
+ * rather than a `ch` value, because that is MDN's own live figure).
+ *
+ * `layout="reference"` always renders `main.wide` (PageLayout resolves
+ * `wide` to `true` unconditionally there), so the `main.prose { max-width:
+ * var(--measure-max, ...) }` rule this site's 48rem cap otherwise rides on
+ * never matches operation/schema/area pages — today the 8-of-16 track is
+ * 756px, 12px under the cap, so that is inert rather than broken, but an
+ * emergent property of the grid math rather than an enforced ceiling.
+ * Applied narrowly to running text only; tables, figures, AnswerBox and the
+ * illustration slot stay full-track width.
+ *
+ * `> section >` is not a flourish: `areas/[area].astro` wraps every note
+ * section in a bare `<section>`, so the child combinator alone silently
+ * exempted most of the prose on the busiest page type in the site from the
+ * cap it is supposed to prove. Two explicit levels, not a descendant
+ * selector, so a `<p>` inside a table cell or inside the AnswerBox is
+ * still untouched.
+ * ------------------------------------------------------------------- */
+:root[data-site='adcpexplorer'] .doc-content article > :is(p, ul, ol, dl, h2, h3, h4),
+:root[data-site='adcpexplorer'] .doc-content article > section > :is(p, ul, ol, dl, h2, h3, h4) {
+  max-width: var(--measure-max, var(--measure));
+}
+
+/* editorial-references §2.11 protects the 18px body floor, so density has
+   to come from rhythm — and from not leaving ragged single-word last lines
+   in a 48rem column. `pretty` is progressive: unsupported engines ignore
+   it, nothing shifts. */
+:root[data-site='adcpexplorer'] .doc-content article p {
+  text-wrap: pretty;
+}
+
+/* ---------------------------------------------------------------------
+ * §5.4 — the inline-code fix.
+ *
+ * Inline <code> keeps its #e0e0e0 chip only in running prose, where black
+ * text on it is 13.71:1. It drops the chip everywhere the token is already
+ * structurally marked, which is exactly where the green link colour would
+ * otherwise land on it: #0a7d52 on #e0e0e0 measures 3.91:1 and FAILS the
+ * 4.5:1 floor. Green then renders on #ffffff (5.16:1) or, inside table
+ * headers, on #f4f4f4 (4.69:1) — both pass.
+ *
+ * DESCENDANT, NOT CHILD (fixed this pass, found by screenshot): these were
+ * `>` combinators, and `areas/[area].astro` renders its operation headings
+ * as `<h2><span id=…><code>context_match</code></span></h2>` — one level
+ * deeper than the selector reached. Every operation heading on every area
+ * page was therefore rendering as a 32px word inside a grey #e0e0e0 box,
+ * which is precisely the failure this site's own token file names ("a
+ * five-character inline chip at adcpexplorer's 24px chrome pill reads as a
+ * defect, not as a pill") at an even larger size. A `<code>` anywhere
+ * inside a heading, a link, a cell head, a caption or a summary is already
+ * structurally marked; it never needs the chip as well.
+ * ------------------------------------------------------------------- */
+:root[data-site='adcpexplorer'] a code,
+:root[data-site='adcpexplorer'] :is(h1, h2, h3, h4) code,
+:root[data-site='adcpexplorer'] th code,
+:root[data-site='adcpexplorer'] caption code,
+:root[data-site='adcpexplorer'] summary code,
+:root[data-site='adcpexplorer'] .field-table td:first-child > code,
+:root[data-site='adcpexplorer'] .docs-tree code {
+  background: none;
+  padding: 0;
+}
+
+/* ---------------------------------------------------------------------
+ * §5.5 — the 1.75 prose rule.
+ *
+ * global.css deliberately does not read --lh-prose ("reading it globally
+ * would give all six sites 1.75"); this site applies it, scoped, to running
+ * prose only. Chrome and dense indexes stay at the UI rhythm (--lh-ui).
+ * ------------------------------------------------------------------- */
+:root[data-site='adcpexplorer'] main p,
+:root[data-site='adcpexplorer'] main li,
+:root[data-site='adcpexplorer'] main dd {
+  line-height: var(--lh-prose);
+}
+
+:root[data-site='adcpexplorer'] main table p,
+:root[data-site='adcpexplorer'] .task-list li,
+:root[data-site='adcpexplorer'] .docs-tree li,
+:root[data-site='adcpexplorer'] .toc-rail li,
+:root[data-site='adcpexplorer'] .breadcrumbs li,
+:root[data-site='adcpexplorer'] .portfolio-links li {
+  line-height: var(--lh-ui);
+}
+
+/* Homepage Explore region: a dense 2-column index at >=1056px. Markup is
+   unchanged; only the presentation becomes multi-column. */
+:root[data-site='adcpexplorer'] .task-list {
+  columns: 2;
+  column-gap: var(--space-07);
+}
+
+:root[data-site='adcpexplorer'] .task-list li {
+  break-inside: avoid;
+  padding: var(--space-03) 0;
+}
+
+@media (max-width: 1055px) {
+  :root[data-site='adcpexplorer'] .task-list {
+    columns: 1;
+  }
+}
+
+/* ---------------------------------------------------------------------
+ * Tables — horizontal dividers only, no zebra, no vertical rules. No zebra
+ * because it would fill half of every table with #f4f4f4 and fight the
+ * "surfaces darker than page" ramp.
+ * ------------------------------------------------------------------- */
+:root[data-site='adcpexplorer'] main th,
+:root[data-site='adcpexplorer'] main td {
+  border: 0;
+  border-bottom: var(--table-row-rule);
+  padding: var(--space-03) var(--space-04);
+}
+
+/* §B — the evidence face on table column heads.
+ *
+ * This is the single most visible application of the type-role split: this
+ * corpus argues in tables, and a column head is a NAME FROM THE SCHEMA
+ * ("Field", "Type", "Required"), not our prose. Setting it in the label
+ * primitive's own recipe — mono, uppercase, 12px, +0.6px, 600, muted —
+ * turns every table on the site from a generic docs table into a figure in
+ * a paper (editorial-references §2.1's kicker recipe applied at column
+ * scale, and §2.7's "the family itself signals 'this is evidence, not
+ * prose'"). Muted rather than full ink so the DATA stays the loudest thing
+ * in the table: #525252 on #f4f4f4 is 7.10:1, measured.
+ *
+ * SPECIFICITY, deliberate and load-bearing: `FieldTable.astro` is a frozen
+ * shared component whose own scoped rule compiles to
+ * `.field-table[data-astro-cid-…] thead[…] th[…]` = (0,4,2) and sets
+ * font-size/weight/line-height/letter-spacing on exactly these cells. The
+ * repeated `[data-site]` attribute is the documented trick already used by
+ * the zebra override below: it is valid CSS, still only ever matches
+ * `<html data-site="adcpexplorer">`, and buys (0,4,3) — one element column
+ * past the component — without `!important` and without hardcoding
+ * FieldTable's build-time hash, which changes whenever that file does. */
+:root[data-site='adcpexplorer'][data-site='adcpexplorer'][data-site='adcpexplorer'] main thead th {
+  background: var(--table-header-bg);
+  border-bottom: var(--table-header-rule);
+  font-family: var(--meta-font);
+  font-size: var(--meta-size);
+  font-weight: var(--label-weight);
+  line-height: var(--lh-ui);
+  letter-spacing: var(--meta-track);
+  text-transform: var(--label-transform);
+  color: var(--meta-color);
+  vertical-align: bottom;
+}
+
+/* An operation name in a row header is an atom, not a sentence.
+ * `global.css` gives every inline `<code>` `overflow-wrap: anywhere`,
+ * which is correct and load-bearing for the 500px schema paths that used
+ * to blow out a 390px viewport — but in a narrow first column it also
+ * broke `context_match` across two lines as "context_mat / ch", which is
+ * unreadable and, worse, unsearchable by eye. Undone for row headers only,
+ * exactly mirroring the `white-space: nowrap` `global.css` already applies
+ * to `.field-table td:first-child` for the same reason. Safe at 390px:
+ * `main table` becomes its own scroll container there, so a long name
+ * scrolls inside the table instead of widening the document. */
+:root[data-site='adcpexplorer'] main tbody th[scope='row'] code {
+  white-space: nowrap;
+  overflow-wrap: normal;
+}
+
+/* Counts, field totals and version numbers are measurements; lining them up
+   is instrumentation, not decoration (editorial-references §1, "colour is
+   instrumentation" — here the mechanism is numerals, not colour, because
+   this site spends its one hue on links alone). */
+:root[data-site='adcpexplorer'] main table,
+:root[data-site='adcpexplorer'] .docs-tree-count,
+:root[data-site='adcpexplorer'] .version-tag-id {
+  font-variant-numeric: tabular-nums;
+}
+
+/* FieldTable's own zebra rule is Astro-scoped with three `[data-astro-cid-*]`
+   attribute selectors (one per compound: `.field-table`, `tbody`, `tr`),
+   landing at specificity (0,5,2) — one column past this file's usual (0,4,2)
+   `:root[data-site=...]` prefix. Repeating the attribute selector is valid
+   CSS (it still only matches `<html data-site="adcpexplorer">`) and buys the
+   point needed to win without `!important` or duplicating FieldTable's
+   build-time hash. */
+:root[data-site='adcpexplorer'][data-site='adcpexplorer'] .field-table tbody tr:nth-child(even) {
+  background: none;
+}
+
+/* ---------------------------------------------------------------------
+ * §5.6 — chrome: the 24px pill made visible at rest, not only on hover.
+ * The outline is functional (it makes the hit target legible), not
+ * decorative. Current-page state is carried by fill + text colour +
+ * aria-current — three redundant channels.
+ * ------------------------------------------------------------------- */
+:root[data-site='adcpexplorer'] .site-header nav a {
+  border: 1px solid var(--nav-pill-border);
+  border-radius: var(--radius-24);
+}
+
+/* ---------------------------------------------------------------------
+ * Current-page / hover pill fill (MUST-FIX 1, 2).
+ *
+ * Header.astro's own scoped rule (`.site-header nav a:hover, [aria-current=
+ * 'page'] { background: var(--bg-inset) }`) is Astro-scoped, which adds a
+ * `[data-astro-cid-*]` attribute selector per compound and lands at
+ * specificity (0,4,2) — one column ahead of this file's normal (0,3,2)
+ * `:root[data-site=...]` prefix, so a direct `background:` override here
+ * loses. `--bg-inset` is a custom property, though, and custom-property
+ * *values* cascade independently of which rule's `background:` declaration
+ * ends up reading them — redefining `--bg-inset` on the element via a
+ * lower-specificity rule still wins, because nothing else sets `--bg-inset`
+ * at that scope. This is the fix, not a specificity fight:
+ *
+ *   - current page: --bg-inset -> --site-accent (#0a7d52), text flips to
+ *     --nav-current-fg (white) -> 5.16:1 on #0a7d52 / 7.13:1 dark pair.
+ *   - hover (non-current): --bg-inset -> --bg-subtle (#f4f4f4), so
+ *     global.css's `color: var(--accent)` on hover composites against
+ *     #f4f4f4 (4.69:1) instead of the #e0e0e0 default (3.91:1, FAILS).
+ *
+ * Declared in this order so a hovered current-page pill's `[aria-current]`
+ * rule wins the tie (equal specificity, source order) and stays green, not
+ * grey-then-green.
+ * ------------------------------------------------------------------- */
+:root[data-site='adcpexplorer'] .site-header nav a:hover {
+  --bg-inset: var(--bg-subtle);
+}
+
+:root[data-site='adcpexplorer'] .site-header nav a[aria-current='page'] {
+  --bg-inset: var(--nav-current-bg);
+  border-color: var(--nav-current-bg);
+  color: var(--nav-current-fg);
+}
+
+/* ---------------------------------------------------------------------
+ * Breadcrumbs — links stay --fg-muted (never the green accent); the final,
+ * non-linked crumb is --fg at 600.
+ * ------------------------------------------------------------------- */
+:root[data-site='adcpexplorer'] .breadcrumbs ol {
+  font-size: 0.875rem;
+}
+
+:root[data-site='adcpexplorer'] .breadcrumbs a {
+  color: var(--fg-muted);
+  text-decoration: none;
+}
+
+:root[data-site='adcpexplorer'] .breadcrumbs a:hover {
+  text-decoration: underline;
+}
+
+:root[data-site='adcpexplorer'] .breadcrumbs li:last-child span {
+  color: var(--fg);
+  font-weight: 600;
+}
+
+/* ---------------------------------------------------------------------
+ * §4.2 — operation record separation on area pages.
+ *
+ * This block used to paint its own `1px hairline + 32px` boundary between
+ * peer records. Since §A each record's own `<h2>` carries the section rule
+ * and the 64/24/8 asymmetry, so the two devices stacked: screenshotting an
+ * area page showed TWO hairlines about 90px apart above `identity_match`,
+ * which reads as a defect rather than as a system.
+ *
+ * The record's rule is the one that goes, not the h2's: the h2 is the
+ * thing a reader is actually navigating to (it owns the anchor id and the
+ * TOC entry), and keeping the break attached to the heading is what makes
+ * ONE mechanic cover section breaks, FAQ, Related, the colophon and peer
+ * records alike. Zeroed rather than deleted so this file still documents
+ * that the record boundary is deliberate and where it now comes from.
+ * ------------------------------------------------------------------- */
+:root[data-site='adcpexplorer'] .operation-record {
+  border-top: none;
+  padding-top: 0;
+  margin-top: 0;
+}
+
+/* ---------------------------------------------------------------------
+ * Illustration placements sit centred in the 756px track, never full-width
+ * (spec §6). IllustrationPlaceholder.astro is already token-styled; this
+ * only bounds its width on this site.
+ *
+ * The placeholders themselves are DEV-ONLY — each call site is wrapped in
+ * `import.meta.env.DEV` (user decision: production ships clean, prompts
+ * stay catalogued in /srv/ws/out/illustration-prompts-adcpexplorer.md), so
+ * this rule has no consumer in a production build. It is kept because the
+ * slot is still visible locally and must be composed correctly there.
+ * ------------------------------------------------------------------- */
+:root[data-site='adcpexplorer'] .illustration-placeholder-figure {
+  max-width: 26rem;
+  margin-inline: auto;
+}
+
+/* =====================================================================
+ * §A — SECTION RHYTHM: one hairline, one asymmetry, every break.
+ *
+ * editorial-references §2.3 (Monocle's 30+ `border-top` section breaks —
+ * "hairline as the ONLY structural chrome, low-contrast neutral, never
+ * black") crossed with §2.9 (Stripe Press's live `margin: 80px 0 10px`
+ * immediately preceding a 1px rule — the BREAK carries the whitespace,
+ * not a padding box).
+ *
+ * Read down the page the cadence is: 64px of air -> a #e0e0e0 hairline ->
+ * 24px -> the heading -> 8px -> the text. Big above, small below. That
+ * asymmetry is the whole mechanic; a symmetric 32/32 reads as a card
+ * without borders, which is the failure mode this replaces.
+ *
+ * It also CONSOLIDATES. Before this pass the page had four competing
+ * section devices: `h2`'s ad-hoc `2.2rem 0 0.7rem` + `padding-top: .5rem`,
+ * `.faq`'s own `border-top` + `2.5rem`, `.related`'s identical pair, and
+ * `.spec-source`'s dashed box. Now there is exactly one, so "a new section
+ * starts here" is a single learned signal rather than four dialects — and
+ * `.faq`/`.related` stop double-ruling (their own border sat 2.5rem above
+ * an h2 that then added its own margin).
+ *
+ * Descendant, not child: `areas/[area].astro` renders `<section><h2>`,
+ * `FaqBlock` renders `<section class="faq"><h2>`, and the index renders a
+ * bare `<h2>` — all three must land on the same rhythm. Scoped to
+ * `.doc-content article` so the TOC rail's own `<h2>` (in `.doc-aside`)
+ * and the footer's `<h2>`s are untouched.
+ * ------------------------------------------------------------------- */
+:root[data-site='adcpexplorer'] .doc-content article h2 {
+  margin: var(--section-space-above) 0 var(--section-space-below);
+  padding-top: var(--section-space-lead);
+  border-top: var(--section-rule);
+}
+
+/* h3 is the quieter level: the same asymmetry at half the space and NO
+   rule, so the two levels are told apart by rhythm rather than by a second
+   line weight. (No left rule anywhere here; ruling 5's single 2px
+   exemption stays the TOC active marker's alone.) */
+:root[data-site='adcpexplorer'] .doc-content article h3 {
+  margin: var(--subsection-space-above) 0 var(--section-space-below);
+  padding-top: 0;
+}
+
+/* The shared FAQ/Related blocks hand back their own section chrome — their
+   `<h2>` above now carries it. */
+:root[data-site='adcpexplorer'] .doc-content article :is(.faq, .related) {
+  margin-top: 0;
+  border-top: none;
+}
+
+/* No first-child exception, on purpose. Every page opens with an h1 and
+   (on most types) an AnswerBox or a lede, so the first h2 always has
+   something above it to be separated from — and exempting it would
+   reintroduce a second dialect for the sake of one break. One mechanic,
+   no special cases, is the whole argument of this section. */
+
+/* h1 gets the space the old ad-hoc margins were spending badly: tight to
+   its kicker above (§D), generous before the AnswerBox below. */
+:root[data-site='adcpexplorer'] .doc-content article > h1 {
+  margin: 0 0 var(--space-06);
+}
+
+/* Mobile-first step-down. Carbon layout steps, not invented numbers: the
+   64/24/8 desktop rhythm becomes 48/16/8, which keeps the asymmetry (the
+   signal) while giving back 40px per break on a 390px screen. Matches
+   PageLayout's own 672px collapse point so the rhythm changes at the same
+   moment the grid does. */
+@media (max-width: 671px) {
+  :root[data-site='adcpexplorer'] {
+    --section-space-above: var(--space-layout-04); /* 48px */
+    --section-space-lead: var(--space-05); /* 16px */
+    --subsection-space-above: var(--space-06); /* 24px */
+  }
+}
+
+/* =====================================================================
+ * §B — THE EVIDENCE FACE, continued (table heads are in the tables block
+ * above, where they belong next to the rest of the table treatment).
+ *
+ * editorial-references §2.7: "the four-face split where the grotesque is
+ * reserved for captions/credits/timestamps/nav is the load-bearing
+ * mechanic: type family alone distinguishes claim from sourcing." We have
+ * one grotesque and one mono, so mono takes the metadata role.
+ *
+ * The rule is narrow ON PURPOSE. Mono everywhere is a costume; mono on
+ * exactly the artefacts that came from the specification is a system. What
+ * stays Plex Sans: running prose, every heading (h2/h3/h4), breadcrumbs,
+ * nav labels, area titles, FAQ questions and answers.
+ * ------------------------------------------------------------------- */
+
+/* A HEADING THAT HAPPENS TO BE A LINK IS STILL A HEADING.
+ *
+ * Found by screenshotting: on the homepage's "Every operation by name"
+ * index, every `<h3>` is a link to its area page, so all ten section
+ * headings rendered in the accent green — on top of ~64 green operation
+ * names underneath them. Two failures at once. editorial-references §1:
+ * "if a colour appears and it is not measuring something or marking one
+ * recurring editorial device, it reads as marketing" — a heading is not an
+ * instrument, and green on a heading spends the entire one-colour budget
+ * on decoration. And hierarchically the h3 stopped reading as a level and
+ * started reading as the loudest link on the page.
+ *
+ * Ink, with the underline left in currentColor so the link affordance is
+ * NOT carried by colour alone (WCAG 1.4.1) — the same discipline the
+ * breadcrumb rule below already applies. Scale, weight and the rhythm above
+ * carry the heading; green stays on body links, where it is doing
+ * wayfinding work. Deliberately NOT agenticadlab's device (a coloured
+ * `text-decoration-color` under ink body prose, its own <5%-accent
+ * mechanic) — this is the opposite move, and it is scoped to headings. */
+:root[data-site='adcpexplorer'] .doc-content article :is(h1, h2, h3, h4) a {
+  color: inherit;
+}
+
+/* Badges are chips of schema truth ("required"), so they take the evidence
+   face — and, per §F, the capsule. */
+:root[data-site='adcpexplorer'] .badge {
+  font-family: var(--meta-font);
+  font-size: var(--meta-size);
+  letter-spacing: var(--meta-track);
+  border-radius: var(--radius-24);
+  padding: 0.1rem 0.55rem;
+}
+
+/* =====================================================================
+ * §C — TERSE CAPTIONS, METHODOLOGY DEFERRED (editorial-references §2.13,
+ * live/Pudding: "captions are plain-weight, directly under the graphic;
+ * credit and method live in a separate section — the figure-in-a-paper
+ * convention, not the product-screenshot convention").
+ *
+ * Deliberately NOT uppercased, unlike the kicker and the column heads:
+ * captions carry literal identifiers (`get_products request — 14 fields,
+ * 3 required`) and upper-casing an identifier misrepresents it. Mono +
+ * 12px + muted is enough to mark the register; case is data here.
+ * ------------------------------------------------------------------- */
+:root[data-site='adcpexplorer'] main caption {
+  font-family: var(--meta-font);
+  font-size: var(--meta-size);
+  line-height: var(--lh-ui);
+  letter-spacing: var(--meta-track);
+  color: var(--meta-color);
+  padding-bottom: var(--space-03);
+}
+
+/* `CodeSample.astro` is a frozen shared component; its scoped
+   `.code-sample[data-astro-cid-…] figcaption[…]` is (0,3,1) and sets
+   font-size/tracking/colour, so one repeated `[data-site]` (0,4,1) is the
+   minimum that carries the family change with it. Same trick, same reason
+   as the table heads. */
+/* `<figure>` carries a UA default `margin: 1em 40px`, and nothing in the
+   chassis overrides it for `.code-sample` (FieldTable's figure escapes via
+   global.css's `.comparison { margin: 1.8rem 0 }`). The result on
+   /schemas/ was a worked example — caption and panel together — indented
+   40px off the page's left spine while every paragraph above and below it
+   sat flush. A single alignment spine down the content column is the
+   cheapest thing a reference page has going for it; an accidental UA
+   inset is not a composition. Flush, with the section rhythm's own
+   spacing. */
+:root[data-site='adcpexplorer'] .code-sample {
+  margin: var(--space-06) 0;
+}
+
+:root[data-site='adcpexplorer'][data-site='adcpexplorer'] .code-sample figcaption {
+  font-family: var(--meta-font);
+  font-size: var(--meta-size);
+  line-height: var(--lh-ui);
+  letter-spacing: var(--meta-track);
+  color: var(--meta-color);
+}
+
+/* THE COLOPHON — the "methodology deferred to an end section" half of
+   §2.13, and the closest thing this site has to a signature gesture.
+   `SpecSource` prints the repo path, the commit and the parse date on
+   every generated page; it shipped as a dashed-border box, which is
+   editorial-references §1's "boxless hierarchy" tell firing in reverse and
+   the anti-tell "bordered tile" firing forwards. Un-boxed, it becomes what
+   it actually is: a printed colophon under the same hairline every other
+   section break uses, set in the evidence face. No border-left is involved
+   at any point (ruling 5). */
+:root[data-site='adcpexplorer'] .spec-source {
+  margin: var(--section-space-above) 0 0;
+  padding: var(--section-space-lead) 0 0;
+  border: none;
+  border-top: var(--section-rule);
+  border-radius: 0;
+  font-family: var(--meta-font);
+  font-size: var(--meta-size);
+  line-height: var(--lh-ui);
+  letter-spacing: var(--meta-track);
+  color: var(--meta-color);
+}
+
+/* =====================================================================
+ * §D — THE KICKER AND ITS 40px MARK.
+ *
+ * editorial-references §2.1 ranks the kicker/eyebrow the highest-leverage
+ * mechanic available, and the chassis already ships it (mono, uppercase,
+ * 600, `--track-label`) — this site's 0.6px is the TIGHTEST tracking in the
+ * portfolio, against wiab's 1.8px and aamp's 1.3px, which is the point:
+ * a reference work's label is set close, a magazine's is set loose.
+ *
+ * What is new is §2.8's short-rule half, taken from Stripe Press's live
+ * pull-quote recipe (a 40px-wide, 1px-tall rule as an `::after`). The
+ * oversized-glyph half of that trick is deliberately declined — a display
+ * flourish belongs to agenticadlab and whatisagenticbuying, not here. One
+ * 40px mark between the kicker and the headword is the entire gesture, and
+ * it turns the top of an operation page into a masthead: breadcrumb, mono
+ * kicker, 40px mark, mono headword.
+ *
+ * `::after` on a block element, so it costs no markup, no asset and no
+ * accessible text.
+ * ------------------------------------------------------------------- */
+:root[data-site='adcpexplorer'] .doc-content article > .eyebrow {
+  margin-bottom: var(--space-04);
+}
+
+:root[data-site='adcpexplorer'] .doc-content article > .eyebrow::after {
+  content: '';
+  display: block;
+  width: var(--kicker-rule-width);
+  height: 1px;
+  margin-top: var(--space-03);
+  background: var(--kicker-rule-color);
+}
+
+/* =====================================================================
+ * §F — THE CAPSULE AS A SYSTEM (axis 2, the dominant differentiator).
+ *
+ * editorial-references §3 axis 2 says radius is bucket membership, and §4
+ * says this site owns the pill bucket outright — "do not let aamp adopt a
+ * pill anywhere". A differentiator that appears once, in the header, is a
+ * flourish; one that appears on every chrome affordance and on NO content
+ * shape is an identity. Already 24px: header nav links (Header.astro reads
+ * `--radius`), the version credit, nav-tree rows and hovers, `.badge`
+ * (above). Already deliberately NOT 24px: cards (2px), code panels (2px
+ * via `--code-radius`), the AnswerBox (2px), inline `<code>` chips (2px).
+ *
+ * The one remaining gap was the skip link — the first focusable thing on
+ * every page, and the only chrome control still rendering at the raw
+ * `--radius` through a rule that predates the split. It reads `--radius`
+ * already, so it is a capsule for free; what it lacked was the outline
+ * that makes the other capsules legible at rest.
+ * ------------------------------------------------------------------- */
+:root[data-site='adcpexplorer'] .skip-link:focus {
+  border: 1px solid var(--nav-pill-border);
+  border-radius: var(--radius-24);
+}

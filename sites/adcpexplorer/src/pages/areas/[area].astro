@@ -3,11 +3,14 @@
  * One page per AdCP area, carrying the full reference for every operation in it.
  * Operations that also have a standalone page are listed in FEATURED_OPERATIONS.
  */
-import BaseLayout from '@agenticbrief/shared-ui/BaseLayout.astro'
-import AnswerBox from '@agenticbrief/shared-ui/AnswerBox.astro'
+import PageLayout from '@agenticbrief/shared-ui/PageLayout.astro'
 import FieldTable from '@agenticbrief/shared-ui/FieldTable.astro'
 import CodeSample from '@agenticbrief/shared-ui/CodeSample.astro'
 import SpecSource from '@agenticbrief/shared-ui/SpecSource.astro'
+import IllustrationPlaceholder from '@agenticbrief/shared-ui/IllustrationPlaceholder.astro'
+import DocsTree from '../../components/DocsTree.astro'
+import TocRail from '../../components/TocRail.astro'
+import '../../styles/site.css'
 import { adcp } from '@agenticbrief/protocol-data'
 import {
   graph,
@@ -294,37 +297,96 @@ const jsonLd = graph([
 ])
 
 const otherAreas = orderedAreas().filter((a) => a.key !== areaKey)
+
+/**
+ * TOC (spec §4.3): note headings + "What the N … do" + one entry per
+ * task.slug + "The other N areas" + "Related" — built from the exact same
+ * `note`/`tasks` data that renders the headings themselves, so an id here
+ * can never point at an anchor the page did not emit.
+ */
+function stripTags(html: string): string {
+  return html.replace(/<[^>]+>/g, '')
+}
+function slugifyHeading(html: string): string {
+  return stripTags(html)
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)/g, '')
+}
+const opsHeading = `What the ${tasks.length} ${area.title.toLowerCase()} operation${plural} ${
+  tasks.length === 1 ? 'does' : 'do'
+}`
+const opsHeadingId = 'what-they-do'
+const otherAreasHeading = `The other ${otherAreas.length} AdCP areas`
+const otherAreasId = 'other-areas'
+
+const toc = [
+  ...(note?.beforeTable ?? []).map((s) => ({
+    id: slugifyHeading(s.heading),
+    label: stripTags(s.heading),
+    depth: 2 as const,
+  })),
+  { id: opsHeadingId, label: opsHeading, depth: 2 as const },
+  ...(note?.afterTable ?? []).map((s) => ({
+    id: slugifyHeading(s.heading),
+    label: stripTags(s.heading),
+    depth: 2 as const,
+  })),
+  ...tasks.map((t) => ({ id: t.slug, label: t.name, depth: 3 as const })),
+  ...(note?.afterOperations ?? []).map((s) => ({
+    id: slugifyHeading(s.heading),
+    label: stripTags(s.heading),
+    depth: 2 as const,
+  })),
+  { id: otherAreasId, label: otherAreasHeading, depth: 2 as const },
+  { id: 'related-heading', label: 'Related', depth: 2 as const },
+]
+
+const TRUSTED_MATCH_ILLUSTRATION_PROMPT = `Visual Aesthetic: Technical diagram in a "senior engineer's whiteboard sketch" style — a digital napkin sketch, not a photograph. Line-based, 2-3px uniform stroke weight, flat 2D. Drawn straight and rigidly grid-aligned so it reads as a specification diagram rather than a loose sketch. Strict Color Palette: Background pure white #ffffff, no texture. Lines and text black #1a1a1a. Exactly ONE accent highlight, green #0a7d52, applied to a single named element. Optional #f5f5f5 light-gray fill for pencil-style shading only. Composition: maximum 7 elements, minimum 70% whitespace, comprehensible in 3 seconds. Everything is rectangles, arrows, straight lines and text labels. Aspect ratio 4:3. Negative Constraints (Forbidden): NO isometric perspective, NO 3D, NO shadows, NO gradients, NO rounded corners, NO multiple stroke weights, NO characters, stick figures, mascots or robots, NO cute icons, NO laptops, computers or hardware of any kind, NO folded-corner document icons, NO red, yellow or orange, NO green other than the single #0a7d52 accent, NO gray textured background, NO captions or title text baked into the image, NO more than 7 elements.
+
+DIAGRAM CONTENT: Two long horizontal rectangles stacked vertically as lanes, with clear space between them. TOP LANE: label at its left edge outside the rectangle reading "context_match"; inside the lane, one straight horizontal arrow running left to right, labelled "request → response". BOTTOM LANE: label at its left edge outside the rectangle reading "identity_match"; inside the lane, one straight horizontal arrow running left to right, labelled "request → response". BETWEEN the two lanes, spanning the full width of the canvas, one HARD THICK HORIZONTAL DASHED LINE. The text "no shared correlation id" sits centred directly on that dashed line. NO arrow, line or connector crosses the dashed line anywhere — the two lanes are absolutely isolated from each other. The accent highlight #0a7d52 is applied to the dashed separating line ONLY; every other line is black.`
 ---
 
-<BaseLayout
+<PageLayout
   site="adcpexplorer"
   title={title}
+  heading={`AdCP ${area.title}`}
   description={description}
   path={path}
+  answer={answer}
+  eyebrow={`AdCP ${adcp.version}${layer ? ` · ${layer.title}` : ''}`}
+  breadcrumbs={breadcrumbs}
   jsonLd={jsonLd}
-  wide
+  layout="reference"
   ogType="article"
   publishDate={new Date(LAST_UPDATED)}
   keywords={[`adcp ${area.key}`, `${area.title.toLowerCase()} protocol`, 'ad context protocol']}
 >
-  <nav class="breadcrumbs" aria-label="Breadcrumb">
-    <ol>
-      <li><a href="/">AdCP Explorer</a></li>
-      <li><span>{area.title}</span></li>
-    </ol>
-  </nav>
-
-  <p class="eyebrow">AdCP {adcp.version}{layer ? ` · ${layer.title}` : ''}</p>
-  <h1>AdCP {area.title}</h1>
-
-  <AnswerBox answer={answer} />
+  <DocsTree slot="nav" />
+  <TocRail slot="aside" toc={toc} />
 
   {note && note.lede.map((p) => <p set:html={p} />)}
 
   {
+    /*
+     * DEV-ONLY (user decision): production ships clean, with no visible
+     * placeholder box. The prompt stays catalogued in
+     * /srv/ws/out/illustration-prompts-adcpexplorer.md.
+     */
+    import.meta.env.DEV && areaKey === 'trusted-match' && (
+      <IllustrationPlaceholder
+        slug="adcpexplorer/areas/trusted-match-correlation-gap"
+        prompt={TRUSTED_MATCH_ILLUSTRATION_PROMPT}
+        alt="context_match and identity_match run in separate lanes with no correlation id between them."
+        ratio="4 / 3"
+      />
+    )
+  }
+
+  {
     note?.beforeTable?.map((s) => (
       <section>
-        <h2>{s.heading}</h2>
+        <h2 id={slugifyHeading(s.heading)}>{s.heading}</h2>
         {s.body.map((p) => (
           <p set:html={p} />
         ))}
@@ -332,13 +394,7 @@ const otherAreas = orderedAreas().filter((a) => a.key !== areaKey)
     ))
   }
 
-  <h2>
-    {
-      `What the ${tasks.length} ${area.title.toLowerCase()} operation${plural} ${
-        tasks.length === 1 ? 'does' : 'do'
-      }`
-    }
-  </h2>
+  <h2 id={opsHeadingId}>{opsHeading}</h2>
 
   <table>
     <caption>{area.title} — {tasks.length} operation{plural}</caption>
@@ -372,7 +428,7 @@ const otherAreas = orderedAreas().filter((a) => a.key !== areaKey)
     note &&
       note.afterTable.map((s) => (
         <section>
-          <h2>{s.heading}</h2>
+          <h2 id={slugifyHeading(s.heading)}>{s.heading}</h2>
           {s.body.map((p) => (
             <p set:html={p} />
           ))}
@@ -382,7 +438,7 @@ const otherAreas = orderedAreas().filter((a) => a.key !== areaKey)
 
   {
     tasks.map((task) => (
-      <section aria-labelledby={`${task.slug}-heading`}>
+      <section class="operation-record" aria-labelledby={`${task.slug}-heading`}>
         <h2 id={task.slug}>
           <span id={`${task.slug}-heading`}>
             <code>{task.name}</code>
@@ -426,7 +482,7 @@ const otherAreas = orderedAreas().filter((a) => a.key !== areaKey)
     note &&
       note.afterOperations.map((s) => (
         <section>
-          <h2>{s.heading}</h2>
+          <h2 id={slugifyHeading(s.heading)}>{s.heading}</h2>
           {s.body.map((p) => (
             <p set:html={p} />
           ))}
@@ -434,7 +490,7 @@ const otherAreas = orderedAreas().filter((a) => a.key !== areaKey)
       ))
   }
 
-  <h2>{`The other ${otherAreas.length} AdCP areas`}</h2>
+  <h2 id={otherAreasId}>{otherAreasHeading}</h2>
   <ul>
     {
       otherAreas.map((a) => {
@@ -452,7 +508,7 @@ const otherAreas = orderedAreas().filter((a) => a.key !== areaKey)
     }
   </ul>
 
-  <h2>Related</h2>
+  <h2 id="related-heading">Related</h2>
   <ul>
     <li><a href="/">Every AdCP operation, all {adcp.tasks.length} of them</a></li>
     <li><a href="/schemas/">How the AdCP schema registry is organised</a></li>
@@ -460,4 +516,4 @@ const otherAreas = orderedAreas().filter((a) => a.key !== areaKey)
       <a href={`${HUB}/protocols/adcp-vs-aamp/`} rel="noopener">AdCP compared with AAMP</a>
     </li>
   </ul>
-</BaseLayout>
+</PageLayout>

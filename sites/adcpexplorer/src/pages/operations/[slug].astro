@@ -6,12 +6,14 @@
  * its area page, and operationUrl() is the single function that decides which
  * — so no link on the site can point at a page that was not generated.
  */
-import BaseLayout from '@agenticbrief/shared-ui/BaseLayout.astro'
-import AnswerBox from '@agenticbrief/shared-ui/AnswerBox.astro'
+import PageLayout from '@agenticbrief/shared-ui/PageLayout.astro'
 import FieldTable from '@agenticbrief/shared-ui/FieldTable.astro'
 import CodeSample from '@agenticbrief/shared-ui/CodeSample.astro'
 import SpecSource from '@agenticbrief/shared-ui/SpecSource.astro'
 import FaqBlock from '@agenticbrief/shared-ui/FaqBlock.astro'
+import DocsTree from '../../components/DocsTree.astro'
+import TocRail from '../../components/TocRail.astro'
+import '../../styles/site.css'
 import { adcp } from '@agenticbrief/protocol-data'
 import {
   graph,
@@ -169,33 +171,45 @@ const jsonLd = graph([
 ])
 
 const siblings = tasksForArea(task.area).filter((t) => t.name !== task.name)
+
+const hasExamples = task.examples.length > 0
+const toc = [
+  { id: 'request-fields', label: `${task.name} request fields`, depth: 2 as const },
+  { id: 'response-fields', label: `${task.name} response fields`, depth: 2 as const },
+  { id: 'shared-envelope', label: 'The shared protocol envelope', depth: 2 as const },
+  {
+    id: 'field-lists-not-published',
+    label: 'Field lists are not published over the wire',
+    depth: 2 as const,
+  },
+  ...(hasExamples
+    ? [{ id: 'example-calls', label: `Example ${task.name} calls`, depth: 2 as const }]
+    : []),
+  { id: 'faq-heading', label: 'Frequently asked', depth: 2 as const },
+  { id: 'other-operations', label: `Other operations in ${area}`, depth: 2 as const },
+  { id: 'related-heading', label: 'Related', depth: 2 as const },
+]
 ---
 
-<BaseLayout
+<PageLayout
   site="adcpexplorer"
   title={title}
+  heading={task.name}
   description={description}
   path={path}
+  answer={answer}
+  eyebrow={`AdCP ${adcp.version} · ${area}`}
+  breadcrumbs={breadcrumbs}
   jsonLd={jsonLd}
-  wide
+  layout="reference"
   ogType="article"
   publishDate={new Date(LAST_UPDATED)}
   keywords={[task.name, `adcp ${task.name}`, 'ad context protocol']}
 >
-  <nav class="breadcrumbs" aria-label="Breadcrumb">
-    <ol>
-      <li><a href="/">AdCP Explorer</a></li>
-      <li><a href={`/areas/${task.area}/`}>{area}</a></li>
-      <li><span>{task.name}</span></li>
-    </ol>
-  </nav>
+  <DocsTree slot="nav" />
+  <TocRail slot="aside" toc={toc} />
 
-  <p class="eyebrow">AdCP {adcp.version} · {area}</p>
-  <h1><code>{task.name}</code></h1>
-
-  <AnswerBox answer={answer} />
-
-  <h2><code>{task.name}</code> request fields</h2>
+  <h2 id="request-fields"><code>{task.name}</code> request fields</h2>
   <p>
     The required column reflects the top-level <code>required</code> array only. {
       requiredRequestSentence
@@ -213,7 +227,7 @@ const siblings = tasksForArea(task.area).filter((t) => t.name !== task.name)
     safe to retry.
   </p>
 
-  <h2><code>{task.name}</code> response fields</h2>
+  <h2 id="response-fields"><code>{task.name}</code> response fields</h2>
   {
     bodyFields.length === 0 && (
       <p>
@@ -232,7 +246,7 @@ const siblings = tasksForArea(task.area).filter((t) => t.name !== task.name)
   </p>
   <FieldTable fields={task.responseFields} caption={`${task.name} response`} />
 
-  <h2>The shared protocol envelope</h2>
+  <h2 id="shared-envelope">The shared protocol envelope</h2>
   <p>
     {carriesFullEnvelope} of AdCP's {adcp.tasks.length} registered operations carry every one of the {
       envelopeNames.size
@@ -260,7 +274,7 @@ const siblings = tasksForArea(task.area).filter((t) => t.name !== task.name)
     nothing there.
   </p>
 
-  <h2>Field lists are not published over the wire</h2>
+  <h2 id="field-lists-not-published">Field lists are not published over the wire</h2>
   <p>
     AdCP's integration guide, <code>docs/protocol/calling-an-agent.mdx</code>, states that its MCP
     servers no longer publish per-tool parameter schemas: a <code>tools/list</code> call returns an empty
@@ -271,7 +285,7 @@ const siblings = tasksForArea(task.area).filter((t) => t.name !== task.name)
   {
     task.examples.length > 0 && (
       <>
-        <h2>
+        <h2 id="example-calls">
           Example <code>{task.name}</code> calls
         </h2>
         <p>
@@ -292,7 +306,7 @@ const siblings = tasksForArea(task.area).filter((t) => t.name !== task.name)
 
   <FaqBlock entries={faq} />
 
-  <h2>Other operations in {area}</h2>
+  <h2 id="other-operations">Other operations in {area}</h2>
   <ul class="task-list">
     {
       siblings.map((t) => (
@@ -305,7 +319,7 @@ const siblings = tasksForArea(task.area).filter((t) => t.name !== task.name)
     }
   </ul>
 
-  <h2>Related</h2>
+  <h2 id="related-heading">Related</h2>
   <ul>
     <li><a href={`/areas/${task.area}/`}>The full {area} reference</a></li>
     <li>
@@ -319,4 +333,40 @@ const siblings = tasksForArea(task.area).filter((t) => t.name !== task.name)
   </ul>
 
   <SpecSource provenance={task.provenance} specVersion={adcp.version} />
-</BaseLayout>
+</PageLayout>
+
+<style>
+  /*
+   * Headword-first density (spec §4.3): the operation name is the h1, set in
+   * mono rather than wrapped in an inline <code> — PageLayout's `heading`
+   * prop takes a plain string, so the whole h1 (which is just the operation
+   * name) takes the mono treatment instead of only a nested element. Scoped
+   * to this route only via `:global`, which Astro still bundles into this
+   * page's own CSS chunk, not into the other reference page types.
+   */
+  :global(:root[data-site='adcpexplorer'] .doc-content > article > h1) {
+    font-family: var(--font-mono);
+    /*
+     * ORCHESTRATOR FIX (M4) — was a flat 2.3125rem (37px), which fractured the
+     * site's signature device at 390px: `get_adcp_capabil/ities`,
+     * `create_media_bu/y`. An operation name broken mid-token is worse than a
+     * smaller operation name — the identifier IS the headword.
+     *
+     * Sized from the data, not guessed. The longest operation name in
+     * data/adcp-specs.json is `get_adcp_capabilities` (21 chars). IBM Plex Mono
+     * advances ~0.6em, so it needs 21 x 0.6 x size px, against a 390px viewport
+     * with 16px padding each side = 358px available:
+     *
+     *   37px -> 466px  overflows, breaks mid-token
+     *   28px -> 353px  fits, but with only 5px to spare
+     *   23px -> 290px  fits comfortably
+     *
+     * clamp floors at 23px (5.9vw at a 390px viewport) and reaches the full
+     * 37px at 627px and above, so desktop is unchanged. The body's
+     * `overflow-wrap: break-word` stays as a last-resort net for any future
+     * name longer than today's corpus.
+     */
+    font-size: clamp(1.4375rem, 5.9vw, 2.3125rem); /* 23px -> 37px */
+    font-weight: 400;
+  }
+</style>

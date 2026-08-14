@@ -1,10 +1,13 @@
 ---
-import BaseLayout from '@agenticbrief/shared-ui/BaseLayout.astro'
-import AnswerBox from '@agenticbrief/shared-ui/AnswerBox.astro'
+import PageLayout from '@agenticbrief/shared-ui/PageLayout.astro'
 import FieldTable from '@agenticbrief/shared-ui/FieldTable.astro'
 import CodeSample from '@agenticbrief/shared-ui/CodeSample.astro'
 import SpecSource from '@agenticbrief/shared-ui/SpecSource.astro'
 import FaqBlock from '@agenticbrief/shared-ui/FaqBlock.astro'
+import IllustrationPlaceholder from '@agenticbrief/shared-ui/IllustrationPlaceholder.astro'
+import DocsTree from '../components/DocsTree.astro'
+import TocRail from '../components/TocRail.astro'
+import '../styles/site.css'
 import { adcp } from '@agenticbrief/protocol-data'
 import {
   graph,
@@ -79,24 +82,51 @@ const jsonLd = graph([
   }),
   faqPageNode(url, faq),
 ])
+
+const breadcrumbs = [
+  { name: 'AdCP Explorer', url: `${BASE}/` },
+  { name: 'Schema registry', url },
+]
+
+// TOC: 12 h2s + the 10 object h3s (spec §4.3).
+const toc = [
+  { id: 'schema-trees', label: 'Schema trees', depth: 2 as const },
+  { id: 'index-manifest', label: 'index.json and manifest.json', depth: 2 as const },
+  { id: 'reference-resolution', label: 'How a reference resolves', depth: 2 as const },
+  { id: 'shared-envelopes', label: 'The shared envelopes', depth: 2 as const },
+  { id: 'no-inbound-reference', label: 'Schemas with no inbound reference', depth: 2 as const },
+  { id: 'error-detail-schemas', label: 'Error detail schemas', depth: 2 as const },
+  { id: 'discriminator', label: 'discriminator under draft-07', depth: 2 as const },
+  { id: 'bundled-schemas', label: 'Bundled schemas', depth: 2 as const },
+  { id: 'core-objects', label: `The ${adcp.objects.length} core objects`, depth: 2 as const },
+  ...adcp.objects.map((o) => ({ id: o.slug, label: o.name, depth: 3 as const })),
+  { id: 'client-checklist', label: "A client author's checklist", depth: 2 as const },
+  { id: 'faq-heading', label: 'Frequently asked', depth: 2 as const },
+  { id: 'related-heading', label: 'Related', depth: 2 as const },
+]
+
+const REF_RESOLUTION_ILLUSTRATION_PROMPT = `Visual Aesthetic: Technical diagram in a "senior engineer's whiteboard sketch" style — a digital napkin sketch, not a photograph. Line-based, 2-3px uniform stroke weight, flat 2D. Drawn straight and rigidly grid-aligned so it reads as a specification diagram rather than a loose sketch. Strict Color Palette: Background pure white #ffffff, no texture. Lines and text black #1a1a1a. Exactly ONE accent highlight, green #0a7d52, applied to a single named element. Optional #f5f5f5 light-gray fill for pencil-style shading only. Composition: maximum 7 elements, minimum 70% whitespace, comprehensible in 3 seconds. Everything is rectangles, arrows, straight lines and text labels. Aspect ratio 4:3. Negative Constraints (Forbidden): NO isometric perspective, NO 3D, NO shadows, NO gradients, NO rounded corners, NO multiple stroke weights, NO characters, stick figures, mascots or robots, NO cute icons, NO laptops, computers or hardware of any kind, NO folded-corner document icons, NO red, yellow or orange, NO green other than the single #0a7d52 accent, NO gray textured background, NO captions or title text baked into the image, NO more than 7 elements.
+
+DIAGRAM CONTENT: Three rectangles arranged left to right on one horizontal line, evenly spaced, connected by two straight horizontal arrows. ZONE 1 (left): rectangle, text "index.json", subtext "dist/schemas/3.1.13/". ZONE 2 (centre): rectangle, text "task map", subtext "get_products". ZONE 3 (right): rectangle, text "request schema", subtext "get-products-request.json". Arrow from Zone 1 to Zone 2 labelled "names". Arrow from Zone 2 to Zone 3 labelled "$ref". Below Zone 3, a fourth rectangle drawn with a DASHED outline, labelled "core/protocol-envelope.json", with one straight vertical arrow pointing up into Zone 3, labelled "$ref". The accent highlight #0a7d52 is applied to the arrow from Zone 2 to Zone 3 ONLY; every other line is black.`
 ---
 
-<BaseLayout
+<PageLayout
   site="adcpexplorer"
   title={title}
+  heading="The AdCP schema registry"
   description={description}
   path={path}
+  answer={answer}
+  breadcrumbs={breadcrumbs}
   jsonLd={jsonLd}
-  wide
+  layout="reference"
+  current="/schemas/"
   ogType="article"
   publishDate={new Date(LAST_UPDATED)}
   keywords={['adcp schemas', 'adcp json schema']}
 >
-  <nav class="breadcrumbs" aria-label="Breadcrumb">
-    <ol><li><a href="/">AdCP Explorer</a></li><li><span>Schema registry</span></li></ol>
-  </nav>
-  <h1>The AdCP schema registry</h1>
-  <AnswerBox answer={answer} />
+  <DocsTree slot="nav" />
+  <TocRail slot="aside" toc={toc} />
 
   <p>
     AdCP is the Ad Context Protocol, an open standard for software agents that discover inventory
@@ -106,7 +136,7 @@ const jsonLd = graph([
     } tree holds {adcp.counts?.schemaFiles} of them.
   </p>
 
-  <h2>Schema trees</h2>
+  <h2 id="schema-trees">Schema trees</h2>
   <p>
     <code>static/schemas/source/</code> is what the build reads.
     <code>dist/schemas/&lt;version&gt;/</code> is what it writes, and
@@ -122,7 +152,7 @@ const jsonLd = graph([
     <code>manifest.json</code>. Neither is visible when browsing the source tree on GitHub.
   </p>
 
-  <h2><code>index.json</code> and <code>manifest.json</code></h2>
+  <h2 id="index-manifest"><code>index.json</code> and <code>manifest.json</code></h2>
   <p>
     The two registry files describe the same release from different angles, and each omits
     operations the other carries. The operation list is the union of the two. Where both name the
@@ -198,7 +228,7 @@ const jsonLd = graph([
     not recognise are discarded without an error.
   </p>
 
-  <h2>How a reference resolves</h2>
+  <h2 id="reference-resolution">How a reference resolves</h2>
   <p>
     Every cross-file reference in a published release is an absolute, version-pinned URL path. The
     tree contains no relative paths. The source tree writes those same references without the
@@ -206,6 +236,23 @@ const jsonLd = graph([
     fetches paths that do not exist — every reference, not some of them. Resolving a published
     reference means mapping the <code>/schemas/&lt;version&gt;/</code> prefix onto the release directory.
   </p>
+
+  {
+    /*
+     * DEV-ONLY (user decision): production ships clean, with no visible
+     * placeholder box. The prompt stays catalogued in
+     * /srv/ws/out/illustration-prompts-adcpexplorer.md.
+     */
+    import.meta.env.DEV && (
+      <IllustrationPlaceholder
+        slug="adcpexplorer/schemas/ref-resolution"
+        prompt={REF_RESOLUTION_ILLUSTRATION_PROMPT}
+        alt="index.json names a task map, which $refs the request schema, which $refs the shared envelope."
+        ratio="4 / 3"
+      />
+    )
+  }
+
   <CodeSample
     title={`The same $ref in the published release and in the source tree`}
     language="json"
@@ -218,7 +265,7 @@ const jsonLd = graph([
 //   -> static/schemas/source/core/version-envelope.json`}
     sourceUrl={adcp.repository}
   />
-  <h2>The shared envelopes</h2>
+  <h2 id="shared-envelopes">The shared envelopes</h2>
   <p>
     <code>core/version-envelope.json</code> declares two properties, <code>adcp_version</code> and
     <code>adcp_major_version</code>, is referenced by 137 files, and requests and responses compose
@@ -228,7 +275,7 @@ const jsonLd = graph([
     does, so a response schema inherits those fields before declaring any of its own.
   </p>
 
-  <h2>Schemas with no inbound reference</h2>
+  <h2 id="no-inbound-reference">Schemas with no inbound reference</h2>
   <p>
     Some files in the release are reachable from neither registry file nor from any <code>$ref</code
     >. Every file in <code>error-details/</code> is one, and so is every file in <code
@@ -247,7 +294,7 @@ const jsonLd = graph([
     >, which refs <code>formats/canonical/_base.json</code>.
   </p>
 
-  <h2>Error detail schemas</h2>
+  <h2 id="error-detail-schemas">Error detail schemas</h2>
   <p>
     <code>enums/error-code.json</code> defines 92 error codes. <code>error-details/</code> holds 15 schemas,
     one per shape those errors can take. No <code>$ref</code> edge joins the two files.
@@ -279,7 +326,7 @@ const jsonLd = graph([
     name correspond by convention only. The map from code to detail schema exists in no release artefact,
     so a new code or a changed mapping is not detectable from a release diff.
   </p>
-  <h2><code>discriminator</code> under draft-07</h2>
+  <h2 id="discriminator"><code>discriminator</code> under draft-07</h2>
   <p>
     42 schemas in the release use <code>discriminator</code> to say which branch of a <code
       >oneOf</code
@@ -292,7 +339,7 @@ const jsonLd = graph([
     branch's errors.
   </p>
 
-  <h2>Bundled schemas</h2>
+  <h2 id="bundled-schemas">Bundled schemas</h2>
   <p>
     <code>docs/building/by-layer/L0/schemas.mdx</code> directs tools that cannot resolve
     <code>$ref</code> to the bundled schemas, which have every reference inlined. That page states that
@@ -310,7 +357,7 @@ const jsonLd = graph([
     <code>$ref</code>-resolving validator has no offline schema to load for those operations.
   </p>
 
-  <h2>The {adcp.objects.length} core objects</h2>
+  <h2 id="core-objects">The {adcp.objects.length} core objects</h2>
   <p>
     These are the domain nouns the operations pass around. They are not the schemas that hold the
     reference tree together: the most-referenced files in the release are extension, envelope and
@@ -353,7 +400,7 @@ const jsonLd = graph([
     ))
   }
 
-  <h2>A client author's checklist</h2>
+  <h2 id="client-checklist">A client author's checklist</h2>
   <ul>
     <li>
       Read <code>dist/schemas/&lt;version&gt;/</code>, not <code>static/schemas/source/</code>. The
@@ -380,7 +427,7 @@ const jsonLd = graph([
 
   <FaqBlock entries={faq} />
 
-  <h2>Related</h2>
+  <h2 id="related-heading">Related</h2>
   <ul>
     <li><a href="/">All {adcp.tasks.length} AdCP operations</a></li>
     <li><a href="/discovery/">Discovery files: adagents.json and brand.json</a></li>
@@ -392,4 +439,4 @@ const jsonLd = graph([
   </ul>
 
   <SpecSource provenance={adcp.provenance} specVersion={adcp.version} />
-</BaseLayout>
+</PageLayout>

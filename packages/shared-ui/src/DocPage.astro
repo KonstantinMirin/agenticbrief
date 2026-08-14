@@ -43,6 +43,9 @@ export interface Props {
    * overrides the derivation entirely.
    */
   relatedLinks?: { href: string; title: string; note?: string }[]
+  /** forwarded to PageLayout — see its Props doc. Default 'flow', unchanged
+   * for every existing caller. */
+  layout?: 'flow' | 'reference'
 }
 
 const {
@@ -54,6 +57,7 @@ const {
   technical = true,
   section,
   relatedLinks,
+  layout,
 } = Astro.props
 const BASE = siteUrl(site)
 const url = `${BASE}${path}`
@@ -153,6 +157,14 @@ function labelFor(href: string): string {
 
 const related =
   relatedLinks ?? (d.related ?? []).map((href: string) => ({ href, title: labelFor(href) }))
+
+// Only forward the `nav`/`aside` slot tags when this page actually received
+// one — an unconditional `<slot name="nav" slot="nav" />` would still count
+// as "the nav slot was passed" to PageLayout even when it renders empty,
+// which would open an empty "On this page" disclosure on every reference
+// page that doesn't use a rail.
+const hasNav = Astro.slots.has('nav')
+const hasAside = Astro.slots.has('aside')
 ---
 
 <PageLayout
@@ -171,6 +183,9 @@ const related =
   modifiedDate={d.updatedDate ?? d.pubDate}
   keywords={d.keywords ?? []}
   wide
+  layout={layout}
 >
+  {hasNav && <slot name="nav" slot="nav" />}
   <slot />
+  {hasAside && <slot name="aside" slot="aside" />}
 </PageLayout>

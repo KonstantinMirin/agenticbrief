@@ -102,3 +102,36 @@ const required = fields.filter((f) => f.required).length
     </figure>
   )
 }
+
+<style>
+  /*
+   * §9.5's three token-level refinements, scoped to `.field-table` only so the
+   * portfolio's other `<table>` usage (bare markdown tables, ComparisonTable)
+   * is untouched by this file. The 390px overflow fix lives in global.css on
+   * `main table` — a type selector, so it still matches `.field-table`
+   * unchanged; nothing here sets `display`, `width` or `overflow`, so that
+   * fix is not shadowed.
+   */
+  .field-table th,
+  .field-table td {
+    padding: var(--space-05); /* 16px, ibm.md:156 — was 0.55rem/0.7rem */
+  }
+
+  .field-table {
+    line-height: var(--lh-ui); /* tables are chrome, not prose (spec ruling 10) */
+  }
+
+  .field-table thead th {
+    font-size: var(--type-body-short-02-size);
+    font-weight: var(--type-body-short-02-weight);
+    line-height: var(--type-body-short-02-lh);
+    letter-spacing: var(--type-body-short-02-tracking);
+  }
+
+  /* Alternating rows, ibm.md:50 — the header band's own `--bg-subtle` sets the
+     ceiling for how strong this can read, so data rows alternate between the
+     page ground and one step up, never past it. */
+  .field-table tbody tr:nth-child(even) {
+    background: var(--bg-subtle);
+  }
+</style>

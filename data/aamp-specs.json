@@ -57,7 +57,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/iab-agentic-primitives",
         "commit": "2fc7029fb9eca801bc94586aec398906aa6af6c0",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "spec/jsonschema/protocol",
         "sourceUrl": "https://github.com/IABTechLab/iab-agentic-primitives/blob/2fc7029fb9eca801bc94586aec398906aa6af6c0/spec/jsonschema/protocol"
       }
@@ -159,7 +159,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/seller-agent",
         "commit": "2bb7ebce45891e3bdddd7a43198cb81d710b0916",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "docs/api/openapi.json",
         "sourceUrl": "https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/docs/api/openapi.json"
       }
@@ -188,7 +188,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/buyer-agent",
         "commit": "0c3a1545e334a0dc6acf0a6722b554cc4a4503d6",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "docs/api/openapi.json",
         "sourceUrl": "https://github.com/IABTechLab/buyer-agent/blob/0c3a1545e334a0dc6acf0a6722b554cc4a4503d6/docs/api/openapi.json"
       }
@@ -236,7 +236,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/agentic-direct",
         "commit": "915bda98f4de986aa0bbafe1d64df52fae974e62",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "opendirect.json",
         "sourceUrl": "https://github.com/IABTechLab/agentic-direct/blob/915bda98f4de986aa0bbafe1d64df52fae974e62/opendirect.json"
       }
@@ -252,7 +252,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/agentic-rtb-framework",
         "commit": "7f481614ba228f8fab5b08df2e13ed540d4a1954",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "Agentic_Real_Time_Framework_Version_1_0_FINAL.md",
         "sourceUrl": "https://github.com/IABTechLab/agentic-rtb-framework/blob/7f481614ba228f8fab5b08df2e13ed540d4a1954/Agentic_Real_Time_Framework_Version_1_0_FINAL.md"
       }
@@ -266,7 +266,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/agentic-audiences",
         "commit": "106ebd645668677ff8be458877a5684a5d229961",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "specs/v1.0/schema/embedding_format.schema.json",
         "sourceUrl": "https://github.com/IABTechLab/agentic-audiences/blob/106ebd645668677ff8be458877a5684a5d229961/specs/v1.0/schema/embedding_format.schema.json"
       }
@@ -292,7 +292,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/iab-agentic-primitives",
         "commit": "2fc7029fb9eca801bc94586aec398906aa6af6c0",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "spec/jsonschema/protocol/AgentDiscoveryRequest.json",
         "sourceUrl": "https://github.com/IABTechLab/iab-agentic-primitives/blob/2fc7029fb9eca801bc94586aec398906aa6af6c0/spec/jsonschema/protocol/AgentDiscoveryRequest.json"
       }
@@ -389,7 +389,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/iab-agentic-primitives",
         "commit": "2fc7029fb9eca801bc94586aec398906aa6af6c0",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "spec/jsonschema/protocol/AvailsRequest.json",
         "sourceUrl": "https://github.com/IABTechLab/iab-agentic-primitives/blob/2fc7029fb9eca801bc94586aec398906aa6af6c0/spec/jsonschema/protocol/AvailsRequest.json"
       }
@@ -414,7 +414,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/iab-agentic-primitives",
         "commit": "2fc7029fb9eca801bc94586aec398906aa6af6c0",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "spec/jsonschema/protocol/ChangeRequestResponse.json",
         "sourceUrl": "https://github.com/IABTechLab/iab-agentic-primitives/blob/2fc7029fb9eca801bc94586aec398906aa6af6c0/spec/jsonschema/protocol/ChangeRequestResponse.json"
       }
@@ -488,7 +488,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/iab-agentic-primitives",
         "commit": "2fc7029fb9eca801bc94586aec398906aa6af6c0",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "spec/jsonschema/protocol/DealBookingRequest.json",
         "sourceUrl": "https://github.com/IABTechLab/iab-agentic-primitives/blob/2fc7029fb9eca801bc94586aec398906aa6af6c0/spec/jsonschema/protocol/DealBookingRequest.json"
       }
@@ -556,7 +556,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/iab-agentic-primitives",
         "commit": "2fc7029fb9eca801bc94586aec398906aa6af6c0",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "spec/jsonschema/protocol/JsonRpcRequest.json",
         "sourceUrl": "https://github.com/IABTechLab/iab-agentic-primitives/blob/2fc7029fb9eca801bc94586aec398906aa6af6c0/spec/jsonschema/protocol/JsonRpcRequest.json"
       }
@@ -600,7 +600,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/iab-agentic-primitives",
         "commit": "2fc7029fb9eca801bc94586aec398906aa6af6c0",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "spec/jsonschema/protocol/NegotiationRoundResponse.json",
         "sourceUrl": "https://github.com/IABTechLab/iab-agentic-primitives/blob/2fc7029fb9eca801bc94586aec398906aa6af6c0/spec/jsonschema/protocol/NegotiationRoundResponse.json"
       }
@@ -656,7 +656,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/iab-agentic-primitives",
         "commit": "2fc7029fb9eca801bc94586aec398906aa6af6c0",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "spec/jsonschema/protocol/ProductListRequest.json",
         "sourceUrl": "https://github.com/IABTechLab/iab-agentic-primitives/blob/2fc7029fb9eca801bc94586aec398906aa6af6c0/spec/jsonschema/protocol/ProductListRequest.json"
       }
@@ -768,7 +768,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/iab-agentic-primitives",
         "commit": "2fc7029fb9eca801bc94586aec398906aa6af6c0",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "spec/jsonschema/protocol/QuoteRequest.json",
         "sourceUrl": "https://github.com/IABTechLab/iab-agentic-primitives/blob/2fc7029fb9eca801bc94586aec398906aa6af6c0/spec/jsonschema/protocol/QuoteRequest.json"
       }
@@ -787,7 +787,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/seller-agent",
         "commit": "2bb7ebce45891e3bdddd7a43198cb81d710b0916",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "docs/api/openapi.json",
         "sourceUrl": "https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/docs/api/openapi.json"
       }
@@ -806,7 +806,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/seller-agent",
         "commit": "2bb7ebce45891e3bdddd7a43198cb81d710b0916",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "docs/api/openapi.json",
         "sourceUrl": "https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/docs/api/openapi.json"
       }
@@ -825,7 +825,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/seller-agent",
         "commit": "2bb7ebce45891e3bdddd7a43198cb81d710b0916",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "docs/api/openapi.json",
         "sourceUrl": "https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/docs/api/openapi.json"
       }
@@ -844,7 +844,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/seller-agent",
         "commit": "2bb7ebce45891e3bdddd7a43198cb81d710b0916",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "docs/api/openapi.json",
         "sourceUrl": "https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/docs/api/openapi.json"
       }
@@ -863,7 +863,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/seller-agent",
         "commit": "2bb7ebce45891e3bdddd7a43198cb81d710b0916",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "docs/api/openapi.json",
         "sourceUrl": "https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/docs/api/openapi.json"
       }
@@ -943,7 +943,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/seller-agent",
         "commit": "2bb7ebce45891e3bdddd7a43198cb81d710b0916",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "docs/api/openapi.json",
         "sourceUrl": "https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/docs/api/openapi.json"
       }
@@ -962,7 +962,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/seller-agent",
         "commit": "2bb7ebce45891e3bdddd7a43198cb81d710b0916",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "docs/api/openapi.json",
         "sourceUrl": "https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/docs/api/openapi.json"
       }
@@ -981,7 +981,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/seller-agent",
         "commit": "2bb7ebce45891e3bdddd7a43198cb81d710b0916",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "docs/api/openapi.json",
         "sourceUrl": "https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/docs/api/openapi.json"
       }
@@ -1055,7 +1055,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/seller-agent",
         "commit": "2bb7ebce45891e3bdddd7a43198cb81d710b0916",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "docs/api/openapi.json",
         "sourceUrl": "https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/docs/api/openapi.json"
       }
@@ -1074,7 +1074,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/seller-agent",
         "commit": "2bb7ebce45891e3bdddd7a43198cb81d710b0916",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "docs/api/openapi.json",
         "sourceUrl": "https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/docs/api/openapi.json"
       }
@@ -1093,7 +1093,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/seller-agent",
         "commit": "2bb7ebce45891e3bdddd7a43198cb81d710b0916",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "docs/api/openapi.json",
         "sourceUrl": "https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/docs/api/openapi.json"
       }
@@ -1112,7 +1112,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/seller-agent",
         "commit": "2bb7ebce45891e3bdddd7a43198cb81d710b0916",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "docs/api/openapi.json",
         "sourceUrl": "https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/docs/api/openapi.json"
       }
@@ -1131,7 +1131,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/seller-agent",
         "commit": "2bb7ebce45891e3bdddd7a43198cb81d710b0916",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "docs/api/openapi.json",
         "sourceUrl": "https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/docs/api/openapi.json"
       }
@@ -1150,7 +1150,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/seller-agent",
         "commit": "2bb7ebce45891e3bdddd7a43198cb81d710b0916",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "docs/api/openapi.json",
         "sourceUrl": "https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/docs/api/openapi.json"
       }
@@ -1169,7 +1169,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/seller-agent",
         "commit": "2bb7ebce45891e3bdddd7a43198cb81d710b0916",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "docs/api/openapi.json",
         "sourceUrl": "https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/docs/api/openapi.json"
       }
@@ -1188,7 +1188,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/seller-agent",
         "commit": "2bb7ebce45891e3bdddd7a43198cb81d710b0916",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "docs/api/openapi.json",
         "sourceUrl": "https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/docs/api/openapi.json"
       }
@@ -1232,7 +1232,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/seller-agent",
         "commit": "2bb7ebce45891e3bdddd7a43198cb81d710b0916",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "docs/api/openapi.json",
         "sourceUrl": "https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/docs/api/openapi.json"
       }
@@ -1251,7 +1251,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/seller-agent",
         "commit": "2bb7ebce45891e3bdddd7a43198cb81d710b0916",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "docs/api/openapi.json",
         "sourceUrl": "https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/docs/api/openapi.json"
       }
@@ -1367,7 +1367,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/seller-agent",
         "commit": "2bb7ebce45891e3bdddd7a43198cb81d710b0916",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "docs/api/openapi.json",
         "sourceUrl": "https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/docs/api/openapi.json"
       }
@@ -1466,7 +1466,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/seller-agent",
         "commit": "2bb7ebce45891e3bdddd7a43198cb81d710b0916",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "docs/api/openapi.json",
         "sourceUrl": "https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/docs/api/openapi.json"
       }
@@ -1510,7 +1510,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/seller-agent",
         "commit": "2bb7ebce45891e3bdddd7a43198cb81d710b0916",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "docs/api/openapi.json",
         "sourceUrl": "https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/docs/api/openapi.json"
       }
@@ -1548,7 +1548,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/seller-agent",
         "commit": "2bb7ebce45891e3bdddd7a43198cb81d710b0916",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "docs/api/openapi.json",
         "sourceUrl": "https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/docs/api/openapi.json"
       }
@@ -1567,7 +1567,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/seller-agent",
         "commit": "2bb7ebce45891e3bdddd7a43198cb81d710b0916",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "docs/api/openapi.json",
         "sourceUrl": "https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/docs/api/openapi.json"
       }
@@ -1586,7 +1586,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/seller-agent",
         "commit": "2bb7ebce45891e3bdddd7a43198cb81d710b0916",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "docs/api/openapi.json",
         "sourceUrl": "https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/docs/api/openapi.json"
       }
@@ -1715,7 +1715,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/seller-agent",
         "commit": "2bb7ebce45891e3bdddd7a43198cb81d710b0916",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "docs/api/openapi.json",
         "sourceUrl": "https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/docs/api/openapi.json"
       }
@@ -1765,7 +1765,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/seller-agent",
         "commit": "2bb7ebce45891e3bdddd7a43198cb81d710b0916",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "docs/api/openapi.json",
         "sourceUrl": "https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/docs/api/openapi.json"
       }
@@ -1784,7 +1784,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/seller-agent",
         "commit": "2bb7ebce45891e3bdddd7a43198cb81d710b0916",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "docs/api/openapi.json",
         "sourceUrl": "https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/docs/api/openapi.json"
       }
@@ -1883,7 +1883,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/seller-agent",
         "commit": "2bb7ebce45891e3bdddd7a43198cb81d710b0916",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "docs/api/openapi.json",
         "sourceUrl": "https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/docs/api/openapi.json"
       }
@@ -1952,7 +1952,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/seller-agent",
         "commit": "2bb7ebce45891e3bdddd7a43198cb81d710b0916",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "docs/api/openapi.json",
         "sourceUrl": "https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/docs/api/openapi.json"
       }
@@ -2027,7 +2027,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/seller-agent",
         "commit": "2bb7ebce45891e3bdddd7a43198cb81d710b0916",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "docs/api/openapi.json",
         "sourceUrl": "https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/docs/api/openapi.json"
       }
@@ -2059,7 +2059,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/seller-agent",
         "commit": "2bb7ebce45891e3bdddd7a43198cb81d710b0916",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "docs/api/openapi.json",
         "sourceUrl": "https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/docs/api/openapi.json"
       }
@@ -2078,7 +2078,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/seller-agent",
         "commit": "2bb7ebce45891e3bdddd7a43198cb81d710b0916",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "docs/api/openapi.json",
         "sourceUrl": "https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/docs/api/openapi.json"
       }
@@ -2116,7 +2116,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/seller-agent",
         "commit": "2bb7ebce45891e3bdddd7a43198cb81d710b0916",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "docs/api/openapi.json",
         "sourceUrl": "https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/docs/api/openapi.json"
       }
@@ -2269,7 +2269,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/seller-agent",
         "commit": "2bb7ebce45891e3bdddd7a43198cb81d710b0916",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "docs/api/openapi.json",
         "sourceUrl": "https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/docs/api/openapi.json"
       }
@@ -2288,7 +2288,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/seller-agent",
         "commit": "2bb7ebce45891e3bdddd7a43198cb81d710b0916",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "docs/api/openapi.json",
         "sourceUrl": "https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/docs/api/openapi.json"
       }
@@ -2339,7 +2339,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/seller-agent",
         "commit": "2bb7ebce45891e3bdddd7a43198cb81d710b0916",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "docs/api/openapi.json",
         "sourceUrl": "https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/docs/api/openapi.json"
       }
@@ -2419,7 +2419,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/seller-agent",
         "commit": "2bb7ebce45891e3bdddd7a43198cb81d710b0916",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "docs/api/openapi.json",
         "sourceUrl": "https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/docs/api/openapi.json"
       }
@@ -2438,7 +2438,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/seller-agent",
         "commit": "2bb7ebce45891e3bdddd7a43198cb81d710b0916",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "docs/api/openapi.json",
         "sourceUrl": "https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/docs/api/openapi.json"
       }
@@ -2524,7 +2524,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/seller-agent",
         "commit": "2bb7ebce45891e3bdddd7a43198cb81d710b0916",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "docs/api/openapi.json",
         "sourceUrl": "https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/docs/api/openapi.json"
       }
@@ -2543,7 +2543,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/seller-agent",
         "commit": "2bb7ebce45891e3bdddd7a43198cb81d710b0916",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "docs/api/openapi.json",
         "sourceUrl": "https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/docs/api/openapi.json"
       }
@@ -2562,7 +2562,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/seller-agent",
         "commit": "2bb7ebce45891e3bdddd7a43198cb81d710b0916",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "docs/api/openapi.json",
         "sourceUrl": "https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/docs/api/openapi.json"
       }
@@ -2654,7 +2654,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/seller-agent",
         "commit": "2bb7ebce45891e3bdddd7a43198cb81d710b0916",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "docs/api/openapi.json",
         "sourceUrl": "https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/docs/api/openapi.json"
       }
@@ -2673,7 +2673,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/seller-agent",
         "commit": "2bb7ebce45891e3bdddd7a43198cb81d710b0916",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "docs/api/openapi.json",
         "sourceUrl": "https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/docs/api/openapi.json"
       }
@@ -2753,7 +2753,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/seller-agent",
         "commit": "2bb7ebce45891e3bdddd7a43198cb81d710b0916",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "docs/api/openapi.json",
         "sourceUrl": "https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/docs/api/openapi.json"
       }
@@ -2833,7 +2833,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/seller-agent",
         "commit": "2bb7ebce45891e3bdddd7a43198cb81d710b0916",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "docs/api/openapi.json",
         "sourceUrl": "https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/docs/api/openapi.json"
       }
@@ -2865,7 +2865,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/seller-agent",
         "commit": "2bb7ebce45891e3bdddd7a43198cb81d710b0916",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "docs/api/openapi.json",
         "sourceUrl": "https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/docs/api/openapi.json"
       }
@@ -2884,7 +2884,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/seller-agent",
         "commit": "2bb7ebce45891e3bdddd7a43198cb81d710b0916",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "docs/api/openapi.json",
         "sourceUrl": "https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/docs/api/openapi.json"
       }
@@ -2903,7 +2903,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/seller-agent",
         "commit": "2bb7ebce45891e3bdddd7a43198cb81d710b0916",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "docs/api/openapi.json",
         "sourceUrl": "https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/docs/api/openapi.json"
       }
@@ -2922,7 +2922,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/seller-agent",
         "commit": "2bb7ebce45891e3bdddd7a43198cb81d710b0916",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "docs/api/openapi.json",
         "sourceUrl": "https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/docs/api/openapi.json"
       }
@@ -2966,7 +2966,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/seller-agent",
         "commit": "2bb7ebce45891e3bdddd7a43198cb81d710b0916",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "docs/api/openapi.json",
         "sourceUrl": "https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/docs/api/openapi.json"
       }
@@ -2985,7 +2985,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/seller-agent",
         "commit": "2bb7ebce45891e3bdddd7a43198cb81d710b0916",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "docs/api/openapi.json",
         "sourceUrl": "https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/docs/api/openapi.json"
       }
@@ -3035,7 +3035,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/seller-agent",
         "commit": "2bb7ebce45891e3bdddd7a43198cb81d710b0916",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "docs/api/openapi.json",
         "sourceUrl": "https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/docs/api/openapi.json"
       }
@@ -3054,7 +3054,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/seller-agent",
         "commit": "2bb7ebce45891e3bdddd7a43198cb81d710b0916",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "docs/api/openapi.json",
         "sourceUrl": "https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/docs/api/openapi.json"
       }
@@ -3073,7 +3073,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/seller-agent",
         "commit": "2bb7ebce45891e3bdddd7a43198cb81d710b0916",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "docs/api/openapi.json",
         "sourceUrl": "https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/docs/api/openapi.json"
       }
@@ -3099,7 +3099,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/seller-agent",
         "commit": "2bb7ebce45891e3bdddd7a43198cb81d710b0916",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "docs/api/openapi.json",
         "sourceUrl": "https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/docs/api/openapi.json"
       }
@@ -3118,7 +3118,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/seller-agent",
         "commit": "2bb7ebce45891e3bdddd7a43198cb81d710b0916",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "docs/api/openapi.json",
         "sourceUrl": "https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/docs/api/openapi.json"
       }
@@ -3137,7 +3137,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/seller-agent",
         "commit": "2bb7ebce45891e3bdddd7a43198cb81d710b0916",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "docs/api/openapi.json",
         "sourceUrl": "https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/docs/api/openapi.json"
       }
@@ -3156,7 +3156,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/seller-agent",
         "commit": "2bb7ebce45891e3bdddd7a43198cb81d710b0916",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "docs/api/openapi.json",
         "sourceUrl": "https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/docs/api/openapi.json"
       }
@@ -3175,7 +3175,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/seller-agent",
         "commit": "2bb7ebce45891e3bdddd7a43198cb81d710b0916",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "docs/api/openapi.json",
         "sourceUrl": "https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/docs/api/openapi.json"
       }
@@ -3225,7 +3225,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/seller-agent",
         "commit": "2bb7ebce45891e3bdddd7a43198cb81d710b0916",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "docs/api/openapi.json",
         "sourceUrl": "https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/docs/api/openapi.json"
       }
@@ -3244,7 +3244,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/seller-agent",
         "commit": "2bb7ebce45891e3bdddd7a43198cb81d710b0916",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "docs/api/openapi.json",
         "sourceUrl": "https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/docs/api/openapi.json"
       }
@@ -3354,7 +3354,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/seller-agent",
         "commit": "2bb7ebce45891e3bdddd7a43198cb81d710b0916",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "docs/api/openapi.json",
         "sourceUrl": "https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/docs/api/openapi.json"
       }
@@ -3373,7 +3373,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/seller-agent",
         "commit": "2bb7ebce45891e3bdddd7a43198cb81d710b0916",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "docs/api/openapi.json",
         "sourceUrl": "https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/docs/api/openapi.json"
       }
@@ -3392,7 +3392,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/seller-agent",
         "commit": "2bb7ebce45891e3bdddd7a43198cb81d710b0916",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "docs/api/openapi.json",
         "sourceUrl": "https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/docs/api/openapi.json"
       }
@@ -3411,7 +3411,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/seller-agent",
         "commit": "2bb7ebce45891e3bdddd7a43198cb81d710b0916",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "docs/api/openapi.json",
         "sourceUrl": "https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/docs/api/openapi.json"
       }
@@ -3443,7 +3443,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/seller-agent",
         "commit": "2bb7ebce45891e3bdddd7a43198cb81d710b0916",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "docs/api/openapi.json",
         "sourceUrl": "https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/docs/api/openapi.json"
       }
@@ -3462,7 +3462,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/seller-agent",
         "commit": "2bb7ebce45891e3bdddd7a43198cb81d710b0916",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "docs/api/openapi.json",
         "sourceUrl": "https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/docs/api/openapi.json"
       }
@@ -3481,7 +3481,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/seller-agent",
         "commit": "2bb7ebce45891e3bdddd7a43198cb81d710b0916",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "docs/api/openapi.json",
         "sourceUrl": "https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/docs/api/openapi.json"
       }
@@ -3500,7 +3500,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/seller-agent",
         "commit": "2bb7ebce45891e3bdddd7a43198cb81d710b0916",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "docs/api/openapi.json",
         "sourceUrl": "https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/docs/api/openapi.json"
       }
@@ -3519,7 +3519,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/seller-agent",
         "commit": "2bb7ebce45891e3bdddd7a43198cb81d710b0916",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "docs/api/openapi.json",
         "sourceUrl": "https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/docs/api/openapi.json"
       }
@@ -3538,7 +3538,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/seller-agent",
         "commit": "2bb7ebce45891e3bdddd7a43198cb81d710b0916",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "docs/api/openapi.json",
         "sourceUrl": "https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/docs/api/openapi.json"
       }
@@ -3564,7 +3564,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/seller-agent",
         "commit": "2bb7ebce45891e3bdddd7a43198cb81d710b0916",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "docs/api/openapi.json",
         "sourceUrl": "https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/docs/api/openapi.json"
       }
@@ -3596,7 +3596,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/seller-agent",
         "commit": "2bb7ebce45891e3bdddd7a43198cb81d710b0916",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "docs/api/openapi.json",
         "sourceUrl": "https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/docs/api/openapi.json"
       }
@@ -3707,7 +3707,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/seller-agent",
         "commit": "2bb7ebce45891e3bdddd7a43198cb81d710b0916",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "docs/api/openapi.json",
         "sourceUrl": "https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/docs/api/openapi.json"
       }
@@ -3733,7 +3733,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/seller-agent",
         "commit": "2bb7ebce45891e3bdddd7a43198cb81d710b0916",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "docs/api/openapi.json",
         "sourceUrl": "https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/docs/api/openapi.json"
       }
@@ -3771,7 +3771,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/seller-agent",
         "commit": "2bb7ebce45891e3bdddd7a43198cb81d710b0916",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "docs/api/openapi.json",
         "sourceUrl": "https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/docs/api/openapi.json"
       }
@@ -3790,7 +3790,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/seller-agent",
         "commit": "2bb7ebce45891e3bdddd7a43198cb81d710b0916",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "docs/api/openapi.json",
         "sourceUrl": "https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/docs/api/openapi.json"
       }
@@ -3809,7 +3809,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/seller-agent",
         "commit": "2bb7ebce45891e3bdddd7a43198cb81d710b0916",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "docs/api/openapi.json",
         "sourceUrl": "https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/docs/api/openapi.json"
       }
@@ -3828,7 +3828,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/seller-agent",
         "commit": "2bb7ebce45891e3bdddd7a43198cb81d710b0916",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "docs/api/openapi.json",
         "sourceUrl": "https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/docs/api/openapi.json"
       }
@@ -3847,7 +3847,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/seller-agent",
         "commit": "2bb7ebce45891e3bdddd7a43198cb81d710b0916",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "docs/api/openapi.json",
         "sourceUrl": "https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/docs/api/openapi.json"
       }
@@ -3891,7 +3891,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/seller-agent",
         "commit": "2bb7ebce45891e3bdddd7a43198cb81d710b0916",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "docs/api/openapi.json",
         "sourceUrl": "https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/docs/api/openapi.json"
       }
@@ -3910,7 +3910,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/seller-agent",
         "commit": "2bb7ebce45891e3bdddd7a43198cb81d710b0916",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "docs/api/openapi.json",
         "sourceUrl": "https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/docs/api/openapi.json"
       }
@@ -3966,7 +3966,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/seller-agent",
         "commit": "2bb7ebce45891e3bdddd7a43198cb81d710b0916",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "docs/api/openapi.json",
         "sourceUrl": "https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/docs/api/openapi.json"
       }
@@ -3985,7 +3985,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/seller-agent",
         "commit": "2bb7ebce45891e3bdddd7a43198cb81d710b0916",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "docs/api/openapi.json",
         "sourceUrl": "https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/docs/api/openapi.json"
       }
@@ -4004,7 +4004,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/seller-agent",
         "commit": "2bb7ebce45891e3bdddd7a43198cb81d710b0916",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "docs/api/openapi.json",
         "sourceUrl": "https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/docs/api/openapi.json"
       }
@@ -4042,7 +4042,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/seller-agent",
         "commit": "2bb7ebce45891e3bdddd7a43198cb81d710b0916",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "docs/api/openapi.json",
         "sourceUrl": "https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/docs/api/openapi.json"
       }
@@ -4061,7 +4061,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/seller-agent",
         "commit": "2bb7ebce45891e3bdddd7a43198cb81d710b0916",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "docs/api/openapi.json",
         "sourceUrl": "https://github.com/IABTechLab/seller-agent/blob/2bb7ebce45891e3bdddd7a43198cb81d710b0916/docs/api/openapi.json"
       }
@@ -4080,7 +4080,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/buyer-agent",
         "commit": "0c3a1545e334a0dc6acf0a6722b554cc4a4503d6",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "docs/api/openapi.json",
         "sourceUrl": "https://github.com/IABTechLab/buyer-agent/blob/0c3a1545e334a0dc6acf0a6722b554cc4a4503d6/docs/api/openapi.json"
       }
@@ -4099,7 +4099,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/buyer-agent",
         "commit": "0c3a1545e334a0dc6acf0a6722b554cc4a4503d6",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "docs/api/openapi.json",
         "sourceUrl": "https://github.com/IABTechLab/buyer-agent/blob/0c3a1545e334a0dc6acf0a6722b554cc4a4503d6/docs/api/openapi.json"
       }
@@ -4118,7 +4118,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/buyer-agent",
         "commit": "0c3a1545e334a0dc6acf0a6722b554cc4a4503d6",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "docs/api/openapi.json",
         "sourceUrl": "https://github.com/IABTechLab/buyer-agent/blob/0c3a1545e334a0dc6acf0a6722b554cc4a4503d6/docs/api/openapi.json"
       }
@@ -4169,7 +4169,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/buyer-agent",
         "commit": "0c3a1545e334a0dc6acf0a6722b554cc4a4503d6",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "docs/api/openapi.json",
         "sourceUrl": "https://github.com/IABTechLab/buyer-agent/blob/0c3a1545e334a0dc6acf0a6722b554cc4a4503d6/docs/api/openapi.json"
       }
@@ -4188,7 +4188,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/buyer-agent",
         "commit": "0c3a1545e334a0dc6acf0a6722b554cc4a4503d6",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "docs/api/openapi.json",
         "sourceUrl": "https://github.com/IABTechLab/buyer-agent/blob/0c3a1545e334a0dc6acf0a6722b554cc4a4503d6/docs/api/openapi.json"
       }
@@ -4262,7 +4262,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/buyer-agent",
         "commit": "0c3a1545e334a0dc6acf0a6722b554cc4a4503d6",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "docs/api/openapi.json",
         "sourceUrl": "https://github.com/IABTechLab/buyer-agent/blob/0c3a1545e334a0dc6acf0a6722b554cc4a4503d6/docs/api/openapi.json"
       }
@@ -4288,7 +4288,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/buyer-agent",
         "commit": "0c3a1545e334a0dc6acf0a6722b554cc4a4503d6",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "docs/api/openapi.json",
         "sourceUrl": "https://github.com/IABTechLab/buyer-agent/blob/0c3a1545e334a0dc6acf0a6722b554cc4a4503d6/docs/api/openapi.json"
       }
@@ -4307,7 +4307,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/buyer-agent",
         "commit": "0c3a1545e334a0dc6acf0a6722b554cc4a4503d6",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "docs/api/openapi.json",
         "sourceUrl": "https://github.com/IABTechLab/buyer-agent/blob/0c3a1545e334a0dc6acf0a6722b554cc4a4503d6/docs/api/openapi.json"
       }
@@ -4357,7 +4357,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/buyer-agent",
         "commit": "0c3a1545e334a0dc6acf0a6722b554cc4a4503d6",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "docs/api/openapi.json",
         "sourceUrl": "https://github.com/IABTechLab/buyer-agent/blob/0c3a1545e334a0dc6acf0a6722b554cc4a4503d6/docs/api/openapi.json"
       }
@@ -4376,7 +4376,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/buyer-agent",
         "commit": "0c3a1545e334a0dc6acf0a6722b554cc4a4503d6",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "docs/api/openapi.json",
         "sourceUrl": "https://github.com/IABTechLab/buyer-agent/blob/0c3a1545e334a0dc6acf0a6722b554cc4a4503d6/docs/api/openapi.json"
       }
@@ -4395,7 +4395,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/buyer-agent",
         "commit": "0c3a1545e334a0dc6acf0a6722b554cc4a4503d6",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "docs/api/openapi.json",
         "sourceUrl": "https://github.com/IABTechLab/buyer-agent/blob/0c3a1545e334a0dc6acf0a6722b554cc4a4503d6/docs/api/openapi.json"
       }
@@ -4414,7 +4414,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/buyer-agent",
         "commit": "0c3a1545e334a0dc6acf0a6722b554cc4a4503d6",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "docs/api/openapi.json",
         "sourceUrl": "https://github.com/IABTechLab/buyer-agent/blob/0c3a1545e334a0dc6acf0a6722b554cc4a4503d6/docs/api/openapi.json"
       }
@@ -4433,7 +4433,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/buyer-agent",
         "commit": "0c3a1545e334a0dc6acf0a6722b554cc4a4503d6",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "docs/api/openapi.json",
         "sourceUrl": "https://github.com/IABTechLab/buyer-agent/blob/0c3a1545e334a0dc6acf0a6722b554cc4a4503d6/docs/api/openapi.json"
       }
@@ -4452,7 +4452,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/buyer-agent",
         "commit": "0c3a1545e334a0dc6acf0a6722b554cc4a4503d6",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "docs/api/openapi.json",
         "sourceUrl": "https://github.com/IABTechLab/buyer-agent/blob/0c3a1545e334a0dc6acf0a6722b554cc4a4503d6/docs/api/openapi.json"
       }
@@ -4494,7 +4494,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/agentic-direct",
         "commit": "915bda98f4de986aa0bbafe1d64df52fae974e62",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "opendirect.json",
         "sourceUrl": "https://github.com/IABTechLab/agentic-direct/blob/915bda98f4de986aa0bbafe1d64df52fae974e62/opendirect.json"
       }
@@ -4542,7 +4542,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/agentic-direct",
         "commit": "915bda98f4de986aa0bbafe1d64df52fae974e62",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "opendirect.json",
         "sourceUrl": "https://github.com/IABTechLab/agentic-direct/blob/915bda98f4de986aa0bbafe1d64df52fae974e62/opendirect.json"
       }
@@ -4566,7 +4566,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/agentic-direct",
         "commit": "915bda98f4de986aa0bbafe1d64df52fae974e62",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "opendirect.json",
         "sourceUrl": "https://github.com/IABTechLab/agentic-direct/blob/915bda98f4de986aa0bbafe1d64df52fae974e62/opendirect.json"
       }
@@ -4583,7 +4583,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/agentic-direct",
         "commit": "915bda98f4de986aa0bbafe1d64df52fae974e62",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "opendirect.json",
         "sourceUrl": "https://github.com/IABTechLab/agentic-direct/blob/915bda98f4de986aa0bbafe1d64df52fae974e62/opendirect.json"
       }
@@ -4685,7 +4685,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/agentic-direct",
         "commit": "915bda98f4de986aa0bbafe1d64df52fae974e62",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "opendirect.json",
         "sourceUrl": "https://github.com/IABTechLab/agentic-direct/blob/915bda98f4de986aa0bbafe1d64df52fae974e62/opendirect.json"
       }
@@ -4793,7 +4793,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/agentic-direct",
         "commit": "915bda98f4de986aa0bbafe1d64df52fae974e62",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "opendirect.json",
         "sourceUrl": "https://github.com/IABTechLab/agentic-direct/blob/915bda98f4de986aa0bbafe1d64df52fae974e62/opendirect.json"
       }
@@ -4817,7 +4817,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/agentic-direct",
         "commit": "915bda98f4de986aa0bbafe1d64df52fae974e62",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "opendirect.json",
         "sourceUrl": "https://github.com/IABTechLab/agentic-direct/blob/915bda98f4de986aa0bbafe1d64df52fae974e62/opendirect.json"
       }
@@ -4834,7 +4834,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/agentic-direct",
         "commit": "915bda98f4de986aa0bbafe1d64df52fae974e62",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "opendirect.json",
         "sourceUrl": "https://github.com/IABTechLab/agentic-direct/blob/915bda98f4de986aa0bbafe1d64df52fae974e62/opendirect.json"
       }
@@ -4960,7 +4960,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/agentic-direct",
         "commit": "915bda98f4de986aa0bbafe1d64df52fae974e62",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "opendirect.json",
         "sourceUrl": "https://github.com/IABTechLab/agentic-direct/blob/915bda98f4de986aa0bbafe1d64df52fae974e62/opendirect.json"
       }
@@ -5092,7 +5092,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/agentic-direct",
         "commit": "915bda98f4de986aa0bbafe1d64df52fae974e62",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "opendirect.json",
         "sourceUrl": "https://github.com/IABTechLab/agentic-direct/blob/915bda98f4de986aa0bbafe1d64df52fae974e62/opendirect.json"
       }
@@ -5116,7 +5116,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/agentic-direct",
         "commit": "915bda98f4de986aa0bbafe1d64df52fae974e62",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "opendirect.json",
         "sourceUrl": "https://github.com/IABTechLab/agentic-direct/blob/915bda98f4de986aa0bbafe1d64df52fae974e62/opendirect.json"
       }
@@ -5133,7 +5133,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/agentic-direct",
         "commit": "915bda98f4de986aa0bbafe1d64df52fae974e62",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "opendirect.json",
         "sourceUrl": "https://github.com/IABTechLab/agentic-direct/blob/915bda98f4de986aa0bbafe1d64df52fae974e62/opendirect.json"
       }
@@ -5199,7 +5199,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/agentic-direct",
         "commit": "915bda98f4de986aa0bbafe1d64df52fae974e62",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "opendirect.json",
         "sourceUrl": "https://github.com/IABTechLab/agentic-direct/blob/915bda98f4de986aa0bbafe1d64df52fae974e62/opendirect.json"
       }
@@ -5271,7 +5271,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/agentic-direct",
         "commit": "915bda98f4de986aa0bbafe1d64df52fae974e62",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "opendirect.json",
         "sourceUrl": "https://github.com/IABTechLab/agentic-direct/blob/915bda98f4de986aa0bbafe1d64df52fae974e62/opendirect.json"
       }
@@ -5295,7 +5295,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/agentic-direct",
         "commit": "915bda98f4de986aa0bbafe1d64df52fae974e62",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "opendirect.json",
         "sourceUrl": "https://github.com/IABTechLab/agentic-direct/blob/915bda98f4de986aa0bbafe1d64df52fae974e62/opendirect.json"
       }
@@ -5312,7 +5312,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/agentic-direct",
         "commit": "915bda98f4de986aa0bbafe1d64df52fae974e62",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "opendirect.json",
         "sourceUrl": "https://github.com/IABTechLab/agentic-direct/blob/915bda98f4de986aa0bbafe1d64df52fae974e62/opendirect.json"
       }
@@ -5360,7 +5360,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/agentic-direct",
         "commit": "915bda98f4de986aa0bbafe1d64df52fae974e62",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "opendirect.json",
         "sourceUrl": "https://github.com/IABTechLab/agentic-direct/blob/915bda98f4de986aa0bbafe1d64df52fae974e62/opendirect.json"
       }
@@ -5384,7 +5384,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/agentic-direct",
         "commit": "915bda98f4de986aa0bbafe1d64df52fae974e62",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "opendirect.json",
         "sourceUrl": "https://github.com/IABTechLab/agentic-direct/blob/915bda98f4de986aa0bbafe1d64df52fae974e62/opendirect.json"
       }
@@ -5408,7 +5408,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/agentic-direct",
         "commit": "915bda98f4de986aa0bbafe1d64df52fae974e62",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "opendirect.json",
         "sourceUrl": "https://github.com/IABTechLab/agentic-direct/blob/915bda98f4de986aa0bbafe1d64df52fae974e62/opendirect.json"
       }
@@ -5425,7 +5425,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/agentic-direct",
         "commit": "915bda98f4de986aa0bbafe1d64df52fae974e62",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "opendirect.json",
         "sourceUrl": "https://github.com/IABTechLab/agentic-direct/blob/915bda98f4de986aa0bbafe1d64df52fae974e62/opendirect.json"
       }
@@ -5503,7 +5503,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/agentic-direct",
         "commit": "915bda98f4de986aa0bbafe1d64df52fae974e62",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "opendirect.json",
         "sourceUrl": "https://github.com/IABTechLab/agentic-direct/blob/915bda98f4de986aa0bbafe1d64df52fae974e62/opendirect.json"
       }
@@ -5587,7 +5587,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/agentic-direct",
         "commit": "915bda98f4de986aa0bbafe1d64df52fae974e62",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "opendirect.json",
         "sourceUrl": "https://github.com/IABTechLab/agentic-direct/blob/915bda98f4de986aa0bbafe1d64df52fae974e62/opendirect.json"
       }
@@ -5611,7 +5611,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/agentic-direct",
         "commit": "915bda98f4de986aa0bbafe1d64df52fae974e62",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "opendirect.json",
         "sourceUrl": "https://github.com/IABTechLab/agentic-direct/blob/915bda98f4de986aa0bbafe1d64df52fae974e62/opendirect.json"
       }
@@ -5628,7 +5628,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/agentic-direct",
         "commit": "915bda98f4de986aa0bbafe1d64df52fae974e62",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "opendirect.json",
         "sourceUrl": "https://github.com/IABTechLab/agentic-direct/blob/915bda98f4de986aa0bbafe1d64df52fae974e62/opendirect.json"
       }
@@ -5652,7 +5652,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/agentic-direct",
         "commit": "915bda98f4de986aa0bbafe1d64df52fae974e62",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "opendirect.json",
         "sourceUrl": "https://github.com/IABTechLab/agentic-direct/blob/915bda98f4de986aa0bbafe1d64df52fae974e62/opendirect.json"
       }
@@ -5669,7 +5669,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/agentic-direct",
         "commit": "915bda98f4de986aa0bbafe1d64df52fae974e62",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "opendirect.json",
         "sourceUrl": "https://github.com/IABTechLab/agentic-direct/blob/915bda98f4de986aa0bbafe1d64df52fae974e62/opendirect.json"
       }
@@ -5693,7 +5693,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/agentic-direct",
         "commit": "915bda98f4de986aa0bbafe1d64df52fae974e62",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "opendirect.json",
         "sourceUrl": "https://github.com/IABTechLab/agentic-direct/blob/915bda98f4de986aa0bbafe1d64df52fae974e62/opendirect.json"
       }
@@ -5759,7 +5759,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/agentic-direct",
         "commit": "915bda98f4de986aa0bbafe1d64df52fae974e62",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "opendirect.json",
         "sourceUrl": "https://github.com/IABTechLab/agentic-direct/blob/915bda98f4de986aa0bbafe1d64df52fae974e62/opendirect.json"
       }
@@ -5783,7 +5783,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/agentic-direct",
         "commit": "915bda98f4de986aa0bbafe1d64df52fae974e62",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "opendirect.json",
         "sourceUrl": "https://github.com/IABTechLab/agentic-direct/blob/915bda98f4de986aa0bbafe1d64df52fae974e62/opendirect.json"
       }
@@ -5800,7 +5800,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/agentic-direct",
         "commit": "915bda98f4de986aa0bbafe1d64df52fae974e62",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "opendirect.json",
         "sourceUrl": "https://github.com/IABTechLab/agentic-direct/blob/915bda98f4de986aa0bbafe1d64df52fae974e62/opendirect.json"
       }
@@ -5878,7 +5878,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/agentic-direct",
         "commit": "915bda98f4de986aa0bbafe1d64df52fae974e62",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "opendirect.json",
         "sourceUrl": "https://github.com/IABTechLab/agentic-direct/blob/915bda98f4de986aa0bbafe1d64df52fae974e62/opendirect.json"
       }
@@ -5902,7 +5902,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/agentic-direct",
         "commit": "915bda98f4de986aa0bbafe1d64df52fae974e62",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "opendirect.json",
         "sourceUrl": "https://github.com/IABTechLab/agentic-direct/blob/915bda98f4de986aa0bbafe1d64df52fae974e62/opendirect.json"
       }
@@ -5919,7 +5919,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/agentic-direct",
         "commit": "915bda98f4de986aa0bbafe1d64df52fae974e62",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "opendirect.json",
         "sourceUrl": "https://github.com/IABTechLab/agentic-direct/blob/915bda98f4de986aa0bbafe1d64df52fae974e62/opendirect.json"
       }
@@ -6030,7 +6030,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/agentic-rtb-framework",
         "commit": "7f481614ba228f8fab5b08df2e13ed540d4a1954",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "rust/proto/agenticrtbframeworkservices.proto",
         "sourceUrl": "https://github.com/IABTechLab/agentic-rtb-framework/blob/7f481614ba228f8fab5b08df2e13ed540d4a1954/rust/proto/agenticrtbframeworkservices.proto"
       }
@@ -6091,7 +6091,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/iab-agentic-primitives",
         "commit": "2fc7029fb9eca801bc94586aec398906aa6af6c0",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "spec/jsonschema/Account.json",
         "sourceUrl": "https://github.com/IABTechLab/iab-agentic-primitives/blob/2fc7029fb9eca801bc94586aec398906aa6af6c0/spec/jsonschema/Account.json"
       }
@@ -6215,7 +6215,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/iab-agentic-primitives",
         "commit": "2fc7029fb9eca801bc94586aec398906aa6af6c0",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "spec/jsonschema/Agent.json",
         "sourceUrl": "https://github.com/IABTechLab/iab-agentic-primitives/blob/2fc7029fb9eca801bc94586aec398906aa6af6c0/spec/jsonschema/Agent.json"
       }
@@ -6286,7 +6286,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/iab-agentic-primitives",
         "commit": "2fc7029fb9eca801bc94586aec398906aa6af6c0",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "spec/jsonschema/Assignment.json",
         "sourceUrl": "https://github.com/IABTechLab/iab-agentic-primitives/blob/2fc7029fb9eca801bc94586aec398906aa6af6c0/spec/jsonschema/Assignment.json"
       }
@@ -6426,7 +6426,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/iab-agentic-primitives",
         "commit": "2fc7029fb9eca801bc94586aec398906aa6af6c0",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "spec/jsonschema/ChangeRequest.json",
         "sourceUrl": "https://github.com/IABTechLab/iab-agentic-primitives/blob/2fc7029fb9eca801bc94586aec398906aa6af6c0/spec/jsonschema/ChangeRequest.json"
       }
@@ -6491,7 +6491,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/iab-agentic-primitives",
         "commit": "2fc7029fb9eca801bc94586aec398906aa6af6c0",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "spec/jsonschema/ConsentContext.json",
         "sourceUrl": "https://github.com/IABTechLab/iab-agentic-primitives/blob/2fc7029fb9eca801bc94586aec398906aa6af6c0/spec/jsonschema/ConsentContext.json"
       }
@@ -6594,7 +6594,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/iab-agentic-primitives",
         "commit": "2fc7029fb9eca801bc94586aec398906aa6af6c0",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "spec/jsonschema/Creative.json",
         "sourceUrl": "https://github.com/IABTechLab/iab-agentic-primitives/blob/2fc7029fb9eca801bc94586aec398906aa6af6c0/spec/jsonschema/Creative.json"
       }
@@ -6653,7 +6653,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/iab-agentic-primitives",
         "commit": "2fc7029fb9eca801bc94586aec398906aa6af6c0",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "spec/jsonschema/CreativeApproval.json",
         "sourceUrl": "https://github.com/IABTechLab/iab-agentic-primitives/blob/2fc7029fb9eca801bc94586aec398906aa6af6c0/spec/jsonschema/CreativeApproval.json"
       }
@@ -6784,7 +6784,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/iab-agentic-primitives",
         "commit": "2fc7029fb9eca801bc94586aec398906aa6af6c0",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "spec/jsonschema/Deal.json",
         "sourceUrl": "https://github.com/IABTechLab/iab-agentic-primitives/blob/2fc7029fb9eca801bc94586aec398906aa6af6c0/spec/jsonschema/Deal.json"
       }
@@ -6882,7 +6882,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/iab-agentic-primitives",
         "commit": "2fc7029fb9eca801bc94586aec398906aa6af6c0",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "spec/jsonschema/DecisionRecord.json",
         "sourceUrl": "https://github.com/IABTechLab/iab-agentic-primitives/blob/2fc7029fb9eca801bc94586aec398906aa6af6c0/spec/jsonschema/DecisionRecord.json"
       }
@@ -6979,7 +6979,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/iab-agentic-primitives",
         "commit": "2fc7029fb9eca801bc94586aec398906aa6af6c0",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "spec/jsonschema/Line.json",
         "sourceUrl": "https://github.com/IABTechLab/iab-agentic-primitives/blob/2fc7029fb9eca801bc94586aec398906aa6af6c0/spec/jsonschema/Line.json"
       }
@@ -7050,7 +7050,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/iab-agentic-primitives",
         "commit": "2fc7029fb9eca801bc94586aec398906aa6af6c0",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "spec/jsonschema/MediaKit.json",
         "sourceUrl": "https://github.com/IABTechLab/iab-agentic-primitives/blob/2fc7029fb9eca801bc94586aec398906aa6af6c0/spec/jsonschema/MediaKit.json"
       }
@@ -7129,7 +7129,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/iab-agentic-primitives",
         "commit": "2fc7029fb9eca801bc94586aec398906aa6af6c0",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "spec/jsonschema/Negotiation.json",
         "sourceUrl": "https://github.com/IABTechLab/iab-agentic-primitives/blob/2fc7029fb9eca801bc94586aec398906aa6af6c0/spec/jsonschema/Negotiation.json"
       }
@@ -7231,7 +7231,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/iab-agentic-primitives",
         "commit": "2fc7029fb9eca801bc94586aec398906aa6af6c0",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "spec/jsonschema/Order.json",
         "sourceUrl": "https://github.com/IABTechLab/iab-agentic-primitives/blob/2fc7029fb9eca801bc94586aec398906aa6af6c0/spec/jsonschema/Order.json"
       }
@@ -7291,7 +7291,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/iab-agentic-primitives",
         "commit": "2fc7029fb9eca801bc94586aec398906aa6af6c0",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "spec/jsonschema/Organization.json",
         "sourceUrl": "https://github.com/IABTechLab/iab-agentic-primitives/blob/2fc7029fb9eca801bc94586aec398906aa6af6c0/spec/jsonschema/Organization.json"
       }
@@ -7432,7 +7432,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/iab-agentic-primitives",
         "commit": "2fc7029fb9eca801bc94586aec398906aa6af6c0",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "spec/jsonschema/Package.json",
         "sourceUrl": "https://github.com/IABTechLab/iab-agentic-primitives/blob/2fc7029fb9eca801bc94586aec398906aa6af6c0/spec/jsonschema/Package.json"
       }
@@ -7547,7 +7547,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/iab-agentic-primitives",
         "commit": "2fc7029fb9eca801bc94586aec398906aa6af6c0",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "spec/jsonschema/Product.json",
         "sourceUrl": "https://github.com/IABTechLab/iab-agentic-primitives/blob/2fc7029fb9eca801bc94586aec398906aa6af6c0/spec/jsonschema/Product.json"
       }
@@ -7631,7 +7631,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/iab-agentic-primitives",
         "commit": "2fc7029fb9eca801bc94586aec398906aa6af6c0",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "spec/jsonschema/Proposal.json",
         "sourceUrl": "https://github.com/IABTechLab/iab-agentic-primitives/blob/2fc7029fb9eca801bc94586aec398906aa6af6c0/spec/jsonschema/Proposal.json"
       }
@@ -7750,7 +7750,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/iab-agentic-primitives",
         "commit": "2fc7029fb9eca801bc94586aec398906aa6af6c0",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "spec/jsonschema/Quote.json",
         "sourceUrl": "https://github.com/IABTechLab/iab-agentic-primitives/blob/2fc7029fb9eca801bc94586aec398906aa6af6c0/spec/jsonschema/Quote.json"
       }
@@ -7834,7 +7834,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/iab-agentic-primitives",
         "commit": "2fc7029fb9eca801bc94586aec398906aa6af6c0",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "spec/jsonschema/RateCard.json",
         "sourceUrl": "https://github.com/IABTechLab/iab-agentic-primitives/blob/2fc7029fb9eca801bc94586aec398906aa6af6c0/spec/jsonschema/RateCard.json"
       }
@@ -7893,7 +7893,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/iab-agentic-primitives",
         "commit": "2fc7029fb9eca801bc94586aec398906aa6af6c0",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "spec/jsonschema/SellersJsonEntry.json",
         "sourceUrl": "https://github.com/IABTechLab/iab-agentic-primitives/blob/2fc7029fb9eca801bc94586aec398906aa6af6c0/spec/jsonschema/SellersJsonEntry.json"
       }
@@ -7978,7 +7978,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/iab-agentic-primitives",
         "commit": "2fc7029fb9eca801bc94586aec398906aa6af6c0",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "spec/jsonschema/Session.json",
         "sourceUrl": "https://github.com/IABTechLab/iab-agentic-primitives/blob/2fc7029fb9eca801bc94586aec398906aa6af6c0/spec/jsonschema/Session.json"
       }
@@ -8019,7 +8019,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/iab-agentic-primitives",
         "commit": "2fc7029fb9eca801bc94586aec398906aa6af6c0",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "spec/jsonschema/SupplyChain.json",
         "sourceUrl": "https://github.com/IABTechLab/iab-agentic-primitives/blob/2fc7029fb9eca801bc94586aec398906aa6af6c0/spec/jsonschema/SupplyChain.json"
       }
@@ -8066,7 +8066,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/iab-agentic-primitives",
         "commit": "2fc7029fb9eca801bc94586aec398906aa6af6c0",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "spec/jsonschema/protocol/AgentTrustVerification.json",
         "sourceUrl": "https://github.com/IABTechLab/iab-agentic-primitives/blob/2fc7029fb9eca801bc94586aec398906aa6af6c0/spec/jsonschema/protocol/AgentTrustVerification.json"
       }
@@ -8130,7 +8130,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/iab-agentic-primitives",
         "commit": "2fc7029fb9eca801bc94586aec398906aa6af6c0",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "spec/jsonschema/protocol/Avails.json",
         "sourceUrl": "https://github.com/IABTechLab/iab-agentic-primitives/blob/2fc7029fb9eca801bc94586aec398906aa6af6c0/spec/jsonschema/protocol/Avails.json"
       }
@@ -8153,7 +8153,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/iab-agentic-primitives",
         "commit": "2fc7029fb9eca801bc94586aec398906aa6af6c0",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "spec/jsonschema/protocol/AvailsCollection.json",
         "sourceUrl": "https://github.com/IABTechLab/iab-agentic-primitives/blob/2fc7029fb9eca801bc94586aec398906aa6af6c0/spec/jsonschema/protocol/AvailsCollection.json"
       }
@@ -8219,7 +8219,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/iab-agentic-primitives",
         "commit": "2fc7029fb9eca801bc94586aec398906aa6af6c0",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "spec/jsonschema/protocol/ChangeRequestCreate.json",
         "sourceUrl": "https://github.com/IABTechLab/iab-agentic-primitives/blob/2fc7029fb9eca801bc94586aec398906aa6af6c0/spec/jsonschema/protocol/ChangeRequestCreate.json"
       }
@@ -8242,7 +8242,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/iab-agentic-primitives",
         "commit": "2fc7029fb9eca801bc94586aec398906aa6af6c0",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "spec/jsonschema/protocol/ErrorEnvelope.json",
         "sourceUrl": "https://github.com/IABTechLab/iab-agentic-primitives/blob/2fc7029fb9eca801bc94586aec398906aa6af6c0/spec/jsonschema/protocol/ErrorEnvelope.json"
       }
@@ -8313,7 +8313,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/iab-agentic-primitives",
         "commit": "2fc7029fb9eca801bc94586aec398906aa6af6c0",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "spec/jsonschema/protocol/NegotiationMessage.json",
         "sourceUrl": "https://github.com/IABTechLab/iab-agentic-primitives/blob/2fc7029fb9eca801bc94586aec398906aa6af6c0/spec/jsonschema/protocol/NegotiationMessage.json"
       }
@@ -8389,7 +8389,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/iab-agentic-primitives",
         "commit": "2fc7029fb9eca801bc94586aec398906aa6af6c0",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "spec/jsonschema/protocol/ProductAvailsSearch.json",
         "sourceUrl": "https://github.com/IABTechLab/iab-agentic-primitives/blob/2fc7029fb9eca801bc94586aec398906aa6af6c0/spec/jsonschema/protocol/ProductAvailsSearch.json"
       }
@@ -8436,7 +8436,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/agentic-direct",
         "commit": "915bda98f4de986aa0bbafe1d64df52fae974e62",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "opendirect.json",
         "sourceUrl": "https://github.com/IABTechLab/agentic-direct/blob/915bda98f4de986aa0bbafe1d64df52fae974e62/opendirect.json"
       }
@@ -8543,7 +8543,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/agentic-direct",
         "commit": "915bda98f4de986aa0bbafe1d64df52fae974e62",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "opendirect.json",
         "sourceUrl": "https://github.com/IABTechLab/agentic-direct/blob/915bda98f4de986aa0bbafe1d64df52fae974e62/opendirect.json"
       }
@@ -8674,7 +8674,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/agentic-direct",
         "commit": "915bda98f4de986aa0bbafe1d64df52fae974e62",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "opendirect.json",
         "sourceUrl": "https://github.com/IABTechLab/agentic-direct/blob/915bda98f4de986aa0bbafe1d64df52fae974e62/opendirect.json"
       }
@@ -8877,7 +8877,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/agentic-direct",
         "commit": "915bda98f4de986aa0bbafe1d64df52fae974e62",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "opendirect.json",
         "sourceUrl": "https://github.com/IABTechLab/agentic-direct/blob/915bda98f4de986aa0bbafe1d64df52fae974e62/opendirect.json"
       }
@@ -8948,7 +8948,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/agentic-direct",
         "commit": "915bda98f4de986aa0bbafe1d64df52fae974e62",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "opendirect.json",
         "sourceUrl": "https://github.com/IABTechLab/agentic-direct/blob/915bda98f4de986aa0bbafe1d64df52fae974e62/opendirect.json"
       }
@@ -9001,7 +9001,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/agentic-direct",
         "commit": "915bda98f4de986aa0bbafe1d64df52fae974e62",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "opendirect.json",
         "sourceUrl": "https://github.com/IABTechLab/agentic-direct/blob/915bda98f4de986aa0bbafe1d64df52fae974e62/opendirect.json"
       }
@@ -9084,7 +9084,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/agentic-direct",
         "commit": "915bda98f4de986aa0bbafe1d64df52fae974e62",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "opendirect.json",
         "sourceUrl": "https://github.com/IABTechLab/agentic-direct/blob/915bda98f4de986aa0bbafe1d64df52fae974e62/opendirect.json"
       }
@@ -9137,7 +9137,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/agentic-direct",
         "commit": "915bda98f4de986aa0bbafe1d64df52fae974e62",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "opendirect.json",
         "sourceUrl": "https://github.com/IABTechLab/agentic-direct/blob/915bda98f4de986aa0bbafe1d64df52fae974e62/opendirect.json"
       }
@@ -9208,7 +9208,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/agentic-direct",
         "commit": "915bda98f4de986aa0bbafe1d64df52fae974e62",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "opendirect.json",
         "sourceUrl": "https://github.com/IABTechLab/agentic-direct/blob/915bda98f4de986aa0bbafe1d64df52fae974e62/opendirect.json"
       }
@@ -9279,7 +9279,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/agentic-direct",
         "commit": "915bda98f4de986aa0bbafe1d64df52fae974e62",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "opendirect.json",
         "sourceUrl": "https://github.com/IABTechLab/agentic-direct/blob/915bda98f4de986aa0bbafe1d64df52fae974e62/opendirect.json"
       }
@@ -9362,7 +9362,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/agentic-direct",
         "commit": "915bda98f4de986aa0bbafe1d64df52fae974e62",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "opendirect.json",
         "sourceUrl": "https://github.com/IABTechLab/agentic-direct/blob/915bda98f4de986aa0bbafe1d64df52fae974e62/opendirect.json"
       }
@@ -9403,7 +9403,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/agentic-direct",
         "commit": "915bda98f4de986aa0bbafe1d64df52fae974e62",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "opendirect.json",
         "sourceUrl": "https://github.com/IABTechLab/agentic-direct/blob/915bda98f4de986aa0bbafe1d64df52fae974e62/opendirect.json"
       }
@@ -9438,7 +9438,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/agentic-direct",
         "commit": "915bda98f4de986aa0bbafe1d64df52fae974e62",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "opendirect.json",
         "sourceUrl": "https://github.com/IABTechLab/agentic-direct/blob/915bda98f4de986aa0bbafe1d64df52fae974e62/opendirect.json"
       }
@@ -9497,7 +9497,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/agentic-direct",
         "commit": "915bda98f4de986aa0bbafe1d64df52fae974e62",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "opendirect.json",
         "sourceUrl": "https://github.com/IABTechLab/agentic-direct/blob/915bda98f4de986aa0bbafe1d64df52fae974e62/opendirect.json"
       }
@@ -9544,7 +9544,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/agentic-direct",
         "commit": "915bda98f4de986aa0bbafe1d64df52fae974e62",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "opendirect.json",
         "sourceUrl": "https://github.com/IABTechLab/agentic-direct/blob/915bda98f4de986aa0bbafe1d64df52fae974e62/opendirect.json"
       }
@@ -9669,7 +9669,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/agentic-direct",
         "commit": "915bda98f4de986aa0bbafe1d64df52fae974e62",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "opendirect.json",
         "sourceUrl": "https://github.com/IABTechLab/agentic-direct/blob/915bda98f4de986aa0bbafe1d64df52fae974e62/opendirect.json"
       }
@@ -9722,7 +9722,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/agentic-direct",
         "commit": "915bda98f4de986aa0bbafe1d64df52fae974e62",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "opendirect.json",
         "sourceUrl": "https://github.com/IABTechLab/agentic-direct/blob/915bda98f4de986aa0bbafe1d64df52fae974e62/opendirect.json"
       }
@@ -9775,7 +9775,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/agentic-direct",
         "commit": "915bda98f4de986aa0bbafe1d64df52fae974e62",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "opendirect.json",
         "sourceUrl": "https://github.com/IABTechLab/agentic-direct/blob/915bda98f4de986aa0bbafe1d64df52fae974e62/opendirect.json"
       }
@@ -9846,7 +9846,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/agentic-direct",
         "commit": "915bda98f4de986aa0bbafe1d64df52fae974e62",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "opendirect.json",
         "sourceUrl": "https://github.com/IABTechLab/agentic-direct/blob/915bda98f4de986aa0bbafe1d64df52fae974e62/opendirect.json"
       }
@@ -9929,7 +9929,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/agentic-direct",
         "commit": "915bda98f4de986aa0bbafe1d64df52fae974e62",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "opendirect.json",
         "sourceUrl": "https://github.com/IABTechLab/agentic-direct/blob/915bda98f4de986aa0bbafe1d64df52fae974e62/opendirect.json"
       }
@@ -10012,7 +10012,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/agentic-direct",
         "commit": "915bda98f4de986aa0bbafe1d64df52fae974e62",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "opendirect.json",
         "sourceUrl": "https://github.com/IABTechLab/agentic-direct/blob/915bda98f4de986aa0bbafe1d64df52fae974e62/opendirect.json"
       }
@@ -10059,7 +10059,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/agentic-direct",
         "commit": "915bda98f4de986aa0bbafe1d64df52fae974e62",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "opendirect.json",
         "sourceUrl": "https://github.com/IABTechLab/agentic-direct/blob/915bda98f4de986aa0bbafe1d64df52fae974e62/opendirect.json"
       }
@@ -10088,7 +10088,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/agentic-direct",
         "commit": "915bda98f4de986aa0bbafe1d64df52fae974e62",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "opendirect.json",
         "sourceUrl": "https://github.com/IABTechLab/agentic-direct/blob/915bda98f4de986aa0bbafe1d64df52fae974e62/opendirect.json"
       }
@@ -10117,7 +10117,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/agentic-direct",
         "commit": "915bda98f4de986aa0bbafe1d64df52fae974e62",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "opendirect.json",
         "sourceUrl": "https://github.com/IABTechLab/agentic-direct/blob/915bda98f4de986aa0bbafe1d64df52fae974e62/opendirect.json"
       }
@@ -10224,7 +10224,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/agentic-direct",
         "commit": "915bda98f4de986aa0bbafe1d64df52fae974e62",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "opendirect.json",
         "sourceUrl": "https://github.com/IABTechLab/agentic-direct/blob/915bda98f4de986aa0bbafe1d64df52fae974e62/opendirect.json"
       }
@@ -10331,7 +10331,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/agentic-direct",
         "commit": "915bda98f4de986aa0bbafe1d64df52fae974e62",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "opendirect.json",
         "sourceUrl": "https://github.com/IABTechLab/agentic-direct/blob/915bda98f4de986aa0bbafe1d64df52fae974e62/opendirect.json"
       }
@@ -10372,7 +10372,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/agentic-direct",
         "commit": "915bda98f4de986aa0bbafe1d64df52fae974e62",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "opendirect.json",
         "sourceUrl": "https://github.com/IABTechLab/agentic-direct/blob/915bda98f4de986aa0bbafe1d64df52fae974e62/opendirect.json"
       }
@@ -10533,7 +10533,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/agentic-direct",
         "commit": "915bda98f4de986aa0bbafe1d64df52fae974e62",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "opendirect.json",
         "sourceUrl": "https://github.com/IABTechLab/agentic-direct/blob/915bda98f4de986aa0bbafe1d64df52fae974e62/opendirect.json"
       }
@@ -10574,7 +10574,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/agentic-direct",
         "commit": "915bda98f4de986aa0bbafe1d64df52fae974e62",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "opendirect.json",
         "sourceUrl": "https://github.com/IABTechLab/agentic-direct/blob/915bda98f4de986aa0bbafe1d64df52fae974e62/opendirect.json"
       }
@@ -10771,7 +10771,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/agentic-direct",
         "commit": "915bda98f4de986aa0bbafe1d64df52fae974e62",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "opendirect.json",
         "sourceUrl": "https://github.com/IABTechLab/agentic-direct/blob/915bda98f4de986aa0bbafe1d64df52fae974e62/opendirect.json"
       }
@@ -10866,7 +10866,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/agentic-direct",
         "commit": "915bda98f4de986aa0bbafe1d64df52fae974e62",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "opendirect.json",
         "sourceUrl": "https://github.com/IABTechLab/agentic-direct/blob/915bda98f4de986aa0bbafe1d64df52fae974e62/opendirect.json"
       }
@@ -10931,7 +10931,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/agentic-direct",
         "commit": "915bda98f4de986aa0bbafe1d64df52fae974e62",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "opendirect.json",
         "sourceUrl": "https://github.com/IABTechLab/agentic-direct/blob/915bda98f4de986aa0bbafe1d64df52fae974e62/opendirect.json"
       }
@@ -10966,7 +10966,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/agentic-direct",
         "commit": "915bda98f4de986aa0bbafe1d64df52fae974e62",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "opendirect.json",
         "sourceUrl": "https://github.com/IABTechLab/agentic-direct/blob/915bda98f4de986aa0bbafe1d64df52fae974e62/opendirect.json"
       }
@@ -11001,7 +11001,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/agentic-direct",
         "commit": "915bda98f4de986aa0bbafe1d64df52fae974e62",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "opendirect.json",
         "sourceUrl": "https://github.com/IABTechLab/agentic-direct/blob/915bda98f4de986aa0bbafe1d64df52fae974e62/opendirect.json"
       }
@@ -11066,7 +11066,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/agentic-direct",
         "commit": "915bda98f4de986aa0bbafe1d64df52fae974e62",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "opendirect.json",
         "sourceUrl": "https://github.com/IABTechLab/agentic-direct/blob/915bda98f4de986aa0bbafe1d64df52fae974e62/opendirect.json"
       }
@@ -11143,7 +11143,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/agentic-direct",
         "commit": "915bda98f4de986aa0bbafe1d64df52fae974e62",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "opendirect.json",
         "sourceUrl": "https://github.com/IABTechLab/agentic-direct/blob/915bda98f4de986aa0bbafe1d64df52fae974e62/opendirect.json"
       }
@@ -11202,7 +11202,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/agentic-direct",
         "commit": "915bda98f4de986aa0bbafe1d64df52fae974e62",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "opendirect.json",
         "sourceUrl": "https://github.com/IABTechLab/agentic-direct/blob/915bda98f4de986aa0bbafe1d64df52fae974e62/opendirect.json"
       }
@@ -11237,7 +11237,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/agentic-direct",
         "commit": "915bda98f4de986aa0bbafe1d64df52fae974e62",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "opendirect.json",
         "sourceUrl": "https://github.com/IABTechLab/agentic-direct/blob/915bda98f4de986aa0bbafe1d64df52fae974e62/opendirect.json"
       }
@@ -11266,7 +11266,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/agentic-direct",
         "commit": "915bda98f4de986aa0bbafe1d64df52fae974e62",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "opendirect.json",
         "sourceUrl": "https://github.com/IABTechLab/agentic-direct/blob/915bda98f4de986aa0bbafe1d64df52fae974e62/opendirect.json"
       }
@@ -11301,7 +11301,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/agentic-direct",
         "commit": "915bda98f4de986aa0bbafe1d64df52fae974e62",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "opendirect.json",
         "sourceUrl": "https://github.com/IABTechLab/agentic-direct/blob/915bda98f4de986aa0bbafe1d64df52fae974e62/opendirect.json"
       }
@@ -11365,7 +11365,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/agentic-rtb-framework",
         "commit": "7f481614ba228f8fab5b08df2e13ed540d4a1954",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "rust/proto/agenticrtbframework.proto",
         "sourceUrl": "https://github.com/IABTechLab/agentic-rtb-framework/blob/7f481614ba228f8fab5b08df2e13ed540d4a1954/rust/proto/agenticrtbframework.proto"
       }
@@ -11380,7 +11380,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/agentic-rtb-framework",
         "commit": "7f481614ba228f8fab5b08df2e13ed540d4a1954",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "rust/proto/agenticrtbframework.proto",
         "sourceUrl": "https://github.com/IABTechLab/agentic-rtb-framework/blob/7f481614ba228f8fab5b08df2e13ed540d4a1954/rust/proto/agenticrtbframework.proto"
       }
@@ -11414,7 +11414,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/agentic-rtb-framework",
         "commit": "7f481614ba228f8fab5b08df2e13ed540d4a1954",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "rust/proto/agenticrtbframework.proto",
         "sourceUrl": "https://github.com/IABTechLab/agentic-rtb-framework/blob/7f481614ba228f8fab5b08df2e13ed540d4a1954/rust/proto/agenticrtbframework.proto"
       }
@@ -11429,7 +11429,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/agentic-rtb-framework",
         "commit": "7f481614ba228f8fab5b08df2e13ed540d4a1954",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "rust/proto/agenticrtbframework.proto",
         "sourceUrl": "https://github.com/IABTechLab/agentic-rtb-framework/blob/7f481614ba228f8fab5b08df2e13ed540d4a1954/rust/proto/agenticrtbframework.proto"
       }
@@ -11493,7 +11493,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/agentic-rtb-framework",
         "commit": "7f481614ba228f8fab5b08df2e13ed540d4a1954",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "rust/proto/agenticrtbframework.proto",
         "sourceUrl": "https://github.com/IABTechLab/agentic-rtb-framework/blob/7f481614ba228f8fab5b08df2e13ed540d4a1954/rust/proto/agenticrtbframework.proto"
       }
@@ -11521,7 +11521,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/agentic-rtb-framework",
         "commit": "7f481614ba228f8fab5b08df2e13ed540d4a1954",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "rust/proto/agenticrtbframework.proto",
         "sourceUrl": "https://github.com/IABTechLab/agentic-rtb-framework/blob/7f481614ba228f8fab5b08df2e13ed540d4a1954/rust/proto/agenticrtbframework.proto"
       }
@@ -11543,7 +11543,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/agentic-rtb-framework",
         "commit": "7f481614ba228f8fab5b08df2e13ed540d4a1954",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "rust/proto/agenticrtbframework.proto",
         "sourceUrl": "https://github.com/IABTechLab/agentic-rtb-framework/blob/7f481614ba228f8fab5b08df2e13ed540d4a1954/rust/proto/agenticrtbframework.proto"
       }
@@ -11571,7 +11571,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/agentic-rtb-framework",
         "commit": "7f481614ba228f8fab5b08df2e13ed540d4a1954",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "rust/proto/agenticrtbframework.proto",
         "sourceUrl": "https://github.com/IABTechLab/agentic-rtb-framework/blob/7f481614ba228f8fab5b08df2e13ed540d4a1954/rust/proto/agenticrtbframework.proto"
       }
@@ -11593,7 +11593,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/agentic-rtb-framework",
         "commit": "7f481614ba228f8fab5b08df2e13ed540d4a1954",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "rust/proto/agenticrtbframework.proto",
         "sourceUrl": "https://github.com/IABTechLab/agentic-rtb-framework/blob/7f481614ba228f8fab5b08df2e13ed540d4a1954/rust/proto/agenticrtbframework.proto"
       }
@@ -11615,7 +11615,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/agentic-rtb-framework",
         "commit": "7f481614ba228f8fab5b08df2e13ed540d4a1954",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "rust/proto/agenticrtbframework.proto",
         "sourceUrl": "https://github.com/IABTechLab/agentic-rtb-framework/blob/7f481614ba228f8fab5b08df2e13ed540d4a1954/rust/proto/agenticrtbframework.proto"
       }
@@ -11637,7 +11637,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/agentic-rtb-framework",
         "commit": "7f481614ba228f8fab5b08df2e13ed540d4a1954",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "rust/proto/agenticrtbframework.proto",
         "sourceUrl": "https://github.com/IABTechLab/agentic-rtb-framework/blob/7f481614ba228f8fab5b08df2e13ed540d4a1954/rust/proto/agenticrtbframework.proto"
       }
@@ -11659,7 +11659,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/agentic-rtb-framework",
         "commit": "7f481614ba228f8fab5b08df2e13ed540d4a1954",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "rust/proto/agenticrtbframework.proto",
         "sourceUrl": "https://github.com/IABTechLab/agentic-rtb-framework/blob/7f481614ba228f8fab5b08df2e13ed540d4a1954/rust/proto/agenticrtbframework.proto"
       }
@@ -11741,7 +11741,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/agentic-audiences",
         "commit": "106ebd645668677ff8be458877a5684a5d229961",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "specs/v1.0/schema/embedding_format.schema.json",
         "sourceUrl": "https://github.com/IABTechLab/agentic-audiences/blob/106ebd645668677ff8be458877a5684a5d229961/specs/v1.0/schema/embedding_format.schema.json"
       }
@@ -11773,7 +11773,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/agentic-rtb-framework",
         "commit": "7f481614ba228f8fab5b08df2e13ed540d4a1954",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "rust/proto/agenticrtbframework.proto",
         "sourceUrl": "https://github.com/IABTechLab/agentic-rtb-framework/blob/7f481614ba228f8fab5b08df2e13ed540d4a1954/rust/proto/agenticrtbframework.proto"
       }
@@ -11813,7 +11813,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/agentic-rtb-framework",
         "commit": "7f481614ba228f8fab5b08df2e13ed540d4a1954",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "rust/proto/agenticrtbframework.proto",
         "sourceUrl": "https://github.com/IABTechLab/agentic-rtb-framework/blob/7f481614ba228f8fab5b08df2e13ed540d4a1954/rust/proto/agenticrtbframework.proto"
       }
@@ -11848,7 +11848,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/agentic-rtb-framework",
         "commit": "7f481614ba228f8fab5b08df2e13ed540d4a1954",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "rust/proto/agenticrtbframework.proto",
         "sourceUrl": "https://github.com/IABTechLab/agentic-rtb-framework/blob/7f481614ba228f8fab5b08df2e13ed540d4a1954/rust/proto/agenticrtbframework.proto"
       }
@@ -11908,7 +11908,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/agentic-rtb-framework",
         "commit": "7f481614ba228f8fab5b08df2e13ed540d4a1954",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "rust/proto/agenticrtbframework.proto",
         "sourceUrl": "https://github.com/IABTechLab/agentic-rtb-framework/blob/7f481614ba228f8fab5b08df2e13ed540d4a1954/rust/proto/agenticrtbframework.proto"
       }
@@ -11933,7 +11933,7 @@
       "provenance": {
         "repo": "https://github.com/IABTechLab/agentic-rtb-framework",
         "commit": "7f481614ba228f8fab5b08df2e13ed540d4a1954",
-        "parsedAt": "2026-08-13T22:40:54.585Z",
+        "parsedAt": "2026-08-14T01:23:01.355Z",
         "sourcePath": "rust/proto/agenticrtbframework.proto",
         "sourceUrl": "https://github.com/IABTechLab/agentic-rtb-framework/blob/7f481614ba228f8fab5b08df2e13ed540d4a1954/rust/proto/agenticrtbframework.proto"
       }
@@ -12025,7 +12025,7 @@
   "provenance": {
     "repo": "https://github.com/IABTechLab/AAMP",
     "commit": "3b20e67b568235d86c4025bec7c1301edd7466a0",
-    "parsedAt": "2026-08-13T22:40:54.585Z",
+    "parsedAt": "2026-08-14T01:23:01.355Z",
     "sourcePath": "README.md",
     "sourceUrl": "https://github.com/IABTechLab/AAMP/blob/3b20e67b568235d86c4025bec7c1301edd7466a0/README.md"
   },

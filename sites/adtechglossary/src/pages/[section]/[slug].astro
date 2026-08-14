@@ -8,7 +8,10 @@
  */
 import { getCollection, render } from 'astro:content'
 import PageLayout from '@agenticbrief/shared-ui/PageLayout.astro'
+import IllustrationPlaceholder from '@agenticbrief/shared-ui/IllustrationPlaceholder.astro'
+import GlossaryChrome from '../../components/GlossaryChrome.astro'
 import { publishedOnly } from '@agenticbrief/content-utils'
+import { ILLUSTRATIONS } from '../../lib/illustrations'
 import {
   graph,
   organizationNode,
@@ -37,6 +40,7 @@ const { entry } = Astro.props
 const { Content } = await render(entry)
 const section = sectionFor(entry.id)
 const sectionMeta = SECTIONS[section as keyof typeof SECTIONS]
+const illustration = ILLUSTRATIONS[entry.id]
 
 const path = `/${section}/${entry.id}/`
 const url = `${BASE}${path}`
@@ -165,6 +169,7 @@ const related = entry.data.related
   description={entry.data.description}
   path={path}
   answer={entry.data.answer}
+  eyebrow={sectionMeta?.title}
   breadcrumbs={breadcrumbs}
   related={related}
   jsonLd={jsonLd}
@@ -173,5 +178,33 @@ const related = entry.data.related
   modifiedDate={entry.data.updatedDate ?? entry.data.pubDate}
   keywords={entry.data.keywords}
 >
+  <GlossaryChrome />
+
+  {
+    /*
+    Illustration slots are DEV-ONLY (user decision, 2026-08-14): production
+    ships clean, with no dashed placeholder rectangle and no visible prompt
+    preview, because a hatched box with a truncated prompt in it is the one
+    thing on this site that reads as unfinished rather than as a decision.
+    `import.meta.env.DEV` is statically replaced at build time, so `astro
+    build` emits neither the markup nor the component's scoped CSS, while
+    `astro dev` still renders the slot at its reserved 1:1 ratio so the two
+    placements stay visible to whoever generates the art. The prompts remain
+    catalogued in /srv/ws/out/illustration-prompts-adtechglossary.md and in
+    src/lib/illustrations.ts — nothing about the swap procedure changes,
+    only whether the empty slot is painted for readers.
+  */
+  }
+  {
+    import.meta.env.DEV && illustration && (
+      <IllustrationPlaceholder
+        slug={illustration.slug}
+        alt={illustration.alt}
+        ratio={illustration.ratio}
+        prompt={illustration.prompt}
+      />
+    )
+  }
+
   <Content />
 </PageLayout>

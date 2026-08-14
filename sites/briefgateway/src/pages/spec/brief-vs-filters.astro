@@ -2,11 +2,25 @@
 import { getEntry, render } from 'astro:content'
 import DocPage from '@agenticbrief/shared-ui/DocPage.astro'
 import { siteUrl } from '@agenticbrief/shared-ui/sites'
+import IllustrationPlaceholder from '@agenticbrief/shared-ui/IllustrationPlaceholder.astro'
+import { illustrationPrompt } from '../../lib/illustration-style'
+import '../../styles/briefgateway.css'
 
 const entry = await getEntry('guides', 'brief-vs-filters')
 if (!entry) throw new Error('content/guides/brief-vs-filters.md is missing')
 const { Content } = await render(entry)
 const BASE = siteUrl('briefgateway')
+
+// Catalogue entry: illustration-prompts.md:522-556 ("briefgateway — Brief vs Filters").
+const COMPARISON_PROMPT = illustrationPrompt(`
+Two-column comparison. LEFT column, header "Creative brief": rectangle
+containing prose-style wireframe lines (5-6 short horizontal lines of
+varying length, suggesting free text, NOT a form). RIGHT column, header
+"AdCP filters": rectangle broken into 4 labeled field rows (wireframe
+key:value pairs — DIAMOND for "structured", RECTANGLE for each field row).
+Between the columns: a single arrow pointing left-to-right, label "this
+tool converts". Accent highlight (#0057c2) on the arrow only.
+`)
 ---
 
 <DocPage
@@ -19,5 +33,21 @@ const BASE = siteUrl('briefgateway')
     { name: 'Brief vs filters', url: `${BASE}/spec/brief-vs-filters/` },
   ]}
 >
+  {
+    /* DEV-ONLY (user decision): production ships clean, with no visible
+       placeholder box. The slot still renders under `astro dev` so the
+       reserved space is visible while designing, and the prompt stays
+       catalogued in /srv/ws/out/illustration-prompts-briefgateway.md. */
+    import.meta.env.DEV && (
+      <div class="illustration-cap-560">
+        <IllustrationPlaceholder
+          prompt={COMPARISON_PROMPT}
+          alt="Wireframe comparison of a free-text creative brief beside a structured AdCP filter object, joined by an arrow showing the brief converting into filters."
+          slug="briefgateway/spec-brief-vs-filters/brief-object-vs-filter-array"
+          ratio="4 / 3"
+        />
+      </div>
+    )
+  }
   <Content />
 </DocPage>

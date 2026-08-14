@@ -19,10 +19,12 @@
     "./styles/global.css": "./src/styles/global.css",
     "./FieldTable.astro": "./src/FieldTable.astro",
     "./CodeSample.astro": "./src/CodeSample.astro",
-    "./DocPage.astro": "./src/DocPage.astro"
+    "./DocPage.astro": "./src/DocPage.astro",
+    "./IllustrationPlaceholder.astro": "./src/IllustrationPlaceholder.astro"
   },
   "dependencies": {
     "@agenticbrief/seo": "*",
-    "@agenticbrief/protocol-data": "*"
+    "@agenticbrief/protocol-data": "*",
+    "@agenticbrief/design-tokens": "*"
   }
 }

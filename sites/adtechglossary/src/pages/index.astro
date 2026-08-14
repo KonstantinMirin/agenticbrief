@@ -3,6 +3,7 @@ import { getCollection } from 'astro:content'
 import BaseLayout from '@agenticbrief/shared-ui/BaseLayout.astro'
 import AnswerBox from '@agenticbrief/shared-ui/AnswerBox.astro'
 import FaqBlock from '@agenticbrief/shared-ui/FaqBlock.astro'
+import GlossaryChrome from '../components/GlossaryChrome.astro'
 import { publishedOnly } from '@agenticbrief/content-utils'
 import {
   graph,
@@ -33,6 +34,20 @@ for (const entry of termEntries) {
   const key = sectionFor(entry.id)
   bySection.set(key, [...(bySection.get(key) ?? []), entry])
 }
+
+// A-Z index (design brief §6.1, F3): the corpus's 35 terms occupy 13 of 26
+// letters, so a single sticky rail plus a flowing alphabetical run replaces
+// Investopedia's per-letter pages, which this data cannot support. The 13
+// dead letters are shown, not hidden — a reader who looks for R learns
+// there is no R, and that is what makes the rail read as an alphabet
+// rather than a tag cloud.
+const ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('')
+const byLetter = new Map<string, typeof termEntries>()
+for (const entry of termEntries) {
+  const letter = entry.data.term[0].toUpperCase()
+  byLetter.set(letter, [...(byLetter.get(letter) ?? []), entry])
+}
+const letterHref = (letter: string) => `az-${letter.toLowerCase()}`
 
 // published = earliest pubDate; modified = latest updatedDate.
 const published = new Date(Math.min(...entries.map((e) => e.data.pubDate.getTime()))).toISOString()
@@ -91,58 +106,128 @@ const jsonLd = graph([
   wide
   keywords={['agentic advertising glossary', 'ad tech glossary', 'adcp glossary']}
 >
-  <h1>Ad Tech Glossary</h1>
-
-  <AnswerBox answer={answer} />
-
-  <p>
-    AdCP, the Ad Context Protocol, is a registry of named operations and JSON schemas for buying and
-    selling media through agents, published by AgenticAdvertising.org. AAMP is IAB Tech Lab's
-    umbrella over its agentic work — nine repositories, eight of them with published code — covering
-    the same ground plus real-time bidding and audience embeddings. Each stack names a buy-side
-    agent and a sell-side agent, and one word can name different objects in each. The entries for <a
-      href="/concepts/adcp/">AdCP</a
-    >, <a href="/concepts/aamp/">AAMP</a> and <a href="/media-buying/package/">Package</a> carry the distinctions
-    the rest of the glossary refers back to.
-  </p>
+  <GlossaryChrome />
 
   {
-    Object.entries(SECTIONS).map(([key, meta]) => {
-      const list = bySection.get(key) ?? []
-      if (list.length === 0) return null
-      return (
-        <section>
-          <h2 id={key}>
-            <a href={`/${key}/`}>{meta.title}</a>
-          </h2>
-          <p>{meta.summary}</p>
-          <ul class="term-list">
-            {list.map((e) => (
-              <li>
-                <a class="term-name" href={`/${key}/${e.id}/`}>
-                  {e.data.term}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </section>
-      )
-    })
+    /*
+    THE SHEET ON THE DESK — homepage composition.
+
+    The masthead is the only block that sits directly on the #f4f4f4 desk:
+    title, the one-sentence definition of the whole corpus at lead size, and
+    the orientation paragraph. Its h1 hairline runs the full 1180px, so the
+    page opens on an architectural rule rather than a hero.
+
+    Everything below it — the letter rail, the A-Z index and the systematic
+    contents — is ONE continuous #ffffff sheet. Zero border, zero shadow,
+    zero radius: the value jump is the edge. The book, opened on the desk.
+
+    No copy is added or reworded anywhere in this pass; only the wrappers
+    and their classes are new.
+  */
   }
+  <header class="masthead">
+    <h1>Ad Tech Glossary</h1>
 
-  <FaqBlock entries={faq} />
+    <AnswerBox answer={answer} />
 
-  <h2>Related</h2>
-  <ul>
-    <li>
-      <a href={`${HUB}/protocols/adcp-vs-aamp/`} rel="noopener">AdCP compared with AAMP</a> — the architecture
-      underneath the terminology
-    </li>
-    <li><a href="https://adcpexplorer.com/" rel="noopener">AdCP Explorer</a></li>
-    <li><a href="https://aampexplorer.com/" rel="noopener">AAMP Explorer</a></li>
-    <li>
-      <a href="/about/sources-and-versions/">Sources and versions</a> — which specification artifact each
-      definition comes from, and the terms this glossary leaves out on purpose
-    </li>
-  </ul>
+    <p>
+      AdCP, the Ad Context Protocol, is a registry of named operations and JSON schemas for buying
+      and selling media through agents, published by AgenticAdvertising.org. AAMP is IAB Tech Lab's
+      umbrella over its agentic work — nine repositories, eight of them with published code —
+      covering the same ground plus real-time bidding and audience embeddings. Each stack names a
+      buy-side agent and a sell-side agent, and one word can name different objects in each. The
+      entries for <a href="/concepts/adcp/">AdCP</a>, <a href="/concepts/aamp/">AAMP</a> and <a
+        href="/media-buying/package/">Package</a
+      > carry the distinctions the rest of the glossary refers back to.
+    </p>
+  </header>
+
+  <div class="sheet">
+    <nav class="az-rail" aria-label="Jump to letter">
+      {
+        ALPHABET.map((letter) =>
+          byLetter.has(letter) ? (
+            <a href={`#${letterHref(letter)}`}>{letter}</a>
+          ) : (
+            <span>{letter}</span>
+          ),
+        )
+      }
+    </nav>
+
+    <div class="az-index">
+      {
+        ALPHABET.filter((letter) => byLetter.has(letter)).map((letter) => (
+          <div class="az-group">
+            <h2 class="az-letter" id={letterHref(letter)}>
+              {letter}
+            </h2>
+            <ul class="az-run">
+              {byLetter.get(letter)!.map((e) => (
+                <li>
+                  <a href={`/${sectionFor(e.id)}/${e.id}/`}>{e.data.term}</a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+    </div>
+
+    {
+      /*
+      The systematic contents. This used to be eight identically-stacked
+      heading + paragraph + list blocks, which is slop tell 3 (the equal-
+      weight tile run) wearing a list instead of a card. Recomposed as a
+      printed contents spread: the section name and its scope statement hold
+      a narrow left column, the terms it contains run in the wide right one,
+      and one hairline per entry spans the whole sheet. Asymmetric by row,
+      not by page — lookup speed is untouched (editorial-references §3, axis
+      7's warning against asymmetric PAGE layout on reference sites).
+    */
+    }
+    <div class="contents">
+      {
+        Object.entries(SECTIONS).map(([key, meta]) => {
+          const list = bySection.get(key) ?? []
+          if (list.length === 0) return null
+          return (
+            <section>
+              <div class="contents-head">
+                <h2 id={key}>
+                  <a href={`/${key}/`}>{meta.title}</a>
+                </h2>
+                <p>{meta.summary}</p>
+              </div>
+              <ul class="term-list">
+                {list.map((e) => (
+                  <li>
+                    <a class="term-name" href={`/${key}/${e.id}/`}>
+                      {e.data.term}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )
+        })
+      }
+    </div>
+
+    <FaqBlock entries={faq} />
+
+    <h2>Related</h2>
+    <ul>
+      <li>
+        <a href={`${HUB}/protocols/adcp-vs-aamp/`} rel="noopener">AdCP compared with AAMP</a> — the architecture
+        underneath the terminology
+      </li>
+      <li><a href="https://adcpexplorer.com/" rel="noopener">AdCP Explorer</a></li>
+      <li><a href="https://aampexplorer.com/" rel="noopener">AAMP Explorer</a></li>
+      <li>
+        <a href="/about/sources-and-versions/">Sources and versions</a> — which specification artifact
+        each definition comes from, and the terms this glossary leaves out on purpose
+      </li>
+    </ul>
+  </div>
 </BaseLayout>

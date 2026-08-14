@@ -57,6 +57,16 @@ const NAV: Record<SiteKey, { label: string; href: string }[]> = {
 }
 
 const items = NAV[site]
+
+/**
+ * Masthead slot (spec §9.2): adcpexplorer fills it with the version tag,
+ * aampexplorer with the layer/component switcher, the other four leave it
+ * empty. Neither of those is a shared-component concern — one reads
+ * `data/adcp-specs.json`, the other `data/aamp-specs.json` — so the content
+ * comes from the page as a named slot rather than a hardcoded per-site
+ * branch here. `hasMasthead` only decides whether the wrapper renders.
+ */
+const hasMasthead = Astro.slots.has('masthead')
 ---
 
 <header class="site-header">
@@ -65,6 +75,13 @@ const items = NAV[site]
       <span class="brand-mark" aria-hidden="true"></span>
       <span class="brand-name">{def.name}</span>
     </a>
+    {
+      hasMasthead && (
+        <div class="masthead">
+          <slot name="masthead" />
+        </div>
+      )
+    }
     <nav aria-label="Primary">
       <ul>
         {
@@ -80,3 +97,79 @@ const items = NAV[site]
     </nav>
   </div>
 </header>
+
+<style>
+  /*
+   * Per-site header chrome (spec §9.2) is TOKEN-driven, not branched here.
+   * `--ring-separation` is set only by agenticadlab (the warm ring, spec
+   * §7.2); everyone else falls back to `none` and keeps the existing 1px
+   * hairline below. `--radius` already differs per site (24px pill on
+   * adcpexplorer down to 0px on adtechglossary, spec ruling 7), so reusing
+   * it on the nav links turns adcpexplorer's item into the spec's "24px nav
+   * pills on white" for free and leaves every other site's chrome close to
+   * unchanged — one rule, six looks.
+   *
+   * `aampexplorer` ships `--chrome-bg`/`--chrome-text-*` for its dual-ground
+   * treatment (spec §7.1), but they are deliberately NOT read on
+   * `.site-header`: spec §7.4's pair-14 hard rule caps that site's dark area
+   * at <=40% of viewport WIDTH and forbids full-bleed, and a top masthead
+   * spans 100% of the viewport by construction. The dark band belongs on
+   * PageLayout's 4-of-16 rail column (~25% width) instead — see
+   * PageLayout.astro. Here, `--chrome-*` is only read at badge scale on the
+   * `.masthead` slot wrapper, which stays far under the width cap.
+   */
+  .site-header {
+    background: var(--bg-subtle);
+    border-bottom: 1px solid var(--border);
+    box-shadow: var(--ring-separation, none);
+  }
+
+  /* Hit targets >=44px (req 4) on every interactive element this component
+     renders, and a real focus state using the neutral ring (spec §6.3b) —
+     Carbon's own IBM-Blue inset focus ring is deleted portfolio-wide (spec
+     ruling 8). No `outline: none` without a replacement anywhere below. */
+  .brand,
+  .site-header nav a {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .site-header nav a {
+    padding: 0.35rem 0.75rem;
+    border-radius: var(--radius);
+  }
+
+  .site-header nav a:hover,
+  .site-header nav a[aria-current='page'] {
+    background: var(--bg-inset);
+  }
+
+  .brand:focus-visible,
+  .site-header nav a:focus-visible {
+    outline: none;
+    box-shadow: var(--focus-ring);
+  }
+
+  /* `.brand-mark`'s corner now follows the site's own radius law instead of
+     a hardcoded 3px (spec §4.4) — `min(..., 50%)` turns adcpexplorer's 24px
+     pill radius on a 14px square into a circle rather than an oversized,
+     clipped curve, and leaves the flatter sites close to today's square. */
+  .brand-mark {
+    border-radius: min(var(--radius), 50%);
+  }
+
+  /* Badge-scale-only chrome (see the comment on `.site-header` above): the
+     one place `--chrome-bg`/`--chrome-text-primary` are read, well under the
+     40%-of-viewport cap. Sites that don't set them (five of six) render this
+     as a transparent, unstyled wrapper around whatever the slot provides. */
+  .masthead {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.25rem 0.6rem;
+    border-radius: var(--radius);
+    background: var(--chrome-bg, transparent);
+    color: var(--chrome-text-primary, inherit);
+  }
+</style>

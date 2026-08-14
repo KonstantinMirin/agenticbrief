@@ -1,0 +1,304 @@
+/**
+ * adtechglossary — GLOSSARY (Wikipedia / Investopedia voice)
+ * Dominant differentiator (spec §7.1): the ONLY inverted layering (page
+ * #f4f4f4, surfaces #ffffff — callouts LIGHTER than the page) and the ONLY
+ * 0px-radius site. The inversion is OUR extension of Carbon's documented
+ * layering doctrine (ibm.md:30,342), not a template quotation — recorded
+ * as such (spec §4.8). 0px radius, demoted from Carbon's portfolio law to
+ * this site's exclusive override (spec §5, ruling 7).
+ *
+ * Flatness is written down as an explicit LEVEL, not an omission (Cal.com
+ * graft, spec §6.6) — `--elev-*: none`, `--radius: 0`, `--track-display: 0`
+ * are all declared here with a reason, so a future agent reads a decision,
+ * not a gap to "fix" by adding rounding.
+ *
+ * ---------------------------------------------------------------------------
+ * LIGHT-MODE ELEVATION PASS (2026-08-14). Named editorial move:
+ *
+ *   THE SHEET ON THE DESK — the #f4f4f4 ground is the desk and every entry is
+ *   a single continuous #ffffff sheet laid on it with zero border, zero
+ *   shadow and zero radius, so the site's one value jump is spent at PAGE
+ *   scale instead of being scattered across half a dozen small white boxes.
+ *   Inside the sheet nothing is boxed: hierarchy is carried by a flat 1.8x
+ *   scale, asymmetric rule-anchored whitespace, and full-sheet-width
+ *   hairlines under every heading — Monocle's "1px between sections" and
+ *   Raconteur's boxless uppercase kicker (editorial-references §1, §2.1,
+ *   §2.3, §2.9), composed onto Carbon's inverted layer ramp.
+ *
+ * Consequences recorded here rather than in the site CSS:
+ *   - The 24px category-chip exception is RETIRED (see --chip-radius below).
+ *   - The sheet needs a horizontal pad that is NOT part of the text measure,
+ *     so --sheet-pad + --measure-max are new (see below); 72ch of running
+ *     text is preserved exactly.
+ *   - IBM Plex Mono is promoted from "the label primitive" to THIS SITE'S
+ *     METADATA FACE (editorial-references §2.7, the NYT grotesque split):
+ *     kickers, breadcrumb/hatnote, table captions, cell notes, provenance
+ *     and letter heads are mono; running prose is Sans. --meta-* below.
+ *   - No dark mode. There is no OS-colour-scheme media block anywhere in
+ *     this file or in sites/adtechglossary/**; the grep gate returns zero.
+ */
+
+:root[data-site='adtechglossary'] {
+  /* ---- ground ramp — INVERTED [our extension, spec §4.8]: page #f4f4f4,
+     surfaces #ffffff. This is the same alias mapping every other site
+     uses; only the two hex values are swapped relative to the White theme. ---- */
+  --cds-background: #f4f4f4; /* page */
+  --cds-layer-01: #ffffff; /* surfaces — LIGHTER than the page */
+  --cds-layer-02: #e0e0e0; /* deep */
+  --cds-text-primary: #161616;
+  --cds-text-secondary: #525252; /* 7.11:1 on #f4f4f4 */
+
+  /* ---- accent [spec §5.1 hue family, hex darkened for WCAG, ADAPTATION]
+     Link colors are Wikipedia's own live values, distinct from the accent —
+     amber marks headings/chips/emphasis; blue/purple mark actual hyperlinks. ---- */
+  --site-accent: #845720; /* amber — 5.67:1 on #f4f4f4, verified */
+  --site-accent-strong: var(--site-accent);
+  --link-color: #3366cc; /* 4.88:1 on #f4f4f4, Wikipedia live */
+  --link-visited: #6a60b0; /* 4.88:1 on #f4f4f4, Wikipedia live */
+
+  /*
+   * ORCHESTRATOR FIX (B3) — WCAG 1.4.3 failure on hover.
+   *
+   * The chassis hover ground is `--cds-gray-10-hover` = #e8e8e8. Both link
+   * colours above measure 4.38:1 on it — below the 4.5:1 floor — and it was
+   * live on all 26 A-Z rail targets plus every hovered link on the site.
+   *
+   * Re-grounded to #f4f4f4, which restores BOTH links to exactly 4.88:1 — the
+   * same ratio they already carry on the page ground, so hover is no longer a
+   * special case that has to be reasoned about separately.
+   *
+   * The 1.10:1 step from the #ffffff surface is deliberately quiet: this site's
+   * entire separation language is value steps and hairlines, with no ornament
+   * and no rounding, so a loud hover fill would contradict its identity. Hover
+   * is additionally carried by the underline, which is not colour-dependent.
+   */
+  --cds-layer-hover-01: #f4f4f4;
+
+  /* ---- radius — 0px, and now with ZERO exceptions ----
+     `--chip-radius: var(--radius-24)` used to sit here for the section
+     kicker, quoting Carbon's own pill-tag exception (ibm.md:242). It is
+     RETIRED in the elevation pass, for two reasons that both point the same
+     way. (1) editorial-references §1 lists the boxless kicker as an
+     editorial tell and the coloured chip as a SaaS tell — Raconteur's live
+     category kicker is plain tracked text over a hairline, no box, and
+     Monocle's `.is-style-eyebrow` is likewise unboxed. (2) `--radius-24` is
+     ALSO adcpexplorer's whole-chrome pill (its dominant differentiator);
+     carrying one pill here blunted both claims at once. Deleting it makes
+     "the ONLY 0px-radius site" literally true — every corner on this site
+     is now square, including the header brand mark and the .badge, both of
+     which hardcode a radius in shared CSS and are squared off in
+     GlossaryChrome.astro. ---- */
+  --site-radius: var(--radius-0);
+  /* `--code-radius` (global.css `pre`/`code`, CodeSample.astro) defaults to
+     2px (`--radius-2`) when unset, which silently broke this site's
+     exclusive 0px-radius law wherever a code sample or inline <code> shipped
+     — a shared-layer defect, fixed here rather than left to the site's own
+     radius token, since `--code-radius` is deliberately decoupled from
+     `--site-radius`/`--radius` everywhere else (adcpexplorer's 24px pill). */
+  --code-radius: var(--radius-0);
+  --site-measure: 72ch; /* widest in the portfolio — density register, flowing link runs */
+
+  /* ---- THE SHEET (the named editorial move) ----
+     ONE page width for the whole site. `--measure-max` is the hook
+     global.css reads for `main.prose`'s cap, and it is now the PAGE width,
+     not the text measure — so an entry page and the A-Z index (`main.wide`,
+     capped at the same 1180px in global.css) are the same physical sheet.
+     `--sheet-pad` is the printed margin inside it.
+
+     The running-text cap stays `--site-measure` (72ch, still the portfolio's
+     widest — spec §4.2), applied per element in GlossaryChrome.astro rather
+     than to the page shell. That split is the point: prose sits left at
+     72ch and tables / code panels / figures take the whole 1068px sheet
+     column, breaking into the margin the prose leaves. 36 of 36 term pages
+     carry a table, so that margin is doing work on every one of them.
+
+     What this REPLACES: the old model capped `main.prose` at 72ch and let
+     tables escape it with `width: min(1180px, calc(100vw - 2.5rem))` plus a
+     `margin-inline: min(0px, calc(50% - W/2))` centring term — arithmetic
+     that also needed a scrollbar-overshoot correction and `overflow-x:
+     hidden` on the document root to stay on screen. All of it is deleted:
+     nothing escapes the sheet now, because the sheet is already page-wide.
+
+     `clamp()` keeps the margin a real one on desktop (56px) and a thin one
+     on a phone (20px), where the sheet is viewport-bound anyway. ---- */
+  --sheet-pad: clamp(20px, 3.2vw, 56px);
+  --measure-max: 1180px; /* == global.css's `main.wide` cap: one page width */
+
+  /* ---- metadata face (editorial-references §2.7 — "extending mono to
+     captions/timestamps/version credits is the cheapest remaining editorial
+     gain"). The chassis already reserves Plex Mono for the uppercase label
+     primitive on all six sites; this site extends the SAME face to every
+     non-prose role — breadcrumb/hatnote, table caption, cell note, spec
+     provenance, answer source, letter heads — so family alone separates
+     "sourcing" from "definition", which is the NYT Franklin-for-metadata
+     mechanic executed with mono. Sans stays exclusively on running prose,
+     headings and term names. ---- */
+  --meta-font: var(--cds-font-mono);
+  --meta-size: 13px; /* Monocle's --ts-eyebrow-sm, live */
+
+  /* ---- explicit-triple flatness declaration (Cal graft, spec §6.6) ----
+     Each of these is a DECISION, not an absent value. */
+  --elev-raised: none;
+  --elev-overlay: none;
+  --elev-ring: none;
+  --track-display: 0; /* no display tracking on this site's flat ≈1.8x type scale */
+
+  /* ---- hairline fix (brief §4.2) — the most load-bearing change here.
+     Carbon's #e0e0e0 border-subtle is calibrated against a WHITE page. On
+     this site's #f4f4f4 page it measures 1.20:1 — invisible. Gray 30
+     (ibm.md:48) restores it to 1.55:1 on #f4f4f4 and 1.71:1 on #ffffff,
+     STRONGER than the portfolio norm of #e0e0e0-on-white (1.32:1). Both
+     roles are set identically on purpose: this site has ONE rule weight. ---- */
+  --cds-border-subtle: #c6c6c6; /* 1.55:1 on #f4f4f4 · 1.71:1 on #ffffff */
+  --cds-border-strong: #c6c6c6;
+
+  /* ---- heading ramp (brief §4.3) — retires the three dead --glossary-*
+     tokens (zero consumers repo-wide; global.css:188-193 names the real
+     mechanism: override --type-heading-0N-* directly). Wikipedia's h1/h2
+     rule IS the Carbon default one role down (ibm.md:91-92, spec §3.3
+     callout) — a re-mapping, not a removal. Range 32/18 = 1.78x, the "flat
+     ~1.8x" of spec §7.2. ---- */
+  --type-heading-01-size: 2rem; /* h1 = Carbon Heading 02, 32px */
+  --type-heading-01-weight: 400; /* NOT bold — the encyclopedia tell (§3.5 rule 1) */
+  --type-heading-01-lh: 1.25;
+  --type-heading-02-size: 1.5rem; /* h2 = Carbon Heading 03, 24px */
+  --type-heading-02-weight: 400;
+  --type-heading-02-lh: 1.33;
+  --type-heading-03-size: 1.25rem; /* h3 = Carbon Heading 04, 20px */
+  --type-heading-03-weight: 600; /* h3+ bold: Wikipedia live h3-h6 rule, at Carbon's 600 ceiling */
+  --type-heading-03-lh: 1.4;
+  --type-heading-04-size: 1.125rem; /* 18px = the body floor, bolded — Wikipedia live h6 rule */
+  --type-heading-04-weight: 600;
+  --type-heading-04-lh: 1.5;
+
+  /* --track-display gets real consumers instead of being a comment-only value. */
+  --type-heading-01-tracking: var(--track-display);
+  --type-heading-02-tracking: var(--track-display);
+  --type-heading-03-tracking: var(--track-display);
+  --type-heading-04-tracking: var(--track-display);
+
+  /* ---- Shiki hooks (ruling 7: repaint the code panel here, never in
+     astro.config.mjs, which stays on theme: 'css-variables').
+     RE-POINTED in the elevation pass. The panel used to be #ffffff, which
+     worked only while the page was gray; now that every entry sits on a
+     #ffffff sheet, a #ffffff code panel is invisible. The panel goes to the
+     DEEP layer #e0e0e0 — the inverted ramp read all the way down, the same
+     band the table headers use, so "inert content sits inset, interactive
+     content sits raised" is one rule with three consumers. #f4f4f4 was
+     rejected for the panel specifically because that is adcpexplorer's live
+     code-panel value on ITS white ground: identical pixels, on the pair
+     spec §7.3 calls the acid test. All four ratios computed below. ---- */
+  --code-bg: var(--cds-layer-02); /* #e0e0e0 */
+  --code-fg: var(--cds-text-primary); /* #161616 on #e0e0e0 = 13.71:1 */
+  --code-muted: var(--cds-text-secondary); /* #525252 on #e0e0e0 = 5.92:1 */
+  --code-accent: var(--site-accent); /* #845720 on #e0e0e0 = 4.73:1 */
+
+  /* ---- wayfinding label — inline acronyms (RTB, DSP) ---- */
+  --track-label: 0.8px;
+
+  /* NO SYNTHETIC WEIGHTS. `fonts.css:66-70` self-hosts IBM Plex Mono at
+     weight 400 ONLY (`font-weight: 400`, a single static file — the Sans is
+     the variable 300-600 face, the Mono is not). The chassis default
+     `--label-weight: 600` therefore asks the browser for a weight that does
+     not exist and gets an algorithmically smeared faux-bold, on the very
+     face this site has just promoted to carry all of its metadata. 400 is
+     inside the portfolio's permitted 300/400/600 set and is the only real
+     one available here; the label keeps its presence from uppercase +0.8px
+     tracking and, where it is a kicker, from the amber. ---- */
+  --label-weight: 400;
+
+  /* ---- AnswerBox recipe (spec §9.7): "#ffffff on the #f4f4f4 page (the
+     inversion), 0px, no border, no shadow, 16px padding".
+     STILL SATISFIED, at a larger scale: the answer now sits on the sheet,
+     which IS #ffffff on the #f4f4f4 page. What changes is that it no longer
+     paints its own second #ffffff rectangle on top of an identical one —
+     that would have been a box with no value jump behind it, i.e. a box for
+     its own sake, the single loudest SaaS tell (editorial-references §1).
+     Precedence is carried instead by scale + position + space: the lead sits
+     immediately under the h1's full-sheet rule at Heading 05 (20px/400,
+     ibm.md:97) with 32px of air below it — Wikipedia's own unboxed lead
+     paragraph, and the one place this flat 1.8x ramp spends a size step.
+     Padding therefore goes to 0 and the ground to `none` (the latter in
+     GlossaryChrome.astro, because `--accent-soft` is shared with .skip-link
+     and .badge-required and must keep its #ffffff value). ---- */
+  --answerbox-shadow: none;
+  --answerbox-padding: 0;
+  --answerbox-radius: var(--radius-0);
+
+  /* ---- hatnotes — lightweight cross-refs stay unboxed above the lead
+     (spec §3.5 rule, preserved through the Carbon layering rewrite) ---- */
+  --hatnote-size: 13px;
+  --hatnote-color: var(--cds-text-secondary);
+
+  /* ---- heading hairline (adversarial review, nice-to-have #9): the
+     structural --cds-border-subtle (#c6c6c6, 1.55:1 on #f4f4f4) is correct
+     for table rules, the A-Z rail border and other structural hairlines —
+     changing it would move every hairline on the site at once. The h1/h2
+     underline is this site's loudest "encyclopedia tell" and reads better
+     one step stronger, scoped to headings only. #a8a8a8 = 2.16:1 on #f4f4f4,
+     2.38:1 on #ffffff (both computed, non-text/decorative use) — matches
+     Wikipedia's own live register (#a2a9b1 on #f8f9fa = 2.25:1) rather than
+     #8d8d8d's 3.02:1, which reads as too strong here. ---- */
+  --heading-rule: #a8a8a8;
+
+  /*
+   * Contrast table. EVERY ratio below was RECOMPUTED with the WCAG 2.x
+   * relative-luminance formula in this pass (script output pasted, not
+   * estimated and not inherited from the previous table).
+   *
+   * TEXT — floor 4.5:1 normal, 3:1 large/UI
+   *   #161616 on #ffffff (body ink on the sheet) ............. 18.10:1 PASS
+   *   #161616 on #f4f4f4 (ink on the desk) ................... 16.45:1 PASS
+   *   #525252 on #ffffff (gloss, cell notes, on the sheet) .... 7.81:1 PASS
+   *   #525252 on #f4f4f4 (hatnote/breadcrumb on the desk) ..... 7.10:1 PASS
+   *   #845720 on #ffffff (amber kicker + letter head) ......... 6.24:1 PASS
+   *   #845720 on #f4f4f4 (amber on the desk) .................. 5.67:1 PASS
+   *   #3366cc on #ffffff (link on the sheet) .................. 5.37:1 PASS
+   *   #3366cc on #f4f4f4 (link on the desk) ................... 4.88:1 PASS
+   *   #6a60b0 on #ffffff (visited on the sheet) ............... 5.37:1 PASS
+   *   #6a60b0 on #f4f4f4 (visited on the desk) ................ 4.88:1 PASS
+   *   #161616 on #e0e0e0 (table-head ink, Shiki code panel fg) ... 13.71:1 PASS
+   *   #525252 on #e0e0e0 (badge, Shiki code panel muted) .......... 5.92:1 PASS
+   *   #845720 on #e0e0e0 (Shiki code panel accent) ................ 4.73:1 PASS
+   *   #6f6f6f on #ffffff (dead letters in the A-Z rail) ........... 5.02:1 PASS
+   *   #6f6f6f on #f4f4f4 (breadcrumb separator) ................... 4.57:1 PASS
+   *   #161616 on #f4f4f4 (inline-code literal on its desk chip) .. 16.45:1 PASS
+   *   #3366cc on #f4f4f4 (a LINK inside inline code) .............. 4.88:1 PASS
+   *   #6a60b0 on #f4f4f4 (a VISITED link inside inline code) ...... 4.88:1 PASS
+   *
+   * THE ONE REMAINING FAILING PAIR, kept documented because the fix is a
+   * layering rule rather than a colour change:
+   *   #3366cc on #e0e0e0 (a bare link inside a table HEADER cell,
+   *     which is the only surface still painted #e0e0e0 behind
+   *     interactive text) .................................... 4.07:1 FAIL
+   *     Fixed by lifting that text off the inset band onto the sheet —
+   *     GlossaryChrome.astro's `main thead th a` sets `background: #ffffff`,
+   *     where the same ink measures 5.37:1 PASS. Interactive = raised,
+   *     inert = inset.
+   *     NOTE: the second half of this pair — a link inside INLINE CODE — no
+   *     longer exists. Inline code moved from #e0e0e0 to the desk colour
+   *     #f4f4f4 in the elevation pass, where the link measures 4.88:1 and
+   *     the visited link 4.88:1, so the `a code` lift was deleted rather
+   *     than carried forward.
+   *
+   * DECORATIVE / NON-TEXT (no floor; listed so nobody has to guess)
+   *   #ffffff on #f4f4f4 — the SHEET/DESK jump, the dominant device . 1.10:1
+   *   #e0e0e0 on #ffffff — inset band against the sheet ........... 1.32:1
+   *   #e8e8e8 on #ffffff — A-Z rail hover ......................... 1.23:1
+   *   #c6c6c6 on #ffffff — structural hairline on the sheet ....... 1.71:1
+   *   #c6c6c6 on #f4f4f4 — structural hairline on the desk ........ 1.55:1
+   *   #a8a8a8 on #ffffff — heading hairline on the sheet .......... 2.38:1
+   *   #a8a8a8 on #f4f4f4 — heading hairline on the desk ........... 2.16:1
+   *   #8d8d8d on #f4f4f4 — 3.02:1, REJECTED as too strong for the rules
+   *     here (Wikipedia's own live register is #a2a9b1 on #f8f9fa = 2.25:1,
+   *     which is what #a8a8a8 matches)
+   */
+}
+
+/* Dark mode REMOVED (orchestrator decision, light-only portfolio): the
+   OS-dark-scheme media block that used to live here (a full
+   Carbon Gray 100 inversion, direction-preserving so surfaces stayed
+   lighter than the page) is deleted, not hidden. This site's inverted
+   light layering (page #f4f4f4, surfaces #ffffff) now lives entirely in
+   the light block above. See /srv/ws/out/design-system-spec.md §10
+   ruling 4, marked VOID. */

@@ -1,0 +1,73 @@
+---
+/**
+ * VersionTag.astro — site-owned (adcpexplorer only).
+ *
+ * Non-interactive pill rendering the release identity, spec §5.6/§9.2. This
+ * is the masthead-slot content the design brief specs — but the masthead
+ * slot itself is dead code today (BaseLayout never forwards it to Header,
+ * see the BLOCKED item filed against the shared layer). Ship-now fallback:
+ * render this as the sticky header of the left nav rail (MDN's own live
+ * position for it) via DocsTree.astro. When the shared-layer edit lands,
+ * moving it to the masthead slot is a one-line change at each call site.
+ *
+ * The rendered string is `data/adcp-specs.json`'s own `versionLabel` field
+ * ("3.1.13 (published stable)", spec §7.2 quotes this exact string) —
+ * published data, not invented copy. Falls back to a bare version number for
+ * any future data snapshot that omits the optional field.
+ */
+import { adcp } from '@agenticbrief/protocol-data'
+
+const label = (adcp as { versionLabel?: string }).versionLabel ?? adcp.version
+---
+
+<p class="version-tag">
+  <span class="version-tag-id">{label}</span>
+</p>
+
+<style>
+  .version-tag {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0;
+    padding: 0.35rem 0.75rem;
+  }
+
+  .version-tag-id {
+    display: inline-flex;
+    align-items: center;
+    height: 24px;
+    padding: 0 12px;
+    border-radius: var(--version-tag-radius, var(--radius-24));
+    background: var(--version-tag-bg);
+    color: var(--version-tag-fg);
+    font-family: var(--font-mono);
+    font-size: var(--label-size);
+    font-weight: var(--label-weight);
+    letter-spacing: var(--track-label);
+    text-transform: var(--label-transform);
+    /*
+     * ORCHESTRATOR FIX (M1) — `white-space: nowrap` alone PAINTED THIS PILL
+     * OVER THE H1 from 672px to ~975px, including iPad portrait. The homepage
+     * headline literally read "…CP Explorer".
+     *
+     * Measured: nowrap made this child 219px wide, right edge 251px at EVERY
+     * width from 672 to 1440, inside a rail whose content box is only 130px at
+     * 672 and 187px at 900. H1 left edge sits at 182 / 239 / 264, so the pill
+     * overlapped it by 69 / 12 / 0px.
+     *
+     * Worth noting for anyone auditing this later: measuring the PARENT
+     * `.version-tag` shows 32px of clearance, because the parent is correctly
+     * clipped to the rail. The overflow was entirely in this child. Container
+     * geometry said clean; painted pixels said broken.
+     *
+     * nowrap is kept — a version string must not wrap mid-token — but it is now
+     * bounded, and truncates with an ellipsis instead of escaping its rail.
+     */
+    min-width: 0;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+</style>

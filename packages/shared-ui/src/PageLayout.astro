@@ -32,6 +32,24 @@ export interface Props {
   keywords?: string[]
   current?: string
   wide?: boolean
+  /**
+   * 'flow' (default) is today's single prose column — every existing caller
+   * omits this prop, so behaviour is unchanged.
+   *
+   * 'reference' is the 16-column reference-doc grid (spec §9.3, §10 ruling
+   * 2), fed by two named slots: `nav` (left rail — e.g. adcpexplorer's docs
+   * tree) and `aside` (right rail — e.g. adcpexplorer's sticky TOC or
+   * aampexplorer's schema-compare pane). Column spans are read from CSS, not
+   * a JS prop: `--grid-span-rail` / `--grid-span-content` /
+   * `--grid-span-toc` (or `--grid-span-compare`), which adcpexplorer's and
+   * aampexplorer's own token files already define as 4/8/4 and 4/6/6
+   * respectively (spec §10 ruling 2). A site that defines none of them still
+   * gets adcpexplorer's shape via the fallbacks below — the documented
+   * default. Building the nav TREE itself (data-driven, per site) is out of
+   * this component's scope; it only lays out whatever the `nav` slot is
+   * given.
+   */
+  layout?: 'flow' | 'reference'
 }
 
 const {
@@ -45,11 +63,31 @@ const {
   breadcrumbs = [],
   faq = [],
   related = [],
+  layout = 'flow',
+  wide,
   ...rest
 } = Astro.props
+
+const isReference = layout === 'reference'
+const hasNav = isReference && Astro.slots.has('nav')
+const hasAside = isReference && Astro.slots.has('aside')
+// The grid needs the full main.wide width regardless of what the caller
+// passed; `wide` only matters for 'flow' pages, where it's unchanged.
+const resolvedWide = isReference ? true : wide
+
+const gridClass = ['doc-grid', !hasNav && 'no-nav', !hasAside && 'no-aside']
+  .filter(Boolean)
+  .join(' ')
 ---
 
-<BaseLayout site={site} title={title} description={description} path={path} {...rest}>
+<BaseLayout
+  site={site}
+  title={title}
+  description={description}
+  path={path}
+  wide={resolvedWide}
+  {...rest}
+>
   {
     breadcrumbs.length > 0 && (
       <nav class="breadcrumbs" aria-label="Breadcrumb">
@@ -64,13 +102,199 @@ const {
     )
   }
 
-  <article>
-    {eyebrow && <p class="eyebrow">{eyebrow}</p>}
-    <h1>{heading ?? title}</h1>
-    {answer && <AnswerBox answer={answer} />}
-    <slot />
-    <FaqBlock entries={faq} />
-    <RelatedLinks links={related} />
-    <EngagementCta site={site} />
-  </article>
+  {
+    isReference ? (
+      <div class={gridClass}>
+        {hasNav && (
+          <div class="doc-nav">
+            <details class="doc-nav-disclosure">
+              <summary>On this page</summary>
+              <div class="doc-nav-body">
+                <slot name="nav" />
+              </div>
+            </details>
+          </div>
+        )}
+        <div class="doc-content">
+          <article>
+            {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+            <h1>{heading ?? title}</h1>
+            {answer && <AnswerBox answer={answer} />}
+            <slot />
+            <FaqBlock entries={faq} />
+            <RelatedLinks links={related} />
+            <EngagementCta site={site} />
+          </article>
+        </div>
+        {hasAside && (
+          <div class="doc-aside">
+            <slot name="aside" />
+          </div>
+        )}
+      </div>
+    ) : (
+      <article>
+        {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+        <h1>{heading ?? title}</h1>
+        {answer && <AnswerBox answer={answer} />}
+        <slot />
+        <FaqBlock entries={faq} />
+        <RelatedLinks links={related} />
+        <EngagementCta site={site} />
+      </article>
+    )
+  }
 </BaseLayout>
+
+<style>
+  /*
+   * The 16-column reference-doc grid (spec §9.3). Scoped entirely to this
+   * component so BaseLayout/global.css — foundation-owned, not this file —
+   * never need to change; `main.wide`'s existing 1180px cap (global.css)
+   * still bounds it, short of the chassis's own 1584px grid max (`ibm.md
+   * §3.5`, `--grid-max-width`), which would require editing that file.
+   *
+   * Column spans come from each site's own token file, never a per-site
+   * branch here (req 2): `--grid-span-rail` / `--grid-span-content` /
+   * `--grid-span-toc` (adcpexplorer) or `--grid-span-compare`
+   * (aampexplorer). The `.no-nav`/`.no-aside` modifiers (computed above from
+   * which slots the page actually filled) let `.doc-content` reclaim the
+   * unused rail's columns instead of leaving a gap.
+   */
+  .doc-grid {
+    display: grid;
+    grid-template-columns: repeat(var(--grid-columns, 16), 1fr);
+    gap: 0 var(--grid-gutter, 32px);
+    align-items: start;
+  }
+
+  .doc-nav {
+    grid-column: span var(--grid-span-rail, 4);
+  }
+
+  .doc-content {
+    /* min-width: 0 is the grid analogue of the mobile table fix's
+       `width: auto` (global.css:598-615) — without it a long unbreakable
+       token inside a grid track can force the track wider than its share
+       instead of scrolling/wrapping inside it. */
+    min-width: 0;
+    grid-column: span var(--grid-span-content, 8);
+  }
+
+  .doc-grid.no-aside .doc-content {
+    grid-column: span
+      calc(var(--grid-span-content, 8) + var(--grid-span-toc, var(--grid-span-compare, 4)));
+  }
+
+  .doc-grid.no-nav .doc-content {
+    grid-column: span calc(var(--grid-span-rail, 4) + var(--grid-span-content, 8));
+  }
+
+  .doc-grid.no-nav.no-aside .doc-content {
+    grid-column: span var(--grid-columns, 16);
+  }
+
+  .doc-aside {
+    grid-column: span var(--grid-span-toc, var(--grid-span-compare, 4));
+    position: sticky;
+    /* Clears a fixed/sticky header; every site's header today is static in
+       flow, so this is a conservative default a site can override. */
+    top: var(--doc-aside-top, 1.5rem);
+    align-self: start;
+    max-height: calc(100vh - var(--doc-aside-top, 1.5rem) - 1.5rem);
+    overflow-y: auto;
+  }
+
+  .doc-nav-disclosure summary {
+    cursor: pointer;
+    font-family: var(--font-mono);
+    font-size: var(--label-size);
+    font-weight: var(--label-weight);
+    letter-spacing: var(--track-label);
+    text-transform: var(--label-transform);
+    color: var(--fg-muted);
+  }
+
+  .doc-nav-disclosure summary:focus-visible {
+    outline: none;
+    box-shadow: var(--focus-ring);
+  }
+
+  .doc-nav-body {
+    margin-top: 0.6rem;
+  }
+
+  /* Anchor jumps land below the sticky offset rather than under it (spec
+     §9.3, Wikipedia's live 75px value) — scoped to headings a reference page
+     actually renders, via :global since they arrive through the default
+     slot, not this component's own template. */
+  .doc-content :global(h2),
+  .doc-content :global(h3),
+  .doc-content :global(h4) {
+    scroll-margin-top: 75px;
+  }
+
+  /* Collapse order (spec §9.3): >=1056px is the 3-region grid above.
+     Between 672px and 1055px the right rail drops and content reclaims its
+     columns — same math as `.no-aside`, applied unconditionally because the
+     rail is now hidden regardless of whether the page supplied one. Below
+     672px the whole grid becomes a single flow column and the left rail
+     turns into a genuine, collapsed-by-default disclosure. */
+  @media (max-width: 1055px) {
+    .doc-aside {
+      display: none;
+    }
+
+    .doc-content {
+      grid-column: span
+        calc(var(--grid-span-content, 8) + var(--grid-span-toc, var(--grid-span-compare, 4)));
+    }
+
+    .doc-grid.no-nav .doc-content {
+      grid-column: span var(--grid-columns, 16);
+    }
+  }
+
+  /*
+   * ORCHESTRATOR FIX (M2) — this promotion was `min-width: 672px`, which made
+   * the rail an always-visible sidebar from 672px up. Measured, the rail's
+   * content box at those widths is 130px @672, 162px @800, 187px @900 — far
+   * too narrow for the identifiers it carries, so adcpexplorer's operation
+   * names broke MID-TOKEN across the whole 672-1055px range:
+   * `get_media_buy_deliv/ery`, `provide_perf/ormance_feed/back`,
+   * `list_creative_forma/ts`. Widening cannot fix it —
+   * `provide_performance_feedback` needs ~235px.
+   *
+   * The rail is now promoted at the SAME breakpoint where `.doc-aside` already
+   * collapses (1056px), so the three-region grid appears all at once instead of
+   * half-appearing into a column too narrow to hold it. Between 672 and 1055px
+   * the nav is a real collapsed-by-default disclosure at full width, which is
+   * what the spec asked for and what actually reads.
+   *
+   * >=1056px: the nav rail is a normal, always-visible column, not a
+   * disclosure — the HTML ships closed (no `open` attribute) so it degrades
+   * correctly below that, and this overrides the UA rule that hides everything
+   * but <summary> in a closed <details>.
+   */
+  @media (min-width: 1056px) {
+    .doc-nav-disclosure summary {
+      display: none;
+    }
+
+    .doc-nav-disclosure:not([open]) .doc-nav-body {
+      display: block;
+    }
+  }
+
+  /* Paired with the M2 fix above: single flow column wherever the rail is a
+     disclosure rather than a sidebar. Was `max-width: 671px`. */
+  @media (max-width: 1055px) {
+    .doc-grid {
+      display: block;
+    }
+
+    .doc-nav {
+      margin-bottom: var(--space-06, 24px);
+    }
+  }
+</style>

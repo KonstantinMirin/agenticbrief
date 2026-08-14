@@ -1,8 +1,10 @@
 ---
 import { getCollection, render } from 'astro:content'
 import DocPage from '@agenticbrief/shared-ui/DocPage.astro'
+import IllustrationPlaceholder from '@agenticbrief/shared-ui/IllustrationPlaceholder.astro'
 import { publishedOnly } from '@agenticbrief/content-utils'
 import { BASE, PREFIX, ROOT, slugFor } from '../lib/feed'
+import '../styles/site.css'
 
 // getStaticPaths runs in an isolated module scope and cannot see component-level
 // consts, so the routing constants are imported from lib/feed.ts — the same
@@ -132,9 +134,66 @@ const LINKS: Record<string, { title: string; note?: string }> = {
   },
 }
 
+/**
+ * Illustration slots (spec §8). Only two of the four [slug] routes get one —
+ * /maturity/ and /about/ are explicit refusals (§8, monument-stat/short-page
+ * reasoning) — so this is a lookup, not a per-route default. Full prompts:
+ * /srv/ws/out/illustration-prompts-whatisagenticbuying.md.
+ *
+ * PALETTE (rewritten for the light editorial identity, superseding the
+ * dark-mode-strip flag this block used to carry): both prompts previously
+ * hardcoded the site's old dark-native canvas — background #161616,
+ * lines/text #f4f4f4, secondary #c6c6c6, accent #5b8cff. That palette is
+ * dead: the ground is Carbon White and the accent is process magenta. Every
+ * value below now matches
+ * packages/design-tokens/src/sites/whatisagenticbuying.css exactly, so the
+ * generated PNG sits flush on the page instead of punching a dark hole in
+ * it:
+ *   background #ffffff · lines and primary text #161616 (18.10:1) ·
+ *   secondary lines and labels #525252 (7.81:1) · optional flat fill
+ *   #f4f4f4 · accent #b3005c (6.84:1 on #ffffff), ONE element per diagram,
+ *   outline only, never filled.
+ * The rejected old accent measures 3.16:1 on #ffffff and could not have
+ * carried a label. Catalogue copy of these prompts:
+ * /srv/ws/out/illustration-prompts-whatisagenticbuying.md.
+ */
+const ILLUSTRATION: Record<string, { slug: string; alt: string; prompt: string; ratio: string }> = {
+  'agentic-buying-vs-programmatic': {
+    slug: 'whatisagenticbuying/agentic-buying-vs-programmatic/unit-of-exchange',
+    ratio: '16 / 9',
+    alt: 'Programmatic settles one impression. Agentic buying settles the whole campaign, once.',
+    prompt: `Technical diagram in a "senior engineer's whiteboard sketch" style — a digital napkin sketch. Line-based, 2-3px strokes, hand-drawn feel with slightly imperfect, non-ruler-straight corners. Flat 2D. Background: solid white #ffffff. Lines and primary text: near-black #161616. Secondary lines and labels: grey #525252. Optional flat fill: #f4f4f4 only. Accent: process magenta #b3005c, used for EXACTLY ONE highlighted element, outline only, never filled.
+
+DIAGRAM CONTENT: Two-zone comparison sharing one horizontal time axis.
+AXIS: a single long horizontal arrow across the bottom of the frame, pointing right, labelled "Time" at its left end. Two tick marks: one labelled "milliseconds" roughly one-fifth from the left, one labelled "hours to days" roughly four-fifths from the left.
+UPPER ZONE (top third), label above it reading "Programmatic": a horizontal row of seven small identical squares, evenly spaced, sitting directly above the "milliseconds" tick. Beneath the row: "one impression, one auction".
+LOWER ZONE (middle third), label above it reading "Agentic buying": ONE large rectangle, roughly eight times the width of one small square, spanning from above the "milliseconds" tick to above the "hours to days" tick. Inside it: "a media buy", and inside that, three smaller rectangles side by side, each labelled "package". Beneath the large rectangle: "one campaign, settled once".
+ACCENT: the single large rectangle labelled "a media buy" is drawn in process magenta #b3005c, outline only. Every other line and label is near-black #161616, except the axis tick labels, which are grey #525252.
+
+Composition: wide 16:9 landscape, minimum 70% empty background, maximum 7 elements. NO isometric, NO 3D, NO gradients, NO shadows, NO rounded corners, NO icons, NO mascots, NO hardware, NO colour outside #ffffff/#161616/#525252/#f4f4f4/#b3005c, NO captions inside the image.`,
+  },
+  'agentic-buying-how-it-works': {
+    slug: 'whatisagenticbuying/how-it-works/governance-gate',
+    ratio: '16 / 9',
+    alt: 'The spend check is a gate, not a step. Refused goes nowhere, and delivery loops back to discovery.',
+    prompt: `Technical diagram in a "senior engineer's whiteboard sketch" style — a digital napkin sketch. Line-based, 2-3px strokes, hand-drawn feel with slightly imperfect, non-ruler-straight corners. Flat 2D. Background: solid white #ffffff. Lines and primary text: near-black #161616. Secondary lines and labels: grey #525252. Optional flat fill: #f4f4f4 only. Accent: process magenta #b3005c, used for EXACTLY ONE highlighted element, outline only, never filled.
+
+DIAGRAM CONTENT: Left-to-right flow with one decision gate and one return path.
+LEFT: a rectangle. Text: "Discover". Smaller monospaced subtext beneath it, inside the rectangle: "get_products".
+CENTRE: a DIAMOND — a four-sided decision shape standing on one point, NOT a rectangle. Monospaced text inside: "check_governance". An unlabelled arrow runs from the right edge of "Discover" into the left point of the diamond.
+RIGHT: a rectangle. Text: "Book". Smaller monospaced subtext beneath it: "create_media_buy". An arrow runs from the right point of the diamond to the left edge of this rectangle, labelled "allowed".
+DEAD END: a short arrow pointing straight down from the bottom point of the diamond, labelled "refused", ending in empty background with NO box at its end.
+RETURN PATH: a DASHED line leaving the bottom edge of "Book", running left along the bottom of the frame, then turning upward into the bottom edge of "Discover". Monospaced label on the horizontal part: "get_media_buy_delivery".
+ACCENT: the DIAMOND labelled "check_governance" is drawn in process magenta #b3005c, outline only. The two rectangles and the three solid arrows are near-black #161616. The dashed return path and its label are grey #525252.
+
+Composition: wide 16:9 landscape, minimum 70% empty background, maximum 7 elements. NO isometric, NO 3D, NO gradients, NO shadows, NO rounded corners, NO icons, NO mascots, NO hardware, NO colour outside #ffffff/#161616/#525252/#f4f4f4/#b3005c, NO captions inside the image.`,
+  },
+}
+
 const { entry } = Astro.props
 const { Content } = await render(entry)
 const slug = Astro.params.slug
+const illustration = ILLUSTRATION[entry.id]
 
 const relatedLinks = (entry.data.related ?? []).map((href: string) => ({
   href,
@@ -153,5 +212,23 @@ const relatedLinks = (entry.data.related ?? []).map((href: string) => ({
   ]}
   relatedLinks={relatedLinks}
 >
+  {
+    /* [Phase D repair, adversarial MUST-FIX 5] Gated to dev preview only: an
+       unfinished "ILLUSTRATION SLOT" box with raw prompt jargon and the
+       catalogue slug is a staging artifact, not something a 6-page, fully
+       published site should index. `caption` is also dropped (MUST-FIX 4)
+       — it duplicated `alt` verbatim, so `role="img" aria-label={alt}`
+       plus a `caption`-derived `<figcaption>` made a screen reader
+       announce the same sentence twice; `alt` alone still carries the
+       description once real art replaces this component. */
+    illustration && import.meta.env.DEV && (
+      <IllustrationPlaceholder
+        slug={illustration.slug}
+        alt={illustration.alt}
+        prompt={illustration.prompt}
+        ratio={illustration.ratio}
+      />
+    )
+  }
   <Content />
 </DocPage>

@@ -1,10 +1,12 @@
 ---
-import BaseLayout from '@agenticbrief/shared-ui/BaseLayout.astro'
-import AnswerBox from '@agenticbrief/shared-ui/AnswerBox.astro'
+import PageLayout from '@agenticbrief/shared-ui/PageLayout.astro'
 import FieldTable from '@agenticbrief/shared-ui/FieldTable.astro'
 import CodeSample from '@agenticbrief/shared-ui/CodeSample.astro'
 import SpecSource from '@agenticbrief/shared-ui/SpecSource.astro'
 import FaqBlock from '@agenticbrief/shared-ui/FaqBlock.astro'
+import DocsTree from '../../components/DocsTree.astro'
+import TocRail from '../../components/TocRail.astro'
+import '../../styles/site.css'
 import { adcp } from '@agenticbrief/protocol-data'
 import {
   graph,
@@ -64,24 +66,65 @@ const jsonLd = graph([
   }),
   faqPageNode(url, faq),
 ])
+
+const breadcrumbs = [
+  { name: 'AdCP Explorer', url: `${BASE}/` },
+  { name: 'Discovery files', url },
+]
+
+const toc = [
+  {
+    id: 'ads-txt-equivalents',
+    label: 'The ads.txt and sellers.json equivalents',
+    depth: 2 as const,
+  },
+  { id: 'where-files-sit', label: 'Where the two files sit in the registry', depth: 2 as const },
+  ...files.map((f) => ({ id: f.name.replace('.', '-'), label: f.name, depth: 2 as const })),
+  { id: 'authenticity-guarantees', label: 'Authenticity guarantees', depth: 2 as const },
+  {
+    id: 'two-rejection-rules',
+    label: 'Two rules that reject a well-formed file',
+    depth: 2 as const,
+  },
+  { id: 'authoritative-location', label: 'Following authoritative_location', depth: 2 as const },
+  {
+    id: 'additional-properties',
+    label: 'additionalProperties in adagents.json and brand.json',
+    depth: 2 as const,
+  },
+  {
+    id: 'inherited-required-fields',
+    label: 'Required fields inherited through allOf',
+    depth: 2 as const,
+  },
+  {
+    id: 'authorization-type',
+    label: 'authorization_type and the scope of a signal authorization',
+    depth: 2 as const,
+  },
+  { id: 'missing-or-malformed', label: 'A missing or malformed file', depth: 2 as const },
+  { id: 'faq-heading', label: 'Frequently asked', depth: 2 as const },
+  { id: 'related-heading', label: 'Related', depth: 2 as const },
+]
 ---
 
-<BaseLayout
+<PageLayout
   site="adcpexplorer"
   title={title}
+  heading="AdCP discovery files"
   description={description}
   path={path}
+  answer={answer}
+  breadcrumbs={breadcrumbs}
   jsonLd={jsonLd}
-  wide
+  layout="reference"
+  current="/discovery/"
   ogType="article"
   publishDate={new Date(LAST_UPDATED)}
   keywords={['adagents.json', 'brand.json', 'adcp discovery file']}
 >
-  <nav class="breadcrumbs" aria-label="Breadcrumb">
-    <ol><li><a href="/">AdCP Explorer</a></li><li><span>Discovery files</span></li></ol>
-  </nav>
-  <h1>AdCP discovery files</h1>
-  <AnswerBox answer={answer} />
+  <DocsTree slot="nav" />
+  <TocRail slot="aside" toc={toc} />
 
   <p>
     Publisher domains host an <code>adagents.json</code> for their properties, data provider domains host
@@ -90,7 +133,7 @@ const jsonLd = graph([
     declaration sits on the domain that owns the thing rather than in the offer.
   </p>
 
-  <h2>The ads.txt and sellers.json equivalents</h2>
+  <h2 id="ads-txt-equivalents">The ads.txt and sellers.json equivalents</h2>
 
   <p>
     The mapping is AdCP's own: adagents.json takes the ads.txt role, and brand.json's properties
@@ -99,7 +142,7 @@ const jsonLd = graph([
     >, <code>delegated</code> and <code>ad_network</code> appear on both sides with the same meaning.
   </p>
 
-  <h2>Where the two files sit in the registry</h2>
+  <h2 id="where-files-sit">Where the two files sit in the registry</h2>
 
   <p>
     AdCP, the Ad Context Protocol, is governed by AgenticAdvertising.org and ships as one versioned
@@ -168,7 +211,7 @@ const jsonLd = graph([
     ))
   }
 
-  <h2>Authenticity guarantees</h2>
+  <h2 id="authenticity-guarantees">Authenticity guarantees</h2>
 
   <p>
     Control of the domain is the only guarantee. The document carries no signature and the registry
@@ -193,7 +236,7 @@ const jsonLd = graph([
     >.
   </p>
 
-  <h2>Two rules that reject a well-formed file</h2>
+  <h2 id="two-rejection-rules">Two rules that reject a well-formed file</h2>
 
   <p>
     Both files are <code>oneOf</code> unions with overlapping branches: <code>$schema</code> and <code
@@ -220,7 +263,7 @@ const jsonLd = graph([
     tells validators not to read it as deny-all, authorize-all or a revocation.
   </p>
 
-  <h2>Following authoritative_location</h2>
+  <h2 id="authoritative-location">Following authoritative_location</h2>
 
   <p>
     <code>authoritative_location</code> is an indirection: the well-known path holds a pointer and the
@@ -234,7 +277,9 @@ const jsonLd = graph([
     than one domain.
   </p>
 
-  <h2><code>additionalProperties</code> in adagents.json and brand.json</h2>
+  <h2 id="additional-properties">
+    <code>additionalProperties</code> in adagents.json and brand.json
+  </h2>
 
   <p>
     Both adagents.json branches set <code>additionalProperties</code> to true, and so do all six <code
@@ -254,7 +299,7 @@ const jsonLd = graph([
     notes do not mention the difference.
   </p>
 
-  <h2>Required fields inherited through <code>allOf</code></h2>
+  <h2 id="inherited-required-fields">Required fields inherited through <code>allOf</code></h2>
 
   <p>
     Every <code>authorized_agents</code> entry requires <code>url</code> and <code
@@ -273,7 +318,9 @@ const jsonLd = graph([
     > list plus an <code>anyOf</code> demanding <code>agents</code> or <code>brand_agent</code>.
   </p>
 
-  <h2><code>authorization_type</code> and the scope of a signal authorization</h2>
+  <h2 id="authorization-type">
+    <code>authorization_type</code> and the scope of a signal authorization
+  </h2>
 
   <p>
     <code>authorized_agents</code> is a discriminated union on <code>authorization_type</code>. Four
@@ -295,7 +342,7 @@ const jsonLd = graph([
     representation in the file.
   </p>
 
-  <h2>A missing or malformed file</h2>
+  <h2 id="missing-or-malformed">A missing or malformed file</h2>
 
   <p>
     A 404 on the well-known path means the file is absent. Consumers proceed without verification;
@@ -315,7 +362,7 @@ const jsonLd = graph([
 
   <FaqBlock entries={faq} />
 
-  <h2>Related</h2>
+  <h2 id="related-heading">Related</h2>
   <ul>
     <li><a href="/schemas/">How the AdCP schema registry is organised</a></li>
     <li><a href="/">All {adcp.tasks.length} AdCP operations</a></li>
@@ -325,4 +372,4 @@ const jsonLd = graph([
   </ul>
 
   <SpecSource provenance={adcp.provenance} specVersion={adcp.version} />
-</BaseLayout>
+</PageLayout>

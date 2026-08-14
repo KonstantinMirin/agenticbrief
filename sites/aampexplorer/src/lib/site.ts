@@ -82,6 +82,46 @@ export const MATURITY: Record<string, { level: Maturity; note: string }> = {
 
 export const PLANE_ORDER = ['control', 'real-time', 'data'] as const
 
+/**
+ * Repo counts per plane, derived from `layers[].areaKeys` and
+ * `areas[].provenance.repo` — the rail's count chips (design brief §4.2).
+ * Not hardcoded: verified against the corpus to read control 4, real-time 1,
+ * data 1 (six of the eight components; the hub and the registry example
+ * carry no operational area and so belong to no plane).
+ */
+export function componentCountByPlane(): Record<string, number> {
+  const counts: Record<string, number> = {}
+  for (const layer of aamp.layers) {
+    const repos = new Set(
+      aamp.areas
+        .filter((a) => layer.areaKeys.includes(a.key))
+        .map((a) => a.provenance?.repo)
+        .filter((r): r is string => Boolean(r)),
+    )
+    counts[layer.id] = repos.size
+  }
+  return counts
+}
+
+/** The plane a component belongs to, by the same derivation. `undefined`
+ * for a component with no operational area (AAMP hub, registry-agent-example). */
+export function planeForComponent(name: string): string | undefined {
+  const component = aamp.components.find((c) => c.name === name)
+  if (!component) return undefined
+  for (const layer of aamp.layers) {
+    const repos = new Set(
+      aamp.areas.filter((a) => layer.areaKeys.includes(a.key)).map((a) => a.provenance?.repo),
+    )
+    if (repos.has(component.repo)) return layer.id
+  }
+  return undefined
+}
+
+/** First clause of `aamp.license` — the exact string design brief §7.2 and
+ * §4.2 quote for the rail's licence value, dropping the ", one repo ships
+ * no licence file" trailer that is true but not what the rail has room for. */
+export const LICENSE_SUMMARY = aamp.license.split(';')[0].trim()
+
 export function componentsByMaturity() {
   const rank: Record<Maturity, number> = { substantial: 0, partial: 1, thin: 2 }
   return [...aamp.components].sort((a, b) => {

@@ -1,0 +1,326 @@
+/**
+ * whatisagenticbuying — EXPLAINER (magazine longform, Bloomberg/Pudding register)
+ *
+ * ============================================================================
+ * LIGHT EDITORIAL IDENTITY — DESIGNED. Supersedes the "TODO placeholder"
+ * banner this file carried after the dark-mode strip (2026-08-14).
+ * ============================================================================
+ *
+ * THE EDITORIAL MOVE, in one sentence:
+ *   A 62ch text column pinned hard LEFT with a deliberately open right field,
+ *   where the only things allowed to break the measure are the rules, the
+ *   96px headline, the pull-quote and the tables — so the page's structure is
+ *   legible before a word is read. (editorial-references.md §2.9 asymmetric
+ *   rule-anchored whitespace + §2.12 section-level beats + §2.3 hairline as
+ *   the sole structural chrome.)
+ *
+ * The one-line law the whole site is built on:
+ *   RULES RUN THE FULL WIDTH. TEXT NEVER DOES.
+ *
+ * DOMINANT DIFFERENTIATOR (spec §7.1, unchanged and now load-bearing):
+ *   Axis 6 — display-scale drama. 96px at -0.03em against an 11px mono
+ *   metadata face = 8.7x range, the portfolio's ONE named exemption from
+ *   Carbon's 60px display ceiling and its no-display-tracking law
+ *   (ibm.md:276, ibm.md:235; spec §4.3, ruling 9). Independent of colour
+ *   scheme, which is why it survived the dark-mode strip intact and is now
+ *   the whole identity rather than half of it.
+ *
+ * SECONDARY: a two-tier rule system (2px ink for the three major breaks,
+ * 1px #c6c6c6 for the section beat) on an un-inverted Carbon White ground.
+ * The ground is shared with briefgateway and adcpexplorer BY DESIGN — this
+ * site's dominant axis is type, not layering, and every other ground value in
+ * the portfolio is claimed (warm = agenticadlab, inverted = adtechglossary,
+ * dual = aampexplorer). See the pairwise defence in the site's own
+ * sites/whatisagenticbuying/src/styles/site.css header.
+ *
+ * WHAT CHANGED FROM THE PLACEHOLDER, and why:
+ *   - --site-accent: was the achromatic ink placeholder (and before that the
+ *     dark-ground #6f94ea, which measures 2.96:1 on white and could never
+ *     have shipped). Now #b3005c, a process-magenta carmine — chosen because
+ *     magenta is a PRINT ink (the M in CMYK), not a screen/tech hue, and
+ *     because every neighbouring hue in the portfolio is taken: green
+ *     (adcpexplorer #0a7d52), violet (aampexplorer #6c3aa6), amber
+ *     (adtechglossary #845720), terracotta (agenticadlab #a84c33),
+ *     achromatic (briefgateway). It also clears slop tell 2 by construction:
+ *     no indigo, no violet, no stock blue.
+ *   - --elev-raised/--elev-overlay: the placeholder DROPPED these, inheriting
+ *     the chassis shadow by default. Now set to `none` AFFIRMATIVELY: nothing
+ *     on this site floats (no menus, popovers, tooltips or sticky rails), and
+ *     its separation mechanic is hairline + whitespace, exclusively. This is a
+ *     consequence of the composition, not an identity claim — adtechglossary
+ *     owns flatness-as-a-named-LEVEL (spec §6.6).
+ *   - --pill-border: was aliased to --cds-border-strong (#c6c6c6, 1.71:1) as a
+ *     legibility stopgap. #c6c6c6 is fine for a decorative hairline and NOT
+ *     fine for the boundary of an interactive state, which is what this token
+ *     paints. Re-measured and replaced with #767676 (4.54:1 on white, clears
+ *     the 3:1 non-text-UI floor with margin).
+ *   - --cds-border-subtle: overridden to #c6c6c6 (from the chassis #e0e0e0).
+ *     #e0e0e0 is 1.32:1 on white and reads as a smudge at the 1140px rule
+ *     lengths this layout draws; #c6c6c6 is the Monocle/Raconteur hairline
+ *     weight (editorial-references.md §2.3). --cds-layer-02 stays #e0e0e0,
+ *     so the code-chip ground is unaffected.
+ *   - --answerbox-*: the box is DELETED as a box. See the AnswerBox note below.
+ *   - Illustration prompts (sites/whatisagenticbuying/src/pages/[slug].astro
+ *     and /srv/ws/out/illustration-prompts-whatisagenticbuying.md) rewritten
+ *     off the old #161616/#5b8cff dark palette onto this file's light one.
+ *
+ * NO DARK MODE. This file declares no colour-scheme media query and no
+ * second-ground ("on dark") token, and none may be added back (orchestrator
+ * decision, 2026-08-14, light-only portfolio).
+ */
+
+:root[data-site='whatisagenticbuying'] {
+  /* ======================================================================
+   * GROUND — Carbon White theme, un-inverted, verbatim (ibm.md:38, 50, 251).
+   * Deliberately unremarkable: on this site the ground is the paper, not the
+   * identity. Everything that differentiates is type, rule and composition.
+   * ==================================================================== */
+  --cds-background: #ffffff;
+  --cds-layer-01: #f4f4f4;
+  --cds-layer-02: #e0e0e0;
+  --cds-text-primary: #161616; /* 18.10:1 on #ffffff */
+  --cds-text-secondary: #525252; /* 7.81:1 on #ffffff */
+
+  /* Hairline weight, lifted one step off the chassis default. #e0e0e0 is
+     1.32:1 on white — invisible at the 1140px rule lengths this layout
+     draws. #c6c6c6 is the Monocle/Raconteur editorial hairline value
+     (editorial-references.md §2.3). Decorative divider, not a UI boundary:
+     no WCAG floor applies, measured for the record at 1.71:1 on #ffffff. */
+  --cds-border-subtle: #c6c6c6;
+  --cds-border-strong: #c6c6c6;
+
+  /* ======================================================================
+   * ACCENT — process magenta. One hue, used on interactive and identity
+   * surfaces ONLY: prose links, the masthead caret, nav hover/current.
+   * Never a fill, never a section divider, never a heading colour
+   * (editorial-references.md §1 "colour is instrumentation").
+   * ==================================================================== */
+  --site-accent: #b3005c; /* 6.84:1 on #ffffff · 6.22:1 on #f4f4f4 · 5.18:1 on #e0e0e0 */
+  --site-accent-strong: #8f1148; /* 8.97:1 on #ffffff — hover + visited */
+  --link-color: var(--site-accent);
+  --link-visited: var(--site-accent-strong);
+
+  /* ======================================================================
+   * GEOMETRY — spec ruling 7. 3px, not 2px, so adtechglossary's 0px stays
+   * adjacency-free on the extended radius scale. Structural, untouched by
+   * the light redesign.
+   * ==================================================================== */
+  --site-radius: var(--radius-3); /* default/secondary controls */
+  --cta-radius: var(--radius-pill); /* the pill exception — see the note at the foot of this file */
+  --code-radius: var(--site-radius); /* 3px, not the chassis 2px */
+  --site-measure: 62ch; /* magazine article column, ~670px at the 18px body floor */
+
+  /* The px twin of --site-measure. `ch` resolves against the ELEMENT's font
+     size, so 62ch inside a 30px h2 is 1116px, not 670px. Any full-bleed
+     block that must cap its own text at the column width uses this instead.
+     42rem = 672px; 62ch at 18px Plex Sans = ~670px. */
+  --column-cap: 42rem;
+
+  /* ======================================================================
+   * THE TWO-TIER RULE SYSTEM — this site's separation mechanic, and the
+   * only structural chrome it has. Axis 4 stays hairline-exclusive
+   * portfolio-wide: no cards, no shadows, no fills (editorial-references
+   * §3.4).
+   *   --rule-major  2px ink   — three consumers, no more: under the masthead
+   *                             nameplate, under a table's column heads, above
+   *                             the related index. Monocle's "2-4px reserved
+   *                             for a handful of emphasis dividers"
+   *                             (editorial-references.md §1).
+   *   --rule-hair   1px #c6c6c6 — the section beat, above every h2, and the
+   *                             table row rules. Monocle's 30+ hairlines.
+   * ==================================================================== */
+  --rule-major: 2px solid var(--cds-text-primary); /* #161616, 18.10:1 on #ffffff */
+  --rule-hair: 1px solid var(--cds-border-subtle); /* #c6c6c6, 1.71:1 — decorative */
+
+  /* ======================================================================
+   * SEPARATION — the nav current-item state paints as a hairline PILL
+   * BORDER, never a fill (The Verge's own live mechanic, design-research
+   * §3.6). This is the boundary of an interactive state, so it takes the
+   * 3:1 non-text-UI floor, not the decorative-hairline exemption: #c6c6c6
+   * (1.71:1) FAILED that floor and has been replaced.
+   * ==================================================================== */
+  --pill-border: #767676; /* 4.54:1 on #ffffff — clears 3:1 for non-text UI */
+
+  /* The breadcrumb "/" separator, at 11px. It is rendered text, so 4.5:1
+     applies with no decorative exemption (spec ruling 6). Carbon Gray 50
+     #8d8d8d, the obvious pick, measures 3.32:1 and FAILS. */
+  --crumb-separator: #767676; /* 4.54:1 on #ffffff */
+
+  /* ======================================================================
+   * ELEVATION — affirmatively flat. Nothing on this site floats: no menus,
+   * popovers, tooltips or sticky rails exist on any of its six pages, and
+   * separation is hairline + whitespace exclusively. The placeholder pass
+   * dropped these and silently inherited the chassis shadow; this is the
+   * affirmative choice its banner asked for. (Not an identity claim —
+   * adtechglossary owns flatness-as-a-named-LEVEL, spec §6.6.)
+   * ==================================================================== */
+  --elev-raised: none;
+  --elev-overlay: none;
+
+  /* ======================================================================
+   * DISPLAY — THE ONE NAMED EXEMPTION (spec ruling 9, §4.3). Departs from
+   * ibm.md:276 (never track display text) and ibm.md:235 (functional
+   * density, not expansive whitespace). No other site may copy this block;
+   * Phase D gate 7 greps for exactly this.
+   *
+   * `--display-00-*` is the DOCUMENTARY record of the exemption. The tokens
+   * that actually PAINT it are `--type-heading-01-*`, because global.css's
+   * h1 rule reads those.
+   * ==================================================================== */
+  --display-00-size: 96px;
+  --display-00-tracking: -0.03em; /* -2.88px at 96px */
+  --display-scale-range: 8; /* 96px display -> 11px mono label = 8.7x */
+
+  /* Reaches 96px at a 1116px viewport; 40px floor at 390px. global.css's own
+     <=640px rule reassigns h1 to --type-heading-02-size; site.css restores
+     this token there. */
+  --type-heading-01-size: clamp(40px, 8.6vw, 96px);
+  /* 600, not 300: briefgateway holds the only-weight-300-display claim. On a
+     light ground 600 is also what makes a 96px headline read as a magazine
+     cover line rather than a thin luxury-brand wordmark — the loud pole of
+     the portfolio needs the ink (editorial-references.md §2.14, one heavy
+     display face used sparingly). Do NOT also set --display-weight;
+     global.css reads it first and would shadow this. */
+  --type-heading-01-weight: 600;
+  --type-heading-01-lh: 1.05;
+  --type-heading-01-tracking: -0.03em;
+
+  /* 30px is not a Carbon step (Heading 02 is 32px). It is The Verge's live
+     .headline value (design-research §3.6) and it keeps this site's h2 a
+     distinct size from all five siblings, which sit at 32 or 24. */
+  --type-heading-02-size: 30px;
+  --type-heading-02-weight: 600;
+  --type-heading-02-lh: 1.2;
+  --type-heading-02-tracking: -0.01em;
+
+  --type-heading-03-size: 22px;
+  --type-heading-03-weight: 600;
+  --type-heading-03-lh: 1.3;
+
+  /* ======================================================================
+   * THE MONO REGISTER — the second type role. Plex Mono carries EVERY piece
+   * of metadata and chrome on this site (wordmark, nav, breadcrumb dateline,
+   * table headers, related-index marker, footer block headings) while Plex
+   * Sans carries the entire reading path. That is the NYT grotesque/serif
+   * metadata split executed with mono instead of a grotesque
+   * (editorial-references.md §2.7) — and extending mono past labels to
+   * captions and credits is the "cheapest remaining editorial gain" that
+   * section names. It is spent here.
+   * ==================================================================== */
+  --type-mono-display-size: clamp(22px, 3.6vw, 42px);
+  --signature-opener-font: var(--cds-font-mono);
+  --signature-opener-size: var(--type-mono-display-size);
+
+  /* Wayfinding label — the loudest tracking in the portfolio by design
+     (adcp 0.6 · glossary 0.8 · briefgateway 1 · agenticadlab 1 · aamp 1.3 ·
+     here 1.8). The Verge's live eyebrow is `600 11px/120%, +1.8px`
+     (design-research §3.6); this is that value, verbatim. */
+  --track-label: 1.8px;
+  --label-size: 11px; /* overrides the 13px chassis default */
+  --label-lh: 1.2; /* the chassis 1.69 is a body leading on an 11px cap line */
+
+  /* ======================================================================
+   * ANSWERBOX — the box is deleted AS A BOX.
+   *
+   * §9.7's recipe for this site (`#f4f4f4` ground, 3px radius) was written
+   * against the old dark canvas and re-flagged "TODO placeholder" by the
+   * dark-mode strip. On a white editorial page a gray rounded panel under
+   * the headline is the SaaS tell, not a precedence device. The same
+   * precedence is carried here by SCALE, SPACE and RULE instead: the answer
+   * becomes a 28px standfirst directly under the 96px headline, closed by a
+   * full-width hairline — which is what a magazine deck is, and what
+   * editorial-references.md §1 calls boxless hierarchy.
+   *
+   * §9.7's HARD RULE (no left rule over 2px; the 4px accent rail stays
+   * deleted) is honoured — there is no rule of any weight on the left here.
+   * Ruling 5's STRUCTURAL precedence is untouched: <AnswerBox> still renders
+   * before body prose, unchanged, and the .answer-text <p> is still the
+   * first paragraph a extraction pipeline meets.
+   * ==================================================================== */
+  --answerbox-padding: 0;
+  --answerbox-radius: 0;
+  --answerbox-shadow: none;
+  /* ground is removed in site.css (`.answer-box { background: none }`) rather
+     than by re-pointing --accent-soft, which .skip-link and .badge-required
+     also read. */
+
+  /* ======================================================================
+   * NOT SET, deliberately:
+   *
+   * --code-bg / --code-fg / --code-muted / --code-accent — measured: 0 fenced
+   *   code blocks across all five markdown files (`grep -c '^\`\`\`'` = 0 on
+   *   each). Shiki's `css-variables` theme resolves against the light ground
+   *   above if one is ever added. Re-verify then.
+   *
+   * --display-weight / --display-font / --display-size — global.css reads
+   *   --display-weight BEFORE --type-heading-01-weight, so setting it would
+   *   shadow the exemption block above. --display-font unset keeps h1 in Plex
+   *   Sans (Plex Serif is agenticadlab's, and it is the only site that loads
+   *   the Serif file at all).
+   *
+   * --dark-coverage-min-pct — deleted 2026-08-14 and NOT restored. It existed
+   *   only to keep this site's old dark canvas pairwise-distinct from
+   *   aampexplorer's chrome band (spec §7.4 pair-14). No referent remains.
+   *
+   * --answerbox-eyebrow-* / --answerbox-term-* — dead by construction:
+   *   DocPage.astro never passes `term` to <AnswerBox> on either route this
+   *   site uses, so `.answer-term` renders on zero of its six pages.
+   *
+   * --measure-max — left unset so `main.wide`'s 1180px cap governs the page
+   *   shell while --site-measure governs the text column. The gap between
+   *   the two IS the open right field; capping the shell would close it.
+   * ==================================================================== */
+
+  /* ======================================================================
+   * MEASURED CONTRAST TABLE — every pair this file defines, computed this
+   * session with the WCAG 2.x relative-luminance formula (script output
+   * pasted, not estimated). Floors: 4.5:1 normal text · 3:1 large text
+   * (>=24px) and non-text UI (spec ruling 6).
+   *
+   *  ratio  fg        on bg       role                                floor  verdict
+   *  18.10  #161616   #ffffff     body, headings, pull-quote, tables   4.5   PASS
+   *   7.81  #525252   #ffffff     breadcrumbs, nav rest, table heads   4.5   PASS
+   *   6.84  #b3005c   #ffffff     prose links, nav hover/current       4.5   PASS
+   *   6.84  #b3005c   #ffffff     masthead caret (non-text UI)         3.0   PASS
+   *   8.97  #8f1148   #ffffff     link hover + visited                 4.5   PASS
+   *  16.45  #161616   #f4f4f4     ink on layer-01                      4.5   PASS
+   *   7.10  #525252   #f4f4f4     muted on layer-01                    4.5   PASS
+   *   6.22  #b3005c   #f4f4f4     accent on layer-01                   4.5   PASS
+   *  13.71  #161616   #e0e0e0     inline code chip text                4.5   PASS
+   *   5.18  #b3005c   #e0e0e0     accent on layer-02                   4.5   PASS
+   *   4.54  #767676   #ffffff     nav pill border (non-text UI)        3.0   PASS
+   *   4.54  #767676   #ffffff     breadcrumb "/" separator (text)      4.5   PASS
+   *   1.71  #c6c6c6   #ffffff     section hairline                     n/a   decorative
+   *   1.55  #c6c6c6   #f4f4f4     hairline on layer-01                 n/a   decorative
+   *
+   * REJECTED, with the measurement that rejected it:
+   *   #6f94ea on #ffffff = 2.96:1  — the old dark-ground accent. FAIL.
+   *   #5b8cff on #ffffff = 3.16:1  — the old illustration accent. FAIL.
+   *   #8d8d8d on #ffffff = 3.32:1  — Gray 50 as the crumb separator. FAIL (text).
+   *   #c6c6c6 on #ffffff = 1.71:1  — as the nav pill border. FAIL (non-text UI).
+   * ==================================================================== */
+}
+
+/*
+ * NOTE — --cta-radius (the 99999px pill, spec ruling 7) still has no live
+ * consumer on this site, and this is a SHARED-LAYER BLOCK, not an oversight.
+ * EngagementCta, the portfolio's other pill reader, is deliberately excluded
+ * from this site by the persona study (EngagementCta.astro:20-25). The
+ * spec'd consumer is the nav current-item state, which site.css styles as a
+ * hairline pill; but every route here renders through
+ * packages/shared-ui/src/DocPage.astro, whose Props interface has no
+ * `current` field and which therefore cannot forward one to PageLayout — so
+ * `aria-current="page"` is never emitted and the rule matches nothing.
+ * DocPage.astro is outside this site's edit scope. The rule is left in place
+ * as correct, inert, zero-risk groundwork; the required shared-layer edit is
+ * reported BLOCKED rather than made.
+ */
+
+/*
+ * NO COLOUR-SCHEME MEDIA QUERY ANYWHERE IN THIS FILE, and none may be added.
+ * Dark mode is removed portfolio-wide by orchestrator decision (2026-08-14):
+ * AI design converges hard in dark ("black + neon"), and light is where these
+ * six systems actually differentiate. This site was the portfolio's dark-
+ * native one and is the whole reason that decision was made; it now carries
+ * 100% of its identity in light.
+ */

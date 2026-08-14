@@ -38,3 +38,39 @@ const wordCount = answer.trim().split(/\s+/).length
     )
   }
 </div>
+
+<style>
+  /*
+   * The six §9.7 ground/radius/shadow/label values already flow entirely from
+   * `--answerbox-*` tokens consumed by the shared `.answer-box`/`.answer-term`
+   * rules in global.css — this block only completes the two per-site
+   * treatments that need a hook global.css does not define, both additive
+   * (a fallback keeps the other four sites byte-for-byte unchanged):
+   *
+   * - adcpexplorer's hairline: the token comment in `sites/adcpexplorer.css`
+   *   already says "hairline only, applied as a border, not a shadow", but no
+   *   rule ever painted it. `--answerbox-border` closes that gap.
+   * - whatisagenticbuying's label is the one treatment that is not "inside
+   *   the box" (spec §9.7: "mono 12px/+0.32px eyebrow ABOVE the box") — every
+   *   other site's label sits in-flow as the box's first line. Rather than a
+   *   `[data-site]` selector (ruled out — variance here stays var()-driven,
+   *   same discipline as every other file in this cascade), the box becomes
+   *   the positioning context and the term is lifted out of flow only where
+   *   a site sets `--answerbox-term-position: absolute`; everywhere else it
+   *   defaults to `static` and renders exactly as before.
+   */
+  .answer-box {
+    position: relative;
+    border: var(--answerbox-border, none);
+  }
+
+  .answer-term {
+    position: var(--answerbox-term-position, static);
+    bottom: var(--answerbox-term-bottom, auto);
+    left: var(--answerbox-term-left, auto);
+    /* Falls back to the same label tokens every other site already reads;
+       only whatisagenticbuying's file sets the eyebrow pair. */
+    font-size: var(--answerbox-eyebrow-size, var(--answerbox-label-size));
+    letter-spacing: var(--answerbox-eyebrow-track, var(--answerbox-label-track));
+  }
+</style>

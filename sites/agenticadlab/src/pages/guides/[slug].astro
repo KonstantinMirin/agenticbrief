@@ -3,6 +3,7 @@ import { getCollection, render } from 'astro:content'
 import DocPage from '@agenticbrief/shared-ui/DocPage.astro'
 import { publishedOnly } from '@agenticbrief/content-utils'
 import { BASE, ELSEWHERE, EXPLICIT_ROUTES } from '../../lib/feed'
+import '../../styles/agenticadlab.css'
 
 // Only guides that do not have an explicit route of their own, and whose
 // canonical home is this site. Both predicates are imported so the router, the
@@ -16,6 +17,15 @@ export async function getStaticPaths() {
 
 const { entry } = Astro.props
 const { Content } = await render(entry)
+
+// Illustration slot 3 (design brief §9), autonomy-ladder only, removed for
+// review round 2 — the shared IllustrationPlaceholder component renders its
+// dev-only scaffolding (eyebrow, slug, prompt preview) unconditionally in
+// production, with no import.meta.env.DEV gate. That's a shared-layer defect
+// (BLOCKED, reported to the orchestrator); the fix in scope here is to pull
+// the call site until art actually lands. Re-add with the
+// LADDER_CEILING_PROMPT (git history) once either the component is gated or
+// real art exists.
 ---
 
 <DocPage

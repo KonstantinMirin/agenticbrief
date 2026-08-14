@@ -1,8 +1,9 @@
 ---
-import BaseLayout from '@agenticbrief/shared-ui/BaseLayout.astro'
+import PageLayout from '@agenticbrief/shared-ui/PageLayout.astro'
 import AnswerBox from '@agenticbrief/shared-ui/AnswerBox.astro'
 import SpecSource from '@agenticbrief/shared-ui/SpecSource.astro'
-import FaqBlock from '@agenticbrief/shared-ui/FaqBlock.astro'
+import IllustrationPlaceholder from '@agenticbrief/shared-ui/IllustrationPlaceholder.astro'
+import PlaneRail from '../../components/PlaneRail.astro'
 import { aamp, adcp } from '@agenticbrief/protocol-data'
 import {
   graph,
@@ -15,6 +16,8 @@ import {
   faqPageNode,
 } from '@agenticbrief/seo/schema'
 import { BASE, MATURITY, componentsByMaturity } from '../../lib/site'
+import { ILLUSTRATIONS } from '../../lib/illustrations'
+import '../../styles/aampexplorer.css'
 
 const components = componentsByMaturity()
 const count = (level: string) => components.filter((c) => MATURITY[c.name]?.level === level).length
@@ -52,15 +55,17 @@ const faq = [
   },
 ]
 
+const breadcrumbs = [
+  { name: 'AAMP Explorer', url: `${BASE}/` },
+  { name: 'Components', url },
+]
+
 const jsonLd = graph([
   organizationNode(),
   personNode(),
   webSiteNode({ siteUrl: BASE, name: 'AAMP Explorer', description }),
   webPageNode({ url, siteUrl: BASE, title, description, breadcrumb: {} }),
-  breadcrumbNode(url, [
-    { name: 'AAMP Explorer', url: `${BASE}/` },
-    { name: 'Components', url },
-  ]),
+  breadcrumbNode(url, breadcrumbs),
   articleNode({
     url,
     title,
@@ -71,22 +76,42 @@ const jsonLd = graph([
   }),
   faqPageNode(url, faq),
 ])
+
+const related = [
+  {
+    href: '/versions/',
+    title: 'What version is AAMP?',
+    note: 'works through the repositories one at a time',
+  },
+  {
+    href: '/what-does-aamp-stand-for/',
+    title: 'What does AAMP stand for?',
+    note: 'Agentic Advertising Management Protocols, and the other expansions in the corpus',
+  },
+  {
+    href: '/negotiation/',
+    title: 'Price negotiation in AAMP',
+    note: 'the quote, counter and booking sequence',
+  },
+]
 ---
 
-<BaseLayout
+<PageLayout
   site="aampexplorer"
   title={title}
+  heading="AAMP repositories, ranked by what they define"
   description={description}
   path={path}
   jsonLd={jsonLd}
-  wide
   ogType="article"
   publishDate={new Date('2026-08-08')}
+  layout="reference"
+  breadcrumbs={breadcrumbs}
+  faq={faq}
+  related={related}
 >
-  <nav class="breadcrumbs" aria-label="Breadcrumb">
-    <ol><li><a href="/">AAMP Explorer</a></li><li><span>Components</span></li></ol>
-  </nav>
-  <h1>AAMP repositories, ranked by what they define</h1>
+  <PlaneRail slot="nav" />
+
   <AnswerBox answer={answer} />
   <p>
     AAMP is Agentic Advertising Management Protocols, in the hub README's own expansion of it. The
@@ -151,6 +176,24 @@ const jsonLd = graph([
     to what the repositories contain: it ranks a mock server first, as repository 1, Core Orchestration,
     and leaves out the wire contract both reference agents pin.
   </p>
+
+  {
+    /* DEV-ONLY illustration slot (user decision, light-only pass): production
+       ships no visible placeholder box. The prompt stays catalogued in
+       src/lib/illustrations.ts and /srv/ws/out/illustration-prompts-aampexplorer.md;
+       the slot renders under `astro dev` so the composition is visible locally. */
+  }
+  {
+    import.meta.env.DEV && (
+      <IllustrationPlaceholder
+        slug={ILLUSTRATIONS.threeLayerStack.slug}
+        ratio={ILLUSTRATIONS.threeLayerStack.ratio}
+        alt={ILLUSTRATIONS.threeLayerStack.alt}
+        prompt={ILLUSTRATIONS.threeLayerStack.prompt}
+      />
+    )
+  }
+
   <p>
     <code>iab-agentic-primitives</code> is the wire: the shared object schemas and the request/response
     protocol. <code>buyer-agent</code> and <code>seller-agent</code> sit at either end of that wire, demand
@@ -185,8 +228,20 @@ const jsonLd = graph([
     accepts: bookings, product search, reports, health. None of them is a message to a seller.
   </p>
 
+  {
+    /*
+    Phase D.5 fix (S2): the design pass replaced this table with an unlabelled
+    `.chip-strip` scan list, so the page's own comparison lost its column
+    semantics — a reader saw `HUB THIN v2.4.1` with nothing naming which fact
+    was which, and the version value wore `.chip-thin`, the SUBSTANCE-GRADE
+    class. The <th> headers are restored verbatim from the published table.
+    The design work is kept where it belongs: the substance grade is still a
+    chip (the ground-step ladder, not a hue), the repository name still takes
+    the metadata face, and the caption still sits below the figure in mono.
+  */
+  }
   <figure class="comparison">
-    <table>
+    <table class="repo-table">
       <caption
         >All {components.length} AAMP repositories on 12 August 2026, ordered by how much specification
         each one carries. Untagged means the repository has no git tag and its only version is a commit
@@ -206,14 +261,18 @@ const jsonLd = graph([
           components.map((c) => (
             <tr>
               <th scope="row">
-                <a href={`/repos/${c.name}/`}>{c.name}</a>
+                <a href={`/repos/${c.name}/`}>
+                  <code>{c.name}</code>
+                </a>
               </th>
               <td>
                 <code>{displayVersion(c.version)}</code>
               </td>
               <td>{c.kind.replace(/-/g, ' ')}</td>
               <td>
-                <span class="badge">{MATURITY[c.name]?.level ?? 'unassessed'}</span>
+                <span class={`chip chip-${MATURITY[c.name]?.level ?? 'thin'}`}>
+                  {MATURITY[c.name]?.level ?? 'unassessed'}
+                </span>
               </td>
               <td>
                 {MATURITY[c.name]?.note ?? c.purpose}
@@ -262,21 +321,5 @@ const jsonLd = graph([
     reads {adcp.version}.
   </p>
 
-  <FaqBlock entries={faq} />
-
-  <h2>Related</h2>
-  <ul>
-    <li>
-      <a href="/versions/">What version is AAMP?</a> works through the repositories one at a time.
-    </li>
-    <li>
-      <a href="/what-does-aamp-stand-for/">What does AAMP stand for?</a> Agentic Advertising Management
-      Protocols, and the other expansions in the corpus.
-    </li>
-    <li>
-      <a href="/negotiation/">Price negotiation in AAMP</a> — the quote, counter and booking sequence.
-    </li>
-  </ul>
-
   <SpecSource provenance={aamp.provenance} />
-</BaseLayout>
+</PageLayout>

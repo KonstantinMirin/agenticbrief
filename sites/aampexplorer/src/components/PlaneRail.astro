@@ -1,0 +1,85 @@
+---
+/**
+ * PlaneRail — the site's single dominant differentiator (design brief §3):
+ * the dark #161616 layer/component switcher that fills PageLayout's `nav`
+ * slot on every reference page. Site-local, not shared — this is the
+ * COMPONENT/PLANE SWITCHER the design-system-spec's masthead-slot ruling
+ * asks for (blocked, see B1 in the brief; this rail is what ships instead).
+ *
+ * Every visible string is either verbatim from data/aamp-specs.json or
+ * already on the site — the only new copy is the four group labels
+ * (Planes, Components, Version, Licence), each grounded in existing rail
+ * vocabulary (design brief §9.6).
+ */
+import { aamp } from '@agenticbrief/protocol-data'
+import { componentCountByPlane, planeForComponent, LICENSE_SUMMARY } from '../lib/site'
+
+export interface Props {
+  /** the component this page belongs to, e.g. on /repos/[name]/ — drives
+   * the component row's aria-current and the mobile chip's plane label. */
+  currentComponent?: string
+}
+
+const { currentComponent } = Astro.props
+const counts = componentCountByPlane()
+const currentPlane = currentComponent ? planeForComponent(currentComponent) : undefined
+
+function repoLabel(n: number) {
+  return `${n} repo${n === 1 ? '' : 's'}`
+}
+---
+
+<div class="rail">
+  <details class="rail-disclosure">
+    <summary class="rail-summary">{currentPlane ?? 'planes'}</summary>
+    <div class="rail-inner">
+      <div class="rail-group">
+        <p class="rail-label">Planes</p>
+        <ul class="rail-list">
+          {
+            aamp.layers.map((layer) => (
+              <li>
+                <a
+                  href={`/#plane-${layer.id}`}
+                  aria-current={currentPlane === layer.id ? 'page' : undefined}
+                >
+                  <span class="rail-item-name">{layer.title}</span>
+                  <span class="rail-chip">{repoLabel(counts[layer.id] ?? 0)}</span>
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+
+      <div class="rail-group">
+        <p class="rail-label">Components</p>
+        <ul class="rail-list">
+          {
+            aamp.components.map((c) => (
+              <li>
+                <a
+                  href={`/repos/${c.name}/`}
+                  aria-current={currentComponent === c.name ? 'page' : undefined}
+                >
+                  <code class="rail-item-name">{c.name}</code>
+                  <span class="rail-chip">{c.kind.replace(/-/g, ' ')}</span>
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+
+      <div class="rail-group">
+        <p class="rail-label">Version</p>
+        <p class="rail-value"><code>{aamp.version}</code></p>
+      </div>
+
+      <div class="rail-group">
+        <p class="rail-label">Licence</p>
+        <p class="rail-value rail-value-muted">{LICENSE_SUMMARY}</p>
+      </div>
+    </div>
+  </details>
+</div>

@@ -19,7 +19,12 @@ export default defineConfig({
   build: { format: 'directory' },
   integrations: [mdx(), sitemap(sitemapConfig())],
   markdown: {
-    shikiConfig: { theme: 'nord' },
+    // css-variables mode: Shiki's inline background/color read design-tokens'
+    // --astro-code-* custom properties (packages/shared-ui/src/styles/global.css)
+    // instead of a hardcoded theme, so syntax colour follows this site's own
+    // --bg-subtle/--fg/--accent (spec ruling 12; dark mode is removed portfolio-wide,
+    // so there is no cascade to follow any more — light values only).
+    shikiConfig: { theme: 'css-variables' },
     remarkPlugins: [remarkGfm, remarkSmartypants],
     rehypePlugins: [[rehypeExternalLinks, { target: '_blank', rel: ['noopener', 'nofollow'] }]],
   },

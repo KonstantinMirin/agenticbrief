@@ -1,0 +1,255 @@
+/**
+ * adcpexplorer — REFERENCE DOCS (MDN voice). LIGHT ONLY.
+ *
+ * THE EDITORIAL MOVE (one sentence, per the elevate brief):
+ *   editorial-references.md §2.7's functional type-role split — NYT's
+ *   "the grotesque is reserved for captions, credits, timestamps and nav"
+ *   rule — executed with IBM Plex Mono as this site's EVIDENCE FACE: every
+ *   sourced artefact (table column heads, figure captions, counts, the
+ *   version credit, the end-of-page colophon) is mono, all running prose is
+ *   Plex Sans, so type FAMILY ALONE separates the protocol's own vocabulary
+ *   from ours — with no box, no icon and no second colour — hung on §2.9's
+ *   asymmetric rule-anchored section rhythm (64px above a 1px hairline,
+ *   24px after it, 8px below the heading; Stripe Press's live
+ *   `margin: 80px 0 10px` immediately preceding a 1px rule).
+ *
+ * Dominant differentiator (spec §7.1, editorial-references §3 axis 2): the
+ * ONLY 24px-pill radius on all chrome, on a white page with #f4f4f4 rails —
+ * surfaces DARKER than page (ibm.md:249-251, the un-inverted direction) —
+ * and the ONLY site above 1.65 line-height (prose 1.75, MDN's live
+ * `--font-line-content`). Secondary axis 3 = dense-reference.
+ *
+ * One of the acid-test triangle (spec §7.3, §10 ruling 2): 16-col grid
+ * spans 4/8/4, nav tree, prose capped at `minmax(0,48rem)`, masthead slot =
+ * VERSION TAG. Data enforces this: `data/adcp-specs.json` has a single
+ * `version`/`license` pair and `components: []` — no per-component licence
+ * chip is possible here (that's aampexplorer's shape, not this one).
+ *
+ * NEVER on this site (editorial-references §4, "Never" column): a warm
+ * ground (agenticadlab's alone), display drama (whatisagenticbuying's
+ * alone), asymmetric/offset columns (axis 7 is explicitly withheld from
+ * dense reference sites — lookup speed dominates), a second ground
+ * (aampexplorer's alone), a dark code panel (aampexplorer's alone).
+ */
+
+:root[data-site='adcpexplorer'] {
+  /* ---- ground ramp — Carbon White theme, surfaces darker than page (ibm.md:249-251) ---- */
+  --cds-background: #ffffff;
+  --cds-layer-01: #f4f4f4;
+  --cds-layer-02: #e0e0e0;
+  --cds-text-primary: #161616;
+  --cds-text-secondary: #525252; /* 7.11:1 on #f4f4f4 */
+
+  /* ---- accent [spec §5.1 hue family; ADAPTATION for WCAG] ----
+     ONE hue, one value. editorial-references §1 ("a one-colour accent
+     budget… never as page chrome or background") and the Hearst Exhibit
+     lesson in §1 (a literal two-colour palette beat typographic
+     complexity): radical restraint is the win condition, so the vivid
+     companion `#18e299` — 1.70:1, FILL ONLY, and with ZERO consumers
+     anywhere in this site (verified by grep: `--accent-bright` is read only
+     in global.css COMMENTS warning against it) — is deleted. A dead neon
+     token is exactly the "black + neon" convergence the light-only decision
+     rejects, and keeping it invited a future author to paint with it.
+     `--site-accent-strong` now aliases the text-safe value, matching what
+     aampexplorer, adtechglossary and agenticadlab already do. ---- */
+  --site-accent: #0a7d52; /* green — 5.16:1 on #ffffff, 4.69:1 on #f4f4f4, recomputed this session */
+  --site-accent-strong: var(--site-accent); /* no second hue; the alias stays text-safe */
+
+  /* ---- radius — 24px pill on chrome; cards/AnswerBox are the deliberate 2px exception ---- */
+  --site-radius: var(--radius-24);
+  --card-radius: var(--radius-2);
+
+  /* ---- measure & prose rhythm — the only site above 1.65 line-height ---- */
+  --site-measure: minmax(0, 48rem); /* MDN live, hard cap — not a ch value */
+  /* Same decision, expressed as a length. `minmax()` is a GRID TRACK value:
+     it is valid in `grid-template-columns` (Phase C's 4/8/4 layout) but
+     invalid in `max-width`, where it computes to `none` and silently
+     uncaps the prose column. `global.css`'s `main.prose` therefore reads
+     `var(--measure-max, var(--measure))`; the five sites whose measure is
+     already a length do not define this and fall through. */
+  --measure-max: 48rem;
+  --lh-prose: 1.75;
+
+  /* ---- separation — hairlines only, no elevation.
+     `--section-rule` below is now the ONE separation value this site uses;
+     `--hairline` was its only other name for the same thing and had a
+     single consumer (`.operation-record`), which was retired this pass
+     because its rule stacked with the section rhythm's. Kept as an alias
+     rather than deleted so nothing referring to it can silently resolve to
+     an invalid `border` shorthand — but new rules should read
+     `--section-rule`. ---- */
+  --hairline: var(--section-rule);
+
+  /* ======================================================================
+   * THE EVIDENCE FACE — editorial-references §2.7 (the highest-leverage
+   * mechanic left unspent on this site: "mono is currently only on labels;
+   * extending it to captions/timestamps/version credits is the cheapest
+   * remaining editorial gain").
+   *
+   * The rule is FUNCTIONAL, not decorative, and it is deliberately narrow —
+   * mono is NOT sprinkled everywhere. A thing is set in the evidence face
+   * if and only if it is an artefact of the source rather than our writing
+   * about the source:
+   *   YES — table column heads, figure/table captions, counts and numerals,
+   *         the version credit, the end-of-page provenance colophon,
+   *         operation names, badges, `<code>`.
+   *   NO  — running prose, headings, breadcrumbs, nav labels, area titles,
+   *         FAQ questions and answers. Those are ours; they stay Plex Sans.
+   * Same size and tracking as the wayfinding label primitive (§2.1), so the
+   * kicker and the evidence layer read as one system, not two.
+   * ==================================================================== */
+  --meta-font: var(--cds-font-mono);
+  --meta-size: 12px; /* Carbon Caption 01 (ibm.md:99); nothing is typed into it */
+  --meta-track: var(--track-label); /* 0.6px — the portfolio's TIGHTEST label tracking */
+  --meta-color: var(--cds-text-secondary); /* #525252 — 7.81:1 on #ffffff, 7.10:1 on #f4f4f4 */
+
+  /* ======================================================================
+   * SECTION RHYTHM — editorial-references §2.3 (hairline as the sole
+   * structural chrome; Monocle's 30+ `border-top` section breaks) crossed
+   * with §2.9 (asymmetric, rule-anchored whitespace: big space ABOVE the
+   * break, small below — Stripe Press's live `margin: 80px 0 10px`).
+   *
+   * This replaces four competing devices with one: the shared `.faq` and
+   * `.related` border-tops, `h2`'s ad-hoc `2.2rem/0.7rem` margins and
+   * `.spec-source`'s dashed box are all neutralised on this site (see
+   * sites/adcpexplorer/src/styles/site.css) and every section break on
+   * every page is now this single hairline + this single asymmetry.
+   * Values are Carbon layout steps, not invented numbers; a media query in
+   * site.css steps them down below 672px.
+   * ==================================================================== */
+  --section-rule: 1px solid var(--cds-border-subtle); /* #e0e0e0 — 1.32:1, decorative, not a UI component */
+  --section-space-above: var(--space-layout-05); /* 64px, above the rule */
+  --section-space-lead: var(--space-06); /* 24px, rule -> heading */
+  --section-space-below: var(--space-03); /* 8px, heading -> text (the asymmetry) */
+  --subsection-space-above: var(--space-07); /* 32px — h3, the quieter level, no rule */
+
+  /* ---- kicker rule — editorial-references §2.8, the short-rule half of
+     Stripe Press's "oversized glyph + short thin rule". The glyph half is
+     deliberately NOT taken: a display flourish is agenticadlab's and
+     whatisagenticbuying's register, not a reference work's. A 40px x 1px
+     mark under the mono kicker is the whole gesture. ---- */
+  --kicker-rule-width: 40px;
+  --kicker-rule-color: var(--cds-border-strong); /* #c6c6c6 — decorative mark, no text on it */
+
+  /* ---- structure tokens (grid + nav tree + TOC), consumed by Phase C's
+     layout components, not by global.css ---- */
+  --grid-span-rail: 4;
+  --grid-span-content: 8;
+  --grid-span-toc: 4;
+  --toc-active-rule-width: 2px; /* the ONLY permitted 2px left rule in the portfolio (ruling 5) */
+
+  /* ---- wayfinding label — version tags ---- */
+  --track-label: 0.6px;
+  --label-size: 12px; /* overrides the 13px chassis default */
+
+  /* ---- AnswerBox recipe (spec §9.7): #f4f4f4 ground (== --cds-layer-01, no
+     override needed); radius is deliberately NOT the 24px chrome pill ---- */
+  --answerbox-radius: var(--radius-2);
+  --answerbox-shadow: none; /* hairline only, applied as a border, not a shadow */
+  --answerbox-border: 1px solid var(--border); /* == 1px solid #e0e0e0, ibm.md:49 */
+
+  /* ---- heading ramp — §7.3 "heading weight 400 with 600 sub-heads".
+     Sizes stay Carbon-verbatim (42/32/24/20 = 3.5x range, deliberately flat
+     against whatisagenticbuying's 8x). Only two weights move. ---- */
+  --type-heading-01-weight: 400; /* was 300 — 300 is aampexplorer's slot */
+  --type-heading-03-weight: 600; /* was 400 — the "600 sub-heads" half */
+
+  /* ---- container — derived, not chosen. 16 cols @ 32px gutters needs a
+     1568px inner width for an 8-col track to reach 48rem; Carbon's own grid
+     max is 1584px (ibm.md:228), giving a 756px track, 12px inside the cap. ---- */
+  --site-max-width: var(--grid-max-width); /* 1584px */
+
+  /* ---- nav tree (MDN live, styles-left-sidebar) ---- */
+  --tree-indent: 0.5rem;
+  --tree-chevron-gutter: 1rem;
+  --tree-row-height: 32px; /* 44px under (pointer: coarse) and <672px */
+
+  /* ---- TOC rail. The 2px width above is the ACTIVE state only; resting is a
+     1px gray hairline, so ruling 5's single exemption stays a state marker. ---- */
+  --toc-rest-rule-width: 1px;
+  --toc-rule-rest-color: var(--cds-border-subtle); /* #e0e0e0 */
+  --toc-rule-active-color: var(--site-accent); /* #0a7d52, 5.16:1 on #ffffff */
+  --doc-aside-top: 2rem; /* read by PageLayout */
+
+  /* ---- chrome pills (the dominant differentiator, made visible at rest) ----
+     `--nav-pill-border` is deliberately its OWN literal, not an alias of
+     `--cds-border-strong` (#c6c6c6): site.css's own comment calls this
+     outline "functional... not decorative", which puts it under WCAG
+     1.4.11's 3:1 UI-component floor. #c6c6c6 measures 1.55:1 on this site's
+     header ground (#f4f4f4) — FAILS. This outline's ground is always
+     --bg-subtle (header only), never any other surface; #7e7e7e clears 3:1
+     there with margin.
+
+     The capsule is this site's dominant differentiator, so it is applied as
+     a SYSTEM, not as one nav flourish: header nav links, the version credit,
+     nav-tree rows and `.badge` chips are all 24px capsules; every content
+     shape (cards 2px, code panels 2px, the AnswerBox 2px) deliberately is
+     not. That split is what makes the pill read as chrome rather than as
+     decoration — and it is what separates this site from aampexplorer at a
+     one-second squint (editorial-references §4, "do not let aamp adopt a
+     pill anywhere"). */
+  --nav-pill-border: #7e7e7e; /* [ADAPTATION] 3.69:1 on #f4f4f4 */
+  --nav-current-bg: var(--site-accent); /* #0a7d52 */
+  --nav-current-fg: #ffffff; /* 5.16:1 on #0a7d52 — computed this session */
+
+  /* ---- version tag. NOT green: #0a7d52 on #e0e0e0 is 3.91:1 and FAILS
+     (§5.4's inline-code fix exists for the same reason). ---- */
+  --version-tag-bg: var(--cds-layer-02); /* #e0e0e0 */
+  --version-tag-fg: var(--cds-text-primary); /* #161616 — 13.71:1, computed this session */
+  --version-tag-radius: var(--radius-24);
+
+  /* ---- tables — horizontal dividers only, no zebra, no vertical rules ---- */
+  --table-header-bg: var(--cds-layer-01); /* #f4f4f4, ibm.md:50 */
+  --table-header-rule: 1px solid var(--cds-border-strong); /* #c6c6c6 */
+  --table-row-rule: 1px solid var(--cds-border-subtle); /* #e0e0e0 */
+
+  /*
+   * ===================================================================
+   * CONTRAST TABLE — every value MEASURED, not estimated. Recomputed this
+   * session with the WCAG 2.x relative-luminance formula by
+   * /tmp/contrast-adcp.mjs (no dependencies; the ratios below are that
+   * script's literal stdout, rounded to 2dp). This site's palette is four
+   * neutrals and one hue, so the table is the whole palette.
+   *
+   *   TEXT (floor 4.5:1)
+   *     #161616 on #ffffff  (ink on page)                     18.10:1  PASS
+   *     #161616 on #f4f4f4  (ink on rail / code / AnswerBox)  16.45:1  PASS
+   *     #161616 on #e0e0e0  (ink on version capsule + chip)   13.71:1  PASS
+   *     #525252 on #ffffff  (evidence face: caption/colophon)  7.81:1  PASS
+   *     #525252 on #f4f4f4  (evidence face on table head)      7.10:1  PASS
+   *     #525252 on #e0e0e0  (.badge base chip)                 5.92:1  PASS
+   *     #0a7d52 on #ffffff  (accent link on page)              5.16:1  PASS
+   *     #0a7d52 on #f4f4f4  (accent link; .badge-required)     4.69:1  PASS
+   *     #ffffff on #0a7d52  (nav current-page capsule)         5.16:1  PASS
+   *
+   *   NON-TEXT / UI COMPONENT (floor 3:1, WCAG 1.4.11)
+   *     #7e7e7e on #f4f4f4  (nav capsule outline)              3.69:1  PASS
+   *     #0a7d52 on #ffffff  (TOC 2px active rule, badge edge)  5.16:1  PASS
+   *     #525252 on #ffffff  (focus-ring inner stroke)          7.81:1  PASS
+   *
+   *   DECORATIVE HAIRLINES (no floor — structural marks that carry no
+   *   information a reader could miss; the state they mark is always also
+   *   carried by ink, weight or position)
+   *     #e0e0e0 on #ffffff  (section rule, row rule, TOC rest) 1.32:1
+   *     #c6c6c6 on #f4f4f4  (table header bottom rule)         1.55:1
+   *     #c6c6c6 on #ffffff  (40px kicker mark)                 1.71:1
+   *
+   *   THE ONE FAILING PAIR, and why it can never render
+   *     #0a7d52 on #e0e0e0  (accent on an inline-code chip)    3.91:1  FAIL
+   *     Mitigated structurally, not by hoping: site.css §5.4 strips the
+   *     #e0e0e0 chip in every context where the accent lands on it
+   *     (a > code, h1-h3 > code, th > code, caption > code, summary > code,
+   *     .field-table td:first-child > code, .docs-tree code), so green
+   *     always composites on #ffffff (5.16:1) or #f4f4f4 (4.69:1).
+   * ===================================================================
+   */
+}
+
+/* OS-THEME SWITCHING IS REMOVED, PORTFOLIO-WIDE (orchestrator decision,
+   light-only). The colour-scheme media block that used to live here — a full
+   Carbon Gray 100 inversion with a lifted #4fb583 accent — is deleted, not
+   hidden, and must not be reintroduced. All six sites now differentiate in
+   light, which is the point of the decision: this site carries 100% of its
+   identity above, in one white ground, one green hue, a 24px capsule and a
+   mono evidence face. See /srv/ws/out/design-system-spec.md §10 ruling 4,
+   marked VOID, and /srv/ws/out/editorial-references.md §3. */

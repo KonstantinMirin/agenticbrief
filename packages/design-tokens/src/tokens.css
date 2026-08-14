@@ -1,0 +1,359 @@
+/**
+ * @agenticbrief/design-tokens — the shared chassis
+ * "Carbon Chassis, No IBM Blue"
+ *
+ * Source: IBM Carbon, quoted from
+ *   /usr/local/lib/hermes-agent/skills/creative/popular-web-designs/templates/ibm.md
+ *   (cited below as `ibm.md:N`), adopted as a SEMANTIC-TOKEN CHASSIS, not as a
+ *   look. Full rationale: /srv/ws/out/design-system-spec.md (cited `spec §N`).
+ *   See ../DESIGN.md for the human-readable version of this file.
+ *
+ * WHAT LIVES HERE: only values that are the SAME on all six sites — the
+ * Carbon role vocabulary (`--cds-*`), the extended radius scale, the type
+ * scale, spacing, grid, elevation, control geometry, the neutral focus ring,
+ * and the fourteen-line alias block that lets `global.css` and `generate.astro`
+ * consume these tokens with zero renames (spec §4.6).
+ *
+ * WHAT DOES NOT LIVE HERE: any per-site color, radius selection, measure,
+ * accent, or dark-mode block. Those are six sibling files under `./sites/`,
+ * cascaded via `:root[data-site="<key>"]` (spec §11.2). This file sets the
+ * Carbon "White theme" as a DEFENSIVE DEFAULT only — in production every page
+ * carries a `data-site` attribute and one of the six site blocks always wins
+ * on specificity (0,2,0 beats 0,1,0), so these base values are only ever seen
+ * if a page is rendered without `data-site` (a bug, not a design state).
+ *
+ * IBM Blue 60 (#0f62fe) enforcement (spec ruling 8): it appears exactly once
+ * below, as `--cds-support-info`, and is commented FILL ONLY. It must never
+ * be reintroduced as text, a link, a focus ring, or a brand mark. Phase D
+ * gate: `grep -rn '0f62fe|edf5ff|0043ce|002d9c' packages/ sites/` — every hit
+ * must sit on a `--cds-support-info` declaration line.
+ */
+
+:root {
+  /* ======================================================================
+   * 1. Font stacks (spec §8.5). Family names only — the self-hosted
+   *    `.woff2` files and their `@font-face` rules live in `./fonts.css`
+   *    (imported first by `index.css`, spec §8.3). These names must match
+   *    the `font-family` declared there exactly, or the stack silently
+   *    falls through to the system fallback with no error.
+   * ==================================================================== */
+  --cds-font-sans:
+    'IBM Plex Sans', 'IBM Plex Sans Fallback', -apple-system, BlinkMacSystemFont, 'Segoe UI',
+    Roboto, Helvetica, Arial, sans-serif;
+  --cds-font-mono:
+    'IBM Plex Mono', 'IBM Plex Mono Fallback', ui-monospace, SFMono-Regular, Menlo, Consolas,
+    monospace;
+  --cds-font-serif: 'IBM Plex Serif', Georgia, 'Times New Roman', serif;
+
+  /* ======================================================================
+   * 2. Neutral ramp — Carbon Gray family, verbatim (ibm.md:41-51).
+   *    Raw swatches first, then the White-theme role assignment (ibm.md:38,
+   *    249-251) as the chassis default. Every site overrides the ROLE
+   *    tokens (`--cds-background` etc.), never the raw swatch names, so a
+   *    site that still needs e.g. Gray 80 for something can reach it.
+   * ==================================================================== */
+  --cds-gray-100: #161616; /* ibm.md:42 */
+  --cds-gray-90: #262626; /* ibm.md:43 */
+  --cds-gray-80: #393939; /* ibm.md:44 */
+  --cds-gray-70: #525252; /* ibm.md:45 */
+  --cds-gray-60: #6f6f6f; /* ibm.md:46 */
+  --cds-gray-50: #8d8d8d; /* ibm.md:47 */
+  --cds-gray-30: #c6c6c6; /* ibm.md:48 */
+  --cds-gray-20: #e0e0e0; /* ibm.md:49 */
+  --cds-gray-10: #f4f4f4; /* ibm.md:50 */
+  --cds-gray-10-hover: #e8e8e8; /* ibm.md:51 */
+  --cds-white: #ffffff; /* ibm.md:38 */
+
+  /* Role assignment — Carbon White theme (defensive default; every site
+     redefines these six under its own :root[data-site] block, spec §7.2). */
+  --cds-background: var(--cds-white);
+  --cds-layer-01: var(--cds-gray-10);
+  --cds-layer-02: var(--cds-gray-20);
+  --cds-layer-hover-01: var(--cds-gray-10-hover);
+  --cds-text-primary: var(--cds-gray-100);
+  --cds-text-secondary: var(--cds-gray-70);
+  --cds-text-placeholder: var(--cds-gray-60); /* ibm.md:46 */
+  --cds-text-disabled: var(--cds-gray-50); /* ibm.md:47 */
+  --cds-border-strong: var(--cds-gray-30); /* ibm.md:48 */
+  --cds-border-subtle: var(--cds-gray-20); /* ibm.md:49 */
+
+  /* ======================================================================
+   * 3. Status quartet + WCAG text-safe companions (spec §4.7, ibm.md:62-65).
+   *    Three of Carbon's four status swatches fail as text on white; the
+   *    text companions are the fix, not a re-sourcing (spec §4.7, ruling 6a).
+   * ==================================================================== */
+  --cds-support-error: #da1e28; /* Red 60 — 5.00:1 on white, passes verbatim as text */
+  --cds-support-success: #24a148; /* Green 50 — 3.35:1 on white, FILL ONLY */
+  --cds-support-success-text: #0e6027; /* text-safe companion, spec §4.7 */
+  --cds-support-warning: #f1c21b; /* Yellow 30 — 1.68:1 on white, FILL ONLY */
+  --cds-support-warning-text: #8e6a00; /* text-safe companion, spec §4.7 */
+  --cds-support-info: #0f62fe; /* Blue 60 — FILL ONLY (ruling 8). Never text, link, focus, or brand. */
+
+  /* ======================================================================
+   * 4. Type scale — IBM Plex Sans, verbatim (ibm.md:86-102, spec §3.3).
+   *    Three functional weights only: 300 / 400 / 600. Weight 700 is
+   *    intentionally absent (ibm.md:107, 275). Tracking law: 0 above 14px,
+   *    +0.16px at 14px, +0.32px at 12px, never on display text (ibm.md:106,
+   *    276, 339).
+   * ==================================================================== */
+  --type-display-01-size: 3.75rem; /* 60px */
+  --type-display-01-weight: 300;
+  --type-display-01-lh: 1.17;
+  --type-display-01-tracking: 0;
+
+  --type-display-02-size: 3rem; /* 48px */
+  --type-display-02-weight: 300;
+  --type-display-02-lh: 1.17;
+  --type-display-02-tracking: 0;
+
+  --type-heading-01-size: 2.625rem; /* 42px */
+  --type-heading-01-weight: 300;
+  --type-heading-01-lh: 1.19;
+  --type-heading-01-tracking: 0;
+
+  --type-heading-02-size: 2rem; /* 32px */
+  --type-heading-02-weight: 400;
+  --type-heading-02-lh: 1.25;
+  --type-heading-02-tracking: 0;
+
+  --type-heading-03-size: 1.5rem; /* 24px */
+  --type-heading-03-weight: 400;
+  --type-heading-03-lh: 1.33;
+  --type-heading-03-tracking: 0;
+
+  --type-heading-04-size: 1.25rem; /* 20px */
+  --type-heading-04-weight: 600;
+  --type-heading-04-lh: 1.4;
+  --type-heading-04-tracking: 0;
+
+  --type-heading-05-size: 1.25rem; /* 20px */
+  --type-heading-05-weight: 400;
+  --type-heading-05-lh: 1.4;
+  --type-heading-05-tracking: 0;
+
+  --type-body-long-01-size: 1rem; /* 16px — Carbon's own body role; the portfolio floor is 18px, §5 below */
+  --type-body-long-01-weight: 400;
+  --type-body-long-01-lh: 1.5;
+  --type-body-long-01-tracking: 0;
+
+  --type-body-long-02-size: 1rem; /* 16px */
+  --type-body-long-02-weight: 600;
+  --type-body-long-02-lh: 1.5;
+  --type-body-long-02-tracking: 0;
+
+  --type-body-short-01-size: 0.875rem; /* 14px */
+  --type-body-short-01-weight: 400;
+  --type-body-short-01-lh: 1.29;
+  --type-body-short-01-tracking: 0.16px;
+
+  --type-body-short-02-size: 0.875rem; /* 14px */
+  --type-body-short-02-weight: 600;
+  --type-body-short-02-lh: 1.29;
+  --type-body-short-02-tracking: 0.16px;
+
+  --type-caption-01-size: 0.75rem; /* 12px */
+  --type-caption-01-weight: 400;
+  --type-caption-01-lh: 1.33;
+  --type-caption-01-tracking: 0.32px;
+
+  --type-code-01-size: 0.875rem; /* 14px, IBM Plex Mono */
+  --type-code-01-weight: 400;
+  --type-code-01-lh: 1.43;
+  --type-code-01-tracking: 0.16px;
+
+  --type-code-02-size: 1rem; /* 16px, IBM Plex Mono */
+  --type-code-02-weight: 400;
+  --type-code-02-lh: 1.5;
+  --type-code-02-tracking: 0;
+
+  --type-mono-display-size: 2.625rem; /* 42px, IBM Plex Mono — "hero mono decorative" (ibm.md:102) */
+  --type-mono-display-weight: 400;
+  --type-mono-display-lh: 1.19;
+  --type-mono-display-tracking: 0;
+
+  /* ======================================================================
+   * 5. Body floor — protected, portfolio-wide (spec ruling 10, §4.1).
+   *    HOLD 18px / 1.65 on all six sites. Do NOT regress to Carbon's own
+   *    Body Long 01 (16px/1.50) even though Carbon's density doctrine
+   *    argues for it — `global.css:61-62` names this a documented
+   *    legibility fix. Density comes from line-height MODE, section
+   *    rhythm, measure and scale flatness, never from shrinking body text.
+   * ==================================================================== */
+  --body-size: 18px;
+  --lh-ui: 1.5; /* chrome, nav, tables, labels — Carbon Body Long 01 (ibm.md:95) */
+  --lh-body: 1.65; /* protected portfolio default (global.css:62) */
+  --lh-prose: 1.75; /* adcpexplorer ONLY — MDN's live --font-line-content, spec §4.1 */
+
+  /* ======================================================================
+   * 6. Spacing — 8px base unit (ibm.md:218-224, spec §3.4).
+   * ==================================================================== */
+  --space-01: 2px;
+  --space-02: 4px;
+  --space-03: 8px;
+  --space-04: 12px;
+  --space-05: 16px;
+  --space-06: 24px;
+  --space-07: 32px;
+  --space-08: 40px;
+  --space-09: 48px;
+  --space-layout-01: 16px;
+  --space-layout-02: 24px;
+  --space-layout-03: 32px;
+  --space-layout-04: 48px; /* major section rhythm (ibm.md:237) */
+  --space-layout-05: 64px;
+  --space-layout-06: 80px; /* hero, low end (ibm.md:237) */
+  --space-layout-07: 96px; /* hero, high end (ibm.md:237) */
+  --space-layout-08: 160px;
+
+  /* ======================================================================
+   * 7. Grid & breakpoints (ibm.md:227-231, 284-290, spec §3.5).
+   *    Breakpoint tokens are DOCUMENTATION ONLY — `var()` cannot appear
+   *    inside an `@media` condition. They exist so Phase C and any JS that
+   *    needs a breakpoint value read the same number CSS does.
+   * ==================================================================== */
+  --grid-columns: 16;
+  --grid-max-width: 1584px;
+  --grid-gutter: 32px;
+  --grid-gutter-mobile: 16px;
+  --grid-margin-mobile: 16px;
+  --grid-margin-tablet: 32px;
+  --bp-sm: 320px;
+  --bp-md: 672px;
+  --bp-lg: 1056px;
+  --bp-xlg: 1312px;
+  --bp-max: 1584px;
+
+  /* ======================================================================
+   * 8. Elevation (ibm.md:247-257, spec §3.6). Shadows reserved exclusively
+   *    for genuinely floating elements. No box-shadow anywhere else.
+   * ==================================================================== */
+  --elev-flat: none;
+  --elev-layer: none;
+  --elev-raised: 0 2px 6px rgba(0, 0, 0, 0.3);
+  --elev-overlay: 0 2px 6px rgba(0, 0, 0, 0.3);
+
+  /* ======================================================================
+   * 9. Control geometry (ibm.md:120, 159-171, 292-297, spec §3.7).
+   * ==================================================================== */
+  --control-height-compact: 40px;
+  --control-height-default: 48px;
+  --control-height-expressive: 64px;
+  --input-height-default: 40px;
+  --input-height-large: 48px;
+  --control-padding-x: 16px;
+  --nav-row-height: 48px;
+  --icon-button-size: 48px;
+  --input-label-size: 12px;
+  --input-label-tracking: 0.32px;
+  --input-helper-size: 12px;
+
+  /* ======================================================================
+   * 10. Radius scale — Carbon's four values {0, 2, 24, 50%} (ibm.md:239-243)
+   *     extended to eight (spec §4.4, ruling 7), each site picking one
+   *     with no adjacency. This block is the raw SCALE; `--radius` itself
+   *     is set per-site via the alias layer below.
+   * ==================================================================== */
+  --radius-0: 0px; /* adtechglossary — the Carbon-dominant treatment, made exclusive */
+  --radius-2: 2px; /* adcpexplorer cards */
+  --radius-3: 3px; /* whatisagenticbuying secondary controls */
+  --radius-4: 4px; /* aampexplorer — never pill */
+  --radius-6: 6px; /* briefgateway — Vercel `md` */
+  --radius-8: 8px; /* agenticadlab — Claude's soft register */
+  --radius-24: 24px; /* Carbon's own pill-tag exception (ibm.md:242); adcpexplorer's chrome */
+  --radius-pill: 99999px; /* whatisagenticbuying's CTA */
+
+  /* ======================================================================
+   * 11. Neutral focus ring — replaces Carbon's Blue-60 focus everywhere
+   *     (spec §6.3b, live-verified). Composable: the halo color is a
+   *     separate token so a site's dark block can swap it without
+   *     re-declaring the whole shadow.
+   * ==================================================================== */
+  --focus-ring-halo: #00000029;
+  --focus-ring: 0 0 0 1px var(--fg-muted), 0 0 0 4px var(--focus-ring-halo);
+
+  /* ======================================================================
+   * 12. Wayfinding label primitive — grafted from HashiCorp
+   *     (hashicorp.md:98, 233; spec §6.1), rendered in IBM Plex Mono so it
+   *     reads as a system marker, not a Sans sub-heading. Every site sets
+   *     its own `--track-label`; the value here is a defensive fallback,
+   *     never intended to ship.
+   * ==================================================================== */
+  --label-size: 13px;
+  /*
+   * ORCHESTRATOR FIX (B2) — was 600, measured as SYNTHETIC bold.
+   *
+   * `fonts.css` self-hosts IBM Plex Mono at weight 400 ONLY. This primitive
+   * renders in Mono, so 600 asked for a weight that does not exist and Chrome
+   * faked it. Proven by canvas ink probe at 40px, identical advance width:
+   *
+   *   Plex Mono 400 -> ink 946,552
+   *   Plex Mono 600 -> ink 1,342,114   (+41.8% ink, SAME metrics = fake bold)
+   *   Plex Sans 600 -> ink 1,392,411
+   *   Plex Sans 700 -> ink 1,392,411   (identical = 700 clamps to the variable
+   *                                     axis cap; Sans never synthesises)
+   *
+   * It was live on 2,252 elements across four sites (1,466 on adcpexplorer
+   * alone) — and precisely on the mono evidence/metadata face that adcp, aamp
+   * and whatisagenticbuying each name as a differentiator, so three sites'
+   * distinctness partly rested on an accidental fake weight.
+   *
+   * Emphasis for this primitive comes from UPPERCASE + letter-spacing (the
+   * HashiCorp graft, spec §6.1), which is why dropping to 400 costs nothing:
+   * the wayfinding signal was never the weight.
+   */
+  --label-weight: 400;
+  --label-lh: 1.69;
+  --label-transform: uppercase;
+  --track-label: 1px; /* fallback only — every site overrides, spec §6.1 */
+
+  /* ======================================================================
+   * 13. AnswerBox recipe tokens — the slop-tell-#4 replacement (spec §9.7).
+   *     The 4px accent rail is DELETED portfolio-wide; these tokens carry
+   *     Carbon's own precedence device (one-step layer shift + label)
+   *     instead. `--answerbox-term-weight` drops from the old 700 to
+   *     Carbon's 600 ceiling (ibm.md:107). Defensive fallbacks below;
+   *     every site sets its own ground implicitly (via `--cds-layer-01`,
+   *     already re-themed per site) and explicitly overrides radius/
+   *     shadow/label where §9.7's table diverges from its own defaults.
+   * ==================================================================== */
+  --answerbox-padding: 16px; /* ibm.md:156, 223 */
+  --answerbox-radius: var(--radius);
+  --answerbox-shadow: none; /* a border/ring, set per site; never a >2px left rule (hard rule, spec ruling 5) */
+  --answerbox-label-size: var(--label-size);
+  --answerbox-label-track: var(--track-label);
+  --answerbox-term-weight: 600;
+
+  /* ======================================================================
+   * 14. The fourteen-line alias block (spec §4.6, quoted verbatim).
+   *     `global.css:45-616` and `generate.astro:565-954` consume THESE
+   *     names today; this block is what lets the chassis land with zero
+   *     renames in either file (spec §11.4 risks 5, 6). Do not rename the
+   *     left-hand side — it is not this package's variable, it is the
+   *     existing repo's.
+   * ==================================================================== */
+  --bg: var(--cds-background);
+  --bg-subtle: var(--cds-layer-01);
+  --bg-inset: var(--cds-layer-02);
+  --fg: var(--cds-text-primary);
+  --fg-muted: var(--cds-text-secondary);
+  --border: var(--cds-border-subtle);
+  --accent: var(--site-accent); /* per-site, never Blue 60 */
+  --accent-bright: var(--site-accent-strong);
+  --accent-soft: var(--cds-layer-01); /* AnswerBox ground; see §9.7 */
+  --font-sans: var(--cds-font-sans);
+  --font-mono: var(--cds-font-mono);
+  --font-serif: var(--cds-font-serif);
+  --measure: var(--site-measure);
+  --radius: var(--site-radius);
+
+  /* ---- defensive fallbacks for the --site-* inputs above ----
+     Every one of the six site files defines these under a higher-
+     specificity :root[data-site="<key>"] selector (0,2,0 > 0,1,0), so in
+     production these values are never seen. They exist only so a page
+     rendered without a `data-site` attribute degrades to plain ink-on-
+     white instead of an undefined custom property. */
+  --site-accent: var(--cds-text-primary);
+  --site-accent-strong: var(--cds-text-secondary);
+  --site-measure: 68ch;
+  --site-radius: var(--radius-6);
+}

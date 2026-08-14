@@ -1,0 +1,822 @@
+/**
+ * agenticadlab — layout rules (design brief §6–§8).
+ *
+ * THE EDITORIAL MOVE (light-only elevation pass, 2026-08-14):
+ * A BOOK PAGE WITH A MARGINALIA COLUMN — a 96px hanging gutter outboard of a
+ * single flush-left content edge, into which every structural mark is exdented
+ * (chapter numerals, region rules, the pull-quote glyph), so the reading path
+ * keeps one unbroken left edge while the page's structure is legible entirely
+ * in the margin. Sources, all from /srv/ws/out/editorial-references.md:
+ *   §2.1  kicker/eyebrow discipline, reused as the mono chapter numeral
+ *   §2.3  1px hairlines as the only structural chrome
+ *   §2.7  two-role type system — serif reads, mono sources
+ *   §2.8  Stripe Press's 80px glyph at line-height .22 + 40px/1px rule @ .4
+ *   §2.9  asymmetric, rule-anchored whitespace (48px above / 32px below)
+ *   §2.13 terse captions, set in the metadata face
+ *   §3/§4 axis 3 airy-editorial (dominant) x axis 5 warm ground (sole owner)
+ *
+ * LIGHT ONLY. This file contains no OS dark-scheme media block and no
+ * dark-only value; every @media here is a width query. Do not add one. (The
+ * literal at-rule name is kept out of this file so the Phase D gate grep
+ * returns a clean zero rather than a comment.)
+ *
+ * Every selector is prefixed `:root[data-site='agenticadlab']` (or
+ * `html[data-site='agenticadlab']` for the one `html` rule) so specificity
+ * beats packages/shared-ui/src/styles/global.css regardless of bundle order —
+ * that file is frozen and this stylesheet only ever needs to out-specify it,
+ * never edit it. No custom properties are declared here; every value not a
+ * bare CSS primitive (a px/ch length, a media query) reads a `--*` token from
+ * packages/design-tokens/src/sites/agenticadlab.css.
+ *
+ * Elevation-pass changes, in file order:
+ *   E-1 main.wide gains --hang as extra left padding (the gutter)
+ *   E-2 the reading-list entry name takes Heading 04 — scale, not a box
+ *   E-3 PortfolioNav's lead loses its fill/ring/radius and gains a serif
+ *       Heading 02 headline: slop tells 3 + 4 repaired by re-composing
+ *   E-4 the essay AnswerBox's text becomes a serif standfirst
+ *   E-5 the blockquote's 1px left rule becomes the §2.8 glyph-and-rule
+ *   E-6 every REGION rule exdents into the gutter; item rules do not
+ *   E-7 mono chapter numerals, counted on the reading path only
+ *   E-8 a drop cap on the lede paragraph of each template
+ *   E-9 captions, figcaptions and breadcrumbs move to the mono metadata face
+ *   E-10 breadcrumb separators stop being painted in a 1.05:1 token
+ *   E-11 link underlines specified at 1px / 0.18em rather than left to the UA
+ *
+ * Fixes, in the order the design brief names them:
+ *   D1 — the 68ch measure did not reach the page (§1, §6, §7)
+ *   D2 — terracotta text on --cds-layer-02 measured 4.48:1, below 4.5:1 (§8)
+ *   D3 — --cds-text-tertiary fixed at the token layer, nothing to do here
+ *
+ * Review round 2 fixes, in the order they appear below:
+ *   R-B — .card-featured's grid-column override lost the specificity race
+ *         against the component's own scoped rule (0,4,0 beats 0,3,0)
+ *   R-2 — table cell borders were invisible (they read --border, deliberately
+ *         kept near 1:1) — 29 tables across 14 pages had no visible structure
+ *   R-6 — header/footer chrome stayed at the chassis-default measure while
+ *         main.wide narrowed to --measure-container, a 70px misalignment
+ *   R-7 — .task-list hit target was measured on the wrong box: the padding is
+ *         on the <li>, the link itself is an inline ~21px line box
+ *   R-D — the display moment was spent on the wordmark twice (masthead +
+ *         60px h1); inverted so the thesis, not the brand name, gets Display 01
+ */
+
+/* ==========================================================================
+   Container (fixes D1) — every route on this site, MOBILE FIRST.
+   main.wide's chassis default is 1180px (global.css:105); this site's own
+   row narrows it and raises padding to the top of Carbon's layout scale.
+
+   `padding-left` is the container's left gutter PLUS --hang, the marginalia
+   column. --hang is 0px below 1056px, so at every mobile width this is
+   byte-identical in effect to the shorthand above it; at >=1056px the whole
+   content column steps 96px right and the gutter it vacates becomes the
+   marginalia column. Written as shorthand-then-longhand rather than four
+   longhands so the three vertical values stay readable as one rhythm.
+   ========================================================================== */
+
+:root[data-site='agenticadlab'] main.wide {
+  max-width: var(--measure-container);
+  padding: var(--space-chapter) var(--space-08) var(--space-page-foot);
+  padding-left: calc(var(--space-08) + var(--hang));
+}
+
+/*
+ * R-6 — header/footer alignment, and what the marginalia column does to it.
+ * main.wide narrows to --measure-container (1080px / 40px gutter) but
+ * Header.astro's `.header-inner` (global.css:131) and Footer.astro's
+ * `.footer-inner` / `.footer-legal` (global.css:717/735) stay at the chassis
+ * default (1180px / 20px gutter) — at 1440px that was a 70px gap between
+ * where the brand mark starts and where body text starts, with nothing in it.
+ * Shared components are frozen; this out-specifies their plain, unscoped
+ * selectors from the site file instead of editing them.
+ *
+ * Note the chrome deliberately does NOT take --hang. Above 1056px the
+ * masthead and footer sit on the marginalia edge and prose sits on the text
+ * edge, 96px in — the same two vertical lines the chapter numerals, the
+ * region rules and the pull-quote glyph land on. That is a grid with an
+ * occupied column between the two edges, which is the opposite of R-6's
+ * unintended mismatch between two containers with an empty gap.
+ */
+:root[data-site='agenticadlab'] .header-inner,
+:root[data-site='agenticadlab'] .footer-inner,
+:root[data-site='agenticadlab'] .footer-legal {
+  max-width: var(--measure-container);
+  padding-inline: var(--space-08);
+}
+
+/* ==========================================================================
+   Tables (fixes R-2) — every route.
+   global.css:488 paints cell borders with --border == --cds-border-subtle,
+   which this site deliberately keeps near 1:1 (#f0eee6 on #f5f4ed, 1.05:1) as
+   a "never painted as a rule" token — except global.css paints it as a rule
+   on every <table>. This corpus argues in tables (29 across 14 pages, three
+   on the homepage alone); they need their own, stronger treatment rather
+   than inheriting the deliberately-invisible token.
+   ========================================================================== */
+
+:root[data-site='agenticadlab'] main.wide th,
+:root[data-site='agenticadlab'] main.wide td {
+  border: 0;
+  border-bottom: 1px solid var(--border-prominent);
+}
+
+:root[data-site='agenticadlab'] main.wide thead th {
+  background: none;
+  border-bottom: 1px solid var(--cds-text-tertiary);
+}
+
+:root[data-site='agenticadlab'] main.wide tbody th[scope='row'] {
+  background: none;
+}
+
+@media (max-width: 672px) {
+  :root[data-site='agenticadlab'] main.wide {
+    padding: 48px 16px 96px;
+  }
+}
+
+/* ==========================================================================
+   Homepage — `/` (Decide/Learn, the one legitimate hero in the portfolio).
+   index.astro wraps its h1 + AnswerBox in <header class="hub-hero">; every
+   other homepage region is a direct child of <main class="wide"> (index.astro
+   does not use PageLayout/<article> — it calls BaseLayout directly).
+   ========================================================================== */
+
+:root[data-site='agenticadlab'] .hub-hero {
+  margin: 0 0 var(--space-region);
+}
+
+/*
+ * THE OPENING: KICKER, THEN THESIS. editorial-references §1's argument-first
+ * rule ("a declarative thesis sentence, not headline + subhead + CTA stack")
+ * plus §2.1's kicker, which is the highest-leverage mechanic in the whole
+ * reference document and was the one this site had not spent.
+ *
+ * R-D established the right principle — the biggest type on the page must
+ * argue something, not repeat the brand name twelve pixels under the masthead
+ * — but implemented it by leaving the h1 at Heading 01 (42px serif) and
+ * handing the thesis Display 01 (60px) inside a 46ch box. MEASURED at 1440px
+ * that put a 330-character sentence at 60px into a 442px column: roughly seven
+ * characters per line for seventeen lines, which is not a display moment, it
+ * is a mis-set measure that fills the entire first screen.
+ *
+ * Both halves are fixed by role, not by size alone:
+ *   - the h1 ("Agentic Ad Lab") becomes the KICKER — mono, uppercase, 13px,
+ *     +1px tracking, i.e. the chassis's own §6.1 label primitive. That is what
+ *     the string actually is on a homepage whose masthead already carries the
+ *     wordmark: a section marker, not a headline. Copy, element and document
+ *     outline are untouched; only the visual role changes.
+ *   - the thesis then unambiguously owns the largest type on the page, and
+ *     gets a measure that fits it: the figure width (880px) rather than 46ch,
+ *     at 28px→40px, which lands it in six or seven lines instead of
+ *     seventeen. --measure-deck and --display-size are both retired from this
+ *     surface; --display-size still ships as the site's Display 01 role.
+ *
+ * The AnswerBox's DOM, position and GEO docblock contract are untouched — only
+ * its skin changes, and only inside .hub-hero. On all 12 other routes it keeps
+ * its full §9.7 treatment (ivory, 8px, warm ring, 24px padding) with the serif
+ * standfirst inside it — see the essay-template block below.
+ */
+:root[data-site='agenticadlab'] .hub-hero h1 {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: var(--label-size);
+  font-weight: var(--label-weight);
+  line-height: var(--label-lh);
+  letter-spacing: var(--track-label);
+  text-transform: var(--label-transform);
+  color: var(--cds-text-secondary); /* #5e5d59 — 5.98:1 on #f5f4ed */
+}
+
+:root[data-site='agenticadlab'] .hub-hero .answer-box {
+  margin-top: var(--space-05);
+  padding: 0;
+  max-width: min(var(--measure-figure), 100%);
+  background: none;
+  box-shadow: none;
+  border-radius: 0;
+}
+
+:root[data-site='agenticadlab'] .hub-hero .answer-box .answer-text {
+  font-family: var(--display-font);
+  font-weight: var(--display-weight); /* only weight 300 supplied */
+  font-synthesis-weight: none;
+  /* 28px at 390px → 40px from ~1060px up. Deliberately below Display 01's
+     60px: this is a 55-word argument, and 60px only sets a headline. */
+  font-size: clamp(1.75rem, 0.9rem + 2.4vw, 2.5rem);
+  line-height: 1.16;
+  letter-spacing: var(--display-tracking); /* 0 — tracking law */
+  color: var(--cds-text-primary);
+  text-wrap: pretty;
+}
+
+:root[data-site='agenticadlab'] .hub-page > p {
+  max-width: var(--site-measure);
+  text-wrap: pretty;
+}
+
+:root[data-site='agenticadlab'] .hub-page > h2 {
+  max-width: calc(var(--site-measure) + var(--hang));
+  margin-top: var(--space-chapter);
+  margin-bottom: var(--space-05);
+  padding-top: var(--space-06);
+  border-top: var(--rule-chapter);
+  /* exdent into the marginalia column — see the shared block below */
+  margin-left: calc(-1 * var(--hang));
+  padding-left: var(--hang);
+}
+
+/* Tables and the illustration slot break out past the 68ch text — up to
+   880px, never past the container. min(), never a bare 880px: a
+   :root[data-site]-prefixed rule out-specifies main table's mobile overflow
+   fix (global.css:789), so the figure width must yield to 100% below 880px
+   or it re-breaks the documented 390px table-overflow fix. */
+:root[data-site='agenticadlab'] .hub-page > table,
+:root[data-site='agenticadlab'] .hub-page > .illustration-placeholder-figure {
+  max-width: min(var(--measure-figure), 100%);
+  margin-block: var(--space-figure);
+}
+
+:root[data-site='agenticadlab'] .hub-page > .faq {
+  max-width: calc(var(--site-measure) + var(--hang));
+  margin-top: var(--space-region);
+  border-top: var(--rule-chapter);
+  margin-left: calc(-1 * var(--hang));
+  padding-left: var(--hang);
+}
+
+:root[data-site='agenticadlab'] .hub-page > .task-list {
+  max-width: var(--site-measure);
+}
+
+:root[data-site='agenticadlab'] .hub-page .task-list li {
+  padding: 20px 0; /* row rhythm, not the hit target — see .task-name below */
+  border-bottom: var(--rule-chapter);
+}
+
+/*
+ * R-7 — the 20px <li> padding above does not make the link's hit box 56px:
+ * `.task-name` is an inline <a> (global.css:638, font-weight:600 only, no
+ * size/display), so its hit box is a single ~21px line box, under both the
+ * brief's 44px floor and WCAG 2.2 SC 2.5.8's 24px. Making it inline-block
+ * with its own block padding gives the link itself a ~45px target without
+ * changing the visible row rhythm.
+ */
+:root[data-site='agenticadlab'] .hub-page .task-list .task-name {
+  display: inline-block;
+  padding-block: 12px;
+  /* Hierarchy by SCALE, not by a box: the reading-list entry name takes
+     Heading 04 (20px) against the 18px blurb underneath it, so the row reads
+     as headline-plus-standfirst rather than as two runs of body copy. The
+     blurb is NOT shrunk — the 18px body floor is protected portfolio-wide
+     (editorial-references §2.11), so the delta is bought at the top. */
+  font-size: var(--type-heading-04-size);
+  line-height: var(--type-heading-04-lh);
+}
+
+:root[data-site='agenticadlab'] .hub-page > .portfolio-nav {
+  margin-top: var(--space-region);
+  padding-top: var(--space-06);
+  border-top: var(--rule-chapter);
+  margin-left: calc(-1 * var(--hang));
+  padding-left: var(--hang);
+}
+
+@media (max-width: 672px) {
+  :root[data-site='agenticadlab'] .hub-page > h2 {
+    margin-top: 48px;
+  }
+
+  :root[data-site='agenticadlab'] .hub-page > .faq,
+  :root[data-site='agenticadlab'] .hub-page > .portfolio-nav {
+    margin-top: 64px;
+  }
+
+  :root[data-site='agenticadlab'] .hub-page > table,
+  :root[data-site='agenticadlab'] .hub-page > .illustration-placeholder-figure {
+    max-width: 100%;
+  }
+}
+
+/* ---- PortfolioNav — differentiated from my own token/site files only,
+   NOT blocked (brief §6). Removes the card chrome from the four secondary
+   entries so the row reads as an editor's lead-plus-list rather than five
+   tiles. The stretched-link hit target and the component's own
+   :focus-visible ring are unaffected. ---- */
+
+:root[data-site='agenticadlab'] .card-grid {
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0 32px;
+}
+
+:root[data-site='agenticadlab'] .card {
+  background: none;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  padding: 24px 0 0;
+  border-top: var(--rule-chapter);
+}
+
+/*
+ * R-B — the previous selector here was `:root[data-site='agenticadlab']
+ * .card-featured`, (0,3,0). The component's own scoped rule is
+ * `.card-grid[data-astro-cid-…]>.card-featured[data-astro-cid-…]`, (0,4,0) —
+ * it wins on class-count alone regardless of bundle order, and
+ * `grid-column: 1 / -1` below never applied. The layout looked correct only
+ * because `span 2` inside a `repeat(2, 1fr)` grid is coincidentally full
+ * width; a 3-column `--card-grid` would have silently dropped the featured
+ * card to two-thirds width. Adding `ul.card-grid >` brings the element count
+ * to (0,4,1), which wins on class-count parity + a higher element count.
+ *
+ * [ELEVATION PASS — slop tells 3 and 4, fixed by RE-COMPOSING, not recolouring]
+ * The lead entry used to be an ivory panel with a warm ring and an 8px radius:
+ * one card sitting in a row of four boxless entries, i.e. the portfolio's only
+ * surviving "hierarchy expressed as a container". editorial-references §1
+ * ("boxless hierarchy… hierarchy comes from type scale + whitespace + rare
+ * single hairlines") and design-research §4.3's repair instruction for tells
+ * 3/8/10 both say the same thing: re-lay-out. The fill, the ring and the
+ * radius are gone. The lead now outranks the list the way a lead does in
+ * print — a serif Heading 02 headline against the list's 17.6px sans, a
+ * standfirst at body size, and one dotted rule closing it off — so the whole
+ * row is a lead-plus-list with zero containers anywhere in it.
+ */
+/* No border-bottom here: the four secondary entries already carry
+   `border-top: var(--rule-chapter)` from the `.card` rule above, so closing
+   the lead with its own rule too rendered as two near-parallel dotted lines
+   24px apart. The list's own top rules ARE the close. */
+:root[data-site='agenticadlab'] ul.card-grid > .card-featured {
+  grid-column: 1 / -1;
+  border-top: 0;
+  margin-bottom: var(--space-06);
+  padding: 0;
+  background: none;
+  box-shadow: none;
+  border-radius: 0;
+}
+
+/* The one serif headline outside the h1/thesis roles: it is the only place a
+   site with a serif display voice gets to use it below the fold. Weight 300 is
+   the only Serif weight loaded, so synthesis is disabled rather than faked. */
+:root[data-site='agenticadlab'] .card-featured h3 {
+  margin-bottom: var(--space-03);
+  font-family: var(--display-font);
+  font-weight: var(--display-weight);
+  font-synthesis-weight: none;
+  font-size: var(--type-heading-02-size); /* 32px */
+  line-height: var(--type-heading-02-lh);
+  letter-spacing: var(--type-heading-02-tracking);
+  max-width: 20ch;
+}
+
+:root[data-site='agenticadlab'] .card-featured p {
+  font-size: 1.125rem;
+  max-width: 54ch;
+}
+
+@media (max-width: 640px) {
+  :root[data-site='agenticadlab'] .card-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ==========================================================================
+   Essay template — /guides/[slug]/, /protocols/*, /services/, /about/
+   (Decide/Learn). One column: no rail, no TOC, no cards, no sidebar. Every
+   markdown-rendered element (h2, p, table, blockquote, pre, ...) lands as a
+   direct child of <article> (verified against the shipped build — Astro's
+   <Content /> emits no wrapping element), so the `> ` child combinator is
+   safe and does not need a :global() escape.
+   ========================================================================== */
+
+/*
+ * Display 01 lands HERE — on the essay title, which is the only string on
+ * this site short enough to carry it (the longest of the twelve is 41
+ * characters, two lines at 24ch). global.css already gives every h1
+ * --display-font/--display-weight; this adds the size/leading/tracking, so an
+ * essay opens the way a book chapter does: one short serif line at the top of
+ * the scale, then the standfirst, then the drop cap.
+ *
+ * Deliberately NOT on the homepage thesis, which is 330 characters — see the
+ * hub-hero block above for the measurement that settled that.
+ */
+:root[data-site='agenticadlab'] main.wide > article > h1 {
+  max-width: 24ch;
+  font-size: var(--display-size);
+  line-height: var(--display-lh);
+  letter-spacing: var(--display-tracking);
+}
+
+:root[data-site='agenticadlab'] main.wide > article > .answer-box {
+  max-width: var(--site-measure);
+}
+
+/*
+ * THE STANDFIRST. The essay AnswerBox keeps its §9.7 recipe exactly (ivory
+ * ground, 8px, warm ring, 24px padding — that ruling is not re-litigated
+ * here); what changes is the TYPE inside it. It was 17.9px sans, i.e. body
+ * copy in a panel, which made the panel the only thing marking it as the
+ * lede. Set in the serif at 20-24px it is a deck, and the hierarchy is
+ * carried by face and scale with the panel merely confirming it. Same voice
+ * as the homepage thesis (Display 01) one step down, so all 12 routes open
+ * with the same instrument. Copy is untouched — this is the `answer` prop,
+ * rendered by the frozen component, restyled only.
+ */
+:root[data-site='agenticadlab'] main.wide > article > .answer-box .answer-text {
+  font-family: var(--display-font);
+  font-weight: var(--display-weight); /* only weight 300 is loaded */
+  font-synthesis-weight: none;
+  font-size: var(--standfirst-size);
+  line-height: var(--standfirst-lh);
+  letter-spacing: var(--display-tracking); /* 0 — tracking law, ibm.md:106/276 */
+}
+
+/* Provenance line under a standfirst is metadata, not prose: mono, per the
+   NYT grotesque-for-sourcing split (editorial-references §2.7). Dormant on
+   this site today (no route passes `source=`), kept because the component
+   supports it and the rule costs nothing. */
+:root[data-site='agenticadlab'] main.wide > article > .answer-box .answer-source {
+  font-family: var(--font-mono);
+  font-size: var(--type-caption-01-size);
+  letter-spacing: var(--type-caption-01-tracking);
+}
+
+:root[data-site='agenticadlab'] main.wide > article > h2 {
+  max-width: calc(var(--site-measure) + var(--hang));
+  margin-top: var(--space-chapter);
+  margin-bottom: var(--space-05);
+  padding-top: var(--space-06);
+  border-top: var(--rule-chapter);
+  /* exdent into the marginalia column — see the shared block below */
+  margin-left: calc(-1 * var(--hang));
+  padding-left: var(--hang);
+}
+
+:root[data-site='agenticadlab'] main.wide > article > p,
+:root[data-site='agenticadlab'] main.wide > article > ul,
+:root[data-site='agenticadlab'] main.wide > article > ol {
+  max-width: var(--site-measure);
+  text-wrap: pretty;
+}
+
+/*
+ * THE PULL-QUOTE — Stripe Press's device, read from its production CSS
+ * (editorial-references §2.8, "the single best trick found"): an oversized
+ * opening curly quote in the serif at `line-height: .22`, which collapses the
+ * glyph's own box so an 80px mark contributes no vertical rhythm, closed by a
+ * 40px x 1px rule at opacity .4.
+ *
+ * This REPLACES the 1px terracotta left rule rather than adding to it. Same
+ * accent budget, one fewer left rule in a portfolio that has a hard rule about
+ * left rules (spec ruling 5), and the mark is now a quotation mark on a
+ * quotation instead of a generic bar. Above 1056px the glyph hangs in the
+ * marginalia column, on the same vertical line as the chapter numerals, so the
+ * quote's text edge is the same edge as every other paragraph's — the quote
+ * reads as inset by its mark, not by an indent.
+ *
+ * Everything else about blockquotes is unchanged and still deliberate: they
+ * stay SANS (brief §7.1 — all 17 are evidence, several carrying inline
+ * `code`/`**bold**`, and Serif 300 has no bold to answer a <strong> with), and
+ * they stay INK, because quoted evidence is not decoration.
+ */
+:root[data-site='agenticadlab'] main.wide > article > blockquote {
+  position: relative;
+  max-width: var(--site-measure);
+  /* asymmetric, rule-anchored whitespace — big above the break, small below
+     (editorial-references §2.9, Stripe Press's live `80px 0 10px`) */
+  margin: var(--space-09) 0 var(--space-07);
+  padding-left: 0;
+  color: var(--cds-text-primary);
+  border-left: 0;
+}
+
+:root[data-site='agenticadlab'] main.wide > article > blockquote::before {
+  /* Two `content` declarations on purpose: the second adds the empty
+     alternative text that keeps the glyph out of the accessibility tree, and
+     is dropped as invalid by engines too old to parse `content: x / y` — which
+     then still get the first, i.e. the mark degrades, never disappears. */
+  content: '\201c';
+  content: '\201c' / '';
+  display: block;
+  font-family: var(--font-serif);
+  font-weight: 300;
+  font-synthesis-weight: none;
+  font-size: var(--quote-glyph-size);
+  line-height: var(--quote-glyph-lh);
+  color: var(--site-accent); /* 5.08:1 on the page; non-text, 3:1 floor */
+}
+
+:root[data-site='agenticadlab'] main.wide > article > blockquote::after {
+  content: '';
+  display: block;
+  width: var(--rule-short);
+  height: 1px;
+  margin-top: var(--space-05);
+  background: var(--site-accent);
+  opacity: var(--rule-short-opacity); /* composites to #d6b1a3, ΔL* 21.02 */
+}
+
+:root[data-site='agenticadlab'] main.wide > article > table,
+:root[data-site='agenticadlab'] main.wide > article > .comparison,
+:root[data-site='agenticadlab'] main.wide > article > figure,
+:root[data-site='agenticadlab'] main.wide > article > .illustration-placeholder-figure {
+  max-width: min(var(--measure-figure), 100%);
+  margin-block: var(--space-figure);
+}
+
+/*
+ * Code panel gets the ring (brief §7.2): #faf9f5 on #f5f4ed is 1.03:1 — a
+ * flat panel here is an invisible panel. astro.config.mjs and the Shiki
+ * `css-variables` theme stay untouched; colour comes from the --code-* hooks
+ * in the token file, where --code-bg (#e3e0d3) and --code-accent (#94432d,
+ * 5.12:1 on it) now both live. See that file for why the accent had to be
+ * re-measured against the panel rather than against --bg-subtle.
+ */
+:root[data-site='agenticadlab'] main.wide article pre {
+  border-radius: var(--radius-8);
+  box-shadow: var(--ring-separation);
+  padding: var(--space-05);
+}
+
+:root[data-site='agenticadlab'] main.wide > article > .faq,
+:root[data-site='agenticadlab'] main.wide > article > .related {
+  max-width: calc(var(--site-measure) + var(--hang));
+  margin-top: var(--space-region);
+  border-top: var(--rule-chapter);
+  margin-left: calc(-1 * var(--hang));
+  padding-left: var(--hang);
+}
+
+/*
+ * .engagement loses its left rule (brief §7 decision 4): the blockquote
+ * already spends this site's one left-rule budget; two different 1px left
+ * rules on the same page reads as decoration. It becomes a dotted top rule
+ * at the region interval instead, matching FAQ/Related.
+ */
+:root[data-site='agenticadlab'] main.wide > article > .engagement {
+  max-width: calc(var(--site-measure) + var(--hang));
+  margin-top: var(--space-region);
+  padding: var(--space-06) 0 0 var(--hang);
+  border-left: 0;
+  border-top: var(--rule-chapter);
+  margin-left: calc(-1 * var(--hang));
+}
+
+@media (max-width: 672px) {
+  :root[data-site='agenticadlab'] main.wide > article > h2 {
+    margin-top: 48px;
+  }
+
+  :root[data-site='agenticadlab'] main.wide > article > .faq,
+  :root[data-site='agenticadlab'] main.wide > article > .related,
+  :root[data-site='agenticadlab'] main.wide > article > .engagement {
+    margin-top: 64px;
+  }
+
+  :root[data-site='agenticadlab'] main.wide > article > table,
+  :root[data-site='agenticadlab'] main.wide > article > .comparison,
+  :root[data-site='agenticadlab'] main.wide > article > figure,
+  :root[data-site='agenticadlab'] main.wide > article > .illustration-placeholder-figure {
+    max-width: 100%;
+  }
+}
+
+/* ==========================================================================
+   THE MARGINALIA COLUMN — the elevation pass's structural device.
+   Shared by both templates (homepage `.hub-page` and essay `article`).
+
+   Three marks live in the gutter and nothing else ever does: the chapter
+   numeral, the exdented left end of every REGION rule (set above, next to
+   each region so the rule and its measure stay together), and the pull-quote
+   glyph. Rule DEPTH therefore encodes level with no colour and no weight
+   change: region rules start at the marginalia edge, item rules (table cells,
+   reading-list rows, portfolio entries) start at the text edge. Two edges,
+   one measurement, no boxes.
+
+   Mobile-first: --hang is 0px below 1056px, so everything here collapses to a
+   single flush-left column and the numeral falls back into flow above its
+   heading. Nothing in this section can push the document sideways at 390px —
+   the only negative margins are `calc(-1 * 0px)` there.
+   ========================================================================== */
+
+:root[data-site='agenticadlab'] main.wide > article,
+:root[data-site='agenticadlab'] .hub-page {
+  counter-reset: chapter;
+}
+
+:root[data-site='agenticadlab'] main.wide > article > h2,
+:root[data-site='agenticadlab'] .hub-page > h2 {
+  position: relative;
+  counter-increment: chapter;
+}
+
+/*
+ * The chapter numeral. Mono, not serif, on purpose: the serif is this site's
+ * READING voice (h1, thesis, standfirst, the portfolio lead) and mono is the
+ * chassis's metadata voice (the §6.1 label primitive, rendered in Plex Mono
+ * on all six sites). A folio is metadata about the reading path, not part of
+ * it — the same split NYT makes by reserving its grotesque for captions,
+ * credits and timestamps (editorial-references §2.7).
+ *
+ * It counts sections in the reading path only: `.faq`, `.related`,
+ * `.engagement` and `.portfolio-nav` each own an h2, but those are nested
+ * inside their own section element, so the `> h2` child combinator never
+ * reaches them and end-of-page furniture is not numbered.
+ *
+ * Generated text, not copy: `content: x / ''` gives it empty alternative text
+ * so assistive tech announces the heading and not "zero one". The unslashed
+ * declaration above it is the fallback for engines that reject that syntax.
+ */
+:root[data-site='agenticadlab'] main.wide > article > h2::before,
+:root[data-site='agenticadlab'] .hub-page > h2::before {
+  content: counter(chapter, decimal-leading-zero);
+  content: counter(chapter, decimal-leading-zero) / '';
+  display: block;
+  margin-bottom: var(--space-03);
+  font-family: var(--font-mono);
+  font-size: var(--label-size);
+  font-weight: var(--label-weight);
+  line-height: var(--label-lh);
+  letter-spacing: var(--track-label);
+  color: var(--cds-text-tertiary); /* #6e6d66 — 4.71:1 on #f5f4ed */
+}
+
+/*
+ * THE DROP CAP — the one place this site spends its serif on body copy.
+ * Scoped to the true lede paragraph on each template and nowhere else: on an
+ * essay, the paragraph immediately after the standfirst (`.answer-box + p`);
+ * on the homepage, `.hub-page`'s first child. A page whose body opens with a
+ * heading instead of a paragraph gets no drop cap at all, which is the
+ * correct outcome rather than a cap stranded mid-document.
+ *
+ * Float, not `initial-letter`: float is deterministic in every engine and the
+ * line count is arithmetic rather than a rendering-engine promise. Two lines
+ * by default — at the 640px body size (17px/1.65 = 28.05px lines) a
+ * 3.8em/0.82 box is 53.0px, which clears two line boxes (56.1px) and cannot
+ * reach the third. From 672px up it becomes a true three-line cap: 5.7em at
+ * 18px = 102.6px, x 0.86 = 88.2px, inside the 59.4-89.1px window where
+ * exactly three 29.7px line boxes intersect the float. Cap height
+ * (102.6 x ~0.7 = 71.8px) lands within ~2px of the third baseline, so it sits
+ * on the grid rather than near it.
+ */
+:root[data-site='agenticadlab'] main.wide > article > .answer-box + p::first-letter,
+:root[data-site='agenticadlab'] .hub-page > p:first-child::first-letter {
+  float: left;
+  margin: 0 0.06em 0 0;
+  font-family: var(--font-serif);
+  font-weight: 300;
+  font-synthesis-weight: none;
+  font-size: 3.8em;
+  line-height: 0.82;
+  color: var(--cds-text-primary); /* ink, never the accent — 16.72:1 */
+}
+
+/*
+ * METADATA IN MONO (editorial-references §2.7 — "extending it to captions,
+ * timestamps and version credits is the cheapest remaining editorial gain").
+ * Table captions and figure captions are sourcing, not prose; setting them in
+ * the chrome face is what tells a reader that without a box, an icon or a
+ * colour. Breadcrumbs are wayfinding and take the same face.
+ *
+ * Deliberately NOT uppercased: `.eyebrow` owns the uppercase register on this
+ * chassis, and a full sentence in caps is not a caption, it is shouting.
+ */
+:root[data-site='agenticadlab'] main.wide caption,
+:root[data-site='agenticadlab'] main.wide figcaption,
+:root[data-site='agenticadlab'] main.wide .illustration-placeholder__caption {
+  font-family: var(--font-mono);
+  font-size: var(--type-code-01-size); /* 14px, Code 01 */
+  line-height: var(--lh-ui);
+  letter-spacing: var(--type-code-01-tracking);
+  color: var(--cds-text-secondary); /* #5e5d59 — 5.98:1 on #f5f4ed */
+  text-align: left;
+  padding-bottom: var(--space-04);
+}
+
+:root[data-site='agenticadlab'] main.wide .breadcrumbs ol {
+  font-family: var(--font-mono);
+  font-size: var(--label-size); /* 13px */
+  letter-spacing: var(--type-code-01-tracking);
+  color: var(--cds-text-secondary);
+  margin-bottom: var(--space-06);
+}
+
+/*
+ * global.css:568-572 paints the breadcrumb separator with `--border`, which
+ * on this site is #f0eee6 — 1.05:1 on the page, i.e. a separator nobody can
+ * see, on 11 of 12 routes. It is the one consumer of the "never painted as a
+ * rule" token that is not a rule. Tertiary ink instead: 4.71:1.
+ */
+:root[data-site='agenticadlab'] main.wide .breadcrumbs li + li::before {
+  color: var(--cds-text-tertiary);
+}
+
+@media (min-width: 672px) {
+  :root[data-site='agenticadlab'] main.wide > article > .answer-box + p::first-letter,
+  :root[data-site='agenticadlab'] .hub-page > p:first-child::first-letter {
+    font-size: 5.7em;
+    line-height: 0.86;
+  }
+}
+
+/* The gutter opens. --hang becomes 96px at this breakpoint (declared in the
+   token file); these three rules are what move into it. */
+@media (min-width: 1056px) {
+  :root[data-site='agenticadlab'] main.wide > article > h2::before,
+  :root[data-site='agenticadlab'] .hub-page > h2::before {
+    position: absolute;
+    left: 0;
+    /* the heading's own padding-top plus the optical drop that puts a 13px
+       mono cap on roughly the same line as a 32px sans cap */
+    top: calc(var(--space-06) + 8px);
+    width: var(--hang);
+    margin-bottom: 0;
+  }
+
+  :root[data-site='agenticadlab'] main.wide > article > blockquote::before {
+    position: absolute;
+    left: calc(-1 * var(--hang));
+    top: 0;
+    /* out of flow, so the .22 box-collapse is no longer needed; 1 puts the
+       glyph's ink on the quote's first line */
+    line-height: 1;
+  }
+}
+
+/* ==========================================================================
+   Chrome (brief §8).
+   ========================================================================== */
+
+/*
+ * Fixes D2. Header.astro's own scoped style already sets the hover/active
+ * background to --bg-inset (= --cds-layer-02 = #e8e6dc) — that part was
+ * already correct. The measured failure was the TEXT COLOUR on top of it:
+ * global.css:183 (unscoped, plain CSS) paints that state with --accent
+ * (#a84c33), which is 4.48:1 on #e8e6dc — below the 4.5:1 floor. This rule
+ * only needs to beat that plain, unscoped selector, which it does on
+ * specificity alone; Header.astro's own scoped background rule is untouched
+ * and unaffected (different property, no conflict).
+ */
+:root[data-site='agenticadlab'] .site-header nav a:hover,
+:root[data-site='agenticadlab'] .site-header nav a[aria-current='page'] {
+  color: var(--cds-text-primary); /* 14.73:1 on #e8e6dc — was 4.48:1, FAIL */
+}
+
+/* An underline is not a left rule, so ruling 5 does not apply. */
+:root[data-site='agenticadlab'] .site-header nav a[aria-current='page'] {
+  text-decoration: underline;
+  text-decoration-color: var(--site-accent);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 6px;
+}
+
+/*
+ * Brand mark — Header.astro:158 resolves min(var(--radius), 50%) -> 7px on a
+ * 14px box -> a circle, the same shape adcpexplorer's 24px pill produces.
+ * Break the tie without a new colour: hollow it out — a terracotta ring on
+ * the site whose separation mechanic IS the ring. 5.32:1 on #faf9f5, well
+ * over the 3:1 non-text floor. global.css's `.brand-mark{background:
+ * var(--accent)}` is unscoped plain CSS; this selector out-specifies it.
+ */
+:root[data-site='agenticadlab'] .brand-mark {
+  background: transparent;
+  box-shadow: inset 0 0 0 2px var(--site-accent);
+}
+
+/*
+ * Links: accent lives in the underline, not the text (brief §3.2/§5). Text
+ * colour already reaches `a` via the --link-color hook global.css's `a` rule
+ * already reads (`color: var(--link-color, var(--accent))`); the underline
+ * colour has no such hook in global.css, so it is set directly here.
+ *
+ * The underline is now specified rather than left to the UA: a 1px rule at an
+ * em-relative offset, so a link inside 18px prose and a link inside the 32px
+ * serif portfolio lead carry proportionally the same mark instead of the same
+ * absolute one. `text-decoration-skip-ink: auto` is the browser default and is
+ * left alone — descenders should break this line, that is the point of setting
+ * it a full 0.18em clear of the baseline.
+ */
+:root[data-site='agenticadlab'] a {
+  text-decoration-color: var(--link-underline);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.18em;
+}
+
+/* Reduced motion — global.css:57 sets scroll-behavior: smooth with no guard.
+   Fixable locally because data-site lives on <html>. Flagged to the
+   orchestrator as a shared-layer issue affecting all six sites; see the
+   final report. */
+@media (prefers-reduced-motion: reduce) {
+  html[data-site='agenticadlab'] {
+    scroll-behavior: auto;
+  }
+}
+
+/*
+ * §9.7 gives the hub the one Sans (non-mono) AnswerBox label in the
+ * portfolio. Dormant today — zero `term=` usages on this site (grepped) —
+ * but global.css:444 hardcodes `.answer-term{font-family:var(--font-mono)}`
+ * unconditionally, so the override is left in place for whoever adds one.
+ */
+:root[data-site='agenticadlab'] .answer-term {
+  font-family: var(--font-sans);
+}

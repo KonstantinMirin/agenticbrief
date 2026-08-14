@@ -1,0 +1,193 @@
+---
+/**
+ * IllustrationPlaceholder.astro
+ *
+ * A slot for illustration art that does not exist yet
+ * (design-research.md §6; design-system-spec.md §7 per-site "Illustration" rows).
+ * Today none of the six sites ship imagery of any kind — this is net-new
+ * surface (research §6, verified: no <img>, no inline SVG, no illustration
+ * component anywhere in the repo before this file).
+ *
+ * WHAT THIS IS: a VISIBLE, self-documenting, token-styled reservation of
+ * layout space. It is the point that these look like empty slots — the art
+ * has not been generated yet. It is not a fake illustration; per the
+ * claude-design "dignified degrade" rule it stays typographic/abstract, never
+ * an elaborate placeholder SVG pretending to be art.
+ *
+ * WHY A DIV, NOT AN <IMG>: no raster asset exists yet, so there is nothing to
+ * point a `src` at, and `astro:assets`/`sharp` is not wired into any site
+ * today (`sharp` exists only for OG generation, research §7.6/§8.2 note) —
+ * introducing an image pipeline for a component that ships zero pixels would
+ * be a new dependency for no reason. Zero JS, zero bytes beyond this markup.
+ *
+ * ACCESSIBILITY MODEL: `role="img"` + `aria-label={alt}` on the wrapper tells
+ * assistive tech to treat the whole node as a single image and to announce
+ * ONLY `alt` — every other child (the "Illustration slot" eyebrow, the slug,
+ * the truncated prompt preview) is a sighted-only affordance for editors and
+ * is suppressed from the accessibility tree by that same role. The FULL
+ * generation prompt lives in `data-illustration-prompt`: a data attribute is
+ * inert to screen readers by construction, yet greppable and visible in
+ * view-source (research §6.4). `alt` must stay short and human — never the
+ * raw prompt — because a screen reader user should not sit through
+ * paragraphs of prompt-engineering jargon.
+ *
+ * CLS: the wrapper's `aspect-ratio` (from the required `ratio` prop) reserves
+ * its box before any art exists, so swapping in a real `<img>`/`<Image>`
+ * later at the same aspect ratio causes zero layout shift. `ratio` is
+ * explicit on every call site (no auto-detection from `data-site`) — see
+ * design-system-spec.md §7 / design-research.md §6.5 for each site's default
+ * ratio and pass it explicitly there; this component does not guess it.
+ *
+ * SWAP PROCEDURE when real art lands (research §6.4): replace this component
+ * with a real `<img>`/`<Image>` using the SAME `alt` string, drop
+ * `data-illustration-prompt`, and wrap in `<figure><figcaption>` only on
+ * sites whose voice wants a visible caption (agenticadlab, whatisagenticbuying
+ * — editorial) — not on the terser docs sites (adcpexplorer, aampexplorer).
+ *
+ * STYLE: consumes tokens only (`--accent`, `--bg-subtle`, `--border`,
+ * `--fg-muted`, `--font-mono`, `--card-radius`/`--radius`, the label
+ * primitive `--label-*`/`--track-label`), so the same component reads as
+ * "agenticadlab" or "adtechglossary" purely from the `data-site` attribute
+ * BaseLayout already sets on `<html>` — no per-site variant of this file.
+ */
+
+export interface Props {
+  /**
+   * Full generation prompt (style block + interpolated content), matching
+   * the catalogue entry's `base_prompt` in /srv/ws/out/illustration-prompts.md.
+   * Carried verbatim in `data-illustration-prompt` so the slot is
+   * self-documenting and greppable. NOT rendered as visible or accessible
+   * text — see the accessibility note above.
+   */
+  prompt: string
+  /**
+   * Short, human, accessibility-grade description of what the finished
+   * illustration will show — a sentence, not prompt jargon. This is the
+   * only prompt-adjacent string a screen reader announces.
+   */
+  alt: string
+  /**
+   * Catalogue key for this slot, matching its entry in
+   * illustration-prompts.md, e.g. "agenticadlab/index/hub-tension". Shown as
+   * a sighted-only label and used to build a stable DOM id.
+   */
+  slug: string
+  /**
+   * CSS `aspect-ratio` value, e.g. `"16 / 9"`, `"4 / 3"`, `"1 / 1"`. Required:
+   * pass the per-site default from design-research.md §6.5 (agenticadlab
+   * 16:9/3:2, briefgateway wide/4:3, adcpexplorer/aampexplorer 4:3 or 1:1,
+   * adtechglossary near-square 1:1, whatisagenticbuying wide) or a
+   * page-specific override. Reserves the box; see the CLS note above.
+   */
+  ratio: string
+  /**
+   * Optional visible caption. Per the swap procedure, only agenticadlab and
+   * whatisagenticbuying's editorial voice wants a caption today — most
+   * callers should omit this and let `alt` carry the description.
+   */
+  caption?: string
+}
+
+const { prompt, alt, slug, ratio, caption } = Astro.props
+
+const PREVIEW_MAX = 160
+const preview = prompt.length > PREVIEW_MAX ? `${prompt.slice(0, PREVIEW_MAX).trimEnd()}…` : prompt
+---
+
+<figure class="illustration-placeholder-figure">
+  <div
+    class="illustration-placeholder"
+    style={`aspect-ratio: ${ratio}`}
+    role="img"
+    aria-label={alt}
+    id={`illustration-${slug}`}
+    data-illustration-slug={slug}
+    data-illustration-prompt={prompt}
+  >
+    <span class="illustration-placeholder__eyebrow" aria-hidden="true">Illustration slot</span>
+    <span class="illustration-placeholder__slug" aria-hidden="true">{slug}</span>
+    <p class="illustration-placeholder__preview" aria-hidden="true">{preview}</p>
+  </div>
+  {caption && <figcaption class="illustration-placeholder__caption">{caption}</figcaption>}
+</figure>
+
+<style>
+  .illustration-placeholder-figure {
+    margin: var(--space-06, 1.5rem) 0;
+  }
+
+  .illustration-placeholder {
+    box-sizing: border-box;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-02, 0.25rem);
+    padding: var(--space-05, 1rem);
+    text-align: center;
+    overflow: hidden;
+
+    /* Site personality, purely from tokens — no per-site CSS anywhere. */
+    background: var(--bg-subtle);
+    border: 1px dashed var(--accent);
+    border-radius: var(--card-radius, var(--radius));
+    color: var(--fg-muted);
+
+    /* An abstract, cheap-to-paint "sketch" texture — a diagonal hatch, not an
+       illustration. Pure CSS gradient, zero bytes, themed off the same
+       accent as the border so it reads as the SAME slot at every site. */
+    background-image: repeating-linear-gradient(
+      -45deg,
+      color-mix(in srgb, var(--accent) 6%, transparent) 0,
+      color-mix(in srgb, var(--accent) 6%, transparent) 1px,
+      transparent 1px,
+      transparent 12px
+    );
+  }
+
+  .illustration-placeholder__eyebrow {
+    font-family: var(--font-mono);
+    font-size: var(--label-size, 13px);
+    font-weight: var(--label-weight, 600);
+    line-height: var(--label-lh, 1.4);
+    text-transform: var(--label-transform, uppercase);
+    letter-spacing: var(--track-label, 1px);
+    color: var(--accent);
+  }
+
+  .illustration-placeholder__slug {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--fg-muted);
+    word-break: break-word;
+  }
+
+  .illustration-placeholder__preview {
+    margin: 0;
+    max-width: 42ch;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    line-height: var(--lh-ui, 1.5);
+    color: var(--fg-muted);
+    opacity: 0.7;
+  }
+
+  .illustration-placeholder__caption {
+    margin-top: var(--space-02, 0.25rem);
+    font-family: var(--font-sans);
+    font-size: 0.875rem;
+    line-height: var(--lh-ui, 1.5);
+    color: var(--fg-muted);
+    text-align: center;
+  }
+
+  /* Respect reduced-motion / reduced-transparency preferences: the hatch is
+     decorative, so drop it rather than fight either media feature. */
+  @media (prefers-contrast: more) {
+    .illustration-placeholder {
+      background-image: none;
+      border-style: solid;
+    }
+  }
+</style>

@@ -1,0 +1,701 @@
+/**
+ * whatisagenticbuying — site stylesheet
+ * EXPLAINER, light magazine longform (Bloomberg / Pudding register).
+ *
+ * ============================================================================
+ * THE EDITORIAL MOVE, in one sentence
+ * ============================================================================
+ * A 62ch text column pinned hard LEFT with a deliberately open right field,
+ * where the only things allowed to break the measure are the rules, the 96px
+ * headline, the pull-quote and the tables — so the page's structure is legible
+ * before a word is read.
+ *
+ * The one-line law everything below implements:
+ *
+ *     RULES RUN THE FULL WIDTH. TEXT NEVER DOES.
+ *
+ * Sourced from /srv/ws/out/editorial-references.md: §2.9 (asymmetric,
+ * rule-anchored whitespace — "the break carries the whitespace, not a padding
+ * box"), §2.3 (hairline as the SOLE structural chrome, 1px low-contrast
+ * neutral, 2px reserved for a handful of emphasis dividers — Monocle's 30+
+ * `border-top`/`border-bottom` hairlines between sections), §2.12
+ * (graphic/prose alternation at SECTION level), §2.14 (one heavy display face
+ * used sparingly at large size, doing the work a hero illustration does on a
+ * SaaS page), §2.7 (two-role type system — Plex Sans carries the reading path,
+ * Plex Mono carries EVERY piece of metadata and chrome), §1 (boxless
+ * hierarchy, warm-off-black avoided here in favour of Carbon's #161616 since
+ * agenticadlab owns the warm register).
+ *
+ * ============================================================================
+ * DIFFERENTIATION — defended against each sibling BY NAME
+ * ============================================================================
+ * Dominant axis: 6, display-scale drama (96px at -0.03em against an 11px mono
+ * label = 8.7x). Secondary: the two-tier rule system + the open right field.
+ * Ground is un-inverted Carbon White, shared by design — every other ground
+ * value in the portfolio is claimed, and this site's identity is type, not
+ * layering. Read live from the five sibling token files, not from the spec:
+ *
+ *  - vs briefgateway (the flagged near-collision: also #ffffff, also
+ *    un-inverted). briefgateway is achromatic by identity, 6px radius, its
+ *    display is 48px WEIGHT 300, its separation mechanic is a Stripe-Elements
+ *    field shadow, and its shape is a centred 640px form column. Here: a
+ *    magenta accent, 3px radius, 96px WEIGHT 600 at -0.03em (2x its display
+ *    size, opposite weight pole), zero shadows anywhere, and a flush-left
+ *    column with an open right field. Six axes, no overlap.
+ *  - vs adcpexplorer (also #ffffff). adcp is 24px PILL chrome on a 3-region
+ *    4/8/4 grid with a nav tree and a sticky TOC, prose at 1.75 leading capped
+ *    at 48rem, label tracking 0.6px, green. Here: 3px radius, NO rail of any
+ *    kind, 1.65 leading, 62ch, label tracking 1.8px (3x adcp's), magenta. At a
+ *    squint adcp is three columns of furniture; this is one column and a
+ *    headline.
+ *  - vs aampexplorer. aamp's whole identity is the #161616 chrome band — two
+ *    grounds on screen at once. This site has exactly one ground and no band;
+ *    that pair used to be "both put dark on screen" and now shares nothing.
+ *  - vs adtechglossary. glossary INVERTS (page #f4f4f4, surfaces #ffffff), is
+ *    0px radius, and is the portfolio's FLATTEST scale (h1 32px/400, ~1.8x
+ *    range, zero display tracking). This is the loud pole against that flat
+ *    pole: 96px/600 at -0.03em, 8.7x range. The two are the extremes of the
+ *    same axis, deliberately.
+ *  - vs agenticadlab. Warm #f5f4ed parchment, Plex SERIF 300 display, dotted
+ *    chapter rules, 8px radius, terracotta, airy 96px section spacing. Here:
+ *    cool white, Plex Sans 600 display, solid rules, 3px, magenta, medium
+ *    rhythm. The only shared mechanic is "a big headline", and the faces,
+ *    weights and grounds are opposite.
+ *
+ * ============================================================================
+ * CASCADE NOTES (load-bearing — do not "clean up")
+ * ============================================================================
+ * Imported by index.astro / [slug].astro / 404.astro AFTER the DocPage import,
+ * so it lands after global.css.
+ *
+ * Header.astro and PageLayout.astro carry Astro-scoped styles compiled to
+ * roughly (0,2,0) plus a hashed data-astro-cid attribute, with
+ * non-deterministic bundle order against this page-level import. Every rule
+ * below is written at `:root[data-site='whatisagenticbuying'] …` (0,2,0 base
+ * plus the rest of the selector), never the bare `[data-site=…] …` form, so it
+ * reliably outranks the scoped component styles regardless of load order.
+ *
+ * Every contrast figure quoted inline was recomputed this session against the
+ * LIGHT ground; the full measured table lives in
+ * packages/design-tokens/src/sites/whatisagenticbuying.css.
+ *
+ * Order: masthead → breadcrumb dateline → the grid → page head (h1 +
+ * standfirst) → section rhythm → pull-quote → tables → related index →
+ * captions/code → footer → responsive patches.
+ */
+
+/* ==========================================================================
+   1. MASTHEAD — a newspaper nameplate, not a product header.
+
+   Three rows: the mono wordmark, a 2px ink rule, the section nav. Built from
+   THIS file only — Header.astro is untouched. `.header-inner` is already a
+   wrapping flexbox, so giving each child `width: 100%` puts it on its own row,
+   and the rule itself is a `::after` pseudo-element.
+
+   `order` is applied to the PSEUDO-ELEMENT only, and to the two real children
+   in their existing DOM sequence (brand 0, rule 1, nav 2 — brand already
+   precedes nav in the markup). Nothing is visually reordered against the DOM,
+   so tab order and reading order stay identical: no WCAG 1.3.2 / 2.4.3 risk.
+   ========================================================================== */
+
+:root[data-site='whatisagenticbuying'] .site-header {
+  background: var(--bg);
+  /* the hairline under the section nav; the heavy rule is the ::after below */
+  border-bottom: var(--rule-hair);
+  box-shadow: none;
+}
+
+:root[data-site='whatisagenticbuying'] .header-inner {
+  align-items: flex-start;
+  row-gap: 0.85rem;
+  padding: 1.5rem 1.25rem 0.5rem;
+}
+
+:root[data-site='whatisagenticbuying'] .brand {
+  width: 100%;
+  order: 0;
+  gap: 0.5em;
+}
+
+/* The nameplate rule. `width: 100%` rather than `flex-basis: 100%` so it still
+   spans when global.css:773 flips `.header-inner` to `flex-direction: column`
+   at <=640px, where `flex-basis` would resolve against the cross axis. A
+   pseudo-element is not focusable and carries no accessible name, so giving it
+   an `order` cannot disturb reading or focus sequence. */
+:root[data-site='whatisagenticbuying'] .header-inner::after {
+  content: '';
+  order: 1;
+  width: 100%;
+  height: 0;
+  border-top: var(--rule-major); /* 2px #161616 */
+}
+
+:root[data-site='whatisagenticbuying'] .site-header nav[aria-label='Primary'] {
+  width: 100%;
+  order: 2;
+}
+
+/* The signature opener: 22 characters of "What Is Agentic Buying" in Plex Mono
+   at clamp(22px, 3.6vw, 42px) is the first painted text on every page — this
+   is what earns the site's Mono preload, and it is the portfolio's only mono
+   display (spec §7.2 "signature opener"; editorial-references.md §2.7, the
+   metadata-face split, executed with mono instead of a grotesque). */
+:root[data-site='whatisagenticbuying'] .brand-name {
+  font-family: var(--font-mono);
+  font-weight: 400;
+  font-size: var(--signature-opener-size);
+  line-height: 1.19;
+  letter-spacing: -0.01em;
+  color: var(--fg); /* #161616 on #ffffff — 18.10:1 */
+}
+
+/* The block caret: a terminal cursor ahead of a monospaced wordmark, not a
+   bullet and not an icon. This is the site's ONE memorable device and the only
+   place the accent appears as a fill (editorial-references.md §1's Hearst
+   note: radical colour restraint plus one memorable device). Non-text UI, so
+   the 3:1 floor applies. */
+:root[data-site='whatisagenticbuying'] .brand-mark {
+  width: 0.45em;
+  height: 0.9em;
+  font-size: var(--signature-opener-size);
+  border-radius: var(--radius); /* 3px */
+  background: var(--accent); /* #b3005c on #ffffff — 6.84:1, floor 3:1 */
+}
+
+/* Section nav in the mono metadata face at the site's signature +1.8px
+   tracking. No pill, no hover fill, flush-left — beats Header.astro's scoped
+   background/radius rules at (0,2,0); this selector clears (0,4,2). */
+:root[data-site='whatisagenticbuying'] .site-header nav[aria-label='Primary'] ul {
+  gap: 0 1.6rem;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: var(--track-label); /* 1.8px */
+}
+
+:root[data-site='whatisagenticbuying'] .site-header nav[aria-label='Primary'] a {
+  padding-left: 0;
+  padding-right: 0;
+  border-radius: 0;
+  background: none;
+  color: var(--fg-muted); /* #525252 on #ffffff — 7.81:1 */
+}
+
+:root[data-site='whatisagenticbuying'] .site-header nav a:hover,
+:root[data-site='whatisagenticbuying'] .site-header nav a[aria-current='page'] {
+  background: none;
+  color: var(--accent); /* #b3005c on #ffffff — 6.84:1 */
+}
+
+/* BLOCKED, and verified inert as shipped — this is the pill CTA of spec ruling
+   7, styled as The Verge's own mechanic (a hairline pill border, never a fill;
+   design-research §3.6). Every route on this site renders through
+   packages/shared-ui/src/DocPage.astro, whose Props interface has no `current`
+   field and which therefore never forwards one to PageLayout, so
+   `aria-current="page"` is emitted nowhere and this selector matches nothing.
+   DocPage.astro is shared-layer and out of this site's edit scope. Left in as
+   correct, zero-risk groundwork; reported BLOCKED rather than silently claimed
+   as fixed. The border colour was re-measured for the light ground: the old
+   #c6c6c6 alias is 1.71:1 and fails the 3:1 non-text-UI floor for an
+   interactive state boundary. */
+:root[data-site='whatisagenticbuying']
+  .site-header
+  nav[aria-label='Primary']
+  a[aria-current='page'] {
+  border: 1px solid var(--pill-border); /* #767676 on #ffffff — 4.54:1, floor 3:1 */
+  border-radius: var(--cta-radius); /* 99999px */
+  padding-inline: 0.75rem;
+}
+
+/* ==========================================================================
+   2. BREADCRUMBS → the dateline. 11px mono, uppercase, +1.8px — the same
+   metadata face as the nav, the table headers and the related-index marker.
+   ========================================================================== */
+
+:root[data-site='whatisagenticbuying'] .breadcrumbs ol {
+  /* The 44px hit target below makes the <a>'s <li> taller than the <li> holding
+     the plain final crumb, so without this the dateline sits on two baselines. */
+  align-items: center;
+  margin-bottom: var(--space-06);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: var(--track-label);
+  text-transform: uppercase;
+  color: var(--fg-muted); /* #525252 on #ffffff — 7.81:1 */
+}
+
+/* The "/" is rendered text, so 4.5:1 applies with no decorative exemption.
+   global.css paints it in `var(--border)`, which on this site is #c6c6c6 —
+   1.71:1, a fail. Carbon Gray 50 #8d8d8d, the obvious replacement, is 3.32:1
+   and also fails. #767676 clears it. */
+:root[data-site='whatisagenticbuying'] .breadcrumbs li + li::before {
+  color: var(--crumb-separator); /* #767676 on #ffffff — 4.54:1 */
+}
+
+/* A dateline is not a body link: it takes the metadata ink and no underline at
+   rest, which is the standard breadcrumb pattern (position in the trail, not
+   colour, carries the affordance — so WCAG 1.4.1's "colour alone" clause,
+   which is about links inside a text block, is not engaged). Both states are
+   still measured: #525252 is 7.81:1 and #b3005c is 6.84:1 on #ffffff. */
+:root[data-site='whatisagenticbuying'] .breadcrumbs a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: var(--fg-muted); /* 7.81:1 */
+  text-decoration: none;
+}
+
+:root[data-site='whatisagenticbuying'] .breadcrumbs a:hover,
+:root[data-site='whatisagenticbuying'] .breadcrumbs a:focus-visible {
+  color: var(--accent); /* 6.84:1 */
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+:root[data-site='whatisagenticbuying'] .breadcrumbs a:focus-visible {
+  outline: none;
+  border-radius: var(--radius);
+  box-shadow: var(--focus-ring);
+}
+
+/* ==========================================================================
+   3. THE GRID — one text track pinned flush left, one open field to its right.
+
+   [full-start text-start] min(100%, 62ch) [text-end] minmax(0, 1fr) [full-end]
+
+   At 1180px (main.wide, less 2x20px padding) that is a ~670px column with a
+   ~470px open field — a 59/41 split, not a centred page with symmetric
+   gutters. Every child sits in `text` by default; the five element types
+   listed below break out to `full`. `column-gap: 0` because nothing is ever
+   PLACED in the right track — the only things that reach it are full-span
+   children, for which a gap would be an invisible seam inside a continuous box
+   (and would break a continuous rule).
+
+   The breakpoint is 672px (Carbon `--bp-md`), not 1056px: the flush-left
+   asymmetry is the identity and it survives to tablet. Below 672px the grid is
+   off and every child is a single full-width column — the rules still run the
+   full content width, so the law holds at every viewport.
+   ========================================================================== */
+
+@media (min-width: 672px) {
+  :root[data-site='whatisagenticbuying'] main article {
+    display: grid;
+    grid-template-columns:
+      [full-start text-start] min(100%, var(--measure))
+      [text-end] minmax(0, 1fr) [full-end];
+    column-gap: 0;
+  }
+
+  :root[data-site='whatisagenticbuying'] main article > * {
+    grid-column: text;
+  }
+
+  :root[data-site='whatisagenticbuying'] main article > h1,
+  :root[data-site='whatisagenticbuying'] main article > h2,
+  :root[data-site='whatisagenticbuying'] main article > .answer-box,
+  :root[data-site='whatisagenticbuying'] main article > blockquote,
+  :root[data-site='whatisagenticbuying'] main article > table,
+  :root[data-site='whatisagenticbuying'] main article > .comparison,
+  :root[data-site='whatisagenticbuying'] main article > figure,
+  :root[data-site='whatisagenticbuying'] main article > .illustration-placeholder-figure,
+  :root[data-site='whatisagenticbuying'] main article > .faq,
+  :root[data-site='whatisagenticbuying'] main article > .related {
+    grid-column: full;
+  }
+
+  /* An h2 spans `full` so its rule does, but its TEXT must still stop at the
+     column. `ch` resolves against the element's own font size, so 62ch inside a
+     30px h2 is 1116px — hence --column-cap, the px twin of the measure. One
+     declaration, no pseudo-element, no `100vw` overflow trick (which would need
+     `overflow-x: hidden` on an ancestor and break the mobile table's own scroll
+     container, global.css:598-615). */
+  :root[data-site='whatisagenticbuying'] main article > h2 {
+    display: grid;
+    grid-template-columns: minmax(0, var(--column-cap));
+  }
+}
+
+/* ==========================================================================
+   4. PAGE HEAD — 96px headline, then a 28px standfirst, closed by a hairline.
+   ========================================================================== */
+
+/* The one named type-scale exemption in the portfolio (spec ruling 9): 96px at
+   -0.03em, weight 600. On a light ground this is what does the work a hero
+   illustration does on a SaaS page (editorial-references.md §2.14) — it is the
+   image, which is also why the index page is an explicit illustration refusal. */
+:root[data-site='whatisagenticbuying'] main h1 {
+  margin: var(--space-06) 0 var(--space-07); /* 24px / 32px */
+  max-width: none;
+}
+
+/* The AnswerBox is NOT A BOX here. Its 40 words become the deck: 28px, full
+   ink, directly under the headline, closed by a full-width hairline that
+   separates page head from body. Hierarchy from scale, space and rule — never
+   a panel (editorial-references.md §1, boxless hierarchy; design-research §4.3
+   repair rule for compositional tells).
+
+   Structural precedence is untouched (spec §12 item 5 / ruling 5): <AnswerBox>
+   still renders before body prose and `.answer-text` is still the first <p> an
+   extraction pipeline meets. The 4px accent rail stays deleted; there is no
+   rule of any weight on the left. */
+:root[data-site='whatisagenticbuying'] main .answer-box {
+  margin: 0 0 var(--space-layout-06); /* 80px */
+  padding: 0 0 var(--space-08); /* 40px below the deck, above its rule */
+  background: none;
+  border: none;
+  border-bottom: var(--rule-hair);
+  border-radius: 0;
+  box-shadow: none;
+}
+
+:root[data-site='whatisagenticbuying'] main .answer-text {
+  max-width: var(--column-cap); /* ~40ch at 28px — a deck measure, not a body measure */
+  font-size: clamp(22px, 5vw, 28px);
+  font-weight: 400;
+  line-height: 1.35;
+  letter-spacing: -0.015em;
+  color: var(--fg); /* #161616 on #ffffff — 18.10:1 */
+}
+
+/* ==========================================================================
+   5. SECTION RHYTHM — the full-width hairline above every h2 is the entire
+   pacing mechanism on a page with no rail, no TOC and no numbering. Monocle
+   uses 1px `border-top`/`border-bottom` between sections 30+ times on one page
+   (editorial-references.md §2.3); the longest page here has fifteen h2s, so
+   this is the same device at the same density.
+   ========================================================================== */
+
+:root[data-site='whatisagenticbuying'] main h2 {
+  margin: var(--space-layout-06) 0 var(--space-05); /* 80px above / 16px below */
+  padding-top: var(--space-06); /* 24px between the rule and the heading */
+  border-top: var(--rule-hair); /* 1px #c6c6c6 — decorative divider, 1.71:1 */
+}
+
+:root[data-site='whatisagenticbuying'] main h3 {
+  margin: var(--space-08) 0 var(--space-04); /* 40px / 12px */
+}
+
+:root[data-site='whatisagenticbuying'] main p,
+:root[data-site='whatisagenticbuying'] main li {
+  text-wrap: pretty;
+}
+
+/* Plex Sans ships 300/400/600 only (weight 700 is intentionally absent,
+   ibm.md:107). `<strong>` defaults to 700 and would ask the variable font for
+   a weight outside its axis range, inviting synthetic bold. Pinned to the
+   ceiling. */
+:root[data-site='whatisagenticbuying'] main strong,
+:root[data-site='whatisagenticbuying'] main b {
+  font-weight: 600;
+}
+
+/* ==========================================================================
+   6. LINKS — the accent's main job. Colour on interactive surfaces only,
+   never on chrome, headings or dividers (editorial-references.md §1,
+   "colour is instrumentation").
+   ========================================================================== */
+
+:root[data-site='whatisagenticbuying'] main a {
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
+:root[data-site='whatisagenticbuying'] main a:hover {
+  color: var(--accent-bright); /* #8f1148 on #ffffff — 8.97:1 */
+}
+
+:root[data-site='whatisagenticbuying'] main a:focus-visible {
+  outline: none;
+  border-radius: var(--radius);
+  box-shadow: var(--focus-ring); /* 1px #525252 (7.81:1) + 4px #00000029 halo */
+}
+
+/* ==========================================================================
+   7. PULL-QUOTE — the second thing allowed to break the measure. No rule, no
+   glyph, no ground: it is distinguished purely by scale and by overhanging the
+   column, which is the whole point of keeping the right field open. (The
+   oversized-glyph-plus-short-rule device of editorial-references.md §2.8 is
+   agenticadlab's; this site does not reuse it.)
+
+   40ch at 32px is ~768px against the ~670px text column — a deliberate,
+   visible ~100px overhang that still reads as a line of type, not a banner.
+   ========================================================================== */
+
+:root[data-site='whatisagenticbuying'] main blockquote {
+  margin: var(--space-layout-05) 0; /* 64px */
+  padding: 0;
+  border-left: none;
+  max-width: 44ch;
+  font-size: clamp(24px, 3.2vw, 32px);
+  font-weight: 400;
+  line-height: 1.3;
+  letter-spacing: -0.015em;
+  color: var(--fg); /* full ink, not muted — a pull-quote is emphasis. 18.10:1 */
+}
+
+:root[data-site='whatisagenticbuying'] main blockquote p:last-child {
+  margin-bottom: 0;
+}
+
+/* ==========================================================================
+   8. TABLES — the Compare secondary, 71 rows across three pages, and the
+   third thing allowed to break the measure. A newspaper table: mono column
+   heads, one ink rule under the head, hairlines between rows, no vertical
+   rules, no fills, first column flush with the text column's left edge.
+   ========================================================================== */
+
+/* A markdown table is emitted bare, with no margin at all, so without this the
+   last row's hairline butts straight into the next paragraph. A table here is a
+   section-level beat (editorial-references.md §2.12) and takes the asymmetric
+   break rhythm: more space below than above, so it reads as belonging to the
+   prose that introduced it. Also overrides `.comparison`'s chassis 1.8rem. */
+:root[data-site='whatisagenticbuying'] main table,
+:root[data-site='whatisagenticbuying'] main .comparison {
+  margin: var(--space-08) 0 var(--space-layout-04); /* 40px above / 48px below */
+}
+
+:root[data-site='whatisagenticbuying'] main th,
+:root[data-site='whatisagenticbuying'] main td {
+  border: none;
+  border-bottom: var(--rule-hair); /* 1px #c6c6c6 */
+  padding: 12px 16px;
+  vertical-align: top;
+}
+
+:root[data-site='whatisagenticbuying'] main th:first-child,
+:root[data-site='whatisagenticbuying'] main td:first-child {
+  padding-left: 0;
+}
+
+:root[data-site='whatisagenticbuying'] main thead th {
+  background: none;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: var(--track-label); /* 1.8px */
+  text-transform: uppercase;
+  color: var(--fg-muted); /* #525252 on #ffffff — 7.81:1 */
+  vertical-align: bottom;
+  border-bottom: var(--rule-major); /* 2px #161616 */
+}
+
+:root[data-site='whatisagenticbuying'] main tbody th[scope='row'] {
+  background: none;
+  font-weight: 600;
+  color: var(--fg); /* 18.10:1 */
+}
+
+/* No zebra striping. Carbon prescribes --cds-layer-01 for alternating rows;
+   #f4f4f4 on #ffffff is 1.06:1, so on this ground the bands would read as a
+   printing fault rather than a system, and a filled row contradicts the
+   boxless discipline the rest of the page keeps. Declared absent as a
+   decision, not an oversight — do not add an nth-child rule here. */
+
+@media (min-width: 641px) {
+  :root[data-site='whatisagenticbuying'] main table {
+    font-size: 16px;
+  }
+}
+
+/* ==========================================================================
+   9. RELATED INDEX — the index page's Explore secondary, set as a magazine
+   contents page: a 2px ink rule, an 11px mono marker, then two columns of
+   headline-weight links with a dash-led standfirst under each.
+   ========================================================================== */
+
+:root[data-site='whatisagenticbuying'] .related {
+  margin-top: var(--space-layout-07); /* 96px */
+  padding-top: var(--space-06);
+  border-top: var(--rule-major); /* 2px #161616 */
+}
+
+:root[data-site='whatisagenticbuying'] .related h2 {
+  margin: 0 0 var(--space-06);
+  padding-top: 0;
+  border-top: none;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: var(--track-label);
+  text-transform: uppercase;
+  color: var(--fg-muted); /* 7.81:1 — a section marker, not a heading */
+}
+
+@media (min-width: 1056px) {
+  :root[data-site='whatisagenticbuying'] .related ul {
+    columns: 2;
+    column-gap: 64px;
+  }
+}
+
+:root[data-site='whatisagenticbuying'] .related li {
+  break-inside: avoid;
+  margin-bottom: var(--space-06);
+}
+
+/* Two tiers, derived from markup RelatedLinks.astro already emits:
+   rel="noopener" appears only on external (off-site) links. On-site rows are
+   the primary tier at headline weight; off-site rows drop to body scale and
+   muted ink. Titles are NOT accent-coloured — a column of magenta headlines
+   would be colour-as-identity (slop tell 2) and would blow the accent budget
+   in one block. */
+:root[data-site='whatisagenticbuying'] .related a {
+  display: block;
+  padding: 6px 0;
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  color: var(--fg); /* 18.10:1 */
+  text-decoration: none;
+}
+
+:root[data-site='whatisagenticbuying'] .related a[rel~='noopener'] {
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 1.5;
+  letter-spacing: normal;
+  color: var(--fg-muted); /* 7.81:1 */
+}
+
+:root[data-site='whatisagenticbuying'] .related a:hover {
+  color: var(--accent); /* 6.84:1 */
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+:root[data-site='whatisagenticbuying'] .related a:focus-visible {
+  outline: none;
+  border-radius: var(--radius);
+  box-shadow: var(--focus-ring);
+}
+
+/* The " — note" span is a SIBLING of the block-level <a>, so it naturally
+   falls to its own line: the dash-led standfirst. */
+:root[data-site='whatisagenticbuying'] .related .muted {
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+/* ==========================================================================
+   10. CAPTIONS AND CODE — the rest of the mono metadata register.
+   ========================================================================== */
+
+/* Terse caption below the figure, methodology deferred (editorial-references
+   §2.13) — set in the mono metadata face, capped at the column so a caption
+   never runs the full breakout width of the figure above it. Groundwork for
+   the swap to real art (IllustrationPlaceholder.astro's documented swap
+   procedure gives this site a visible <figcaption>). */
+:root[data-site='whatisagenticbuying'] main figcaption,
+:root[data-site='whatisagenticbuying'] main caption {
+  max-width: var(--column-cap);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 1.5;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--fg-muted); /* 7.81:1 */
+}
+
+:root[data-site='whatisagenticbuying'] main figcaption {
+  margin-top: var(--space-04);
+}
+
+/* One markdown file wraps a link in inline code. Both readings now pass:
+   #b3005c on the #e0e0e0 chip is 5.18:1 and #b3005c on #ffffff is 6.84:1 — so
+   unlike the old dark ground this is a typographic call, not a contrast fix. A
+   grey chip interrupting an underlined link is the uglier of the two. */
+:root[data-site='whatisagenticbuying'] main a code {
+  background: none;
+  padding: 0;
+  color: inherit;
+}
+
+/* Plex Mono's smaller x-height reads undersized at the chassis 0.88em beside
+   Plex Sans. Scoped to inline code only — the `pre code` block role (never
+   rendered here; 0 fenced blocks across this site's five markdown files) keeps
+   its own 1em rule from global.css untouched. */
+:root[data-site='whatisagenticbuying'] main :not(pre) > code {
+  font-size: 0.92em;
+}
+
+/* ==========================================================================
+   11. FOOTER — flush with the canvas, no rule, 80px of space. The break
+   carries the whitespace (editorial-references.md §2.9); the related index's
+   2px rule above it is already the page's closing statement. Block headings
+   join the mono metadata register.
+   ========================================================================== */
+
+:root[data-site='whatisagenticbuying'] .site-footer {
+  background: var(--bg);
+  border-top: none;
+  margin-top: var(--space-layout-06); /* 80px */
+}
+
+:root[data-site='whatisagenticbuying'] .footer-block h2 {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  line-height: var(--label-lh);
+  letter-spacing: var(--track-label);
+  text-transform: uppercase;
+  color: var(--fg-muted); /* 7.81:1 */
+}
+
+/* ==========================================================================
+   12. RESPONSIVE PATCHES
+   ========================================================================== */
+
+/* global.css:773 flips `.header-inner` to `flex-direction: column` at <=640px.
+   The three-row nameplate already IS a column at every width, so the flip only
+   changes which axis `width`/`gap` act on. Held to row+wrap so the masthead is
+   built the same way at 390px as at 1440px. */
+@media (max-width: 640px) {
+  :root[data-site='whatisagenticbuying'] .header-inner {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  /* global.css:761 reassigns h1 -> --type-heading-02-size below 640px, which
+     would collapse the 96px display headline to 30px and delete the site's
+     dominant differentiator on mobile. Restore the exemption — the clamp's own
+     40px floor is the mobile size. */
+  :root[data-site='whatisagenticbuying'] main h1 {
+    font-size: var(--type-heading-01-size);
+  }
+
+  /* global.css:765 does the same to h2 (-> Heading 03, 22px). 30px -> 26px is
+     the intended mobile step for this site's ramp, not 22px. */
+  :root[data-site='whatisagenticbuying'] main h2 {
+    font-size: 26px;
+  }
+}
+
+@media (max-width: 671px) {
+  /* The grid is off below 672px: one full-width column, so the rules still run
+     the full content width and the law holds. Only the vertical rhythm tightens. */
+  :root[data-site='whatisagenticbuying'] main h2 {
+    margin-top: var(--space-layout-04); /* 48px */
+    padding-top: var(--space-05); /* 16px */
+  }
+
+  :root[data-site='whatisagenticbuying'] main .answer-box {
+    margin-bottom: var(--space-layout-04); /* 48px */
+    padding-bottom: var(--space-06); /* 24px */
+  }
+
+  :root[data-site='whatisagenticbuying'] main blockquote {
+    margin: var(--space-layout-04) 0; /* 48px */
+  }
+
+  :root[data-site='whatisagenticbuying'] .related {
+    margin-top: var(--space-layout-05); /* 64px */
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root[data-site='whatisagenticbuying'] {
+    scroll-behavior: auto;
+  }
+}

@@ -1,0 +1,396 @@
+---
+/**
+ * DocsTree.astro — site-owned (adcpexplorer only).
+ *
+ * The 4-of-16 nav rail (spec §4.3): <details>/<summary> per area, plus the
+ * two standalone reference pages and the one guide. Renders into
+ * PageLayout's `nav` slot on every reference page.
+ *
+ * Data-driven from the same helpers the pages themselves use
+ * (`orderedAreas`/`tasksForArea`/`operationUrl`), so the tree can never link
+ * somewhere a page was not generated — the same guarantee `operationUrl`
+ * already gives every other caller.
+ *
+ * Current-page state is read from `Astro.url.pathname` rather than passed
+ * down as a prop from every one of six page templates — one source of
+ * truth, no per-page bookkeeping to keep in sync.
+ */
+import { getCollection } from 'astro:content'
+import { publishedOnly } from '@agenticbrief/content-utils'
+import { adcp } from '@agenticbrief/protocol-data'
+import VersionTag from './VersionTag.astro'
+import { orderedAreas, tasksForArea, operationUrl } from '../lib/site'
+
+const areas = orderedAreas()
+const pathname = Astro.url.pathname.replace(/\/+$/, '') || '/'
+
+// Which area's <details> ships `open`: the area page itself, or the area
+// that owns whatever operation page is current.
+const areaFromOperationsPath = (() => {
+  const m = pathname.match(/^\/operations\/([^/]+)\/?$/)
+  if (!m) return undefined
+  return adcp.tasks.find((t) => t.slug === m[1])?.area
+})()
+const currentAreaKey =
+  pathname.match(/^\/areas\/([^/]+)/)?.[1] ?? areaFromOperationsPath ?? undefined
+
+const guides = publishedOnly(await getCollection('guides'))
+---
+
+{
+  /*
+   * Own outer <details>/<summary> (spec-review MUST-FIX 4/5): PageLayout's
+   * shared "On this page" <summary> is a hardcoded string it cannot be
+   * relabelled through a prop, and reusing it here would present the
+   * whole-site reference tree under the same label TocRail uses for the
+   * real, page-local table of contents. This wrapper is suppressed as a
+   * control at every width by default (site.css forces the shared
+   * disclosure's body permanently open) and only becomes the visible,
+   * >=44px mobile toggle below 672px — see the media queries in the style
+   * block. Same fix shape as aampexplorer's PlaneRail/`.rail-disclosure`.
+   */
+}
+<details class="docs-tree-disclosure">
+  <summary class="docs-tree-summary">AdCP reference</summary>
+  <div class="docs-tree-body">
+    <nav class="docs-tree" aria-label="AdCP reference">
+      <div class="docs-tree-header">
+        <VersionTag />
+      </div>
+
+      <ul class="docs-tree-areas">
+        {
+          areas.map((area) => {
+            const tasks = tasksForArea(area.key)
+            const isOpen = area.key === currentAreaKey
+            return (
+              <li>
+                <details open={isOpen || undefined}>
+                  <summary>
+                    <span class="docs-tree-chevron" aria-hidden="true" />
+                    <span class="docs-tree-area-title">{area.title}</span>
+                    <span class="docs-tree-count">{tasks.length}</span>
+                  </summary>
+                  <ul class="docs-tree-tasks">
+                    {tasks.map((task) => {
+                      const href = operationUrl(task)
+                      const current = href.replace(/\/+$/, '') === pathname ? 'page' : undefined
+                      return (
+                        <li>
+                          <a href={href} aria-current={current}>
+                            <code>{task.name}</code>
+                          </a>
+                        </li>
+                      )
+                    })}
+                  </ul>
+                </details>
+              </li>
+            )
+          })
+        }
+      </ul>
+
+      <ul class="docs-tree-pages">
+        <li>
+          <a href="/schemas/" aria-current={pathname === '/schemas' ? 'page' : undefined}>
+            Schemas
+          </a>
+        </li>
+        <li>
+          <a href="/discovery/" aria-current={pathname === '/discovery' ? 'page' : undefined}>
+            Discovery
+          </a>
+        </li>
+        {
+          guides.map((g) => {
+            const href = `/guides/${g.id}/`
+            const current = href === `${pathname}/` ? 'page' : undefined
+            return (
+              <li>
+                <a href={href} aria-current={current}>
+                  {g.data.title}
+                </a>
+              </li>
+            )
+          })
+        }
+      </ul>
+    </nav>
+  </div>
+</details>
+
+<style>
+  /* The outer disclosure that replaces PageLayout's shared "On this page"
+     control (see the comment above the markup). Hidden as a control at every
+     width by default; site.css forces the shared `.doc-nav-body` permanently
+     open, and `.docs-tree-body` here defaults open too — only the
+     max-width:671px block below turns it into a real, closed-by-default
+     accordion. `height: 100%` on both lets the sticky rail inside actually
+     have room to stick once site.css stretches `.doc-nav` to the row height
+     (MUST-FIX 3). */
+  .docs-tree-disclosure,
+  .docs-tree-body {
+    height: 100%;
+  }
+
+  .docs-tree-summary {
+    display: none;
+  }
+
+  .docs-tree {
+    font-size: 0.875rem;
+    /* Room for the focus ring's 4px halo, clipped otherwise by the
+       overflow-y:auto sticky rule below forcing overflow-x:auto too. */
+    padding-left: 4px;
+    margin-left: -4px;
+  }
+
+  .docs-tree-header {
+    position: sticky;
+    top: 0;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg);
+    z-index: 1;
+  }
+
+  .docs-tree-areas,
+  .docs-tree-pages {
+    list-style: none;
+    margin: 0;
+    padding: 0.5rem 0;
+  }
+
+  .docs-tree-pages {
+    border-top: 1px solid var(--border);
+  }
+
+  .docs-tree summary {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    list-style: none;
+    cursor: pointer;
+    min-height: var(--tree-row-height, 32px);
+    padding: 0 0.5rem;
+    font-weight: 600;
+    color: var(--fg);
+    border-radius: var(--radius-24);
+  }
+
+  .docs-tree summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .docs-tree summary:hover {
+    background: var(--bg-subtle);
+  }
+
+  .docs-tree summary:focus-visible {
+    outline: none;
+    box-shadow: var(--focus-ring);
+  }
+
+  /* CSS-border triangle, rotated 90deg on [open] — no SVG asset, no icon font. */
+  .docs-tree-chevron {
+    flex: none;
+    width: var(--tree-chevron-gutter, 1rem);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .docs-tree-chevron::before {
+    content: '';
+    display: block;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 4px 0 4px 6px;
+    border-color: transparent transparent transparent var(--fg-muted);
+    transition: transform 0.15s ease;
+  }
+
+  details[open] > summary .docs-tree-chevron::before {
+    transform: rotate(90deg);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .docs-tree-chevron::before {
+      transition: none;
+    }
+  }
+
+  .docs-tree-area-title {
+    flex: 1;
+  }
+
+  .docs-tree-count {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-variant-numeric: tabular-nums;
+    color: var(--fg-muted);
+  }
+
+  .docs-tree-tasks {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .docs-tree-tasks li {
+    padding-left: calc(var(--tree-chevron-gutter, 1rem) + var(--tree-indent, 0.5rem));
+  }
+
+  .docs-tree-tasks a,
+  .docs-tree-pages a {
+    display: flex;
+    align-items: center;
+    min-height: var(--tree-row-height, 32px);
+    padding: 0 0.5rem;
+    border-radius: var(--radius-24);
+    color: var(--fg-muted);
+    text-decoration: none;
+    font-family: var(--font-mono);
+  }
+
+  .docs-tree-pages a {
+    font-family: var(--font-sans);
+    font-weight: 400;
+    padding-left: 1rem;
+  }
+
+  .docs-tree-tasks a:hover,
+  .docs-tree-pages a:hover {
+    background: var(--bg-subtle);
+  }
+
+  .docs-tree-tasks a:focus-visible,
+  .docs-tree-pages a:focus-visible {
+    outline: none;
+    box-shadow: var(--focus-ring);
+  }
+
+  /* Current-page cue (MDN live behaviour): ink + weight only, no background,
+     no fill, no left rule — that's the TOC active marker's job alone. */
+  .docs-tree-tasks a[aria-current='page'],
+  .docs-tree-pages a[aria-current='page'] {
+    color: var(--fg);
+    font-weight: 600;
+  }
+
+  @media (pointer: coarse), (max-width: 671px) {
+    .docs-tree summary,
+    .docs-tree-tasks a,
+    .docs-tree-pages a {
+      min-height: 44px;
+    }
+  }
+
+  /*
+   * Companion to the same fix in site.css (see the long comment there).
+   * At >=672px this wrapper is not a control — it is suppressed by
+   * `.docs-tree-summary { display: none }` above — so it must render open
+   * even though the element ships without the `open` attribute (which is
+   * what makes it degrade correctly into a real accordion below 672px).
+   *
+   * Chrome >=131 (verified live on 151.0.7922.34) hides a closed
+   * `<details>` through `::details-content { content-visibility: hidden;
+   * block-size: 0 }`, which no descendant `display` can escape — without
+   * this, the whole nav tree was invisible on desktop. Its own rule, not
+   * merged with anything: an engine that does not know the pseudo-element
+   * drops the entire rule it appears in.
+   */
+  @media (min-width: 672px) {
+    .docs-tree-disclosure::details-content {
+      content-visibility: visible;
+      block-size: auto;
+    }
+  }
+
+  @media (min-width: 1056px) {
+    .docs-tree {
+      position: sticky;
+      top: 2rem;
+      max-height: calc(100vh - 4rem);
+      overflow-y: auto;
+    }
+  }
+
+  /* <672px: this becomes the real, closed-by-default accordion control —
+     PageLayout's own disclosure is forced permanently open at every width
+     (site.css), so this is the only toggle a mobile reader sees. */
+  @media (max-width: 671px) {
+    .docs-tree-summary {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      min-height: 44px;
+      padding: 0 0.5rem;
+      cursor: pointer;
+      list-style: none;
+      font-family: var(--font-mono);
+      font-size: var(--label-size);
+      font-weight: var(--label-weight);
+      letter-spacing: var(--track-label);
+      text-transform: var(--label-transform);
+      color: var(--fg-muted);
+      border-radius: var(--radius-24);
+    }
+
+    .docs-tree-summary::-webkit-details-marker {
+      display: none;
+    }
+
+    /* Below 672px this summary is the ONLY control that opens the whole
+       site's navigation, and it shipped with both the UA marker and the
+       webkit marker suppressed and nothing put back — a mono label with no
+       affordance at all. Reuses the tree's own CSS-border triangle rather
+       than introducing a second disclosure idiom (no SVG, no icon font, no
+       extra markup); rotation on [open] matches the area rows exactly, and
+       it is suppressed under prefers-reduced-motion for the same reason. */
+    .docs-tree-summary::before {
+      content: '';
+      flex: none;
+      width: 0;
+      height: 0;
+      border-style: solid;
+      border-width: 4px 0 4px 6px;
+      border-color: transparent transparent transparent var(--fg-muted);
+      transition: transform 0.15s ease;
+    }
+
+    .docs-tree-disclosure[open] > .docs-tree-summary::before {
+      transform: rotate(90deg);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .docs-tree-summary::before {
+        transition: none;
+      }
+    }
+
+    .docs-tree-summary:hover {
+      background: var(--bg-subtle);
+    }
+
+    .docs-tree-summary:focus-visible {
+      outline: none;
+      box-shadow: var(--focus-ring);
+    }
+
+    .docs-tree-disclosure,
+    .docs-tree-body {
+      height: auto;
+    }
+
+    .docs-tree-body {
+      display: none;
+    }
+
+    .docs-tree-disclosure[open] .docs-tree-body {
+      display: block;
+      margin-top: 0.5rem;
+    }
+  }
+</style>

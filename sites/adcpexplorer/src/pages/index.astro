@@ -1,8 +1,12 @@
 ---
-import BaseLayout from '@agenticbrief/shared-ui/BaseLayout.astro'
+import PageLayout from '@agenticbrief/shared-ui/PageLayout.astro'
 import AnswerBox from '@agenticbrief/shared-ui/AnswerBox.astro'
 import SpecSource from '@agenticbrief/shared-ui/SpecSource.astro'
 import FaqBlock from '@agenticbrief/shared-ui/FaqBlock.astro'
+import IllustrationPlaceholder from '@agenticbrief/shared-ui/IllustrationPlaceholder.astro'
+import DocsTree from '../components/DocsTree.astro'
+import TocRail from '../components/TocRail.astro'
+import '../styles/site.css'
 import { adcp } from '@agenticbrief/protocol-data'
 import {
   graph,
@@ -81,6 +85,24 @@ const url = `${BASE}/`
 const title = `AdCP Explorer — all ${totalOps} operations in Ad Context Protocol ${adcp.version}`
 const description = `All ${totalOps} Ad Context Protocol operations in release ${adcp.version}, grouped by area, with request and response fields, which operations write state and which are experimental.`
 
+// One entry per h2 this page renders, in document order — including the two
+// that come from FaqBlock/the hand-rolled Related section, so the TOC's 8
+// items match the page's actual 8 h2s exactly.
+const toc = [
+  { id: 'operations-by-area', label: 'Operations by area', depth: 2 },
+  { id: 'buyer-seller-implementation', label: 'Buyer and seller implementation', depth: 2 },
+  { id: 'every-operation', label: 'Every operation by name', depth: 2 },
+  { id: 'release', label: `Release ${adcp.version}`, depth: 2 },
+  { id: 'protocol-layers', label: 'Protocol layers', depth: 2 },
+  { id: 'response-envelope', label: 'The shared response envelope', depth: 2 },
+  { id: 'faq-heading', label: 'Frequently asked', depth: 2 },
+  { id: 'related-heading', label: 'Related', depth: 2 },
+]
+
+const ILLUSTRATION_1_PROMPT = `Visual Aesthetic: Technical diagram in a "senior engineer's whiteboard sketch" style — a digital napkin sketch, not a photograph. Line-based, 2-3px uniform stroke weight, flat 2D. Drawn straight and rigidly grid-aligned so it reads as a specification diagram rather than a loose sketch. Strict Color Palette: Background pure white #ffffff, no texture. Lines and text black #1a1a1a. Exactly ONE accent highlight, green #0a7d52, applied to a single named element. Optional #f5f5f5 light-gray fill for pencil-style shading only. Composition: maximum 7 elements, minimum 70% whitespace, comprehensible in 3 seconds. Everything is rectangles, arrows, straight lines and text labels. Aspect ratio 4:3. Negative Constraints (Forbidden): NO isometric perspective, NO 3D, NO shadows, NO gradients, NO rounded corners, NO multiple stroke weights, NO characters, stick figures, mascots or robots, NO cute icons, NO laptops, computers or hardware of any kind, NO folded-corner document icons, NO red, yellow or orange, NO green other than the single #0a7d52 accent, NO gray textured background, NO captions or title text baked into the image, NO more than 7 elements.
+
+DIAGRAM CONTENT: One large rectangle centred on the canvas, label at its top-left corner reading "AdCP response". Inside it, along the top, a horizontal band containing five stacked text rows reading exactly: "status", "task_id", "context", "push_notification_config", "…". To the LEFT of that band, outside the outer rectangle, a vertical square bracket labelled "protocol envelope — same on every operation". Below the band, still INSIDE the outer rectangle, a smaller rectangle labelled "body fields" containing two text rows reading "products" and "…". A vertical square bracket to its left labelled "this operation only". Bottom-left of the canvas, outside the outer rectangle, a small rectangle labelled "status: submitted | working" with one arrow curving right and up, re-entering the outer rectangle at the "task_id" row, the arrow labelled "poll". The accent highlight #0a7d52 is applied to the outline of the inner "body fields" rectangle ONLY; every other line is black.`
+
 const jsonLd = graph([
   organizationNode(),
   personNode(),
@@ -108,16 +130,18 @@ const jsonLd = graph([
 ])
 ---
 
-<BaseLayout
+<PageLayout
   site="adcpexplorer"
   title={title}
+  heading="AdCP Explorer"
   description={description}
   path="/"
   jsonLd={jsonLd}
-  wide
+  layout="reference"
   keywords={['ad context protocol', 'adcp', 'adcp operations', 'agentic advertising protocol']}
 >
-  <h1>AdCP Explorer</h1>
+  <DocsTree slot="nav" />
+  <TocRail slot="aside" toc={toc} />
 
   <AnswerBox answer={answer} term="Ad Context Protocol (AdCP)" />
 
@@ -131,7 +155,7 @@ const jsonLd = graph([
     }.
   </p>
 
-  <h2>The {totalOps} operations by area</h2>
+  <h2 id="operations-by-area">The {totalOps} operations by area</h2>
 
   <table>
     <caption>AdCP {adcp.version} — operations per area</caption>
@@ -174,7 +198,7 @@ const jsonLd = graph([
     > on <code>get_adcp_capabilities</code>.
   </p>
 
-  <h2>What a buyer implements and what a seller implements</h2>
+  <h2 id="buyer-seller-implementation">What a buyer implements and what a seller implements</h2>
 
   <p>
     Conformance is scoped by role, not by the {totalOps}-operation total. Every conforming agent
@@ -238,7 +262,7 @@ const jsonLd = graph([
     <li>Respect <code>creative_deadline</code>.</li>
   </ol>
 
-  <h2>Every operation by name</h2>
+  <h2 id="every-operation">Every operation by name</h2>
 
   {
     areas.map((area) => (
@@ -271,7 +295,7 @@ const jsonLd = graph([
     task maps in the release's <code>index.json</code> and the request and response schemas they name.
   </p>
 
-  <h2>Release {adcp.version}</h2>
+  <h2 id="release">Release {adcp.version}</h2>
 
   <p>
     <strong>{VERSION_LABEL}</strong>, last updated {LAST_UPDATED}. Releases ship as complete schema
@@ -300,7 +324,7 @@ const jsonLd = graph([
     )
   }
 
-  <h2>Protocol layers</h2>
+  <h2 id="protocol-layers">Protocol layers</h2>
 
   <p>
     A layer is a grouping of schema groups declared in <code>protocol_layers</code> in the release's{
@@ -357,7 +381,7 @@ const jsonLd = graph([
     >.
   </p>
 
-  <h2>The shared response envelope</h2>
+  <h2 id="response-envelope">The shared response envelope</h2>
 
   <p>
     Response schemas compose <code>core/protocol-envelope.json</code>, so {envelopeFields} of the rows
@@ -375,9 +399,28 @@ const jsonLd = graph([
     the envelope files themselves.
   </p>
 
+  {
+    /*
+     * DEV-ONLY (user decision): production ships clean, with no visible
+     * placeholder box and no reserved empty space. The slot still renders
+     * under `astro dev` so the composition is visible while designing, and
+     * the generation prompt stays catalogued in
+     * /srv/ws/out/illustration-prompts-adcpexplorer.md. Swap procedure when
+     * real art lands: drop the guard, keep the same `alt`.
+     */
+    import.meta.env.DEV && (
+      <IllustrationPlaceholder
+        slug="adcpexplorer/index/response-envelope"
+        prompt={ILLUSTRATION_1_PROMPT}
+        alt="Five envelope fields wrap every AdCP response; only the inner box belongs to the operation."
+        ratio="4 / 3"
+      />
+    )
+  }
+
   <FaqBlock entries={faq} />
 
-  <h2>Related</h2>
+  <h2 id="related-heading">Related</h2>
   <ul>
     <li>
       <a href={`${HUB}/protocols/adcp-vs-aamp/`} rel="noopener"
@@ -399,4 +442,4 @@ const jsonLd = graph([
   </ul>
 
   <SpecSource provenance={adcp.provenance} specVersion={adcp.version} />
-</BaseLayout>
+</PageLayout>

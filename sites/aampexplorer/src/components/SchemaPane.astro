@@ -1,0 +1,54 @@
+---
+/**
+ * SchemaPane — the schema-compare pane for /repos/[name]/'s `aside` slot
+ * (design brief §4.3). Site-local, not shared. Renders only when the
+ * repository actually ships object definitions: "page shape encodes
+ * substance", so a thin repo is a plain 12-col prose column instead of
+ * carrying an empty pane.
+ *
+ * Content below is moved VERBATIM out of the page's default flow (the
+ * existing "The objects, field by field" heading, its paragraph, and the
+ * FieldTable per object, plus the truncation note when there are more than
+ * 24) — no new copy.
+ */
+import FieldTable from '@agenticbrief/shared-ui/FieldTable.astro'
+import type { SchemaField } from '@agenticbrief/protocol-data/types'
+
+export interface Props {
+  objects: { name: string; slug: string; summary?: string; fields: SchemaField[] }[]
+}
+
+const { objects } = Astro.props
+const shown = objects.slice(0, 24)
+const rest = objects.slice(24)
+---
+
+<h2>The objects, field by field</h2>
+<p>
+  These come from the schema and interface files this repository checks in, under the names the
+  source files use.
+</p>
+{
+  shown.map((o, i) => (
+    <details class="pane-object" open={i === 0}>
+      <summary>
+        <code id={o.slug}>{o.name}</code>
+        <span class="pane-chip">
+          {o.fields.length} field{o.fields.length === 1 ? '' : 's'}
+        </span>
+      </summary>
+      <div class="pane-object-body">
+        {o.summary && <p>{o.summary}</p>}
+        <FieldTable fields={o.fields} caption={`${o.name} fields`} collapseAfter={12} />
+      </div>
+    </details>
+  ))
+}
+{
+  rest.length > 0 && (
+    <p class="muted">
+      Those are the first 24, in source order. The remaining {rest.length} definitions in the
+      repository are {rest.map((o) => o.name).join(', ')}.
+    </p>
+  )
+}

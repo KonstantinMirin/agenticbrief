@@ -1,0 +1,85 @@
+/**
+ * @agenticbrief/design-tokens — self-hosted IBM Plex `@font-face` faces.
+ *
+ * Ships the font deliverable named but not built by spec §8.3-8.5 and
+ * ruling 3 (§10.3): self-host, latin subset only, `font-display: swap`,
+ * no Google Fonts `<link>`, no preconnect. This file is the ONLY place
+ * `@font-face` is declared in the portfolio.
+ *
+ * Files (packages/design-tokens/public-fonts/, this package, not any
+ * one site's `public/` — see the directory's own note below):
+ *   - ibm-plex-sans-var-latin.woff2   IBM Plex Sans, variable, wght 300-600
+ *   - ibm-plex-mono-400-latin.woff2   IBM Plex Mono, static, weight 400
+ *   - ibm-plex-serif-300-latin.woff2  IBM Plex Serif, static, weight 300
+ *
+ * Provenance: source TTFs pulled from the `google/fonts` GitHub repo
+ * (`ofl/ibmplexsans/IBMPlexSans[wdth,wght].ttf`, `ofl/ibmplexmono/
+ * IBMPlexMono-Regular.ttf`, `ofl/ibmplexserif/IBMPlexSerif-Light.ttf` —
+ * IBM Plex is SIL OFL 1.1, free to self-host). The Sans variable source
+ * carries both `wght` (100-700) and `wdth` (75-100) axes; it was
+ * instanced with `fonttools varLib.instancer` to pin `wdth=100` and
+ * restrict `wght` to the chassis's own 300-600 range (spec §8.1), then
+ * all three were subset with `pyftsubset` to latin
+ * (spec §8.4's own listed range) plus U+2192 (→) and U+2198 (↘), the two
+ * of the spec's three extra codepoints IBM Plex actually contains — see
+ * the unicode-range note below for the third (U+26A0).
+ *
+ * Measured on disk, this repo, today (spec §8.2 predicted 45,712 /
+ * 14,708 / 20,160 B from Google's own v23 CDN build; our from-source
+ * subset comes in smaller on all three because it additionally drops
+ * the `wdth` axis and disables hinting instructions, neither of which
+ * Google's served files do):
+ *   - Sans variable 300-600 latin:  39,912 B (39.0 KB)
+ *   - Mono 400 latin:               10,204 B ( 9.97 KB)
+ *   - Serif 300 latin:              15,432 B (15.1 KB)
+ *   Portfolio distinct payload:     65,548 B (64.0 KB) across 3 files —
+ *   under spec §8.2's 78.7 KB estimate. Report the measured numbers, not
+ *   the spec's, per this task's instruction.
+ *
+ * unicode-range note (spec §8.4): the content tree also uses U+26A0
+ * (⚠), but IBM Plex Sans/Mono/Serif do not contain that glyph in any
+ * weight (verified: absent from the unsubset source `cmap` for all
+ * three families — Plex's symbol coverage stops at U+2713/U+274C,
+ * nothing in the U+2600-26FF Miscellaneous Symbols block exists to
+ * subset). Declaring U+26A0 in `unicode-range` anyway would be actively
+ * harmful: the browser would still match this font for that character
+ * (unicode-range is a coverage CLAIM, not a request) and render its
+ * `.notdef` glyph instead of falling through to the system-sans
+ * fallback that actually has a warning-sign glyph. So U+26A0 is
+ * deliberately left OUT of unicode-range below — the one warning
+ * character in `sources-and-versions.md` renders in the fallback face,
+ * by design, not by omission.
+ */
+
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 300 600;
+  font-display: swap;
+  src: url('../public-fonts/ibm-plex-sans-var-latin.woff2') format('woff2');
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
+    U+2000-206F, U+20AC, U+2122, U+2191-2193, U+2198, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('../public-fonts/ibm-plex-mono-400-latin.woff2') format('woff2');
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
+    U+2000-206F, U+20AC, U+2122, U+2191-2193, U+2198, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'IBM Plex Serif';
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url('../public-fonts/ibm-plex-serif-300-latin.woff2') format('woff2');
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
+    U+2000-206F, U+20AC, U+2122, U+2191-2193, U+2198, U+2212, U+2215, U+FEFF, U+FFFD;
+}

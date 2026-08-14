@@ -1,0 +1,601 @@
+/*
+ * briefgateway — site stylesheet.
+ *
+ * ── THE EDITORIAL MOVE ─────────────────────────────────────────────────
+ * A DRAWING SHEET. Every section opens on a hairline that runs the full
+ * 1180px sheet while the prose stays hard-left at ~66ch, so the wide right
+ * margin becomes a declared field rather than leftover space; and, because
+ * this site is forbidden a brand hue, TYPE FAMILY carries the semantics
+ * colour is not allowed to carry — IBM Plex Mono is the machine's voice and
+ * the chrome it speaks through, IBM Plex Sans is the human's.
+ *
+ * Mechanics, from /srv/ws/out/editorial-references.md:
+ *   §2.7  NYT's metadata/grotesque split ("type family alone distinguishes
+ *         claim from sourcing"), executed with Mono — and pushed past
+ *         chrome into the RUNNING TEXT, which is the part that is this
+ *         site's own: inline code loses its grey chip, so the face alone
+ *         marks machine text mid-sentence. See the token file's
+ *         DOMINANT DIFFERENTIATOR note for the honest read on the overlap
+ *         with whatisagenticbuying, which took the metadata face this
+ *         same session.
+ *   §2.1  Monocle/Raconteur `.block-title` — a section header defined
+ *         entirely by weight, tracking and one hairline; no colour, no box.
+ *   §2.3  1px hairline as the SOLE structural chrome, two tiers
+ *         (--rule-sheet spans the sheet, --rule-column stays in the column).
+ *   §2.9  Stripe Press's asymmetric break rhythm: big space ABOVE the rule
+ *         (64px), small below (20px rule→heading, 16px heading→text).
+ *   §2.5  measure held: ~66ch prose, 640px form column.
+ *   §1    boxless hierarchy — zero card/border/shadow containers around
+ *         CONTENT. The only tinted grounds left on this site are machine
+ *         output (see THE GROUND LAW in the token file).
+ *
+ * ── WHY THIS FILE EXISTS (original, still true) ────────────────────────
+ * DocPage.astro hard-codes `wide` for every entry on this site
+ * (`packages/shared-ui/src/DocPage.astro`), so `main.wide` caps at 1180px
+ * (global.css) and `article` itself carries no measure cap at all — every
+ * doc page was shipping prose at roughly 110ch. global.css cannot fix that
+ * alone without removing the 1180px canvas the tables, `.pane` and
+ * `.scores` still need. The 1180px canvas is now the SHEET and the cap is
+ * the column: what was a defect repair is now the composition.
+ *
+ * ── ENGINEERING RULES ──────────────────────────────────────────────────
+ * 1. Every selector must out-specify the global.css rule it overrides
+ *    rather than rely on import order. `main.wide article > h2` is
+ *    (0,1,3); global.css's bare `h2` is (0,0,1). This is not theoretical:
+ *    verified in the build output, this file is linked FIRST and
+ *    global.css LAST, so an equal-specificity override here silently
+ *    loses. Where the shared rule is already class-level — `.site-header`,
+ *    `.breadcrumbs ol`, `.footer-block h2` — the override is prefixed with
+ *    `:root[data-site='briefgateway']`, the same selector the token file
+ *    uses, which both buys the specificity and says out loud that the
+ *    declaration is a per-site override of a portfolio rule.
+ * 2. Headings and other non-body-size elements cap against `--column-max`
+ *    (a rem length), never `--measure` (66ch, which is relative to the
+ *    element's OWN font-size and therefore computes to ~1900px on a 48px
+ *    h1 — the caps this file used to set on h1/h2 were inert).
+ * 3. The sheet rules are drawn by absolutely-positioned pseudo-elements
+ *    stretched `left:0;right:0` inside `article` (which is the positioning
+ *    context). That is what lets one element carry a rule at SHEET width
+ *    and text at COLUMN width. With `top`/`bottom` left `auto` the pseudo
+ *    sits at its static position — the start/end of the content box — and
+ *    a negative/positive `margin-top` walks it onto the padding edge.
+ *    Stretching to `article` (not a fixed 1180px) means the rule shrinks
+ *    with the viewport instead of forcing a horizontal scrollbar.
+ *
+ * Imported by all nine page files in this site. `/404` is the one page that
+ * renders through BaseLayout directly (`main.prose`, no `article`), so the
+ * masthead rules below name it explicitly rather than leaving it orphaned.
+ * NO DARK MODE: this file contains no dark-mode media query and none
+ * may be added (user decision 2026-08-14, light-only portfolio).
+ */
+
+/* ---------------------------------------------------------------------
+ * 1. THE SHEET AND THE COLUMN
+ * The asymmetry — a ~66ch text column hard left inside a 1180px sheet —
+ * is the structural signature. Tables, code, figures and details run the
+ * full sheet because they are evidence, not prose.
+ * --------------------------------------------------------------------- */
+
+main.wide article,
+main.prose {
+  /* Positioning context for every sheet rule in section 2. */
+  position: relative;
+  /* Everything left-aligned. No centring, anywhere on this site: slop tell
+     #8 is a compositional tell and this site's answer to it is a hard left
+     edge shared by the rule, the heading, the column and the controls. */
+  text-align: left;
+}
+
+main.wide article > p,
+main.wide article > ul,
+main.wide article > ol,
+main.wide article > dl,
+main.wide article > blockquote {
+  max-width: var(--measure);
+}
+
+/* `/404` renders through BaseLayout, so it gets `main.prose` — a 66ch shell
+   that global.css CENTRES. Centring is the one composition this site does
+   not do (slop tell #8), and it also pushed the 404's masthead rule out of
+   line with the header and footer, which are both 1180px shells. Give the
+   page the same sheet as every other page and cap its prose in the column,
+   so one page in ten does not sit on a different grid. Prefixed selector:
+   global.css declares `main.prose` at the same specificity and its bundle
+   is linked last. */
+:root[data-site='briefgateway'] main.prose {
+  max-width: var(--sheet-width);
+}
+
+main.prose > p {
+  max-width: var(--measure);
+}
+
+/* On every other page the sheet rule's containing block is `article`, which
+   already sits inside `main`'s 1.25rem gutter. On `/404` the containing
+   block IS `main`, and an absolutely positioned box resolves `left`/`right`
+   against the PADDING box — so the rule would hang 20px past the header and
+   footer on both sides. Inset it by the gutter global.css sets, matching its
+   640px breakpoint. */
+main.prose > h1:first-child::before {
+  left: 1.25rem;
+  right: 1.25rem;
+}
+
+@media (max-width: 640px) {
+  main.prose > h1:first-child::before {
+    left: 1rem;
+    right: 1rem;
+  }
+}
+
+main.wide article > table,
+main.wide article > pre,
+main.wide article > figure.comparison,
+main.wide article > details {
+  max-width: var(--sheet-width);
+}
+
+/*
+ * Supplementary to the direct-child rule above: FaqBlock/RelatedLinks
+ * (shared-ui, frozen) wrap their content one level deeper — `.faq > dl`,
+ * `.related > ul` — so `article > dl`/`article > ul` never reaches them.
+ * `.answer-box` (AnswerBox.astro's wrapper) is likewise a direct child of
+ * `article` and was missing from the list, so it ran at ~103ch as the
+ * widest and first prose block on every page.
+ */
+main.wide article > .faq,
+main.wide article > .related,
+main.wide article > .engagement,
+main.wide article > .answer-box {
+  max-width: var(--measure);
+}
+
+/* ---------------------------------------------------------------------
+ * 2. THE MASTHEAD AND THE SECTION OPENS — §2.1 + §2.3 + §2.9
+ *
+ * ONE device, ONE meaning: a sheet rule OPENS a section. It never closes
+ * one. It opens the masthead (above the kicker on `/generate/`, above the
+ * h1 everywhere else) and it opens every h2 below that. The rule runs past
+ * the text column into the right margin, which is what turns the empty
+ * right third from leftover space into a declared field — and putting it
+ * at the very top is what declares the sheet before the reader has scrolled
+ * to the first section. Nothing here is a box, a shadow, a colour or an
+ * icon: hierarchy is scale + weight + space + one hairline (§1).
+ *
+ * The rules are `::before` pseudos and never `::after`. That is not
+ * cosmetic: the static position of an abspos `::after` in an inline
+ * formatting context resolves to the END of the last line box, so a rule
+ * drawn that way lands THROUGH the final line of a wrapped heading rather
+ * than under it (observed, not assumed — it is what a first cut of this
+ * file did to every h1 in the site). `::before` resolves to the start of
+ * the first line box, i.e. the top of the content edge, which is exactly
+ * where a `-1 * padding-top` margin needs it.
+ * --------------------------------------------------------------------- */
+
+/* The masthead opener. `/generate/` supplies an `.eyebrow` kicker, which
+   belongs WITH its headline, so the rule goes above the kicker there and
+   above the h1 on every page that has none. Breadcrumbs sit outside
+   `article` (PageLayout), so `h1:first-child` is reliable. */
+main.wide article > .eyebrow,
+main.wide article > h1:first-child,
+main.prose > h1:first-child {
+  padding-top: var(--break-space-lead);
+}
+
+main.wide article > .eyebrow::before,
+main.wide article > h1:first-child::before,
+main.prose > h1:first-child::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1px;
+  margin-top: calc(-1 * var(--break-space-lead));
+  background: var(--rule-sheet); /* #c6c6c6 — decorative divider, 1.71:1 on #ffffff */
+}
+
+/* An `.eyebrow` already opened the masthead; the h1 behind it must not
+   open a second one 30px lower. */
+main.wide article > .eyebrow + h1 {
+  padding-top: 0;
+}
+
+main.wide article > .eyebrow + h1::before {
+  content: none;
+}
+
+main.wide article > h1,
+main.prose > h1 {
+  /* 48px / weight 300 / lh 1.10 comes from the token file — the only
+     300-weight display in the portfolio (spec §7.1). 36rem ≈ 22ch at 48px:
+     a tight two-to-three-line display block, deliberately NARROWER than the
+     66ch body column so the masthead reads as a block, not as a sentence. */
+  max-width: 36rem;
+  margin: 0 0 var(--break-space-lead);
+}
+
+main.wide article > h2 {
+  max-width: 38rem; /* ≈32ch at the 32px Heading 02 size */
+  margin: var(--break-space-above) 0 var(--break-space-below);
+  padding-top: var(--break-space-lead);
+}
+
+main.wide article > h2::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1px;
+  margin-top: calc(-1 * var(--break-space-lead));
+  background: var(--rule-sheet);
+}
+
+/* Subordinate headings live INSIDE the column and take no rule — the sheet
+   rule must mean exactly one thing (a section), or it stops meaning it. */
+main.wide article > h3,
+main.wide article > h4 {
+  max-width: var(--column-max);
+  margin: 2rem 0 0.5rem;
+}
+
+/* ---------------------------------------------------------------------
+ * 3. THE DECK — AnswerBox, re-composed (was a card)
+ *
+ * It shipped as an #f4f4f4 rounded box with a resting ring: a card, first
+ * on every page, on a site whose separation mechanic is hairline-exclusive
+ * (editorial-references §3 axis 4) — slop repair by RE-COMPOSITION, not
+ * recolouring. It is now a lead paragraph in the display weight, closed by
+ * a column rule, sitting under the masthead's sheet rule. §1's
+ * "argument-first opening": the claim is the largest prose on the page and
+ * nothing boxes it. Structural precedence (it renders before body prose,
+ * for answer extraction) is untouched.
+ * --------------------------------------------------------------------- */
+
+main.wide article > .answer-box {
+  background: none;
+  box-shadow: none;
+  border: none;
+  border-bottom: 1px solid var(--rule-column); /* #e0e0e0 — decorative divider */
+  border-radius: 0;
+  margin: 0 0 var(--break-space-below);
+  padding: 0 0 var(--break-space-lead);
+}
+
+/* The homepage's specimen band (components/Specimen.astro) opens on its own
+   sheet rule, and the deck's closing column rule would then stack two
+   hairlines around ~80px of nothing — the defect Phase D recorded as S7 on
+   whatisagenticbuying. The deck keeps its rule on every other page, where a
+   paragraph of body prose follows it; here the section rule below does the
+   closing. §2's law is unchanged: one rule per section, and it OPENS. */
+main.wide article > .answer-box:has(+ .specimen) {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+main.wide article > .answer-box .answer-text {
+  font-size: 1.375rem; /* 22px */
+  font-weight: 300; /* the site's display weight, at reading size */
+  line-height: 1.45;
+  /* [computed] #161616 on #ffffff = 18.10:1 */
+  color: var(--cds-text-primary);
+}
+
+/* Metadata face: a credit line is sourcing, not claim (§2.7). */
+main.wide article > .answer-box .answer-source {
+  font-family: var(--machine-face);
+  font-size: var(--machine-size);
+  letter-spacing: var(--machine-track);
+  line-height: var(--machine-lh);
+}
+
+@media (max-width: 671px) {
+  main.wide article > .answer-box .answer-text {
+    font-size: 1.25rem; /* 20px */
+  }
+}
+
+/* ---------------------------------------------------------------------
+ * 4. THE MACHINE / HUMAN TYPE SPLIT — §2.7, the dominant differentiator
+ *
+ * Mono is the second, quieter face, reserved strictly for chrome and
+ * metadata: breadcrumbs, captions, table headers, credits, apparatus
+ * headings. Sans carries the whole reading path. Nothing longer than about
+ * a line is ever set in mono — the split is a signal, not a texture.
+ * --------------------------------------------------------------------- */
+
+:root[data-site='briefgateway'] .breadcrumbs ol {
+  font-family: var(--machine-face);
+  font-size: var(--type-caption-01-size); /* 12px */
+  letter-spacing: var(--type-caption-01-tracking); /* +0.32px, tracking law */
+  /* [computed] #525252 on #ffffff = 7.81:1 */
+  color: var(--cds-text-secondary);
+}
+
+:root[data-site='briefgateway'] .breadcrumbs li + li::before {
+  /* Was `--border` #e0e0e0 at 1.32:1 — a separator glyph is TEXT, so it is
+     held to the same 4.5:1 as the crumbs it sits between. */
+  color: var(--cds-text-secondary); /* [computed] 7.81:1 on #ffffff */
+}
+
+/* Terse caption at the figure, in the metadata face (§2.13). */
+main caption {
+  font-family: var(--machine-face);
+  font-size: var(--machine-size);
+  letter-spacing: var(--machine-track);
+  line-height: var(--machine-lh);
+  /* [computed] #525252 on #ffffff = 7.81:1 */
+  color: var(--cds-text-secondary);
+}
+
+/* Apparatus headings — end-matter, not argument, so they take the kicker
+   recipe (§2.1) instead of the Heading-02 scale: mono, uppercase, tracked,
+   sitting under the section's own rule. `.engagement`'s heading is
+   deliberately NOT included: it is an aside in a quiet human register and
+   putting it in caps would make the page end on a shout. */
+main.wide article > .faq > h2,
+main.wide article > .related > h2 {
+  font-family: var(--machine-face);
+  font-size: var(--label-size); /* 13px */
+  font-weight: var(--label-weight); /* 400 — Plex Mono has no other weight */
+  line-height: var(--label-lh);
+  letter-spacing: var(--track-label); /* +1px */
+  text-transform: var(--label-transform);
+  /* [computed] #525252 on #ffffff = 7.81:1 */
+  color: var(--cds-text-secondary);
+  margin: 0 0 var(--break-space-below);
+  padding-top: 0;
+}
+
+/* ---------------------------------------------------------------------
+ * 5. CHROME — white sheet edge to edge
+ *
+ * The header and footer bands were `--bg-subtle` #f4f4f4. Under THE GROUND
+ * LAW (token file) a tint means "the program produced this", so the chrome
+ * cannot wear one: it is now the white sheet, bounded by the same sheet
+ * hairline the sections use. Net effect at a one-second squint: the ONLY
+ * grey regions anywhere on this site are machine output.
+ * --------------------------------------------------------------------- */
+
+:root[data-site='briefgateway'] .site-header {
+  background: var(--cds-background);
+  border-bottom: 1px solid var(--rule-sheet);
+}
+
+:root[data-site='briefgateway'] .site-footer {
+  background: var(--cds-background);
+  border-top: 1px solid var(--rule-sheet);
+}
+
+/* Nav is chrome, so it is in the chrome face — lowercase, not uppercase:
+   this site's chips are lowercase too, and a toolbar of shouted caps on a
+   Configure product reads as marketing. */
+:root[data-site='briefgateway'] .site-header nav ul {
+  font-family: var(--machine-face);
+  font-size: 0.875rem; /* 14px */
+  letter-spacing: var(--machine-track); /* +0.16px at 14px, tracking law */
+}
+
+:root[data-site='briefgateway'] .site-header nav a {
+  /* [computed] #525252 on #ffffff = 7.81:1 */
+  color: var(--cds-text-secondary);
+}
+
+:root[data-site='briefgateway'] .site-header nav a:hover,
+:root[data-site='briefgateway'] .site-header nav a[aria-current='page'] {
+  /* No hue exists to mark the current page, so the marker is full ink plus
+     an underline — the same achromatic logic as the link rule below.
+     [computed] #161616 on #ffffff = 18.10:1 */
+  color: var(--cds-text-primary);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+}
+
+:root[data-site='briefgateway'] .footer-block h2 {
+  font-family: var(--machine-face);
+  font-size: var(--label-size); /* 13px */
+  font-weight: var(--label-weight); /* 400 — Plex Mono has no other weight */
+  letter-spacing: var(--track-label); /* +1px, this site's value */
+  text-transform: uppercase;
+  /* [computed] #525252 on #ffffff = 7.81:1 */
+  color: var(--cds-text-secondary);
+}
+
+/* ---------------------------------------------------------------------
+ * 6. TABLES — a spec sheet, not a grid
+ *
+ * A 64-row x 5-column boxed grid (global.css's default `1px solid` on every
+ * th/td) is the noisiest object on the site. Rows are told apart by one
+ * column rule; the header band's FILL is replaced by the sheet rule plus
+ * the metadata face, which is the print convention (§2.3) and one more
+ * grey box removed.
+ * --------------------------------------------------------------------- */
+
+main table {
+  /* Body Short 01 — 14px / 1.5 / +0.16px (ibm.md:96). Tabular figures
+     because most cells in this corpus are counts, ids and versions. */
+  font-size: var(--type-body-short-01-size);
+  line-height: var(--type-body-short-01-lh);
+  letter-spacing: var(--type-body-short-01-tracking);
+  font-variant-numeric: tabular-nums;
+}
+
+main table th,
+main table td {
+  border: 0;
+  border-bottom: 1px solid var(--rule-column); /* #e0e0e0 */
+  padding: 10px 12px 10px 0;
+}
+
+main table th:not(:last-child),
+main table td:not(:last-child) {
+  padding-right: 24px;
+}
+
+main table thead th {
+  background: none; /* was --bg-subtle: a tint means machine output here */
+  border-bottom: 1px solid var(--rule-sheet); /* #c6c6c6 — the heavier of the two tiers */
+  font-family: var(--machine-face);
+  font-size: var(--type-caption-01-size); /* 12px */
+  font-weight: var(--label-weight); /* 400 — Plex Mono has no other weight */
+  letter-spacing: var(--type-caption-01-tracking); /* +0.32px at 12px, tracking law */
+  text-transform: uppercase;
+  /* [computed] #525252 on #ffffff = 7.81:1 */
+  color: var(--cds-text-secondary);
+}
+
+main table tbody th[scope='row'] {
+  background: none;
+  font-size: var(--type-body-short-02-size);
+  font-weight: var(--type-body-short-02-weight); /* 600 */
+  letter-spacing: var(--type-body-short-02-tracking);
+}
+
+/* ---------------------------------------------------------------------
+ * 7. CODE — the machine ground, at the site radius
+ *
+ * Block code keeps `#f4f4f4`: it IS machine output, so it is the one place
+ * a tint is not decoration. `--code-radius` is unset in the token file, so
+ * global.css renders `pre` at 2px while `/generate/`'s payload panes render
+ * at 6px — two radii for the same object. Unified to the site radius here;
+ * inline `<code>` stays at 2px, because a five-character chip at 6px reads
+ * as a lozenge (global.css says the same thing about 24px).
+ * --------------------------------------------------------------------- */
+
+main pre {
+  border-radius: var(--site-radius);
+}
+
+/* INLINE code loses its box entirely. On a site whose whole system says
+   "the face tells you who spoke", a grey lozenge around a mono token is
+   the box restating what the typeface already said — and this corpus puts
+   twenty to forty of them in a single page of prose, which is the single
+   largest source of visual noise in the reading column. Removing them is
+   §1's boxless hierarchy applied at the smallest scale. Full ink, so the
+   token is if anything more legible than it was on a tint.
+   [computed] #161616 on #ffffff = 18.10:1 · on #f4f4f4 = 16.45:1 */
+main :not(pre) > code {
+  background: none;
+  padding: 0;
+  border-radius: 0;
+  color: var(--cds-text-primary);
+}
+
+/* ---------------------------------------------------------------------
+ * 8. LINKS — the achromatic consequence, made deliberate
+ *
+ * There is no hue on this site, so the underline is the ONLY affordance
+ * that distinguishes a link from body text and it must always be present,
+ * at full ink. Do not soften it to a grey: `--rule-sheet` under ink text
+ * would be a 1.71:1 affordance and would fail 1.4.11 for the one control
+ * this document register contains.
+ * --------------------------------------------------------------------- */
+
+main.wide article a {
+  /* [computed] #161616 on #ffffff = 18.10:1 */
+  color: var(--cds-text-primary);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+}
+
+main.wide article a:hover,
+main.wide article a:focus-visible {
+  text-decoration-thickness: 2px;
+}
+
+main.wide article a:visited {
+  color: var(--cds-text-primary); /* no hue = no visited state */
+}
+
+/* ---------------------------------------------------------------------
+ * 9. THE PAGE TAIL
+ * Three sections at the section rhythm, on COLUMN rules rather than sheet
+ * rules: end-matter is apparatus, and the sheet rule is reserved for the
+ * document's own sections. `.engagement`'s left rule (global.css) is
+ * deleted — it was the site's last left rule (spec ruling 5) — and
+ * replaced with the top rule its siblings already use. Its quiet register
+ * (no box, no button-shaped button) is unchanged.
+ * --------------------------------------------------------------------- */
+
+main.wide article > .faq,
+main.wide article > .related,
+main.wide article > .engagement {
+  border-top: 1px solid var(--rule-column);
+  margin-top: var(--break-space-above);
+  padding-top: var(--break-space-lead);
+}
+
+main.wide article > .engagement {
+  border-left: none;
+  padding-left: 0;
+  padding-bottom: 0;
+}
+
+main.wide article > .engagement .cta-primary {
+  font-weight: 600; /* never 700 */
+}
+
+/* ---------------------------------------------------------------------
+ * 10. CONTROLS
+ * The OS default checkbox renders in system blue — an unowned stock blue
+ * on the no-hue site (slop tell #2). 24x24 clears WCAG 2.5.8's target
+ * minimum for the box itself.
+ * --------------------------------------------------------------------- */
+
+input[type='checkbox'] {
+  accent-color: var(--cds-text-primary); /* [computed] 18.10:1 on #ffffff */
+  width: 24px;
+  height: 24px;
+}
+
+/* Focus — one rule, every control. */
+:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring); /* inner ring #525252, [computed] 7.81:1 on #ffffff */
+}
+
+/* ---------------------------------------------------------------------
+ * 11. ILLUSTRATION SLOTS — dev-only
+ * Production ships clean: every call site is wrapped in
+ * `import.meta.env.DEV` (user decision), so nothing below reaches a built
+ * page. The rules stay because the slots must still read correctly in
+ * `astro dev`, where `--accent` on this site IS the ink (#161616) and the
+ * shared component's dashed border and hatch would otherwise paint a hard
+ * near-black rectangle — the loudest object on the page.
+ * Prompts remain catalogued in
+ * /srv/ws/out/illustration-prompts-briefgateway.md.
+ * --------------------------------------------------------------------- */
+
+.illustration-placeholder {
+  --accent: var(--cds-text-secondary); /* [computed] 7.81:1 on #ffffff */
+}
+
+.illustration-cap-640 {
+  max-width: var(--form-column); /* 640px — the site module */
+}
+
+.illustration-cap-560 {
+  max-width: 560px;
+}
+
+/* ---------------------------------------------------------------------
+ * 12. MOBILE
+ * Mobile-first is the default state of this file: everything above is
+ * width-independent except the two `rem` heading caps, which simply stop
+ * biting below ~600px. The break rhythm also tightens below 672px — that
+ * override lives in the TOKEN file, not here, because a token override at
+ * `:root[data-site='briefgateway']` would have to beat the identical
+ * selector in that file, and the token bundle is linked last.
+ * --------------------------------------------------------------------- */
+
+@media (max-width: 671px) {
+  main table th,
+  main table td {
+    padding: 8px 0;
+  }
+
+  main table th:not(:last-child),
+  main table td:not(:last-child) {
+    padding-right: 16px;
+  }
+}

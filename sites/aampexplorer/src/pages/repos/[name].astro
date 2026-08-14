@@ -1,8 +1,9 @@
 ---
-import BaseLayout from '@agenticbrief/shared-ui/BaseLayout.astro'
+import PageLayout from '@agenticbrief/shared-ui/PageLayout.astro'
 import AnswerBox from '@agenticbrief/shared-ui/AnswerBox.astro'
-import FieldTable from '@agenticbrief/shared-ui/FieldTable.astro'
 import SpecSource from '@agenticbrief/shared-ui/SpecSource.astro'
+import PlaneRail from '../../components/PlaneRail.astro'
+import SchemaPane from '../../components/SchemaPane.astro'
 import { aamp } from '@agenticbrief/protocol-data'
 import {
   graph,
@@ -14,6 +15,7 @@ import {
   breadcrumbNode,
 } from '@agenticbrief/seo/schema'
 import { BASE, MATURITY, tasksForArea } from '../../lib/site'
+import '../../styles/aampexplorer.css'
 
 /** The one link that is specific to each repository. */
 const RELATED: Record<string, { href: string; label: string }> = {
@@ -100,16 +102,18 @@ const kindArticle = /^[aeiou]/i.test(kindLabel) ? 'an' : 'a'
 const description = `${component.name}, ${kindArticle} ${kindLabel} repository in IAB Tech Lab's AAMP: ${inventory}. ${listing}.`
 const answer = `${component.name} is an AAMP ${component.kind.replace(/-/g, ' ')} repository from IAB Tech Lab. ${component.purpose}`
 
+const breadcrumbs = [
+  { name: 'AAMP Explorer', url: `${BASE}/` },
+  { name: 'Components', url: `${BASE}/repos/` },
+  { name: component.name, url },
+]
+
 const jsonLd = graph([
   organizationNode(),
   personNode(),
   webSiteNode({ siteUrl: BASE, name: 'AAMP Explorer', description }),
   webPageNode({ url, siteUrl: BASE, title, description, breadcrumb: {} }),
-  breadcrumbNode(url, [
-    { name: 'AAMP Explorer', url: `${BASE}/` },
-    { name: 'Components', url: `${BASE}/repos/` },
-    { name: component.name, url },
-  ]),
+  breadcrumbNode(url, breadcrumbs),
   articleNode({
     url,
     title,
@@ -121,61 +125,107 @@ const jsonLd = graph([
     citations: [component.repo],
   }),
 ])
+
+const related = [
+  RELATED[component.name] && {
+    href: RELATED[component.name].href,
+    title: RELATED[component.name].label,
+  },
+  { href: '/repos/', title: 'Every AAMP repository, ranked by what it defines' },
+  { href: '/versions/', title: 'What each AAMP repository is tagged at' },
+  { href: component.repo, title: 'The repository itself' },
+].filter((r): r is { href: string; title: string } => Boolean(r))
 ---
 
-<BaseLayout
+<PageLayout
   site="aampexplorer"
   title={title}
+  heading={component.name}
+  eyebrow={`AAMP component · ${kindLabel}`}
   description={description}
   path={path}
   jsonLd={jsonLd}
-  wide
   ogType="article"
   publishDate={new Date('2026-08-08')}
   keywords={[component.name, `aamp ${component.name}`]}
+  layout="reference"
+  breadcrumbs={breadcrumbs}
+  related={related}
 >
-  <nav class="breadcrumbs" aria-label="Breadcrumb">
-    <ol>
-      <li><a href="/">AAMP Explorer</a></li><li><a href="/repos/">Components</a></li><li>
-        <span>{component.name}</span>
-      </li>
-    </ol>
-  </nav>
+  <PlaneRail slot="nav" currentComponent={component.name} />
+  {objects.length > 0 && <SchemaPane slot="aside" objects={objects} />}
 
-  <p class="eyebrow">AAMP component · {component.kind.replace(/-/g, ' ')}</p>
-  <h1>{component.name}</h1>
-
+  {
+    /*
+    Phase D fix (§12.5 AnswerBox precedence, nice-to-have): the metadata block
+    used to sit ABOVE the AnswerBox, inserting two blocks before the "renders
+    before body prose" GEO block the spec's §12.5 rule protects. Moved below
+    it, restoring the original page's h1 -> AnswerBox -> metadata order.
+  */
+  }
   <AnswerBox
     answer={answer}
     source={{ label: component.repo.replace('https://github.com/', ''), url: component.repo }}
   />
 
-  <table>
-    <caption
-      >{component.name} on 12 August 2026: version, kind, substance grade and hub listing. Substance is
-      an editorial grade rather than a measurement, on <a href="/repos/#ranking-test"
-        >the ranking test</a
-      >.</caption
-    >
-    <thead><tr><th scope="col">Property</th><th scope="col">Value</th></tr></thead>
-    <tbody>
-      <tr><th scope="row">Version</th><td><code>{displayVersion}</code></td></tr>
-      <tr>
-        <th scope="row">Commit</th>
-        <td>
-          <a href={`${component.repo}/commit/${component.commit}`} rel="noopener nofollow">
-            <code>{String(component.commit).slice(0, 8)}</code>
-          </a>
-        </td>
-      </tr>
-      <tr><th scope="row">Kind</th><td>{component.kind.replace(/-/g, ' ')}</td></tr>
-      <tr><th scope="row">Substance</th><td>{maturity?.level ?? 'unassessed'}</td></tr>
-      <tr
-        ><th scope="row">Listed in the hub README</th><td>{component.listedInHub ? 'Yes' : 'No'}</td
-        ></tr
+  {
+    /*
+    Phase D.5 fix (S2): the design pass split this metadata into an unlabelled
+    `.chip-strip` (kind + substance) and a two-row <dl> (version + commit), so
+    the caption below promised four facts and the page labelled two — and hub
+    listing was encoded as the ABSENCE of a chip, which is not readable. All
+    five rows are back under their published <th scope="row"> labels, in the
+    site's own labelled-metadata idiom (`.prop-dl`, mono, uppercase terms)
+    rather than as a bordered table. The chips survive as VALUES inside their
+    labels, so the ground-step ladder and the one accent mark are kept.
+  */
+  }
+  <dl class="prop-dl">
+    <dt>Version</dt>
+    <dd>
+      <code>{displayVersion}</code>
+    </dd>
+    <dt>Commit</dt>
+    <dd>
+      <a href={`${component.repo}/commit/${component.commit}`} rel="noopener nofollow">
+        <code>{String(component.commit).slice(0, 8)}</code>
+      </a>
+    </dd>
+    <dt>Kind</dt>
+    <dd>
+      <span class="chip chip-kind">{kindLabel}</span>
+    </dd>
+    <dt>Substance</dt>
+    <dd>
+      <span class={`chip chip-${maturity?.level ?? 'thin'}`}>{maturity?.level ?? 'unassessed'}</span
       >
-    </tbody>
-  </table>
+    </dd>
+    <dt>Listed in the hub README</dt>
+    <dd>
+      {
+        component.listedInHub ? (
+          <span class="chip chip-kind">Yes</span>
+        ) : (
+          <span class="chip chip-accent">No</span>
+        )
+      }
+    </dd>
+  </dl>
+
+  {
+    /*
+    Phase D fix (MUST-FIX #5): this sentence is the replaced <table>'s
+    <caption>, restored verbatim (not reworded) now that the table itself is
+    a <dl> — published copy this pass dropped outright rather than relocating.
+    It names four facts (version, kind, substance grade, hub listing) and the
+    <dl> above it labels all four, plus the commit.
+  */
+  }
+  <p class="muted">
+    {component.name} on 12 August 2026: version, kind, substance grade and hub listing. Substance is an
+    editorial grade rather than a measurement, on <a href="/repos/#ranking-test">the ranking test</a
+    >.
+  </p>
 
   {
     maturity && (
@@ -221,38 +271,6 @@ const jsonLd = graph([
   }
 
   {
-    objects.length > 0 && (
-      <>
-        <h2>The objects, field by field</h2>
-        <p>
-          These come from the schema and interface files this repository checks in, under the names
-          the source files use.
-        </p>
-        {objects.slice(0, 24).map((o) => (
-          <section>
-            <h3 id={o.slug}>
-              <code>{o.name}</code>
-            </h3>
-            {o.summary && <p>{o.summary}</p>}
-            <FieldTable fields={o.fields} caption={`${o.name} fields`} collapseAfter={12} />
-          </section>
-        ))}
-        {objects.length > 24 && (
-          <p class="muted">
-            Those are the first 24, in source order. The remaining {objects.length - 24} definitions
-            in the repository are{' '}
-            {objects
-              .slice(24)
-              .map((o) => o.name)
-              .join(', ')}
-            .
-          </p>
-        )}
-      </>
-    )
-  }
-
-  {
     empty && (
       <>
         <h2>No machine-readable definitions</h2>
@@ -260,20 +278,6 @@ const jsonLd = graph([
       </>
     )
   }
-
-  <h2>Related</h2>
-  <ul>
-    {
-      RELATED[component.name] && (
-        <li>
-          <a href={RELATED[component.name].href}>{RELATED[component.name].label}</a>
-        </li>
-      )
-    }
-    <li><a href="/repos/">Every AAMP repository, ranked by what it defines</a></li>
-    <li><a href="/versions/">What each AAMP repository is tagged at</a></li>
-    <li><a href={component.repo} rel="noopener nofollow">The repository itself</a></li>
-  </ul>
 
   <SpecSource
     provenance={{
@@ -283,4 +287,4 @@ const jsonLd = graph([
       sourceUrl: component.repo,
     }}
   />
-</BaseLayout>
+</PageLayout>

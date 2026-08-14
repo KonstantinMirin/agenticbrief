@@ -2,6 +2,9 @@
 import { getCollection, render } from 'astro:content'
 import DocPage from '@agenticbrief/shared-ui/DocPage.astro'
 import { publishedOnly } from '@agenticbrief/content-utils'
+import DocsTree from '../../components/DocsTree.astro'
+import TocRail from '../../components/TocRail.astro'
+import '../../styles/site.css'
 import { BASE } from '../../lib/site'
 
 // The rest of this site is generated from the schema registry. The guides
@@ -13,7 +16,14 @@ export async function getStaticPaths() {
 }
 
 const { entry } = Astro.props
-const { Content } = await render(entry)
+const { Content, headings } = await render(entry)
+
+// The h2/h3 set is deterministic — it comes from the same markdown Content
+// renders, via Astro's own heading extraction, so the TOC can never link to
+// an id the page did not emit.
+const toc = headings
+  .filter((h) => h.depth === 2 || h.depth === 3)
+  .map((h) => ({ id: h.slug, label: h.text, depth: h.depth as 2 | 3 }))
 ---
 
 <DocPage
@@ -21,10 +31,13 @@ const { Content } = await render(entry)
   entry={entry}
   path={`/guides/${entry.id}/`}
   section="Guides"
+  layout="reference"
   breadcrumbs={[
     { name: 'AdCP Explorer', url: `${BASE}/` },
     { name: entry.data.title, url: `${BASE}/guides/${entry.id}/` },
   ]}
 >
+  <DocsTree slot="nav" />
+  <TocRail slot="aside" toc={toc} />
   <Content />
 </DocPage>

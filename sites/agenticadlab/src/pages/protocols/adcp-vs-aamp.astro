@@ -2,6 +2,7 @@
 import { getEntry, render } from 'astro:content'
 import DocPage from '@agenticbrief/shared-ui/DocPage.astro'
 import { siteUrl } from '@agenticbrief/shared-ui/sites'
+import '../../styles/agenticadlab.css'
 
 // The portfolio's single load-bearing asset. It gets its own route rather than
 // a dynamic one so the URL is guaranteed stable even if the file is renamed.
@@ -12,6 +13,14 @@ if (!entry)
   )
 const { Content } = await render(entry)
 const BASE = siteUrl('agenticadlab')
+
+// Illustration slot 2 (design brief §9) removed for review round 2 — the
+// shared IllustrationPlaceholder component renders its dev-only scaffolding
+// (eyebrow, slug, prompt preview) unconditionally in production, with no
+// import.meta.env.DEV gate. That's a shared-layer defect (BLOCKED, reported
+// to the orchestrator); the fix in scope here is to pull the call site until
+// art actually lands. Re-add with the CAMPAIGN_LAYER_OVERLAP_PROMPT
+// (git history) once either the component is gated or real art exists.
 ---
 
 <DocPage

@@ -19,16 +19,26 @@ const { exclude, heading = 'The portfolio' } = Astro.props
 const keys = SITE_KEYS.filter((k) => k !== exclude && SITES[k].inNav)
 ---
 
+<!--
+  Asymmetric featured-vs-secondary row, not a uniform 3-up tile grid (spec
+  §7.2 agenticadlab structure note; design-research §4.3 slop tell —
+  "feature-tile grid as the nav's only shape"). The first card in portfolio
+  order runs wider; the rest sit in a tighter row beneath it. Order comes
+  from `sites.ts`, never hardcoded here.
+-->
 <section class="portfolio-nav" aria-labelledby="portfolio-heading">
   <h2 id="portfolio-heading">{heading}</h2>
   <ul class="card-grid">
     {
-      keys.map((key) => (
-        <li class="card">
+      keys.map((key, i) => (
+        <li class={`card${i === 0 ? ' card-featured' : ''}`}>
           <h3>
-            <a href={siteUrl(key)} rel="noopener">
-              {SITES[key].name}
-            </a>
+            {/* set:html for the same reason as Footer.astro's links: Prettier's
+                Astro plugin always breaks element children onto their own
+                lines, and JSX then emits `<a> AdCP Explorer </a>` — spaces
+                INSIDE the anchor, so the underline overshoots the name at both
+                ends. `name` is a static string from our own sites.ts. */}
+            <a class="card-link" href={siteUrl(key)} rel="noopener" set:html={SITES[key].name} />
           </h3>
           <p>{SITES[key].tagline}</p>
           <p class="card-domain">{SITES[key].productionDomain}</p>
@@ -37,3 +47,43 @@ const keys = SITE_KEYS.filter((k) => k !== exclude && SITES[k].inNav)
     }
   </ul>
 </section>
+
+<style>
+  /* First card runs two tracks wide once the grid has room for it; below
+     that it folds back into the same single-column flow as the rest. */
+  .card-grid > .card-featured {
+    grid-column: span 2;
+  }
+
+  @media (max-width: 640px) {
+    .card-grid > .card-featured {
+      grid-column: auto;
+    }
+  }
+
+  /*
+   * Stretched-link: the whole card is the hit target (>=44px in both axes at
+   * any card size in this grid), not just the title text. `.card` gets
+   * `position: relative` here so the anchor's `::after` can cover it without
+   * a wrapping `<a>` around block content, which would be invalid HTML (the
+   * card holds a heading and two paragraphs).
+   */
+  .card {
+    position: relative;
+  }
+
+  .card-link::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+
+  .card-link:focus-visible {
+    outline: none;
+  }
+
+  .card-link:focus-visible::after {
+    box-shadow: var(--focus-ring);
+    border-radius: var(--card-radius, var(--radius));
+  }
+</style>

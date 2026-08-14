@@ -1,0 +1,296 @@
+/**
+ * briefgateway — TOOL (Stripe / Vercel docs voice)
+ *
+ * ── THE EDITORIAL MOVE (light-only reset, 2026-08-14) ───────────────────
+ * A DRAWING SHEET. Every section opens on a hairline that runs the full
+ * 1180px sheet while the prose stays hard-left at 66ch, so the wide right
+ * margin becomes a declared field rather than leftover space; and, because
+ * this site is forbidden a brand hue, TYPE FAMILY carries the semantics
+ * colour is not allowed to carry — IBM Plex Mono is the machine's voice
+ * (values, verdicts, counts, evidence, provenance) and IBM Plex Sans is the
+ * human's.
+ *
+ * Sources, all from /srv/ws/out/editorial-references.md:
+ *   §2.7  the NYT metadata/grotesque split — "type family alone distinguishes
+ *         claim from sourcing" — executed here with Mono instead of Franklin,
+ *         and named as the site's dominant differentiator (§2.7 flags this as
+ *         "the cheapest remaining editorial gain" in the portfolio).
+ *   §2.1  Monocle/Raconteur `.block-title`: a section header defined entirely
+ *         by weight, tracking and one hairline. No colour, no background.
+ *   §2.3  1px hairline as the SOLE structural chrome, in a low-contrast
+ *         neutral, never black — here as a TWO-TIER system (sheet / column),
+ *         which is Monocle's own `--border-primary|secondary|tertiary` idea.
+ *   §2.9  Stripe Press's asymmetric, rule-anchored whitespace (`margin:
+ *         80px 0 10px`) — big space ABOVE a break, small below.
+ *   §2.5  controlled measure: 66ch prose, 640px form column.
+ *
+ * ── THE GROUND LAW ─────────────────────────────────────────────────────
+ * `#f4f4f4` is not decoration on this site: it is INSTRUMENTATION. A tinted
+ * ground means "this region is the program's output, not the document" —
+ * score readout, payload panes, code, accepted-assumption offers, field-table
+ * group bands. Everything a human wrote sits on the white sheet and is
+ * separated by rules and space alone. This is §1's "colour is instrumentation"
+ * generalised to the one value axis an achromatic site still owns.
+ *
+ * ── DOMINANT DIFFERENTIATOR, STATED HONESTLY ──────────────────────────
+ * TOTAL ACHROMATISM (spec §7.1: the only site in the portfolio with no
+ * brand hue at all) made to carry meaning by the type-role split, on the
+ * drawing-sheet grid. Colour appears in exactly four places — the four
+ * verdict hues — and only where a program has classified the reader's own
+ * text. Everything colour would normally do is done by face, scale, space
+ * and one of two hairline weights.
+ *
+ * Read live, not from the spec: `whatisagenticbuying` has independently
+ * taken the mono metadata face this session (its `site.css` cites the same
+ * NYT split). That is fine and expected — Mono-for-labels is a CHASSIS
+ * convention (§12), not this site's property — so the split is claimed here
+ * as the MECHANISM, not as the differentiator. The separations that hold at
+ * a one-second squint against that site: it has a real hue (magenta
+ * `#b3005c`) and this one has none; its display is 96px at −0.03em and this
+ * one's is 48px at weight 300; its heaviest rule is a 2px nameplate and NO
+ * rule on this site exceeds 1px; it keeps the grey chip around inline code
+ * and this site removes it, so mono alone marks machine text inside running
+ * prose; its label tracking is 1.8px and this site's is 1.0px; its column is
+ * a 62ch magazine measure and this site's is a 66ch column offset hard left
+ * inside a 1180px sheet that the rules cross. Radius 6 vs 3 confirms.
+ *
+ * Also unchanged from spec §7.1: the ONLY weight-300 display in the six.
+ *
+ * `/generate/` (1647 lines, three synchronised regions) is the highest-
+ * consequence page in the portfolio. Every token here that touches it
+ * resolves through the existing alias layer — no class renames required
+ * (spec §11.4 risks 5, 6; §12.4).
+ *
+ * NO DARK MODE. There is no dark-mode media query in this file and
+ * none may be reintroduced (user decision 2026-08-14, light-only portfolio).
+ * Every ratio below is measured against a ground this site actually renders.
+ */
+
+:root[data-site='briefgateway'] {
+  /* ---- ground ramp — Carbon White theme, verbatim (ibm.md:38,50,251) ----
+     `--cds-layer-01` is the machine ground; see THE GROUND LAW above. */
+  --cds-background: #ffffff;
+  --cds-layer-01: #f4f4f4;
+  --cds-layer-02: #e0e0e0;
+  --cds-text-primary: #161616; /* [computed] 18.10:1 on #ffffff · 16.45:1 on #f4f4f4 */
+  --cds-text-secondary: #525252; /* [computed] 7.81:1 on #ffffff · 7.10:1 on #f4f4f4 */
+
+  /* ---- accent — NONE. This is the achromatic site (spec §7.1, §7.2). ---- */
+  --site-accent: var(--cds-text-primary); /* [computed] 18.10:1 on #ffffff */
+  --site-accent-strong: var(--cds-text-secondary); /* [computed] 7.81:1 on #ffffff */
+
+  /* ---- radius — shared by controls and inputs, Stripe's buttonBorderRadius rule ---- */
+  --site-radius: var(--radius-6);
+  --site-measure: 66ch; /* form column caps separately at 640px, spec §4.2 */
+  /* The same column expressed as a LENGTH. `ch` is relative to the element's
+     own font-size, so `max-width: 66ch` on a 48px h1 computes to ~1900px —
+     i.e. no cap at all, which is what the heading rules on this site were
+     silently doing before this pass. Every non-body-size element caps
+     against this instead. (Same device as adcpexplorer's `--measure-max`.) */
+  --column-max: 44rem; /* 704px ≈ 66ch at the 18px body size */
+
+  /* ======================================================================
+   * THE DRAWING SHEET (editorial-references §2.1, §2.3, §2.9)
+   * ==================================================================== */
+
+  /* The sheet is `main.wide`'s 1180px canvas (global.css, foundation-owned
+     and not editable from here). Recorded as a token so this site's own
+     stylesheet reads the same number the shared file does. */
+  --sheet-width: 1180px;
+
+  /* TWO-TIER HAIRLINE. Monocle runs three border roles; two is the number
+     this site can spend without the tiers stopping reading as tiers.
+       sheet  — masthead + every section open. Spans the full 1180px sheet
+                past the 66ch text column. One per section, must read.
+       column — inside the text column: table rows, list separators,
+                blockquote, apparatus. Many per screen, must not shout.
+     Both are DECORATIVE structural dividers, not UI-component boundaries:
+     WCAG 1.4.11 does not apply to them (no control is identified by them,
+     and no information is conveyed by them alone — every section they open
+     also carries a heading). Ratios recorded anyway, per the measurement
+     rule. The one hairline that IS a control boundary is `--field-border`
+     below, which is held at 3:1. */
+  --rule-sheet: var(--cds-gray-30); /* #c6c6c6 — [computed] 1.71:1 on #ffffff · 1.55:1 on #f4f4f4 */
+  --rule-column: var(
+    --cds-gray-20
+  ); /* #e0e0e0 — [computed] 1.32:1 on #ffffff · 1.20:1 on #f4f4f4 */
+
+  /* Asymmetric break rhythm, Stripe Press polarity (§2.9, `margin: 80px 0
+     10px`): the BREAK carries the whitespace, not a padding box. 64/20/16
+     rather than 80/…/10 because this site's sections are tool regions, not
+     book chapters — agenticadlab owns the top of the layout scale (§4). */
+  --break-space-above: 64px;
+  --break-space-below: 16px;
+  --break-space-lead: 20px; /* rule → heading */
+
+  /* ======================================================================
+   * THE TYPE-ROLE SPLIT (editorial-references §2.7) — the site's identity.
+   * `--machine-face` is not a new family: it is a NAME for a rule, so that
+   * every consumer in `sites/briefgateway/**` declares which voice it is in
+   * rather than reaching for a font stack ad hoc.
+   * ==================================================================== */
+  --machine-face: var(
+    --cds-font-mono
+  ); /* IBM Plex Mono — the program speaking, and the chrome
+    it speaks through: verdicts, counts, evidence, provenance, captions,
+    breadcrumbs, nav, apparatus headings. §2.7's "second, quieter face
+    reserved strictly for chrome/metadata". */
+  --human-face: var(--cds-font-sans); /* IBM Plex Sans — the author speaking. The reading path. */
+  --machine-size: 13px; /* metadata register: provenance, captions, breadcrumbs, rules */
+  --machine-track: 0.16px; /* tracking law: +0.16px at 14px and below, spec §4 */
+  --machine-lh: 1.5;
+  --machine-weight: 400; /* see --label-weight below — 400 is the ONLY weight Plex Mono has */
+
+  /* ---- wayfinding label ----
+     `--track-label` is this site's per-site value (spec §6.1). `--label-weight`
+     is overridden from the chassis default of 600 because IBM Plex Mono is
+     self-hosted as a STATIC 400 face (fonts.css:66-70) and the label primitive
+     renders in Mono — asking for 600 gets a synthetic-bold fake, which is the
+     same defect global.css:204 documents and fixes for Serif headings. Emphasis
+     comes from caps and tracking instead: Monocle's own eyebrow does not lean
+     on weight either (§2.1). */
+  --track-label: 1px;
+  --label-weight: 400;
+
+  /* ---- separation — Stripe Elements state layer, briefgateway-only (spec §6.4) ----
+     STATE, never structure. A ring means the control is doing something; no
+     resting element on this site is separated by a shadow (§1's SaaS
+     anti-tell: "pervasive drop shadows … implies product"). */
+  --field-shadow-resting: 0 1px 1px 0 rgba(0, 0, 0, 0.07);
+  --field-shadow-focus:
+    var(--field-shadow-resting), 0 0 0 1px var(--cds-text-primary), 0 0 0 4px var(--focus-ring-halo);
+  /* [computed] inner ring #161616 on #ffffff = 18.10:1 — the ring is the
+     control boundary in the focused state, so it is measured as UI (≥3:1). */
+  --field-shadow-invalid: var(--field-shadow-resting), 0 0 0 2px var(--cds-support-error);
+  /* [computed] #da1e28 on #ffffff = 5.00:1 · on #f4f4f4 = 4.55:1 (UI ≥3:1) */
+
+  /* ---- display ---- */
+  --display-weight: 300; /* Display 02, 48px — the only 300-weight display in the portfolio */
+
+  /* ---- display: Display 02 promoted into the h1 role (ibm.md:89) ----
+     global.css:232 reads --type-heading-01-size for h1 and --display-weight for
+     its weight; overriding the size here is what makes 48px/300 actually ship.
+     Nothing else in the repo consumes --type-heading-01-* (verified by grep).
+     The line-height drops from Carbon's 1.19 to 1.10 so a two-line masthead
+     sets as one thin block above its rule rather than as two sentences —
+     §2.10's "bind existing steps, do not add steps", applied to the ONE step
+     this site's identity rests on. Tracking stays 0: the chassis tracking law
+     never tracks display (spec §4), and this site takes no exemption —
+     whatisagenticbuying owns the portfolio's only one. */
+  --type-heading-01-size: 3rem; /* 48px, was 42px */
+  --type-heading-01-lh: 1.1;
+
+  /* ---- the site module: one column width, three pages ---- */
+  --form-column: 640px; /* ibm.md:331; also the illustration cap */
+
+  /* ---- input floor (ruling 1, hard, portfolio-wide but stated here since this
+     site owns the one page that depends on it): 16px minimum on typed-into fields */
+  --input-font-size-min: 16px;
+
+  /* ---- status = machine verdict. The ONLY colour on this site. ----
+     Worst case is `#f4f4f4`, the darkest ground any of these renders on
+     (THE GROUND LAW puts every verdict on either the white sheet or the
+     machine ground; nothing else exists). Both grounds measured. */
+  --status-info: #0057c2; /* [computed] 6.68:1 on #ffffff · 6.08:1 on #f4f4f4 */
+  --status-success: #0e6027; /* [computed] 7.72:1 on #ffffff · 7.02:1 on #f4f4f4 (= --cds-support-success-text) */
+  --status-warning: #8e6a00; /* [computed] 4.99:1 on #ffffff · 4.53:1 on #f4f4f4 (= --cds-support-warning-text) */
+  --status-error: #da1e28; /* [computed] 5.00:1 on #ffffff · 4.55:1 on #f4f4f4 (= --cds-support-error) */
+  --status-neutral: var(
+    --cds-text-secondary
+  ); /* [computed] 7.81:1 on #ffffff · 7.10:1 on #f4f4f4 */
+
+  /* ---- controls ---- */
+  --field-bg: var(--cds-background);
+  --field-border: var(
+    --cds-gray-50
+  ); /* #8d8d8d — [computed] 3.32:1 on #ffffff · 3.02:1 on #f4f4f4.
+    This one IS a UI-component boundary (ruling 6, ≥3:1) and is deliberately
+    NOT --cds-border-subtle #e0e0e0, which is 1.32:1 and is what the textarea
+    used before this pass — a live 1.4.11 failure. */
+  --btn-primary-bg: var(--cds-text-primary); /* [computed] fg #ffffff on it = 18.10:1 */
+  --btn-primary-fg: var(--cds-background);
+  --btn-primary-bg-hover: var(--cds-gray-80); /* #393939 — [computed] fg #ffffff on it = 11.55:1 */
+
+  /* ---- motion (Linear, live: 160ms ease-out-quad, press scale .97) ---- */
+  --motion-fast: 160ms;
+  --motion-ease: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+
+  /* ---- code panel: the ONE place the achromatic rule would cost legibility ----
+     Unset, --code-accent falls back to --accent, which on this site is
+     --cds-text-primary — every Shiki token would paint #161616 and a JSON
+     payload would have no syntax layer at all, on the site whose product is
+     reading JSON payloads. A syntax token IS a machine classification of the
+     reader's text, so it takes --status-info and the rule holds. */
+  --code-accent: var(--status-info); /* [computed] 6.08:1 on the #f4f4f4 panel */
+
+  /* ---- AnswerBox (spec §9.7, RE-COMPOSED this pass) ----
+     Was a `#f4f4f4` rounded box with a resting ring — i.e. a card, on the
+     first block of every page, on a site whose separation mechanic is
+     hairline-exclusive (§3 axis 4). It is now a rule-bracketed pull-out:
+     no ground, no ring, no radius, hierarchy from a mono kicker + a larger
+     text size + the two rules that bracket it. §1: "hierarchy comes from
+     type scale + whitespace + rare single hairlines". Structural precedence
+     (it still renders before body prose, for answer extraction) is
+     untouched — only the decoration is gone. Geometry lives in
+     sites/briefgateway/src/styles/briefgateway.css. */
+  --answerbox-padding: 0;
+  --answerbox-shadow: none;
+  --answerbox-radius: 0;
+  --answerbox-label-transform: uppercase;
+
+  /*
+   * ── MEASURED CONTRAST TABLE ────────────────────────────────────────────
+   * Recomputed 2026-08-14 with /tmp/bg-contrast.mjs (WCAG 2.x relative
+   * luminance, sRGB). Grounds: the white sheet #ffffff and the machine
+   * ground #f4f4f4. No other ground exists on this site.
+   *
+   *   TEXT (needs 4.5:1 normal, 3:1 large ≥24px or ≥18.66px semibold)
+   *   #161616 ink              #ffffff 18.10:1   #f4f4f4 16.45:1   PASS
+   *   #525252 secondary ink    #ffffff  7.81:1   #f4f4f4  7.10:1   PASS
+   *   #6f6f6f placeholder      #ffffff  5.02:1   #f4f4f4  4.57:1   PASS
+   *   #0057c2 status-info      #ffffff  6.68:1   #f4f4f4  6.08:1   PASS
+   *   #0e6027 status-success   #ffffff  7.72:1   #f4f4f4  7.02:1   PASS
+   *   #8e6a00 status-warning   #ffffff  4.99:1   #f4f4f4  4.53:1   PASS
+   *   #da1e28 status-error     #ffffff  5.00:1   #f4f4f4  4.55:1   PASS
+   *   #ffffff on #161616 (primary button)        18.10:1           PASS
+   *   #ffffff on #393939 (primary button hover)  11.55:1           PASS
+   *
+   *   UI / NON-TEXT (needs 3:1)
+   *   #8d8d8d field border     #ffffff  3.32:1   #f4f4f4  3.02:1   PASS
+   *   #161616 focus inner ring #ffffff 18.10:1                     PASS
+   *   #da1e28 invalid ring     #ffffff  5.00:1   #f4f4f4  4.55:1   PASS
+   *
+   *   TEXT ON THE ONE DEEPER BAND (--cds-layer-02 #e0e0e0, used only for
+   *   the field table's group rows and inline <code>)
+   *   #525252 secondary ink    #e0e0e0  5.92:1                     PASS
+   *   #161616 ink              #e0e0e0 13.71:1                     PASS
+   *
+   *   DECORATIVE DIVIDERS (1.4.11 does not apply — see --rule-sheet)
+   *   #c6c6c6 sheet rule       #ffffff  1.71:1   #f4f4f4  1.55:1
+   *   #e0e0e0 column rule      #ffffff  1.32:1   #f4f4f4  1.20:1
+   */
+}
+
+/*
+ * Mobile break rhythm. 64px above every rule is a section gap on a 1180px
+ * sheet and a dead screen on a 390px one, so it tightens — but only in
+ * magnitude. The MECHANIC is the asymmetry (big above the rule, small
+ * below), and that survives at every width; §2.9 is a polarity, not a
+ * number.
+ *
+ * This lives here rather than in `sites/briefgateway/src/styles/
+ * briefgateway.css` for a cascade reason: an override would have to beat
+ * the identical `:root[data-site='briefgateway']` selector above, media
+ * queries add no specificity, and the token bundle is linked LAST in the
+ * built page. Same selector, same file, later source order — this wins.
+ *
+ * 672px is the chassis `--bp-md` (tokens.css §7) and the breakpoint
+ * `/generate/` already uses for its mobile source-order re-layout.
+ */
+@media (max-width: 671px) {
+  :root[data-site='briefgateway'] {
+    --break-space-above: 40px;
+    --break-space-lead: 16px;
+    --break-space-below: 12px;
+  }
+}

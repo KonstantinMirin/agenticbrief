@@ -32,3 +32,36 @@ const { title, language, code, sourceUrl } = Astro.props
   </figcaption>
   <pre><code class={`language-${language}`}>{code}</code></pre>
 </figure>
+
+<style>
+  /*
+   * §9.6's flat-panel recipe. global.css's bare `pre` rule (Shiki-rendered
+   * markdown fences, outside this component) now carries the identical
+   * background/border/type treatment — reconciled, so a fenced code block
+   * and a CodeSample worked example render the same panel wherever they
+   * appear on a page. See global.css's `pre` rule for the Shiki-theme side
+   * of that fix.
+   *
+   * Radius deliberately reads `--code-radius`, the same hook global.css's
+   * `pre` and inline `<code>` rules read, not `--radius`: adcpexplorer's
+   * `--radius` is a 24px chrome pill, which on a multi-line rectangular
+   * block reads as a defect, not a pill.
+   */
+  .code-sample pre {
+    background: var(--bg-subtle); /* one-step layer shift, not the deeper --bg-inset */
+    border: none;
+    border-radius: var(--code-radius, var(--radius-2));
+    padding: var(--space-05); /* 16px, ibm.md:156 */
+    font-size: var(--type-code-02-size); /* Code 02, 16px — blocks, not the 14px inline role */
+    font-weight: var(--type-code-02-weight);
+    line-height: var(--type-code-02-lh);
+    letter-spacing: var(--type-code-02-tracking);
+  }
+
+  .code-sample figcaption {
+    margin-bottom: var(--space-03); /* 8px, on-grid */
+    font-size: var(--type-caption-01-size);
+    letter-spacing: var(--type-caption-01-tracking);
+    color: var(--fg-muted);
+  }
+</style>

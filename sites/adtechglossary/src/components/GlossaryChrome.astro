@@ -1,0 +1,821 @@
+---
+/**
+ * GlossaryChrome.astro
+ *
+ * Site-local CSS for adtechglossary, imported and rendered by all four page
+ * templates (index, [section]/index, [section]/[slug], 404). Every selector
+ * is prefixed `:root[data-site='adtechglossary']` (specificity 0,2,N) so it
+ * beats `packages/shared-ui/src/styles/global.css`'s element selectors
+ * regardless of bundle order, without editing that frozen file.
+ *
+ * This component renders no markup of its own — its whole body is one
+ * `<style is:global>` block.
+ *
+ * =====================================================================
+ * THE NAMED EDITORIAL MOVE — "the sheet on the desk"
+ * =====================================================================
+ * The #f4f4f4 ground is a desk and every page is a single continuous
+ * #ffffff SHEET laid on it: one page width (1180px) shared by the index
+ * and by every entry, zero border, zero shadow, zero radius. The site's
+ * one value jump (1.10:1, computed) is spent at PAGE scale instead of
+ * being scattered across six small white rectangles — which is what it
+ * used to be, and which is why the inversion, the site's stated dominant
+ * differentiator, was barely legible.
+ *
+ * Three rules follow from it, and they are the whole design:
+ *
+ *   1. NOTHING INSIDE THE SHEET IS BOXED. The AnswerBox loses its ground,
+ *      the blockquote loses its rule, the provenance note loses its dashed
+ *      border, the section kicker loses its 24px pill. Hierarchy is scale,
+ *      space and hairline only (editorial-references §1: "boxless
+ *      hierarchy", Pudding live — 0 containers across 3 essays).
+ *
+ *   2. EVERY STRUCTURAL RULE SPANS THE FULL SHEET, and only headings that
+ *      are direct children of the sheet get one. That is Monocle's live
+ *      `1px solid var(--border-*)` between sections (30+ occurrences) and
+ *      Raconteur's `.block-title { border-bottom: 1px solid #dee2e6 }`,
+ *      used here as the page's architecture: the rules, not a container,
+ *      draw the page edges.
+ *
+ *   3. THE MEASURE IS 72ch AND THE EVIDENCE USES THE REST. Running prose
+ *      sits left at 72ch; tables, code panels and figures — 36 of 36 term
+ *      pages carry a table — take the full 1068px sheet column and break
+ *      into the right margin the prose leaves empty. The full-sheet rules
+ *      are what make that margin read as a margin rather than as a gap.
+ *
+ * Type-role split (editorial-references §2.7, the NYT grotesque-for-
+ * metadata mechanic): IBM Plex Sans carries the reading path — prose,
+ * headings, term names — and IBM Plex Mono carries EVERYTHING that is not
+ * the reading path: kicker, hatnote/breadcrumb, letter heads, table
+ * captions, cell notes, provenance, answer source. Family alone separates
+ * definition from sourcing, with no box and no icon.
+ *
+ * Accent budget: amber #845720 marks WAYFINDING and nothing else — the
+ * brand square, the section kicker, the A-Z letter heads, the code
+ * accent. It never appears on a rule, a ground or a button.
+ *
+ * NO DARK MODE. There is no OS-colour-scheme media block in this file or
+ * anywhere under sites/adtechglossary/.
+ */
+---
+
+<style is:global>
+  /* ============================================================
+   * 1 — THE SHEET
+   *
+   * `--sheet-pad` and the 1180px page width come from the token file.
+   * `main.prose`'s cap is `--measure-max` (= the page width), NOT the
+   * measure: the running-text cap is applied per element in §2 below, so
+   * that tables and code can use the whole sheet. This replaces the old
+   * negative-margin "breakout" of tables past a 72ch main — that trick
+   * needed `100vw` arithmetic, a scrollbar correction and `overflow-x:
+   * hidden` on the document root to stay on screen; all three are now
+   * deleted, because nothing escapes the sheet any more.
+   * ============================================================ */
+  :root[data-site='adtechglossary'] main > article,
+  :root[data-site='adtechglossary'] .sheet {
+    background: var(--cds-layer-01); /* #ffffff on the #f4f4f4 desk — 1.10:1, the device */
+    padding: var(--sheet-pad);
+    /* Deliberately absent, all three: border, box-shadow, border-radius.
+       The value jump is the edge (spec §7.3 axis 4 — "background layering
+       with zero shadow AND zero border"). */
+  }
+
+  /* The masthead is the one block that stays on the desk: it is the label
+     on the folder, not a page in it. */
+  :root[data-site='adtechglossary'] .masthead {
+    margin-bottom: var(--space-07); /* 32px of desk before the sheet begins */
+  }
+
+  /* ============================================================
+   * 2 — MEASURE: prose at 72ch, evidence at full sheet width
+   * ============================================================ */
+  :root[data-site='adtechglossary'] main > article > p,
+  :root[data-site='adtechglossary'] main > article > ul,
+  :root[data-site='adtechglossary'] main > article > ol,
+  :root[data-site='adtechglossary'] main > article > dl,
+  :root[data-site='adtechglossary'] main > article > h3,
+  :root[data-site='adtechglossary'] main > article > h4,
+  :root[data-site='adtechglossary'] main > article > blockquote,
+  :root[data-site='adtechglossary'] main > article > .answer-box,
+  :root[data-site='adtechglossary'] main > article > .faq dl,
+  :root[data-site='adtechglossary'] main > article > .related ul,
+  :root[data-site='adtechglossary'] .sheet > p,
+  :root[data-site='adtechglossary'] .sheet > ul,
+  :root[data-site='adtechglossary'] .sheet > ol,
+  :root[data-site='adtechglossary'] .sheet > .faq dl,
+  :root[data-site='adtechglossary'] .masthead > p,
+  :root[data-site='adtechglossary'] .masthead > .answer-box {
+    max-width: var(--site-measure); /* 72ch — the portfolio's widest, unchanged */
+  }
+
+  /* `.engagement p` reads `--measure-max` in global.css, which on this site
+     is now the PAGE width, not the text measure. Re-point it at the real
+     measure so the closing block wraps like the prose above it. */
+  :root[data-site='adtechglossary'] .engagement p {
+    max-width: var(--site-measure);
+  }
+
+  /* Tables, code panels and figures deliberately carry NO max-width: they
+     fill the sheet column and run past the prose measure into the margin it
+     leaves. This is the one place the page is asymmetric, and it is where
+     the argument of every term page lives. */
+
+  /* ============================================================
+   * 3 — RULES: full-sheet hairlines, and only on top-level headings
+   *
+   * The bleed pair (negative inline margin + equal inline padding) makes an
+   * element's own rule span the sheet while its text stays in the column.
+   * The set is closed on purpose — a nested h2 (the FAQ heading, a contents
+   * entry) gets no rule, so "a rule means a page-level break" stays true.
+   * ============================================================ */
+  :root[data-site='adtechglossary'] main > article > h1,
+  :root[data-site='adtechglossary'] main > article > h2,
+  :root[data-site='adtechglossary'] main > article > .faq,
+  :root[data-site='adtechglossary'] main > article > .related,
+  :root[data-site='adtechglossary'] main > article > .engagement,
+  :root[data-site='adtechglossary'] .sheet > h1,
+  :root[data-site='adtechglossary'] .sheet > h2,
+  :root[data-site='adtechglossary'] .sheet > .az-rail,
+  :root[data-site='adtechglossary'] .sheet > .faq,
+  :root[data-site='adtechglossary'] .sheet > .related,
+  :root[data-site='adtechglossary'] .contents > section {
+    margin-inline: calc(-1 * var(--sheet-pad));
+    padding-inline: var(--sheet-pad);
+  }
+
+  /* The encyclopedia tell, kept and amplified: h1 and h2 are NOT bold, just
+     larger, sitting on a neutral hairline (Wikipedia live, design-research
+     §3.5). `--heading-rule` (#a8a8a8 — 2.38:1 on the sheet, 2.16:1 on the
+     desk, both computed) is one step stronger than the structural
+     `--border` because this rule is the loudest device on the site. */
+  :root[data-site='adtechglossary'] main > article > h1,
+  :root[data-site='adtechglossary'] main > article > h2,
+  :root[data-site='adtechglossary'] .sheet > h1,
+  :root[data-site='adtechglossary'] .sheet > h2,
+  :root[data-site='adtechglossary'] .masthead > h1,
+  :root[data-site='adtechglossary'] main > h1 {
+    border-bottom: 1px solid var(--heading-rule);
+    padding-bottom: var(--space-03); /* 8px */
+  }
+
+  /* ============================================================
+   * 4 — RHYTHM: asymmetric, rule-anchored (editorial-references §2.9 —
+   * Stripe Press's live `margin: 80px 0 10px` immediately before a rule).
+   * Big space ABOVE the break, small below: 48/16 at h2 (3:1), 40/8 at h3
+   * (5:1). On a deliberately flat ≈1.8x type ramp, spacing IS the
+   * hierarchy, so this is where the pass spends its budget — not on size.
+   * ============================================================ */
+  :root[data-site='adtechglossary'] main > article > h1,
+  :root[data-site='adtechglossary'] .sheet > h1,
+  :root[data-site='adtechglossary'] .masthead > h1,
+  :root[data-site='adtechglossary'] main > h1 {
+    margin-block: 0 var(--space-06); /* 0 / 24px — the sheet's own padding is the space above */
+  }
+
+  :root[data-site='adtechglossary'] h2 {
+    margin-block: var(--space-layout-04) var(--space-05); /* 48 / 16 */
+    padding-top: 0; /* kills global.css's 0.5rem heading padding-top */
+  }
+
+  :root[data-site='adtechglossary'] h3 {
+    margin-block: var(--space-08) var(--space-03); /* 40 / 8 */
+  }
+
+  :root[data-site='adtechglossary'] h4 {
+    margin-block: var(--space-06) var(--space-03); /* 24 / 8 */
+  }
+
+  :root[data-site='adtechglossary'] p,
+  :root[data-site='adtechglossary'] ul,
+  :root[data-site='adtechglossary'] ol,
+  :root[data-site='adtechglossary'] dl {
+    margin-block: 0 var(--space-05); /* 16px — was 1.1rem = 17.6px, off the 8px grid */
+  }
+
+  /* MUST-FIX (retained from the previous pass): this site's desktop ramp is
+     ALREADY Carbon's stock ramp shifted one role down (h1 = Heading 02/32px,
+     h2 = Heading 03/24px). global.css's portfolio-wide mobile rule shifts
+     h1/h2 down ANOTHER role at <=640px, which double-demotes this site only:
+     h1 lands at 24px (this site's own h2 size) and h2 at 20px/400, colliding
+     in SIZE with h3's 20px/600 — a 1.41x ramp with a mid-scale collision, on
+     the one site whose identity is a flat ~1.8x size-only ramp. Re-asserting
+     the desktop sizes holds 32/24/20/18 across the breakpoint. */
+  @media (max-width: 640px) {
+    :root[data-site='adtechglossary'] h1 {
+      font-size: var(--type-heading-01-size);
+    }
+
+    :root[data-site='adtechglossary'] h2 {
+      font-size: var(--type-heading-02-size);
+    }
+  }
+
+  /* ============================================================
+   * 5 — THE HEADWORD UNIT: kicker, headword, lead
+   *
+   * A dictionary entry opens kicker / headword / rule / sense. All three
+   * type roles are already in the chassis; what changes here is that none
+   * of them is in a box any more.
+   * ============================================================ */
+
+  /* The kicker was a 24px amber pill. It is now Raconteur's live category
+     kicker: tracked uppercase mono, no box, no background, sitting tight
+     above the headword. This also retires the site's last rounded corner —
+     see the --chip-radius note in the token file. */
+  :root[data-site='adtechglossary'] .eyebrow {
+    display: block;
+    background: none;
+    border-radius: 0;
+    padding: 0;
+    min-height: 0;
+    margin: 0 0 var(--space-02); /* 4px — the kicker belongs to the headword */
+    color: var(--site-accent); /* #845720 on #ffffff — 6.24:1, computed */
+  }
+
+  /* The lead. `.answer-box` keeps its structural precedence (it still
+     renders before body prose — AnswerBox.astro's GEO docblock, spec §12.5)
+     and loses its ground: it already sat on #ffffff, so its own #ffffff
+     rectangle was a box with no value jump behind it. Precedence is now
+     scale + position + air: Heading 05 (20px/400, ibm.md:97) directly under
+     the headword rule, then 32px of nothing. Wikipedia's unboxed lead. */
+  :root[data-site='adtechglossary'] .answer-box {
+    background: none;
+    box-shadow: none;
+    padding: 0;
+    margin: 0 0 var(--space-07); /* 32px */
+  }
+
+  :root[data-site='adtechglossary'] .answer-text {
+    font-size: var(--type-heading-05-size); /* 20px */
+    font-weight: var(--type-heading-05-weight); /* 400 */
+    line-height: var(--type-heading-05-lh); /* 1.4 */
+  }
+
+  /* ============================================================
+   * 6 — THE METADATA FACE (editorial-references §2.7)
+   *
+   * Plex Mono is promoted from "the label primitive" to this site's whole
+   * non-prose voice. Every role below is sourcing, provenance or wayfinding
+   * — never the definition itself, which stays Sans.
+   * ============================================================ */
+
+  /* Hatnote register (design-research §3.5, Wikipedia live: 13px, muted,
+     UNBORDERED, above the lead). The breadcrumb IS this site's hatnote slot,
+     and it sits on the desk, above the sheet — #525252 on #f4f4f4 = 7.10:1. */
+  :root[data-site='adtechglossary'] .breadcrumbs ol {
+    font-family: var(--meta-font);
+    font-size: var(--hatnote-size);
+    color: var(--hatnote-color);
+    margin-bottom: var(--space-05);
+  }
+
+  :root[data-site='adtechglossary'] .breadcrumbs li + li::before {
+    color: var(--cds-text-placeholder); /* #6f6f6f on #f4f4f4 — 4.57:1 */
+  }
+
+  /* Terse caption directly under (here: over) the figure, method deferred —
+     editorial-references §2.13, Pudding live. */
+  :root[data-site='adtechglossary'] caption {
+    font-family: var(--meta-font);
+    font-size: var(--meta-size);
+    letter-spacing: 0;
+    color: var(--cds-text-secondary); /* #525252 on #ffffff — 7.81:1 */
+    padding-bottom: var(--space-03);
+  }
+
+  :root[data-site='adtechglossary'] .cell-note {
+    font-family: var(--meta-font);
+    font-size: var(--meta-size);
+  }
+
+  /* Provenance. Was a dashed 1px box — the one dashed border on the site,
+     and a box on a boxless page. It becomes a mono credit line under a
+     hairline, which is the figure-in-a-paper convention this corpus
+     actually wants. */
+  :root[data-site='adtechglossary'] .spec-source {
+    border: 0;
+    border-top: 1px solid var(--border);
+    background: none;
+    border-radius: 0;
+    padding: var(--space-04) 0 0; /* 12px */
+    margin: var(--space-07) 0 var(--space-06);
+    font-family: var(--meta-font);
+    font-size: var(--meta-size);
+    color: var(--cds-text-secondary);
+  }
+
+  :root[data-site='adtechglossary'] .answer-source {
+    font-family: var(--meta-font);
+    font-size: var(--meta-size);
+  }
+
+  /* One label primitive, not two: global.css's `.footer-block h2` ships a
+     SANS uppercase 0.08em treatment that competes with the mono wayfinding
+     label used everywhere else on this site. */
+  :root[data-site='adtechglossary'] .footer-block h2 {
+    font-family: var(--meta-font);
+    font-size: var(--label-size);
+    letter-spacing: var(--track-label);
+    font-weight: var(--label-weight);
+    border-bottom: 0;
+    padding-bottom: 0;
+  }
+
+  /* ============================================================
+   * 7 — TABLES: the interior main event (36/36 term pages)
+   * ============================================================ */
+  :root[data-site='adtechglossary'] main table {
+    background: transparent; /* the sheet is already the ground */
+    margin-block: var(--space-06) var(--space-07);
+  }
+
+  :root[data-site='adtechglossary'] main th,
+  :root[data-site='adtechglossary'] main td {
+    border: 0;
+    border-bottom: 1px solid var(--border); /* horizontal rules only — no vertical grid */
+    padding: var(--space-03) var(--space-04); /* 8 / 12 */
+    font-size: var(--type-body-long-01-size); /* 16px/1.5, Carbon Body Long 01 */
+    line-height: var(--lh-ui);
+  }
+
+  :root[data-site='adtechglossary'] main thead th {
+    background: var(--cds-layer-02); /* #e0e0e0 — the INSET band, the ramp read downward */
+    font-size: var(--type-body-short-02-size); /* 14px/600/+0.16px, spec §9.5 verbatim */
+    font-weight: var(--type-body-short-02-weight);
+    letter-spacing: var(--type-body-short-02-tracking);
+    text-transform: none; /* uppercase belongs to the mono label primitive only */
+  }
+
+  :root[data-site='adtechglossary'] main tbody th[scope='row'] {
+    background: transparent;
+    font-weight: 600;
+  }
+
+  /* MEASURED FIX (retained): #3366cc on the thead's #e0e0e0 inset band is
+     4.07:1, under the 4.5:1 floor. Interactive text moves to the sheet,
+     where the same ink is 5.37:1. Interactive = raised, inert = inset. */
+  :root[data-site='adtechglossary'] main thead th a {
+    background: var(--cds-layer-01);
+  }
+
+  /* Inline code: THE DESK SHOWING THROUGH THE SHEET.
+     `global.css` fills inline `code` with `--bg-inset` (#e0e0e0 here), which
+     on a page whose Fields column carries six literals per row reads as
+     confetti — a run of little grey boxes on a page whose whole premise is
+     that nothing is boxed. Moving the fill one step up to the DESK colour
+     (#f4f4f4, exactly the ground the sheet is lying on) keeps the literal
+     marked without a box reading, and reuses a mechanic the site already
+     has: the table row hover and the code panel are the same idea at
+     different depths.
+     It also RETIRES a WCAG workaround instead of papering over one. The
+     documented failing pair was a link inside inline code — #3366cc on
+     #e0e0e0 = 4.07:1 — which used to be fixed by lifting that code onto
+     #ffffff. On #f4f4f4 the same link measures 4.88:1 and the visited state
+     4.88:1, both PASS, so the lift rule is deleted rather than kept as dead
+     weight. (The `thead th a` lift above stays: a bare link in a header cell
+     sits on the band itself, not on a code chip.) */
+  :root[data-site='adtechglossary'] code {
+    background: var(--cds-background); /* #f4f4f4 — link 4.88:1, visited 4.88:1, ink 16.45:1 */
+    padding: 0.1em 0.3em;
+  }
+
+  :root[data-site='adtechglossary'] pre code {
+    background: none;
+    padding: 0;
+  }
+
+  /* At <=640px `global.css` turns the table into its own scroll container
+     (`display:block; width:auto; max-width:100%; overflow-x:auto`, preserved
+     verbatim per spec §12.7). That containment was being defeated inside the
+     cells: `:not(pre) > code { overflow-wrap: anywhere }` let schema
+     identifiers break mid-token, so `package_id` rendered as "pack / age_i /
+     d" down a 60px column instead of making the table scroll. Holding code
+     tokens intact hands the overflow back to the scroll container that was
+     built for it. Scoped to the width where that container exists. */
+  @media (max-width: 640px) {
+    :root[data-site='adtechglossary'] main table :not(pre) > code,
+    :root[data-site='adtechglossary'] main table code {
+      overflow-wrap: normal;
+      white-space: nowrap;
+    }
+  }
+
+  @media (hover: hover) {
+    :root[data-site='adtechglossary'] main tbody tr:hover {
+      background: var(--cds-background); /* the desk shows through the sheet */
+    }
+  }
+
+  /* ============================================================
+   * 8 — LINKS: underline discipline + the same measured WCAG fix
+   * ============================================================ */
+  :root[data-site='adtechglossary'] main a {
+    text-decoration-thickness: 1px;
+  }
+
+  /* Blocks that are ENTIRELY links carry no ambiguity about which words are
+     links, so the underline comes off at rest and back on hover/focus —
+     Wikipedia's own index/nav behaviour, applied by rule, not blanket
+     removal. */
+  :root[data-site='adtechglossary'] .az-run a,
+  :root[data-site='adtechglossary'] .term-list a,
+  :root[data-site='adtechglossary'] .related a,
+  :root[data-site='adtechglossary'] .portfolio-links a,
+  :root[data-site='adtechglossary'] .breadcrumbs a,
+  :root[data-site='adtechglossary'] .contents h2 a,
+  :root[data-site='adtechglossary'] .az-rail a {
+    text-decoration: none;
+  }
+
+  :root[data-site='adtechglossary'] .az-run a:hover,
+  :root[data-site='adtechglossary'] .az-run a:focus-visible,
+  :root[data-site='adtechglossary'] .term-list a:hover,
+  :root[data-site='adtechglossary'] .term-list a:focus-visible,
+  :root[data-site='adtechglossary'] .related a:hover,
+  :root[data-site='adtechglossary'] .related a:focus-visible,
+  :root[data-site='adtechglossary'] .contents h2 a:hover,
+  :root[data-site='adtechglossary'] .contents h2 a:focus-visible,
+  :root[data-site='adtechglossary'] .breadcrumbs a:hover {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+  }
+
+  /* The `a code, a > code { background: #ffffff }` lift that used to live
+     here is DELETED, not moved: inline code now sits on #f4f4f4 (see §7),
+     where a link measures 4.88:1 and a visited link 4.88:1 — both PASS
+     without lifting anything. Recorded so nobody re-adds it. */
+
+  /* Do not suppress :visited anywhere — in the A-Z run it is the site's most
+     valuable affordance at 35 terms, and it is the portfolio's only visited
+     state. (No rule here; this comment documents the deliberate absence.) */
+
+  /* ============================================================
+   * 9 — QUOTATION AND THE CLOSING BLOCKS: no boxes, no left rules
+   * ============================================================ */
+
+  /* Block quotations are frequent in this corpus (specification text quoted
+     verbatim). They were a bordered, tinted panel; they are now an indented
+     quotation in the secondary ink, which is what a reference work does with
+     quoted source text. No rule of any weight — the site's rules are
+     horizontal and architectural, and a vertical one would read as a second,
+     competing system (and slop tell 4). */
+  :root[data-site='adtechglossary'] blockquote {
+    border: 0;
+    background: none;
+    color: var(--cds-text-secondary); /* #525252 on #ffffff — 7.81:1 */
+    margin: var(--space-06) 0;
+    padding: 0 0 0 var(--space-07); /* 32px hanging indent */
+    max-width: var(--site-measure);
+  }
+
+  :root[data-site='adtechglossary'] .faq,
+  :root[data-site='adtechglossary'] .related {
+    margin-top: var(--space-layout-05); /* 64px — the region break, above its rule */
+    padding-top: var(--space-06);
+  }
+
+  :root[data-site='adtechglossary'] .engagement {
+    border-left: 0;
+    border-top: 1px solid var(--border);
+    margin-block: var(--space-layout-05) 0; /* 64px */
+    padding-block: var(--space-06) var(--space-02);
+  }
+
+  /* ============================================================
+   * 10 — SQUARING THE SHARED COMPONENTS
+   * Three shared rules hardcode a radius the 0px law does not permit.
+   * They are corrected by cascade here, never by editing shared-ui.
+   * ============================================================ */
+
+  /* global.css's `.brand-mark` is a 14px rounded square (3px). On the only
+     0px-radius site the masthead mark is a SQUARE of amber — which is also
+     the only place the accent appears in the chrome. */
+  :root[data-site='adtechglossary'] .brand-mark {
+    border-radius: 0;
+  }
+
+  /* global.css's `.badge` hardcodes `--radius-2`. */
+  :root[data-site='adtechglossary'] .badge {
+    border-radius: var(--radius);
+  }
+
+  /* Footer.astro hardcodes `border-radius: var(--radius-2, 2px)` on the
+     focus ring of `.brand-mark-link` and `.portfolio-links a`. */
+  :root[data-site='adtechglossary'] .brand-mark-link,
+  :root[data-site='adtechglossary'] .portfolio-links a:focus-visible {
+    border-radius: var(--radius);
+  }
+
+  /* Most links in this site's own markup inherit no explicit focus treatment
+     and fall through to the UA default outline, which on Chromium is
+     literally system blue — the one hue this portfolio deletes everywhere
+     else (ruling 4). One rule covers all of them since they share the <main>
+     ancestor. */
+  :root[data-site='adtechglossary'] main a:focus-visible {
+    outline: none;
+    box-shadow: var(--focus-ring);
+    border-radius: var(--radius);
+  }
+
+  /* ============================================================
+   * 11 — MOTION
+   * ============================================================ */
+  @media (prefers-reduced-motion: reduce) {
+    :root[data-site='adtechglossary'] {
+      scroll-behavior: auto;
+    }
+  }
+
+  /* ============================================================
+   * 12 — THE LETTER RAIL + A-Z INDEX (homepage)
+   *
+   * (a) `auto-fit` with a 26-cell alphabet always wraps to >=2 UNEVEN rows,
+   *     orphaning a lone "Z". Forcing exactly 13 columns once the rail is
+   *     sticky makes it a DELIBERATE two-row block (A-M / N-Z). 13 columns
+   *     clear 44px at any sticky width.
+   * (b) The rail unsticks below 672px: the unforced wrap measures ~178px
+   *     there, 21-28% of a phone viewport pinned for the whole page.
+   *
+   * `--az-rail-h` tracks the rail's real, now-deterministic height so
+   * `.az-letter`'s `scroll-margin-top` derives from it.
+   * ============================================================ */
+  :root[data-site='adtechglossary'] {
+    --az-rail-h: 0px; /* <672px: static, nothing to scroll-clear */
+  }
+
+  @media (min-width: 672px) {
+    :root[data-site='adtechglossary'] {
+      --az-rail-h: 90px; /* sticky, 2 rows: 44px x 2 + 2px border-block */
+    }
+  }
+
+  :root[data-site='adtechglossary'] .az-rail {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    background: var(--cds-layer-01); /* #ffffff — the sheet travels with it */
+    border-block: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(44px, 1fr));
+    /* Flush to the sheet's top edge: the rail IS the head of the page, so
+       its own top hairline lands exactly on the sheet's edge instead of
+       floating below a 56px band of empty white. */
+    margin-block: calc(-1 * var(--sheet-pad)) var(--space-07);
+  }
+
+  @media (max-width: 671px) {
+    :root[data-site='adtechglossary'] .az-rail {
+      position: static; /* see (b) above */
+    }
+  }
+
+  @media (min-width: 672px) {
+    :root[data-site='adtechglossary'] .az-rail {
+      grid-template-columns: repeat(13, minmax(44px, 1fr)); /* see (a) above */
+    }
+  }
+
+  :root[data-site='adtechglossary'] .az-rail a,
+  :root[data-site='adtechglossary'] .az-rail span {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--meta-font);
+    font-size: 14px;
+    font-weight: var(--label-weight);
+    letter-spacing: var(--track-label);
+    text-transform: uppercase;
+    border-radius: 0;
+  }
+
+  :root[data-site='adtechglossary'] .az-rail a {
+    color: var(--link-color); /* #3366cc on #ffffff — 5.37:1 */
+  }
+
+  :root[data-site='adtechglossary'] .az-rail span {
+    color: var(--cds-text-placeholder); /* dead letters, still shown — 5.02:1 */
+  }
+
+  :root[data-site='adtechglossary'] .az-rail a:hover {
+    background: var(--cds-layer-hover-01);
+  }
+
+  :root[data-site='adtechglossary'] .az-rail a:focus-visible {
+    outline: none;
+    box-shadow: var(--focus-ring);
+  }
+
+  :root[data-site='adtechglossary'] .az-index {
+    columns: 3;
+    column-gap: var(--space-07);
+    margin: 0 0 var(--space-layout-04);
+  }
+
+  @media (max-width: 1055px) {
+    :root[data-site='adtechglossary'] .az-index {
+      columns: 2;
+    }
+  }
+
+  @media (max-width: 671px) {
+    :root[data-site='adtechglossary'] .az-index {
+      columns: 1;
+    }
+  }
+
+  :root[data-site='adtechglossary'] .az-group {
+    break-inside: avoid;
+    margin-bottom: var(--space-06);
+  }
+
+  /* The letter head. 20px mono — one step of the EXISTING ramp (Heading 04's
+     size), not a new one, so the flat 32/18 = 1.78x range that spec §7.2
+     names as this site's secondary differentiator is untouched. It reads as
+     an index letter rather than a caption, which at 13px it did not. */
+  :root[data-site='adtechglossary'] .az-letter {
+    font-family: var(--meta-font);
+    font-size: var(--type-heading-04-size); /* 20px */
+    font-weight: var(--label-weight);
+    letter-spacing: var(--track-label);
+    line-height: 1.4;
+    text-transform: uppercase;
+    color: var(--site-accent); /* #845720 on #ffffff — 6.24:1 */
+    border-bottom: 1px solid var(--border);
+    padding: 0 0 var(--space-02);
+    margin: 0 0 var(--space-03);
+    /* Derived from the rail's real height (above) plus a 16px gap; 0 + 16px
+       below 672px, where the rail is static and there is nothing to clear. */
+    scroll-margin-top: calc(var(--az-rail-h) + var(--space-05));
+  }
+
+  :root[data-site='adtechglossary'] .az-run {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  :root[data-site='adtechglossary'] .az-run li {
+    padding-block: 6px;
+  }
+
+  /* 44px is the real touch target at every width, not just phones — the
+     same 35 links are the primary nav on tablet and desktop too, and
+     touch-primary tablets were getting the 23px box. No media query: this
+     is unconditional, same as the phone behaviour always was. */
+  :root[data-site='adtechglossary'] .az-run a {
+    font-size: 18px;
+    font-weight: 400; /* an index run, not a definition list */
+    line-height: var(--lh-ui);
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+  }
+
+  /* ============================================================
+   * 13 — THE SYSTEMATIC CONTENTS (homepage)
+   *
+   * Eight identically-stacked heading+paragraph+list blocks were slop tell 3
+   * (the equal-weight tile run) in list clothing. Recomposed as a printed
+   * contents spread: scope statement left, the terms it contains right, one
+   * full-sheet hairline per entry. The asymmetry is per ROW, so nothing
+   * about page-level lookup changes (editorial-references §3, axis 7).
+   * ============================================================ */
+  :root[data-site='adtechglossary'] .contents {
+    margin-bottom: var(--space-layout-04);
+  }
+
+  :root[data-site='adtechglossary'] .contents > section {
+    border-top: 1px solid var(--border);
+    padding-block: var(--space-07) var(--space-05); /* 32 / 16 — big above the rule's break */
+  }
+
+  :root[data-site='adtechglossary'] .contents h2 {
+    border-bottom: 0; /* only sheet-level headings carry a rule */
+    margin: 0 0 var(--space-03);
+    padding: 0;
+  }
+
+  /* A section heading is a heading first and a link second. Left as a link
+     colour it made the whole index one undifferentiated field of #3366cc;
+     in ink (#161616 on #ffffff — 18.10:1) the page gains the hierarchy it
+     was missing — black section headings over blue term runs — and the blue
+     goes back to meaning "a term you can traverse", which is the only thing
+     the corpus wants it to mean. Underline on hover/focus, per §8. */
+  :root[data-site='adtechglossary'] .contents h2 a,
+  :root[data-site='adtechglossary'] .contents h2 a:visited {
+    color: var(--cds-text-primary);
+  }
+
+  :root[data-site='adtechglossary'] .contents-head p {
+    margin: 0;
+    font-size: var(--type-body-long-01-size); /* 16px — a scope note, not prose */
+    line-height: var(--lh-ui);
+    color: var(--cds-text-secondary); /* 7.81:1 on the sheet */
+  }
+
+  :root[data-site='adtechglossary'] .contents .term-list {
+    margin: var(--space-05) 0 0;
+  }
+
+  /* Inside the contents these are index runs, not definition rows: no
+     hairline per item (the entry rule already separates entries) and no
+     600 weight (there is no gloss to out-rank). */
+  :root[data-site='adtechglossary'] .contents .term-list li {
+    border-bottom: 0;
+    padding-block: 6px;
+  }
+
+  :root[data-site='adtechglossary'] .contents .term-list .term-name {
+    font-weight: 400;
+    font-size: 18px;
+  }
+
+  @media (min-width: 900px) {
+    :root[data-site='adtechglossary'] .contents > section {
+      display: grid;
+      grid-template-columns: minmax(0, 22rem) minmax(0, 1fr);
+      column-gap: var(--space-layout-03); /* 32px */
+      align-items: start;
+    }
+
+    :root[data-site='adtechglossary'] .contents .term-list {
+      margin: 0;
+      columns: 2;
+      column-gap: var(--space-07);
+    }
+
+    :root[data-site='adtechglossary'] .contents .term-list li {
+      break-inside: avoid;
+    }
+
+    :root[data-site='adtechglossary'] .contents .term-list .term-name {
+      display: block;
+      min-height: 0;
+    }
+  }
+
+  /* ============================================================
+   * 14 — SECTION INDEX PAGES: the printed two-column entry list
+   *
+   * The 8 section indexes are the only place a term and its gloss appear
+   * together. Below 768px they stack (and the term keeps a 44px touch
+   * target). At 768px and up they become a real glossary entry list: the
+   * headword holds a fixed column and the gloss runs beside it, so the eye
+   * scans one hard left axis of headwords instead of a ragged stack.
+   * ============================================================ */
+  /* The entry list is EVIDENCE, not prose: like the tables it opts out of
+     the 72ch cap §2 puts on `main > article > ul` and takes the sheet
+     column, so the headword axis and the gloss get real room. The gloss
+     column carries its own 60ch cap in the grid template below, so no line
+     of reading text ever exceeds the measure. */
+  :root[data-site='adtechglossary'] main > article > .term-list {
+    max-width: none;
+    /* Closes the list at the top as well as between rows, so it reads as one
+       ruled block rather than as prose that happens to have lines under it. */
+    border-top: 1px solid var(--border);
+    margin-block: var(--space-07);
+  }
+
+  :root[data-site='adtechglossary'] main .term-list li {
+    padding-block: var(--space-04); /* 12px */
+    border-bottom: 1px solid var(--border);
+  }
+
+  :root[data-site='adtechglossary'] main .term-list .term-name {
+    font-size: 18px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    min-height: 44px; /* a real touch target, not a 27px text line */
+  }
+
+  :root[data-site='adtechglossary'] main .term-list .term-gloss {
+    display: block;
+    font-size: var(--type-body-long-01-size); /* 16px */
+    line-height: var(--lh-ui);
+    color: var(--cds-text-secondary); /* 7.81:1 on the sheet */
+    margin-top: 2px;
+  }
+
+  @media (min-width: 768px) {
+    :root[data-site='adtechglossary'] main.prose .term-list li {
+      display: grid;
+      grid-template-columns: minmax(0, 16rem) minmax(0, 60ch);
+      column-gap: var(--space-07); /* 32px */
+      align-items: start;
+    }
+
+    /* `flex-start` rather than `center`: it puts the headword's text box at
+       the top of its 44px touch target, which lands its baseline within 2px
+       of the gloss's — aligned by construction, no magic offset. */
+    :root[data-site='adtechglossary'] main.prose .term-list .term-name {
+      align-items: flex-start;
+    }
+
+    :root[data-site='adtechglossary'] main.prose .term-list .term-gloss {
+      margin-top: 0;
+    }
+  }
+</style>

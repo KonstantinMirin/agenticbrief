@@ -1,0 +1,1104 @@
+/**
+ * aampexplorer — site-local structural stylesheet.
+ *
+ * THE EDITORIAL MOVE, in one sentence: "the press plate" — the #161616 band
+ * stops being an inset panel floating on a white page and becomes a full-height
+ * black SPINE that bleeds off the left edge of the viewport and off the foot of
+ * the document, closed top and bottom by a single heavy black rule, with the
+ * white text column laid on it like a sheet on a press bed and its index re-set
+ * as a printed contents page (mono, right-aligned figure column, groups
+ * separated by space alone) rather than an application sidebar.
+ *
+ * Drawn from /srv/ws/out/editorial-references.md:
+ *   §2.7  two-role type system — Plex Sans carries the reading path and NOTHING
+ *         else; Plex Mono is the entire metadata voice (spine index, captions,
+ *         chips, property terms, breadcrumbs, versions, provenance, running
+ *         head). This is the NYT "grotesque = metadata" split executed with
+ *         mono, which §2.7 names as the cheapest remaining editorial gain in
+ *         the chassis. It is this site's dominant TYPE differentiator.
+ *   §2.1  the kicker primitive, at this site's 1.3px tracking.
+ *   §2.3  hairlines as the sole structural chrome — here reduced to exactly
+ *         TWO rules on the whole site (masthead, foot). Everything else
+ *         separates on a background-value shift or on space.
+ *   §2.9  asymmetric, rule-anchored whitespace: big space above a break, small
+ *         below (40/8 in prose, 40/8 in the spine's group rhythm).
+ *   §2.13 terse captions BELOW the figure — `caption-side: bottom`, the
+ *         figure-in-a-paper convention, and a visible split from adcpexplorer,
+ *         which keeps the chassis default (captions above).
+ *   §4    this site's Never column: pill radius · any second accent · A BORDER
+ *         ON THE BAND BOUNDARY (the value jump is the border) — the previous
+ *         `border-right: 1px solid var(--chrome-boundary)` violated that row
+ *         and is deleted, along with `--chrome-boundary` itself.
+ *
+ * Every selector is prefixed `[data-site='aampexplorer']` so it out-specifies
+ * both global.css (0,1,x) and PageLayout's own scoped rules (0,2,0) without
+ * depending on bundle order. No shared-layer file is touched; this is the ONLY
+ * place aampexplorer's structural CSS lives.
+ *
+ * Colour values are `var(--cds-*)` / `var(--chrome-*)` / `var(--accent)`
+ * aliases, all measured and commented in
+ * packages/design-tokens/src/sites/aampexplorer.css, which carries this site's
+ * full contrast table. No `@media (prefers-color-scheme: ...)` appears in this
+ * file or in that one; the spine is a composition element, not a colour scheme.
+ *
+ * SPECIFICITY NOTE, used in three places below and nowhere else: Astro compiles
+ * a component's scoped rules by appending `[data-astro-cid-xxxxxxxx]` to EVERY
+ * compound selector, so `Header.astro`'s `.site-header nav a:hover` ships as
+ * (0,6,0). A repeated `[data-site='aampexplorer']` prefix is a specificity
+ * bump, not a typo — the count on each rule is the minimum that wins outright
+ * rather than tying and depending on this repo's per-page CSS chunk order.
+ */
+
+/* ==========================================================================
+ * 1. Container — 1584px, the chassis's own grid max. 1180px cannot hold three
+ *    regions: at 1180 the 6-col prose track is 407px (~45 CPL), at 1584 it is
+ *    550px (~62 CPL).
+ * ========================================================================== */
+[data-site='aampexplorer'] main.wide {
+  max-width: var(--site-container, var(--grid-max-width));
+  padding-inline: 32px;
+}
+
+[data-site='aampexplorer'] .header-inner,
+[data-site='aampexplorer'] .footer-inner,
+[data-site='aampexplorer'] .footer-legal {
+  max-width: var(--site-container, var(--grid-max-width));
+}
+
+/* ==========================================================================
+ * 2. The two rules — masthead and foot (§2.3, Raconteur's `.block-title`
+ *    recipe: a header defined entirely by weight, tracking and ONE rule; no
+ *    fill, no colour).
+ *
+ *    Before this pass the header was a #f4f4f4 fill with a #e0e0e0 hairline
+ *    and 18px sans links with rounded hover chips — an application bar, which
+ *    made everything below it read as application chrome, the spine included.
+ *    It is now the page ground, closed by a single #161616 rule (18.10:1 on
+ *    #ffffff, non-text floor 3:1), with the nav set as a mono running head.
+ *    The footer takes the same rule, so the page is bracketed top and bottom
+ *    by the same drawn line the spine hangs between.
+ * ========================================================================== */
+[data-site='aampexplorer'][data-site='aampexplorer'] .site-header {
+  background: var(--bg);
+  border: none;
+  border-bottom: var(--masthead-rule);
+  box-shadow: none;
+}
+
+[data-site='aampexplorer'][data-site='aampexplorer'] .site-footer {
+  background: var(--bg);
+  border: none;
+  border-top: var(--masthead-rule);
+}
+
+/* The running head. Family, size, case and tracking are not set by
+   Header.astro at all, so a plain (0,2,2) prefix carries them. */
+[data-site='aampexplorer'] .site-header nav a {
+  font-family: var(--meta-font);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: var(--track-label);
+  text-transform: uppercase;
+}
+
+/*
+ * The hover/current fill IS set by Header.astro (`background: var(--bg-inset)`
+ * at (0,6,0)), and a persistent rounded chip on a nav item is the loudest SaaS
+ * tell in the diagnostic. Five repeats put this at (0,6,2), which beats (0,6,0)
+ * on the third component. Replaced by the site's own devices: the ink steps to
+ * the accent (global.css already does that) and the word takes a rule under it.
+ */
+[data-site='aampexplorer'][data-site='aampexplorer'][data-site='aampexplorer'][data-site='aampexplorer'][data-site='aampexplorer']
+  .site-header
+  nav
+  a:hover,
+[data-site='aampexplorer'][data-site='aampexplorer'][data-site='aampexplorer'][data-site='aampexplorer'][data-site='aampexplorer']
+  .site-header
+  nav
+  a[aria-current='page'] {
+  background: none;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 5px;
+}
+
+/* The footer block headings are metadata, not prose: same kicker recipe as the
+   spine's group labels, so the foot of the page and the spine speak with one
+   voice. */
+[data-site='aampexplorer'] .footer-block h2 {
+  font-family: var(--meta-font);
+  font-size: var(--label-size);
+  font-weight: var(--label-weight);
+  letter-spacing: var(--track-label);
+  text-transform: uppercase;
+  color: var(--fg-muted); /* #525252 on #ffffff — 7.81:1 */
+}
+
+/* ==========================================================================
+ * 3. THE SPINE — PageLayout's `nav` slot on every reference page.
+ *
+ *    `align-self: stretch` overrides `.doc-grid`'s `align-items: start` so the
+ *    band runs the full height of the grid row; the `height: 100%` chain lets
+ *    the index stick inside it.
+ *
+ *    The band itself is painted by a pseudo-element rather than a background,
+ *    because it has to leave the grid on two sides:
+ *      LEFT  `left: -100vw` — off the viewport. Overflow to the inline-start
+ *            side is not scrollable in LTR, so this adds no horizontal scroll
+ *            (verified by render: document.scrollWidth is unchanged).
+ *      FOOT  `bottom: calc(-1 * var(--spine-bleed-foot))` — `main`'s own
+ *            4rem bottom padding (global.css:96), so the spine ends exactly on
+ *            the footer rule instead of stopping in mid-air.
+ *      TOP   deliberately NOT bled. The spine's top edge aligns with the top
+ *            of the text column; that shared line is the one composed
+ *            alignment in the layout and it is what makes the band read as
+ *            placed rather than as a widget that happens to be there.
+ *    Zero radius, on purpose: a rounded corner on a plane that runs off two
+ *    viewport edges is a contradiction, and the 4px rounded rectangle sitting
+ *    in white margin was the pre-pass render's clearest SaaS tell.
+ * ========================================================================== */
+[data-site='aampexplorer'] .doc-grid > .doc-nav {
+  align-self: stretch;
+  position: relative;
+  /* The element carries the ground as well as the pseudo-element. The `::before`
+     exists only to BLEED it past the element box; painting the same colour on
+     the element itself means the ink/ground pairing is a real computed-style
+     relationship (an automated contrast audit walking `background-color` up the
+     tree resolves #c6c6c6 on #161616, not #c6c6c6 on #ffffff) and the index
+     stays legible even if the pseudo-element is ever suppressed. */
+  background: var(--chrome-bg);
+  border: none;
+  border-radius: var(--spine-radius);
+  padding: 32px 0 40px;
+}
+
+[data-site='aampexplorer'] .doc-grid > .doc-nav::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: calc(-1 * var(--spine-bleed-foot));
+  left: -100vw;
+  background: var(--chrome-bg);
+  border-radius: var(--spine-radius);
+  z-index: 0;
+}
+
+/* The index paints above the plate. `.doc-nav-disclosure` is the first
+   positioned element after `::before` in tree order, so `position: relative`
+   with `z-index: auto` is enough — no z-index arms race. */
+[data-site='aampexplorer'] .doc-nav-disclosure {
+  position: relative;
+  height: 100%;
+}
+
+/* PageLayout's own "On this page" <summary> is a hardcoded string this site
+   cannot relabel through a prop — suppressed at every width and replaced by
+   PlaneRail's own <details>, which the CSS below drives instead. */
+[data-site='aampexplorer'] .doc-nav-disclosure > summary {
+  display: none;
+}
+
+[data-site='aampexplorer'] .doc-nav-disclosure .doc-nav-body {
+  display: block;
+  height: 100%;
+  margin-top: 0;
+}
+
+/*
+ * Chromium 120+/Firefox 129+ implement a CLOSED <details> via a UA-stylesheet
+ * rule on the internal `::details-content` pseudo-element —
+ * `content-visibility: hidden`, which skips layout and paint of the whole
+ * subtree regardless of any `display` override on a descendant. Neither
+ * `.doc-nav-disclosure > summary { display: none }` above nor the `>=672px`
+ * `.rail-disclosure` rules below ever worked in a modern engine without this.
+ *
+ * `.doc-nav-disclosure`'s own <summary> is suppressed at EVERY width, so it
+ * must always render its content. `.rail-disclosure` — PlaneRail's own
+ * <details>, whose <summary> is the real native mobile toggle — gets the same
+ * override only `>=672px`, leaving the native open/close mechanic intact for
+ * the mobile accordion.
+ */
+[data-site='aampexplorer'] .doc-nav-disclosure::details-content {
+  content-visibility: visible;
+}
+
+@media (min-width: 1056px) {
+  [data-site='aampexplorer'] .rail-disclosure::details-content {
+    content-visibility: visible;
+  }
+}
+
+[data-site='aampexplorer'] .rail,
+[data-site='aampexplorer'] .rail-disclosure {
+  height: 100%;
+}
+
+[data-site='aampexplorer'] .rail-inner {
+  position: sticky;
+  top: 32px;
+  display: flex;
+  flex-direction: column;
+  /* §2.9 — the group rhythm. 40px between groups, 8px under a kicker: big
+     space above the break, small below. This gap plus the kicker margin IS the
+     separation; there are no rules inside the spine (see §4 of the token file,
+     decision 2 — zero borders, site-wide, without exception). */
+  gap: 40px;
+}
+
+/* PlaneRail's own summary — the mobile-only chip. Hidden as a control at
+   desktop widths, where the index is always open; shown as the real native
+   <details> toggle below 672px. */
+[data-site='aampexplorer'] .rail-summary {
+  cursor: pointer;
+  list-style: none;
+  font-family: var(--meta-font);
+  font-size: var(--label-size);
+  font-weight: var(--label-weight);
+  letter-spacing: var(--track-label);
+  text-transform: uppercase;
+  color: var(--chrome-accent); /* #f4f4f4 on #161616 — 16.45:1 */
+  padding: 0 24px;
+}
+
+[data-site='aampexplorer'] .rail-summary::-webkit-details-marker {
+  display: none;
+}
+
+[data-site='aampexplorer'] .rail-summary:focus-visible {
+  outline: none;
+  box-shadow: var(--chrome-focus-ring);
+}
+
+[data-site='aampexplorer'] .rail-group {
+  padding: 0 24px;
+}
+
+/* The kicker (§2.1). Set one step quieter than the rows it heads, so the eye
+   lands on the entries and reads the label only when it needs to — the
+   contents-page convention, not the sidebar-section convention. */
+[data-site='aampexplorer'] .rail-label {
+  margin: 0 0 8px;
+  font-family: var(--meta-font);
+  font-size: var(--label-size);
+  font-weight: var(--label-weight);
+  line-height: var(--label-lh);
+  letter-spacing: var(--track-label);
+  text-transform: uppercase;
+  color: var(--chrome-text-secondary); /* #c6c6c6 on #161616 — 10.59:1 */
+}
+
+[data-site='aampexplorer'] .rail-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/*
+ * A printed index row, not a nav item: the name on the left in mono, the
+ * figure (repo count, kind) pushed to the right edge of the band. No radius —
+ * the current/hover ground shift is a square highlight bar running the full
+ * width of the plate, which is a directory device; a 4px rounded fill on a
+ * nav row is the pill this site is forbidden.
+ *
+ * `flex-wrap` plus `margin-left: auto` on the figure keeps the two parts on
+ * one line when the track allows it and drops the figure to its own
+ * right-aligned line when it does not, instead of forcing the row wider than
+ * the band. (At 1056px the 4-col track is 224px, where `registry-agent-example`
+ * plus its kind genuinely cannot share a line.)
+ */
+[data-site='aampexplorer'] .rail-list a {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 2px 12px;
+  min-height: 44px;
+  padding: 10px 24px;
+  margin: 0 -24px;
+  border-radius: 0;
+  color: var(--chrome-text-secondary); /* #c6c6c6 on #161616 — 10.59:1 */
+  text-decoration: none;
+  line-height: var(--lh-ui);
+}
+
+[data-site='aampexplorer'] .rail-list a:hover {
+  background: var(--chrome-selected);
+  color: var(--chrome-text-primary); /* #f4f4f4 on #262626 — 13.76:1 */
+}
+
+/* The current marker: TWO simultaneous value moves and no hue — the ground
+   steps #161616 -> #262626 and the ink steps #c6c6c6 -> #f4f4f4. The furniture
+   is achromatic by rule (token file, decision 1); the old #b197ff lavender
+   here was the "black + neon" convergence the light-only decision rejects. */
+[data-site='aampexplorer'] .rail-list a[aria-current='page'] {
+  background: var(--chrome-selected);
+  color: var(--chrome-accent); /* #f4f4f4 on #262626 — 13.76:1 */
+  font-weight: 600;
+}
+
+[data-site='aampexplorer'] .rail-list a:focus-visible {
+  outline: none;
+  box-shadow: var(--chrome-focus-ring);
+}
+
+/* Plane titles are prose ("Control plane"); component names are identifiers
+   (`buyer-agent`). The type split follows the content, which is the whole
+   point of a two-role system: Sans for the words, Mono for the strings. */
+[data-site='aampexplorer'] .rail-item-name {
+  min-width: 0;
+  flex: 1 1 auto;
+  font-size: var(--meta-size);
+  overflow-wrap: anywhere;
+}
+
+[data-site='aampexplorer'] code.rail-item-name {
+  font-family: var(--meta-font);
+  background: none;
+  padding: 0;
+}
+
+/* The figure column — right-aligned, one ink step quieter than the row. */
+[data-site='aampexplorer'] .rail-chip {
+  flex: 0 1 auto;
+  margin-left: auto;
+  font-family: var(--meta-font);
+  font-size: var(--meta-size-sm);
+  color: var(--chrome-text-tertiary); /* #a8a8a8 on #161616 — 7.61:1 */
+  text-align: right;
+  overflow-wrap: anywhere;
+}
+
+/*
+ * Two kinds of row, told apart semantically rather than positionally: PlaneRail
+ * marks a component with `<code class="rail-item-name">` (it is an identifier)
+ * and a plane with `<span>` (it is prose). A plane's figure is short ("4 repos")
+ * and always shares the line; a component's kind ("reference implementation")
+ * only sometimes fits, and a list that wraps on some rows and not others reads
+ * as a layout accident. Components therefore always take a second, right-
+ * aligned line — a hanging qualifier, the contents-page convention.
+ */
+[data-site='aampexplorer'] .rail-list a:has(code.rail-item-name) .rail-chip {
+  flex-basis: 100%;
+}
+
+[data-site='aampexplorer'] .rail-list a:hover .rail-chip,
+[data-site='aampexplorer'] .rail-list a[aria-current='page'] .rail-chip {
+  color: var(--chrome-text-secondary); /* #c6c6c6 on #262626 — 8.86:1 */
+}
+
+/* The colophon lines at the foot of the index — version and licence. No
+   inline padding of its own: `.rail-group` already supplies the 24px, and the
+   two stacked (a 48px indent) put the colophon out of line with every kicker
+   above it. */
+[data-site='aampexplorer'] .rail-value {
+  margin: 0;
+  padding: 0;
+  font-family: var(--meta-font);
+  font-size: var(--meta-size);
+  line-height: var(--lh-ui);
+  color: var(--chrome-text-secondary); /* #c6c6c6 on #161616 — 10.59:1 */
+  overflow-wrap: anywhere;
+}
+
+/* The chassis's generic `code { background: var(--bg-inset) }` (global.css) is
+   a CONTENT-column token (#e0e0e0) and leaks onto the plate, where
+   --chrome-text-primary on it measures 1.20:1. Text paints straight on the
+   spine instead: 16.45:1 / 13.76:1. */
+[data-site='aampexplorer'] .rail-value code {
+  background: none;
+  padding-inline: 0;
+  font-size: inherit; /* the colophon paragraph's own 13px, not code's 0.88em */
+}
+
+/* No `font-size` here on purpose: it would out-specify `.rail-item-name`'s
+   13px (a (0,2,2) selector beating a (0,2,0) one) and inherit the 18px body
+   size instead, which is what forced `registry-agent-example` and
+   `agentic-rtb-framework` to wrap in the 1056px rail track. */
+[data-site='aampexplorer'] .rail-list a code {
+  background: none;
+  padding-inline: 0;
+}
+
+[data-site='aampexplorer'] .rail-value-muted {
+  color: var(--chrome-text-tertiary); /* #a8a8a8 on #161616 — 7.61:1 */
+}
+
+/* >=1056px: the index is a normal always-open column, not an accordion. Below
+   that the plate collapses — see §13 for why the threshold is 1056 and not
+   PageLayout's 672. */
+@media (min-width: 1056px) {
+  [data-site='aampexplorer'] .rail-summary {
+    display: none;
+  }
+
+  [data-site='aampexplorer'] .rail-disclosure:not([open]) .rail-inner {
+    display: flex;
+  }
+}
+
+/* ==========================================================================
+ * 4. Grid geometry — the compare pane REFLOWS at 1311px, not PageLayout's
+ *    default 1055px (a 6-col track is 352px there, unreadable) and not to
+ *    `display: none`.
+ *
+ *    On `/repos/[name]/` that box carries SchemaPane's field-by-field tables —
+ *    up to 86% of the page's words by DOM count — so hiding it below 1312px
+ *    would leave readers on a 13" laptop, a tablet or any phone with no object
+ *    reference at all. Below the breakpoint the pane drops out of the sticky
+ *    side column and stacks under `.doc-content` at the same span.
+ * ========================================================================== */
+@media (max-width: 1311px) {
+  [data-site='aampexplorer'] .doc-grid > .doc-aside {
+    /* PageLayout also ships `display: none` for `.doc-aside` at its own
+       <=1055px breakpoint; the cascade resolves per PROPERTY, not per rule, so
+       out-specifying that rule elsewhere in this block does not touch
+       `display` unless it is set here too. */
+    display: block;
+    grid-column: 5 / span 12;
+    position: static;
+    max-height: none;
+    overflow: visible;
+    margin-top: 40px;
+  }
+
+  /* …and that `display: block` also re-showed the EMPTY aside that §5 hides:
+     `.doc-aside:not(:has(*))` is specificity (0,2,0) — `:not()` takes its
+     argument's, and `:has(*)` contributes 0 — while `.doc-grid > .doc-aside`
+     above is (0,3,0), so below 1312px every repository with no object
+     definitions painted a bare 48px `--bg-subtle` box (2 × 24px padding, no
+     content) under its prose. Same question, re-asked at (0,4,0). */
+  [data-site='aampexplorer'] .doc-grid > .doc-aside:not(:has(*)) {
+    display: none;
+  }
+
+  [data-site='aampexplorer'] .doc-grid > .doc-content {
+    grid-column: span 12;
+  }
+}
+
+/*
+ * <=1055px: the plate collapses (see §13). Both remaining regions take the
+ * full 16 columns so the prose is not run inside a 12-of-16 track that no
+ * longer has a rail beside it.
+ */
+@media (max-width: 1055px) {
+  [data-site='aampexplorer'] .doc-grid > .doc-nav,
+  [data-site='aampexplorer'] .doc-grid > .doc-content,
+  [data-site='aampexplorer'] .doc-grid > .doc-aside {
+    grid-column: 1 / -1;
+  }
+}
+
+/* ==========================================================================
+ * 5. The compare pane (`aside` slot), and the empty-pane reclaim.
+ *
+ * PageLayout decides whether to render the `.doc-aside` wrapper (and the
+ * `no-aside` class that widens `.doc-content`) from whether an `aside`-slotted
+ * element is PRESENT IN THE TEMPLATE, not from whether it renders non-empty
+ * output — `{objects.length > 0 && <SchemaPane slot="aside" .../>}` still
+ * registers the slot, so a repository with no object definitions gets an empty
+ * `.doc-aside` box and a `.doc-content` stuck at 6 of 16 columns instead of
+ * reclaiming the full 12 ("page shape encodes substance").
+ *
+ * BUG FIXED THIS PASS (found by render, not by reading): the reclaim rule
+ * shipped as
+ *   .doc-grid:has(> .doc-aside:not(:has(*))) > .doc-content
+ * and `:has()` may not be nested inside `:has()` — the selector is INVALID, so
+ * the browser dropped the whole rule. Verified in-page:
+ * `el.matches(':has(> .doc-aside:not(:has(*))))')` throws
+ * `SyntaxError: not a valid selector`. Every thin repository was therefore
+ * rendering its prose in a 496px column with 528px of dead white beside it
+ * (measured at 1440px on /repos/buyer-agent/). Rewritten as
+ * `:not(:has(> .doc-aside > *))` — `:has()` inside `:not()` IS legal, and it
+ * asks the same question: is there any ELEMENT inside the aside. Checked for
+ * element children rather than `:empty`, which the template's whitespace text
+ * nodes would defeat. Specificity (0,4,0), unchanged.
+ * ========================================================================== */
+[data-site='aampexplorer'] .doc-aside:not(:has(*)) {
+  display: none;
+}
+
+[data-site='aampexplorer'] .doc-grid:not(:has(> .doc-aside > *)) > .doc-content {
+  grid-column: span 12;
+}
+
+[data-site='aampexplorer'] .doc-aside {
+  background: var(--bg-subtle);
+  border: none;
+  border-radius: var(--site-radius);
+  padding: 24px;
+  scrollbar-gutter: stable;
+}
+
+[data-site='aampexplorer'] .doc-aside h2 {
+  margin-top: 0;
+}
+
+[data-site='aampexplorer'] .pane-object {
+  margin: 0 0 16px;
+}
+
+[data-site='aampexplorer'] .pane-object summary {
+  cursor: pointer;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 44px;
+  padding: 8px 0;
+  font-weight: 600;
+}
+
+[data-site='aampexplorer'] .pane-object summary:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+[data-site='aampexplorer'] .pane-object-body {
+  padding-top: 8px;
+}
+
+/* SchemaPane's field-count badge renders on `--bg-subtle`, where the spine's
+   own `--chrome-text-secondary` (#c6c6c6) measures 1.55:1 — a hard fail. This
+   is the metadata voice on the CONTENT ground: #525252 on #f4f4f4 = 7.10:1. */
+[data-site='aampexplorer'] .pane-chip {
+  flex: none;
+  font-family: var(--meta-font);
+  font-size: var(--meta-size);
+  color: var(--fg-muted);
+}
+
+/* `.doc-aside` and `thead th` both resolved to `--bg-subtle` — a 1.00:1 ground
+   shift, i.e. no visible separation for the one row that needs it most. Steps
+   to `--bg-inset`, matching the zebra rule below it. */
+[data-site='aampexplorer'] .doc-aside thead th {
+  background: var(--bg-inset);
+}
+
+[data-site='aampexplorer'] .doc-aside .field-table tbody tr:nth-child(even) {
+  background: var(--bg-inset);
+}
+
+/*
+ * The pane's field tables have four columns (Field / Type / Required /
+ * Description) in a 6-of-16 track. Measured before this change at 1440px: the
+ * table's intrinsic width was 562px inside a 448px content box, so it
+ * overflowed into `.comparison`'s horizontal scroller with the Required column
+ * clipped at the pane edge, and the crushed 122px Description column pushed
+ * single-field rows to 122-167px tall. That is the site's signature pane
+ * failing at its own flagship width.
+ *
+ * Fixed by making the pane a genuinely denser register than the page — the
+ * metadata size, tight cell padding, a fixed layout that gives Description the
+ * room it needs, and identifiers allowed to wrap (global.css pins
+ * `.field-table td:first-child` to `nowrap`, which was the single largest
+ * contributor to the intrinsic width). The <table> stays a real table: no
+ * `display` override, so the row/cell roles assistive tech infers from it are
+ * untouched.
+ */
+[data-site='aampexplorer'] .doc-aside .field-table {
+  table-layout: fixed;
+  width: 100%;
+  font-size: var(--meta-size);
+}
+
+[data-site='aampexplorer'] .doc-aside .field-table th,
+[data-site='aampexplorer'] .doc-aside .field-table td {
+  padding: 8px 10px;
+  overflow-wrap: anywhere;
+}
+
+[data-site='aampexplorer'] .doc-aside .field-table td:first-child {
+  white-space: normal;
+  font-size: var(--meta-size);
+}
+
+[data-site='aampexplorer'] .doc-aside .field-table :is(th, td):nth-child(1) {
+  width: 30%;
+}
+
+[data-site='aampexplorer'] .doc-aside .field-table :is(th, td):nth-child(2) {
+  width: 16%;
+}
+
+[data-site='aampexplorer'] .doc-aside .field-table :is(th, td):nth-child(3) {
+  width: 22%;
+}
+
+[data-site='aampexplorer'] .doc-aside .field-table :is(th, td):nth-child(4) {
+  width: 34%;
+}
+
+/* In the pane the required marker stops being a badge and becomes what it
+   actually is: a one-word annotation in the metadata voice. As a filled chip it
+   could not fit its own column without breaking mid-word ("REQUI/RED",
+   measured), and a fill inside a table cell inside a panel is three levels of
+   box for one boolean. Colour is legitimate here under editorial-references §1
+   — it marks a measured property of the schema, not a decoration. */
+[data-site='aampexplorer'] .doc-aside .badge {
+  background: none;
+  border: none;
+  padding: 0;
+  white-space: nowrap;
+  font-size: var(--type-caption-01-size); /* 12px */
+  letter-spacing: var(--type-caption-01-tracking); /* 0.32px, the chassis law at 12px */
+}
+
+[data-site='aampexplorer'] .doc-aside .badge-required {
+  color: var(--accent); /* #6c3aa6 on #f4f4f4 — 6.83:1 · on #e0e0e0 zebra — 5.69:1 */
+}
+
+/* ==========================================================================
+ * 6. Measure and the breakout discipline (§2.5).
+ *
+ * The reading path is capped at 60ch — the narrowest in the portfolio, chosen
+ * so the split-pane read differs from adcpexplorer's 48rem. Exactly three
+ * things are allowed to break that measure into the right margin: TABLES, CODE
+ * and the compare pane. That is the figure-in-a-paper convention (§2.13), and
+ * stating it as a closed list is what stops the right margin reading as an
+ * accident. h1 joins the capped set so the column has one left AND one right
+ * edge from the first line down.
+ * ========================================================================== */
+[data-site='aampexplorer']
+  .doc-content
+  article
+  > :is(
+    p,
+    ul,
+    ol,
+    dl,
+    h1,
+    h2,
+    h3,
+    h4,
+    .eyebrow,
+    .answer-box,
+    .prop-dl,
+    .faq,
+    .related,
+    .engagement,
+    .spec-source
+  ) {
+  max-width: var(--site-measure);
+}
+
+/* ==========================================================================
+ * 7. THE METADATA VOICE (§2.7) — this site's dominant type differentiator.
+ *
+ * Plex Sans carries the reading path: h1-h4, body prose, list prose, the
+ * answer text. Plex Mono carries everything that is ABOUT the text rather than
+ * part of it. One family switch does the work a caption box, an icon or a
+ * second colour would otherwise be spent on, and it is enforceable: every rule
+ * in this section sets `--meta-font` and no rule outside it does.
+ * ========================================================================== */
+
+/* Table captions: mono, terse, and BELOW the table (§2.13). adcpexplorer keeps
+   the chassis default above; this is a visible, one-second split between the
+   portfolio's two reference sites. */
+[data-site='aampexplorer'] caption {
+  caption-side: bottom;
+  text-align: left;
+  font-family: var(--meta-font);
+  font-size: var(--meta-size);
+  line-height: var(--lh-ui);
+  color: var(--fg-muted); /* #525252 on #ffffff — 7.81:1 */
+  padding-top: 12px;
+  padding-bottom: 0;
+  max-width: var(--site-measure);
+}
+
+/* Provenance — the "Data and Methods" line, deferred to the end of the page
+   (§2.13). A dashed box around it was a container doing a caption's job. */
+[data-site='aampexplorer'] .spec-source {
+  border: none;
+  background: none;
+  padding: 12px 0 0;
+  margin: 48px 0 0;
+  font-family: var(--meta-font);
+  font-size: var(--meta-size);
+  line-height: var(--lh-ui);
+  color: var(--fg-muted); /* #525252 on #ffffff — 7.81:1 */
+}
+
+/* The running head above the article. */
+[data-site='aampexplorer'] .breadcrumbs ol {
+  font-family: var(--meta-font);
+  font-size: var(--meta-size);
+  letter-spacing: var(--track-label);
+  text-transform: uppercase;
+}
+
+/* The breadcrumb "/" glyph read var(--border) (#e0e0e0 on white = 1.32:1) — a
+   text glyph, so no decorative-text exemption applies. #525252 = 7.81:1. */
+[data-site='aampexplorer'] .breadcrumbs li + li::before {
+  color: var(--fg-muted);
+}
+
+/* The AnswerBox term is already the kicker primitive; the answer itself stays
+   in the reading face and gains its precedence from scale and the ground step,
+   not from a rule or a shadow. */
+[data-site='aampexplorer'] .answer-source {
+  font-family: var(--meta-font);
+  font-size: var(--meta-size);
+}
+
+/* Field tables and property terms are identifiers, not prose.
+   `.prop-dl` is the site's labelled-metadata idiom and, since Phase D.5, the
+   whole of `/repos/[name]/`'s property block: five labelled rows where the
+   design pass had two labelled rows plus an unlabelled chip strip. The row
+   gap is 8px rather than 4px because two of the values are now chips, which
+   carry 3px of their own padding; `align-items: baseline` keeps a chip value
+   sitting on the same line as its uppercase term. */
+[data-site='aampexplorer'] .prop-dl {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  align-items: baseline;
+  gap: 8px 16px;
+  margin: 0 0 32px;
+  font-size: var(--meta-size);
+  line-height: var(--lh-ui);
+}
+
+[data-site='aampexplorer'] .prop-dl dt {
+  font-family: var(--meta-font);
+  letter-spacing: var(--track-label);
+  text-transform: uppercase;
+  font-weight: var(--label-weight);
+  color: var(--fg-muted); /* #525252 on #ffffff — 7.81:1 */
+}
+
+[data-site='aampexplorer'] .prop-dl dd {
+  margin: 0;
+  font-family: var(--meta-font);
+}
+
+/* The longest term on the site — "LISTED IN THE HUB README" — is ~200px of
+   uppercase mono, which starves the value column on a phone. Below the
+   chassis' own small breakpoint the pair stacks instead: term, then value.
+   Declared AFTER the dt/dd rules above: same specificity, so source order is
+   what decides the margins. */
+@media (max-width: 671px) {
+  [data-site='aampexplorer'] .prop-dl {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  [data-site='aampexplorer'] .prop-dl dt {
+    margin-top: 16px;
+  }
+
+  [data-site='aampexplorer'] .prop-dl dt:first-of-type {
+    margin-top: 0;
+  }
+
+  [data-site='aampexplorer'] .prop-dl dd {
+    margin: 4px 0 0;
+  }
+}
+
+/* ==========================================================================
+ * 8. Zero borders (§4's Never column), made mechanical. After this pass the
+ *    ONLY borders on the site are the masthead rule and the foot rule in §2;
+ *    every other separation is a background-value shift or space. The band
+ *    boundary carries none — an 18.10:1 value jump IS the border.
+ * ========================================================================== */
+[data-site='aampexplorer'] th,
+[data-site='aampexplorer'] td {
+  border: none;
+  padding: 12px 16px;
+  line-height: var(--lh-ui);
+}
+
+/* The header row and the zebra rows both resolved to `--bg-subtle`, so the
+   head of every table was invisible. The ladder is the site's own mechanic:
+   head one step deeper than zebra. #161616 on #e0e0e0 — 13.71:1. */
+[data-site='aampexplorer'] thead th {
+  background: var(--bg-inset);
+}
+
+[data-site='aampexplorer'] tbody tr:nth-child(even) {
+  background: var(--bg-subtle);
+}
+
+[data-site='aampexplorer'] tbody th[scope='row'] {
+  background: transparent;
+  font-weight: 600;
+}
+
+/* The row-header link is the primary navigation on `/` and `/versions/` and
+   measured 19px tall as an inline box (the ROW is 51px, the link was not). The
+   padding/negative-margin pair makes the anchor fill its cell — 45px and the
+   full column width, so it is a real touch target — while leaving the row's own
+   height and the table's vertical rhythm exactly as they were. */
+[data-site='aampexplorer'] tbody th[scope='row'] > a {
+  display: block;
+  padding-block: 13px;
+  margin-block: -13px;
+}
+
+[data-site='aampexplorer'] blockquote {
+  border-left: none;
+  padding: 16px;
+  background: var(--bg-subtle);
+  border-radius: var(--site-radius);
+}
+
+[data-site='aampexplorer'] .faq,
+[data-site='aampexplorer'] .related {
+  border-top: none;
+  padding-top: 0;
+  margin-top: 56px;
+}
+
+[data-site='aampexplorer'] .card {
+  border: none;
+}
+
+[data-site='aampexplorer'] .term-list li,
+[data-site='aampexplorer'] .task-list li {
+  border-bottom: none;
+  padding: 16px 0;
+}
+
+[data-site='aampexplorer'] .badge {
+  border: none;
+  font-family: var(--meta-font);
+  letter-spacing: var(--track-label);
+  border-radius: var(--site-radius);
+}
+
+[data-site='aampexplorer'] .badge-required {
+  border: none;
+}
+
+/* The end-of-page engagement block ships a 1px left rule from global.css. It
+   is within the portfolio's rule (<=2px), but this site has no left rules at
+   all — its precedence device is the ground step, used here as elsewhere. */
+[data-site='aampexplorer'] .engagement {
+  border-left: none;
+  padding: 24px;
+  margin-top: 56px;
+  background: var(--bg-subtle);
+  border-radius: var(--site-radius);
+}
+
+/* Inline code wrapped in a link would paint --accent on --bg-inset (#6c3aa6 on
+   #e0e0e0 = 5.69:1, passing but muddy) inside a chip nested in a link. Dropping
+   the chip lets the link paint on its parent ground — 7.52:1 on the page — and
+   reads as better typography: a chip should not nest inside a link. */
+[data-site='aampexplorer'] a code {
+  background: none;
+  padding-inline: 0;
+}
+
+/* ==========================================================================
+ * 9. Chip system — hierarchy by ground step, not by hue. No status colours;
+ *    rank is expressed with the same layer ladder that is this site's
+ *    separation mechanic everywhere else.
+ *
+ *    Phase D.5: a chip is now only ever a VALUE under a label — a `<dd>` in
+ *    `.prop-dl`, a cell under a `<th scope="col">`, or a clause in prose. The
+ *    free-floating `.chip-strip` is gone, and with it the rule that styled it:
+ *    an unlabelled row of chips asks the reader to infer which fact is which,
+ *    and asks them to read "listed in the hub" out of an ABSENT chip.
+ * ========================================================================== */
+[data-site='aampexplorer'] .chip {
+  display: inline-block;
+  font-family: var(--meta-font);
+  font-size: var(--meta-size-sm);
+  font-weight: var(--label-weight);
+  letter-spacing: var(--track-label);
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: var(--site-radius);
+  line-height: var(--lh-ui);
+}
+
+/* #161616 on #e0e0e0 — 13.71:1 */
+[data-site='aampexplorer'] .chip-substantial {
+  background: var(--bg-inset);
+  color: var(--fg);
+}
+
+/* #525252 on #f4f4f4 — 7.10:1 */
+[data-site='aampexplorer'] .chip-partial,
+[data-site='aampexplorer'] .chip-kind {
+  background: var(--bg-subtle);
+  color: var(--fg-muted);
+}
+
+/* thin: no fill, text only. This is a SUBSTANCE GRADE and nothing else — the
+   design pass also hung it on the version value, which made a version string
+   assert an editorial grade it does not carry. Version is a value now: mono,
+   in a `<code>`, under a `Version` label. */
+[data-site='aampexplorer'] .chip-thin {
+  background: none;
+  color: var(--fg-muted);
+  padding-inline: 0;
+}
+
+/* The one accent-marked chip on the site — "not listed in hub", exactly one
+   repository, i.e. colour marking a measured fact (§1, colour is
+   instrumentation). #6c3aa6 on #f4f4f4 — 6.83:1. */
+[data-site='aampexplorer'] .chip-accent {
+  background: var(--bg-subtle);
+  color: var(--accent);
+}
+
+/* In `.prop-dl` the chips are values in a column, so the unfilled `thin` chip
+   keeps the inline padding it drops elsewhere — without it the substance row
+   starts 8px left of every other value and the column reads as ragged. */
+[data-site='aampexplorer'] .prop-dl .chip-thin {
+  padding-inline: 8px;
+}
+
+/* ==========================================================================
+ * 10. `/repos/` — the repository comparison, as a labelled table again.
+ *
+ *     This section used to style a dense `.term-list` scan list (`.scan-name`
+ *     / `.scan-note`). Phase D.5 restored the published <th> columns —
+ *     Repository, Version, Kind, Substance, What it defines — because on a
+ *     reference site an unlabelled column is a correctness failure, not a
+ *     style choice, and the page's prose explicitly makes the comparison the
+ *     columns encode. The scan list's two rules are deleted with it; the
+ *     design intent they carried survives in §8's borderless table (ground-step
+ *     head, zebra body, no rules) and §7's caption below the figure.
+ *
+ *     The name keeps the metadata face: `<a><code>` in the row header, where
+ *     §8's `a code` rule drops the inline-code chip so the identifier reads as
+ *     one token, and §8's `th[scope='row'] > a` padding keeps the 44px target.
+ *
+ *     Column discipline is the one thing it does need. Auto table layout gave
+ *     the "What it defines" prose column everything and broke the VALUES:
+ *     `untagged` set as "untagg / ed" and `v0.5.0` as "v0.5. / 0", which is
+ *     the table telling the reader something untrue about the string. Columns
+ *     1, 2 and 4 hold values and do not wrap; 3 and 5 hold prose and do. The
+ *     table is one of the three things allowed to break the measure (§6) and
+ *     scrolls inside its own figure on a phone, so nothing overflows the page.
+ * ========================================================================== */
+[data-site='aampexplorer'] .repo-table :is(th, td):nth-child(1),
+[data-site='aampexplorer'] .repo-table :is(th, td):nth-child(2),
+[data-site='aampexplorer'] .repo-table :is(th, td):nth-child(4) {
+  white-space: nowrap;
+}
+
+/* ==========================================================================
+ * 11. Spacing rhythm (§2.9) — asymmetric and rule-anchored: the space sits
+ *     ABOVE the break, not symmetrically around it. Carbon functional density,
+ *     one step airier at h2 than before so the section breaks land without
+ *     needing a rule to mark them (this site has none to spend).
+ * ========================================================================== */
+[data-site='aampexplorer'] .doc-content article h1 {
+  margin: 0 0 24px;
+}
+
+[data-site='aampexplorer'] .doc-content article > .eyebrow {
+  margin: 0 0 8px;
+}
+
+[data-site='aampexplorer'] .doc-content article h2 {
+  margin: 56px 0 8px;
+  padding-top: 0;
+}
+
+[data-site='aampexplorer'] .doc-content article h3 {
+  margin: 36px 0 4px;
+}
+
+[data-site='aampexplorer'] .doc-content article h4 {
+  margin: 24px 0 4px;
+}
+
+[data-site='aampexplorer'] .doc-content article table,
+[data-site='aampexplorer'] .doc-content article figure {
+  margin: 28px 0;
+}
+
+/* ==========================================================================
+ * 12. Illustration slots — DEV ONLY.
+ *
+ * The slots are gated behind `import.meta.env.DEV` at every call site (the
+ * four pages that use them), so production ships no placeholder box at all —
+ * the prompts stay catalogued in
+ * /srv/ws/out/illustration-prompts-aampexplorer.md and in this site's
+ * src/lib/illustrations.ts. These rules therefore only ever run in `astro dev`;
+ * they are kept so the local slot is composed the way the real art will be
+ * (left-aligned, 4:3/1:1, never centred — slop tell 8).
+ *
+ * The doubled attribute selector is the specificity bump described in the file
+ * header: the component's own scoped rules compile to (0,2,0), the same band
+ * as a single `[data-site='aampexplorer'] .illustration-placeholder`.
+ * ========================================================================== */
+[data-site='aampexplorer'] .illustration-placeholder-figure {
+  max-width: 420px;
+  margin-inline: 0;
+}
+
+[data-site='aampexplorer'][data-site='aampexplorer'] .illustration-placeholder {
+  align-items: flex-start;
+  text-align: left;
+}
+
+/* The component's `opacity: .7` on the preview text fails contrast on this
+   site's ground (#838383 on #f4f4f4 = 3.45:1). At `opacity: 1` the same ink is
+   `--fg-muted`: 7.10:1. */
+[data-site='aampexplorer'][data-site='aampexplorer'] .illustration-placeholder__preview {
+  opacity: 1;
+}
+
+/* ==========================================================================
+ * 13. <=1055px — the plate contracts to a chip and the page becomes a single
+ *     flow column.
+ *
+ *     THE THRESHOLD IS 1056, NOT PageLayout's 672, and that is a measured
+ *     decision. The chassis grid is 16 columns at a 32px gutter, so the gutters
+ *     alone consume 480px; at 768px the 4-column rail track computes to 152px
+ *     and 104px after its own inset, which wrapped `registry-agent-example`
+ *     across three lines and `agentic-direct` across two (verified by render at
+ *     768px before this change). A 16-column grid is simply degenerate below
+ *     the chassis's own `--bp-lg` (1056px), which is exactly where Carbon drops
+ *     to a coarser column count. Rather than ship a 152px sidebar, the plate
+ *     becomes what it already is on a phone: a black chip that opens the index
+ *     as a black block, so the dual ground survives the collapse while the
+ *     prose gets the whole width.
+ *
+ *     The bleeding pseudo-element is switched off here: with no side column
+ *     there is nothing to bleed out of, and a full-width black block would put
+ *     the spine over the 40%-of-viewport-width cap and make it the reading
+ *     surface.
+ * ========================================================================== */
+@media (max-width: 1055px) {
+  [data-site='aampexplorer'] .doc-grid > .doc-nav {
+    /* the chip and the opened block carry their own ground here */
+    background: none;
+    padding: 0;
+    margin-bottom: 32px;
+  }
+
+  [data-site='aampexplorer'] .doc-grid > .doc-nav::before {
+    content: none;
+  }
+
+  [data-site='aampexplorer'] .rail-summary {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 12px 16px;
+    background: var(--chrome-bg);
+    color: var(--chrome-text-primary);
+    border-radius: var(--site-radius);
+  }
+
+  [data-site='aampexplorer'] .rail-inner {
+    position: static;
+    background: var(--chrome-bg);
+    border-radius: var(--site-radius);
+    margin-top: 8px;
+    padding-block: 24px;
+    gap: 32px;
+  }
+
+  [data-site='aampexplorer'] .rail-disclosure:not([open]) .rail-inner {
+    display: none;
+  }
+}

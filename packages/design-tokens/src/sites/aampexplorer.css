@@ -1,0 +1,235 @@
+/**
+ * aampexplorer — REFERENCE DOCS (MDN voice), the portfolio's dual-ground site.
+ *
+ * THE EDITORIAL MOVE (light-only pass, 2026-08-14)
+ * ------------------------------------------------
+ * "The press plate." The #161616 band is no longer an inset panel floating on
+ * a white page — it is a full-height black SPINE that bleeds off the left edge
+ * of the viewport and off the foot of the document, with the white text column
+ * laid on it like a sheet on a press bed. Heavy dark structural furniture on an
+ * otherwise-light page is a print/editorial device (Monocle's black furniture,
+ * Bloomberg's structural bands), NOT a dark mode and NOT a SaaS sidebar. The
+ * difference between the two is entirely in the execution, and this file
+ * encodes the three decisions that make it read as furniture:
+ *
+ *   1. THE FURNITURE IS ACHROMATIC. Not one hue touches the spine. The old
+ *      `--chrome-accent: #b197ff` lavender was exactly the "black + neon"
+ *      convergence the light-only decision rejects; the current/hover marker is
+ *      now a ground shift plus an ink step (#a8a8a8 -> #f4f4f4), which is
+ *      typographic hierarchy rather than colour-coding. Violet exists only on
+ *      the white page. See `--chrome-accent` below.
+ *   2. ZERO BORDERS, SITE-WIDE, WITHOUT EXCEPTION. `--chrome-boundary` is
+ *      DELETED: /srv/ws/out/editorial-references.md §4 lists "a border on the
+ *      band boundary" in this site's Never column — the 18:1 value jump IS the
+ *      border. Groups inside the spine separate on space alone.
+ *   3. MONO IS THE METADATA VOICE (editorial-references §2.7 — the NYT
+ *      "grotesque = metadata" split, executed with IBM Plex Mono). Plex Sans
+ *      carries the reading path and nothing else; the spine index, table
+ *      captions, chips, property terms, breadcrumbs, version/commit strings,
+ *      provenance and the masthead running head are all Mono. §2.7 names
+ *      extending mono past labels as the cheapest remaining editorial gain in
+ *      the chassis; this site spends it in full and owns it portfolio-wide.
+ *
+ * Retained from the original ruling (spec §7.1, §7.3): this is the ONLY
+ * dual-ground site; separation is a pure background-value shift; 4px radius,
+ * never pill; 16-col grid at 4/6/6; plane/component switcher; 60ch measure.
+ *
+ * `--cds-*` here describes the CONTENT COLUMN (white ground). The spine is a
+ * second, fixed ground — see `--chrome-*` — because this site runs two grounds
+ * simultaneously, which the single-ramp alias layer cannot express alone.
+ *
+ * NO DARK MODE. There is no `@media (prefers-color-scheme: dark)` block in this
+ * file and none may be added (orchestrator decision, light-only portfolio). The
+ * spine is not a colour scheme, it is a composition element: it is black at
+ * every OS setting, on every page, always.
+ */
+
+:root[data-site='aampexplorer'] {
+  /* ---- content column — Carbon White theme (ibm.md:38,50,251) ---- */
+  --cds-background: #ffffff;
+  --cds-layer-01: #f4f4f4;
+  --cds-layer-02: #e0e0e0;
+  --cds-text-primary: #161616;
+  --cds-text-secondary: #525252;
+
+  /* ---- the spine — Carbon's Gray 100 theme used as FURNITURE, not as a page
+     dark mode. Three inks, so hierarchy inside the spine is carried by ink
+     step + ground step and never by hue (decision 1 in the header). ---- */
+  --chrome-bg: #161616;
+  --chrome-selected: #262626; /* the current/hover ground shift */
+  --chrome-text-primary: #f4f4f4; /* 16.45:1 on #161616 · 13.76:1 on #262626 */
+  --chrome-text-secondary: #c6c6c6; /* 10.59:1 on #161616 · 8.86:1 on #262626 */
+  /* Carbon Gray 40. The third step, for the index's right-hand figure column
+     (kinds, repo counts) — the quietest thing in the spine that is still real
+     text, so it is measured against the 4.5:1 body floor, not the 3:1 UI one.
+     Carbon Gray 50 (#8d8d8d) was tried first and rejected: 4.56:1 on #262626
+     sits on the floor with no margin. */
+  --chrome-text-tertiary: #a8a8a8; /* 7.61:1 on #161616 · 6.36:1 on #262626 */
+
+  /*
+   * The spine bleeds off two edges so it reads as a plane of the page rather
+   * than a panel on it. Left: off the viewport (painted by a pseudo-element in
+   * the site stylesheet — `left: -100vw`, which creates no scrollable overflow
+   * in LTR). Foot: `main`'s own bottom padding (global.css:96 — `padding:
+   * 2.5rem 1.25rem 4rem`), so the spine lands exactly on the footer rule.
+   * Top: NOT bled — the spine's top edge aligns with the top of the text
+   * column, which is the one composed alignment in the layout.
+   */
+  --spine-bleed-foot: 4rem;
+
+  /*
+   * The masthead rule. The header used to be a #f4f4f4 fill with a #e0e0e0
+   * hairline under it — an app bar. It is now the page ground with ONE heavy
+   * black rule under it (Raconteur's `.block-title` recipe: a section header
+   * defined entirely by weight, tracking and a single rule, no fill, no
+   * colour). The same rule closes the page above the footer, so the
+   * composition is: rule / air / spine running off the bottom-left / rule.
+   * #161616 on #ffffff is 18.10:1, far past the 3:1 non-text floor.
+   */
+  --masthead-rule: 1px solid var(--cds-text-primary);
+
+  /* ---- accent [spec §5.1 hue family; darkened for WCAG, ADAPTATION] ----
+     Violet touches the WHITE PAGE ONLY: links, and the single `.chip-accent`
+     ("not listed in hub", exactly one repository). It is never page chrome and
+     never enters the spine. */
+  --site-accent: #6c3aa6; /* 7.52:1 on #ffffff · 6.83:1 on #f4f4f4 · 5.69:1 on #e0e0e0 */
+  --site-accent-strong: var(--site-accent);
+
+  /*
+   * ACHROMATIC FURNITURE (decision 1). `--chrome-accent` was
+   * `--site-accent-on-dark` (#b197ff) and painted the spine's current item and
+   * mobile chip. A lavender on near-black is the "black + neon" look the
+   * light-only decision names and rejects, and colour-coding a current item is
+   * weaker typography than an ink step anyway. It now resolves to the spine's
+   * brightest ink, so `aria-current` reads as: ground shift to #262626 plus
+   * ink lifted from #a8a8a8 to #f4f4f4 — two simultaneous value moves, both
+   * measured, no hue.
+   */
+  --chrome-accent: var(--chrome-text-primary); /* 16.45:1 on #161616 · 13.76:1 on #262626 */
+
+  /* The chassis `--focus-ring` halo uses `--fg-muted` (#525252 here) = 2.32:1
+     on #161616, below the 3:1 non-text floor. The spine needs its own pair:
+     #c6c6c6 on #161616 is 10.59:1. */
+  --chrome-focus-ring: 0 0 0 1px #c6c6c6, 0 0 0 4px rgba(255, 255, 255, 0.24);
+
+  /*
+   * ---- code panel — painted with the spine's own ground [RETAINED RULING] ----
+   *
+   * The code slab is the one place the spine's ground appears inside the text
+   * column, which is why it reads as an extension of the furniture rather than
+   * an intrusion. It also restores the axis that unifying Shiki on
+   * `theme: 'css-variables'` erased: without it this site's code panel is
+   * #f4f4f4, identical to adcpexplorer's, on the acid-test pair (spec §7.3).
+   *
+   * `--code-accent` is the ONE surviving consumer of the old on-chrome violet,
+   * and it is legitimate under editorial-references §1 "colour is
+   * instrumentation": syntax highlighting encodes a measured property of the
+   * text (token class), it is not decoration. All three measured against the
+   * #161616 panel:
+   *   --code-fg     #f4f4f4 -> 16.45:1
+   *   --code-muted  #c6c6c6 -> 10.59:1
+   *   --code-accent #b197ff ->  7.53:1
+   * The page-side accent #6c3aa6 scores 2.41:1 here and is never reused on it.
+   */
+  --code-bg: #161616;
+  --code-fg: #f4f4f4;
+  --code-muted: #c6c6c6;
+  --code-accent: #b197ff;
+  --code-radius: var(--radius-4);
+
+  /* ---- radius — 4px, never pill (the opposite axis to adcpexplorer's 24px,
+     spec §5.1). It applies to objects sitting ON a ground: chips, the code
+     slab, the AnswerBox, blockquotes. The spine itself carries NO radius — a
+     rounded corner on a plane that bleeds off two viewport edges is a
+     contradiction, and the 4px rounded rectangle floating in white margin was
+     the single loudest SaaS tell in the pre-pass render. ---- */
+  --site-radius: var(--radius-4);
+  --spine-radius: 0;
+
+  --site-measure: 60ch; /* narrowest in the portfolio — the split-pane read differs from adcp */
+
+  /* ---- structure tokens — 16-col grid, 4/6/6 (spec §10 ruling 2) ---- */
+  --grid-span-rail: 4;
+  --grid-span-content: 6;
+  --grid-span-compare: 6;
+
+  /* ---- retained structural rule (spec §7.4, amended 2026-08-14): the spine is
+     a VERTICAL band capped at 40% of viewport width, never full-bleed
+     horizontally, never the reading surface. At the 4-of-16 span it measures
+     ~22% at 1440px and ~21% at 1056px, inside the cap with margin. This is why
+     the masthead is a RULE and not a black bar: a top band spans 100% of the
+     viewport by construction and would break the cap. ---- */
+  --chrome-max-width-pct: 40%;
+
+  /* ---- the metadata voice (decision 3 in the header). One token so every
+     consumer in the site stylesheet is greppable and the split is enforceable:
+     if a rule sets `--meta-font` it is chrome/metadata, if it does not it is
+     the reading path. ---- */
+  --meta-font: var(--cds-font-mono);
+  --meta-size: 13px; /* index rows, chips, captions, property terms */
+  --meta-size-sm: 12px; /* the figure column: kinds, counts */
+
+  /* ---- wayfinding label — the kicker primitive (editorial-references §2.1),
+     the highest-leverage editorial device in the chassis. 1.3px is this site's
+     tracking value; adcpexplorer sits at 0.6px, so the two reference sites are
+     audibly different even at label scale. ---- */
+  --track-label: 1.3px;
+  --label-size: 13px;
+
+  /* ---- AnswerBox (spec §9.7): #f4f4f4 ground (== --cds-layer-01), 4px radius
+     (== --site-radius), ZERO border, ZERO shadow — precedence comes from the
+     ground step, the mono term label and the inset, never from a rule. ---- */
+  --answerbox-shadow: none;
+  --answerbox-padding: 24px; /* chassis default is 16px */
+
+  /* three regions do not fit the 1180px `main.wide` cap: at 1180px the 6-col
+     prose track is 407px (~45 CPL); at the chassis's own grid max it is 550px
+     (~62 CPL). */
+  --site-container: var(--grid-max-width); /* 1584px */
+
+  /* type cadence: headings 1.19 over body 1.65, the weight inversion moved one
+     step up the ramp — h2 takes the 300 the chassis gives Heading 01, h3 takes
+     the 600 the chassis gives Heading 04. 700 is never used anywhere. */
+  --type-heading-02-weight: 300;
+  --type-heading-02-lh: 1.19;
+  --type-heading-03-weight: 600;
+  --type-heading-03-lh: 1.19;
+  --type-heading-04-lh: 1.19;
+
+  /*
+   * MEASURED CONTRAST TABLE — every value below was computed this session with
+   * the WCAG 2.x relative-luminance formula, not estimated. Floors: 4.5:1
+   * normal text, 3:1 large text and non-text UI.
+   *
+   * CONTENT COLUMN (page #ffffff · layer-01 #f4f4f4 · layer-02 #e0e0e0)
+   *   #161616 on #ffffff  18.10:1   body ink
+   *   #161616 on #f4f4f4  16.45:1   ink on AnswerBox / thead / zebra
+   *   #161616 on #e0e0e0  13.71:1   ink on .chip-substantial
+   *   #525252 on #ffffff   7.81:1   muted ink, captions, breadcrumb separator
+   *   #525252 on #f4f4f4   7.10:1   muted on .chip-partial / .chip-kind / pane
+   *   #525252 on #e0e0e0   5.92:1   muted on the deepest layer
+   *   #6c3aa6 on #ffffff   7.52:1   links
+   *   #6c3aa6 on #f4f4f4   6.83:1   .chip-accent
+   *   #6c3aa6 on #e0e0e0   5.69:1   accent on the deepest layer
+   *   #161616 on #ffffff  18.10:1   masthead + foot rule (non-text, floor 3:1)
+   *
+   * SPINE (ground #161616 · selected #262626)
+   *   #f4f4f4 on #161616  16.45:1   index row, current-item ink
+   *   #f4f4f4 on #262626  13.76:1   current-item ink on the shifted ground
+   *   #c6c6c6 on #161616  10.59:1   group kickers, version string, focus ring
+   *   #c6c6c6 on #262626   8.86:1   same, on the shifted ground
+   *   #a8a8a8 on #161616   7.61:1   figure column (kinds, counts)
+   *   #a8a8a8 on #262626   6.36:1   same, on the shifted ground
+   *
+   * CODE PANEL (#161616, both grounds)
+   *   #f4f4f4 on #161616  16.45:1
+   *   #c6c6c6 on #161616  10.59:1
+   *   #b197ff on #161616   7.53:1   syntax accent — instrumentation only
+   *
+   * REJECTED, recorded so it is not reintroduced:
+   *   #8d8d8d on #262626   4.56:1   Carbon Gray 50 as the spine's third ink —
+   *     clears the floor with no margin; replaced by Gray 40 (#a8a8a8).
+   *   #b197ff as --chrome-accent   7.53:1 — passes contrast, REMOVED on design
+   *     grounds (black + neon), not accessibility grounds.
+   */
+}

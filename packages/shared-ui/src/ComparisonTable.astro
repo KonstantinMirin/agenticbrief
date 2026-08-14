@@ -46,3 +46,33 @@ const { caption, rowHeader, columns, rows, emptyLabel = 'Not covered' } = Astro.
     </tbody>
   </table>
 </figure>
+
+<style>
+  /*
+   * Same §9.5 refinements as FieldTable, scoped to `.comparison table` (this
+   * component has no distinguishing class of its own, unlike `.field-table`,
+   * so the wrapper `<figure class="comparison">` is the hook). The row-header
+   * column (`th[scope=row]`, global.css) already carries `--bg-subtle`
+   * permanently — striping only the `<td>`s keeps that column legible as the
+   * header on every row instead of blending into it on alternate rows.
+   */
+  .comparison table {
+    line-height: var(--lh-ui);
+  }
+
+  .comparison th,
+  .comparison td {
+    padding: var(--space-05);
+  }
+
+  .comparison thead th {
+    font-size: var(--type-body-short-02-size);
+    font-weight: var(--type-body-short-02-weight);
+    line-height: var(--type-body-short-02-lh);
+    letter-spacing: var(--type-body-short-02-tracking);
+  }
+
+  .comparison tbody tr:nth-child(even) td {
+    background: var(--bg-subtle);
+  }
+</style>

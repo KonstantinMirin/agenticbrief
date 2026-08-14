@@ -1,0 +1,155 @@
+---
+/**
+ * TocRail.astro — site-owned (adcpexplorer only).
+ *
+ * The sticky right rail (spec §4.3): a flat list of the page's own h2/h3 set,
+ * built by each page's frontmatter from the same arrays that render the
+ * headings, so the TOC can never link to an id the page did not emit.
+ *
+ * The active-item rule is the portfolio's only permitted >=2px left rule
+ * (ruling 5) — painted with `box-shadow: inset`, never `border-left`, so the
+ * 1px(resting) -> 2px(active) state change causes zero reflow and the
+ * Phase D `grep 'border-left: [3-9]px'` gate cannot fire against it.
+ */
+export interface Props {
+  toc: { id: string; label: string; depth: number }[]
+}
+
+const { toc } = Astro.props
+---
+
+{
+  toc.length > 0 && (
+    <nav class="toc-rail" aria-label="On this page">
+      <h2 class="toc-heading">On this page</h2>
+      <ul>
+        {toc.map((item) => (
+          <li class={`toc-item toc-depth-${item.depth}`}>
+            <a class="toc-link" href={`#${item.id}`} data-toc-target={item.id}>
+              {item.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  )
+}
+
+<style>
+  .toc-rail {
+    font-size: 0.875rem;
+    /* PageLayout's `.doc-aside` sets overflow-y:auto (>=1056px, the sticky
+       rail), which per spec computes overflow-x to auto too — clipping the
+       focus ring's 4px outset halo at the left edge. Padding+matching
+       negative margin buys the ring room without moving anything visually. */
+    padding-left: 4px;
+    margin-left: -4px;
+  }
+
+  /*
+   * The rail heading is APPARATUS, not content — so it takes the evidence
+   * face, not a heading role. This is a deliberate, named deviation from
+   * MDN's live TOC `<h2>` (24px/400 Sans), which was what shipped here
+   * before this pass.
+   *
+   * Two reasons, both from editorial-references.md. §2.7: the metadata
+   * face is reserved for "captions, credits, timestamps and NAV" — a table
+   * of contents is nav, and setting it at 24px Sans made it compete with
+   * the page's own `<h2>`s at 32px, so the rail read as a third column of
+   * content rather than as an index. §2.1: Raconteur's `.block-title` is a
+   * section header "defined entirely by weight, tracking and one hairline;
+   * no colour, no background" — which is exactly this recipe, at the
+   * kicker's 12px/+0.6px rather than its own 1.8rem.
+   *
+   * Net effect at a squint: the right rail stops looking like an article
+   * and starts looking like the index of a printed reference.
+   */
+  .toc-heading {
+    margin: 0 0 var(--space-04);
+    padding-bottom: var(--space-03);
+    border-bottom: 1px solid var(--border);
+    font-family: var(--meta-font);
+    font-size: var(--meta-size);
+    font-weight: var(--label-weight);
+    line-height: var(--label-lh);
+    letter-spacing: var(--meta-track);
+    text-transform: var(--label-transform);
+    color: var(--meta-color); /* #525252 on #ffffff — 7.81:1, measured */
+  }
+
+  .toc-rail ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  /*
+   * Depth-3 entries are operation names — `get_products`, `context_match` —
+   * i.e. the protocol's own vocabulary, so they take the evidence face too
+   * (the same rule that puts `<code>` in mono in the tree and in the
+   * tables). Depth-2 entries are our section headings and stay Sans. The
+   * two levels are then told apart by FAMILY as well as by indent, which
+   * is what makes a 40-entry area-page TOC scannable without a second
+   * colour, a bullet or a chevron.
+   */
+  .toc-depth-3 .toc-link {
+    padding-left: calc(12px + 1em);
+    font-family: var(--meta-font);
+    font-size: 13px; /* mono runs optically larger than Sans at the same px */
+  }
+
+  .toc-link {
+    display: block;
+    padding: 6px 0 6px 12px;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--fg-muted);
+    text-decoration: none;
+    /* resting: 1px gray inset rule */
+    box-shadow: inset var(--toc-rest-rule-width) 0 0 var(--toc-rule-rest-color);
+  }
+
+  .toc-link:hover {
+    background: var(--bg-subtle);
+  }
+
+  .toc-link:focus-visible {
+    outline: none;
+    box-shadow: var(--focus-ring);
+  }
+
+  /* active: 2px green inset rule — the one exemption, ruling 5 */
+  .toc-link.is-active {
+    color: var(--fg);
+    box-shadow: inset var(--toc-active-rule-width) 0 0 var(--toc-rule-active-color);
+  }
+</style>
+
+<script>
+  // ~20 lines, no framework, no scrollIntoView. Degrades correctly with JS
+  // off: no item is active, every item shows the 1px resting rule, every
+  // anchor still works.
+  const links = document.querySelectorAll<HTMLAnchorElement>('.toc-link')
+
+  if (links.length > 0) {
+    const setActive = (id: string) => {
+      links.forEach((link) => {
+        link.classList.toggle('is-active', link.getAttribute('data-toc-target') === id)
+      })
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries.find((e) => e.isIntersecting)
+        if (visible) setActive(visible.target.id)
+      },
+      { rootMargin: '-80px 0px -70% 0px' },
+    )
+
+    links.forEach((link) => {
+      const id = link.getAttribute('data-toc-target')
+      const target = id ? document.getElementById(id) : null
+      if (target) observer.observe(target)
+    })
+  }
+</script>

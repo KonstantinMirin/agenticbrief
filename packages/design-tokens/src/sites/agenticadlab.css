@@ -1,0 +1,294 @@
+/**
+ * agenticadlab — HUB (a16z / Stratechery voice)
+ *
+ * THE EDITORIAL MOVE (light-only elevation pass, 2026-08-14):
+ * ---------------------------------------------------------------------------
+ * A BOOK PAGE WITH A MARGINALIA COLUMN — a 96px hanging gutter outboard of a
+ * single flush-left content edge, into which every structural mark is exdented
+ * (chapter numerals, section rules, the pull-quote glyph), so the reading path
+ * keeps one unbroken left edge while the page's structure is legible entirely
+ * in the margin. Monocle's 1px rules and eyebrow discipline, Stripe Press's
+ * oversized-glyph-plus-short-rule device (80px opening quote at line-height
+ * .22 + a 40px/1px rule at opacity .4) and its asymmetric rule-anchored
+ * whitespace, executed in the portfolio's only serif.
+ * Sources: /srv/ws/out/editorial-references.md §2.1/§2.3/§2.7/§2.8/§2.9/§2.13,
+ * §3 axis 3 (airy-editorial) + axis 5 (warm — sole owner), §4 assignment row.
+ * ---------------------------------------------------------------------------
+ *
+ * Dominant differentiator (spec §7.1, editorial-references §4): Axis 3 =
+ * AIRY-EDITORIAL RHYTHM (80/96/160px, the top of Carbon's own layout scale)
+ * carried by the marginalia column; secondary Axis 5 = WARM GROUND, of which
+ * this site is the portfolio's sole owner (#f5f4ed / #faf9f5, ΔL* 1.81), and
+ * the ONLY serif reading voice (IBM Plex Serif 300, ibm.md:81,88,90 — Carbon's
+ * own serif role, not a new family).
+ *
+ * LIGHT-ONLY. There is no dark block and none may be added: this file, its
+ * site stylesheet and the built output all grep clean for `prefers-color-
+ * scheme` (orchestrator decision 2026-08-14). All six-way differentiation for
+ * this site lives in light.
+ *
+ * ~55% of this file is imported from Claude's palette via spec §5.1, not
+ * from ibm.md — flagged [ADAPTATION — import] throughout. Carbon supplies
+ * the grid, spacing scale, weight discipline, tracking law and the token
+ * vocabulary itself; the warm ramp, terracotta and serif-at-display are the
+ * hub's own. If this reads as "Carbon in beige", the fix is MORE Claude on
+ * this one file, not more Carbon (spec §11.5).
+ */
+
+:root[data-site='agenticadlab'] {
+  /* ---- ground ramp [ADAPTATION — import, spec §7.2] ---- */
+  --cds-background: #f5f4ed;
+  --cds-layer-01: #faf9f5;
+  --cds-layer-02: #e8e6dc;
+  --cds-text-primary: #141413;
+  --cds-text-secondary: #5e5d59;
+  /* ---- ink: tertiary raised for WCAG [DEVIATION from spec §7.2's #87867f] ----
+     #87867f measures 3.31:1 on #f5f4ed and 3.47:1 on #faf9f5 — it fails the
+     4.5:1 text floor (ruling 6, no decorative-text exemption) while its own
+     comment scopes it to metadata, which is text. Zero consumers today, so
+     the fix is free. Still NEVER on --cds-layer-02 (4.15:1, forbidden). */
+  --cds-text-tertiary: #6e6d66; /* 4.71:1 on #f5f4ed · 4.93:1 on #faf9f5 · 4.15:1 on #e8e6dc (FAIL — forbidden) */
+  --cds-border-subtle: #f0eee6; /* barely-visible, deliberately near 1:1 — never painted as a rule, see site CSS */
+  /* [FIX — review round 2, "the ring separation mechanic is not perceptible"]
+     was #e8e6dc = 1.13:1 / ΔL* 4.89 on #f5f4ed, the same value as --cds-layer-02
+     — a fill-coloured line reads as no line. #d8d5c8 = 1.33:1 / ΔL* 10.91,
+     matching adcpexplorer's plain hairline (ΔL* 10.82). Still short of the 3:1
+     non-text-UI floor as a stand-alone boundary; this token separates content
+     regions (AnswerBox, code panel, featured card, header), not an
+     interactive control, so it is not held to that floor — see --code-bg
+     below for the panel fix that carries the rest of the perceptual weight. */
+  --border-prominent: #d8d5c8; /* used where a stronger line is needed than --border */
+  /* [FIX — same finding] --astro-code-background falls back to --bg-subtle
+     (== --cds-layer-01, ΔL* 1.81 from the page) when this hook is unset; a
+     1.81-ΔL* fill inside a 4.89-ΔL* ring is two invisible things stacked.
+     #e3e0d3 is ΔL* 7.01 from #f5f4ed — a real fill, still inside the warm
+     ramp, one step darker than --cds-layer-02. Repaints via the --code-*
+     hooks (ruling 7), astro.config.mjs stays on theme: 'css-variables'. */
+  --code-bg: #e3e0d3;
+  /* [FIX — light-only elevation pass, MEASURED WCAG FAILURE]
+     global.css:395-402 paints four Shiki token roles (keyword, function,
+     link, string-expression) with `var(--code-accent, var(--accent))`, and
+     its own comment asserts "--accent as syntax colour is verified >=4.5:1
+     against every site's --bg-subtle". That assertion stopped holding for
+     this site the moment --code-bg moved the panel OFF --bg-subtle: measured,
+     #a84c33 on #e3e0d3 is 4.24:1 — a real, live sub-4.5 text pairing on every
+     fenced code block. --code-accent is the hook global.css ships for exactly
+     this case. #94432d is the same terracotta at 88% toward black (same hue
+     family, not a new colour): 5.12:1 on #e3e0d3, verified below. Scoped to
+     the code panel only, so --site-accent's documented 5.08:1 identity value
+     is untouched. */
+  --code-accent: #94432d; /* 5.12:1 on #e3e0d3 — syntax tokens only */
+
+  /* ---- accent [spec §5.1 hue family; hex darkened for WCAG, ADAPTATION] ---- */
+  --site-accent: #a84c33; /* terracotta — 5.08:1 on #f5f4ed, verified */
+  --site-accent-strong: var(
+    --site-accent
+  ); /* no distinct light-mode "bright" shade sourced; used <5% of elements */
+
+  /* ---- radius, measure, density ---- */
+  --site-radius: var(--radius-8);
+  --site-measure: 68ch; /* now actually consumed — see sites/agenticadlab/src/styles/agenticadlab.css */
+  --lh-body: 1.65;
+
+  /* ---- container + measure (fixes D1 — the 68ch measure did not reach the page) ---- */
+  --measure-container: 1080px; /* per-site override of main.wide's chassis-default 1180px */
+  --measure-figure: 880px; /* tables / illustrations break out past the 68ch text; also the homepage thesis */
+  /* --measure-deck (46ch) is DELETED, not orphaned. It capped the homepage
+     thesis, and measured at 1440px it put a 330-character sentence set at
+     Display 01 (60px) into a 442px column — about seven characters per line,
+     seventeen lines, the whole first screen. The thesis now takes
+     --measure-figure and its own 28→40px clamp; Display 01 moves to the essay
+     h1, the only string short enough to carry it. See the .hub-hero block in
+     sites/agenticadlab/src/styles/agenticadlab.css. */
+
+  /* ---- THE MARGINALIA COLUMN (the elevation pass's structural move) ----
+     A hanging gutter outboard of the content edge. NOTHING in the reading
+     path ever enters it: it carries chapter numerals, the exdented left end
+     of every REGION rule, and the pull-quote glyph. That gives the page two
+     legible vertical lines — an outer STRUCTURE edge and an inner TEXT edge —
+     from one measurement, which is what the three-width ladder
+     (68ch prose / 880px figures / full content-box portfolio row, all flush
+     left) was missing: the widths differ, but before this they had nothing to
+     be flush *against*.
+
+     Mobile-first: 0 by default, so below --bp-lg the numerals and the glyph
+     fall back into flow above their block and every rule starts at the text
+     edge — one column, zero horizontal risk at 390px. It opens only at
+     --bp-lg (1056px), the same breakpoint PageLayout uses for its rail
+     collapse, where --measure-container still leaves 880px of content box
+     (1056 - 96 - 2x40) — exactly --measure-figure, so no figure is ever
+     squeezed by the gutter.
+
+     Consequence, stated so it is not re-diagnosed as the R-6 bug: at >=1056px
+     the masthead/footer sit at the marginalia edge and prose at the text
+     edge, a deliberate 96px offset with an occupied column between them. R-6
+     was an UNINTENDED 70px mismatch between two containers with nothing in
+     the gap; this is a grid. */
+  --hang: 0px;
+
+  /* ---- Stripe Press's glyph-and-rule device, tokenised so the two numbers
+     stay auditable (editorial-references §2.8, read from production CSS) ---- */
+  /* Stripe Press's live value is 80px, in Ivar Text. Rendered and compared at
+     1440px, Plex Serif's opening double quote carries noticeably less ink per
+     em than Ivar's, so 80px read as an ordinary quotation mark rather than as
+     a device. 104px matches the optical size the 80px figure was chosen for;
+     its advance (~0.42em, ~44px) still sits well inside the 96px gutter. */
+  --quote-glyph-size: 104px; /* opening curly quote, IBM Plex Serif 300 */
+  --quote-glyph-lh: 0.22; /* collapses the glyph's own box so it adds no vertical rhythm */
+  --rule-short: 40px; /* the 1px / opacity .4 rule that closes a pull-quote */
+  --rule-short-opacity: 0.4;
+
+  /* ---- standfirst: the essay-page AnswerBox, set as a deck rather than a
+     box of body copy. The homepage thesis already takes Display 01 (see
+     --display-* below); this is the same serif voice one step down, so the
+     lede of every one of the 11 essay routes reads as a deck and the body
+     that follows it starts at the drop cap. Replaces the retired
+     --deck-size/--deck-lh pair, which had zero consumers. ---- */
+  --standfirst-size: clamp(1.25rem, 1.1rem + 0.7vw, 1.5rem); /* 20px → 24px */
+  --standfirst-lh: 1.4;
+
+  /* ---- density: top of Carbon's own layout scale (ibm.md:221, spec §4.5) ----
+     A selection WITHIN the chassis scale (--space-layout-06/07/08/04), not a
+     departure from it. */
+  --space-chapter: var(--space-layout-06); /* 80px — above every h2 */
+  --space-region: var(--space-layout-07); /* 96px — FAQ / Related / Engagement / PortfolioNav */
+  --space-page-foot: var(--space-layout-08); /* 160px — bottom of main */
+  --space-figure: var(--space-layout-04); /* 48px — around tables and illustrations */
+
+  /* ---- separation — Vercel ring graft (§6.3a), never a shadow ---- */
+  --ring-separation: 0 0 0 1px var(--border-prominent); /* was a hardcoded #e8e6dc dupe of --cds-layer-02, see the FIX comment above */
+  /* --divider-style: dotted — DELETED, zero consumers. It duplicated the
+     `dotted` already spelled out in --rule-chapter below, which is the token
+     every rule on this site actually reads. */
+  /* [FIX — review round 2, "the chapter rule measures below where a 1px
+     dotted line reads"] was #e8e6dc, identical failure to --ring-separation
+     above (1.13:1 / ΔL* 4.89), and dotting halves the inked coverage of an
+     already-faint line. Spec §7.2 sanctions "dotted divider" as one of three
+     accent placements — this was shipped neutral, which is both the spec
+     deviation and the cause of the invisibility. #e6d2c8 is 20% terracotta
+     into the page ground: 1.32:1 / ΔL* 10.54, restores the accent placement
+     and reaches portfolio-normal hairline strength. Kept distinct from
+     --border-prominent (which stays neutral) rather than unified — this rule
+     is deliberately the one warm/accent line, not another gray one. */
+  --rule-chapter: 1px dotted #e6d2c8;
+
+  /* ---- display — IBM Plex Serif at Carbon's own Display 01 / Heading 01 sizes ----
+     h1 reaches --display-font/--display-weight via global.css:216/233 on ALL
+     14 routes with no site override — this is the path that earns the Serif
+     preload, and it is why the serif is a reading voice here rather than a
+     one-off flourish.
+
+     [ELEVATION PASS] Display 01 now lands on the ESSAY H1, which is where a
+     60px serif line belongs: the longest of the twelve titles is 41
+     characters. Review round 2's finding D ("the display moment is spent on
+     the wordmark") was right that the homepage h1 must not win the
+     largest-type slot, and it still does not — but its remedy, handing the
+     60px role to a 330-character thesis inside a 46ch box, measured at seven
+     characters per line over seventeen lines. The homepage now opens on the
+     §2.1 kicker (that same h1 string, set as the mono label primitive) with
+     the thesis below it at its own 28→40px clamp over --measure-figure. Both
+     files carry the reasoning at the rule.
+
+     The clamp's floor drops from 40px to 32px so the essay h1 lands on the
+     chassis's own mobile heading size (--type-heading-02-size) at 390px
+     instead of forcing 40px there; the 60px ceiling is unchanged and is
+     reached at ~1330px. Only weight 300 is supplied — font-synthesis-weight:
+     none is set alongside every consumer so a stray <strong> degrades instead
+     of faking a bold. --deck-size/--deck-lh (the old 24px standfirst
+     treatment) stay retired; the standfirst role is now --standfirst-size
+     above, which does have consumers. */
+  --display-font: var(--cds-font-serif);
+  --display-weight: 300;
+  --display-size: clamp(2rem, 0.8rem + 3.6vw, 3.75rem); /* 32px → 60px, Display 01 */
+  --display-lh: 1.1;
+  --display-tracking: 0; /* tracking law, ibm.md:106/276 — ruling 9 gives no exemption here */
+
+  /* ---- wayfinding label ---- */
+  --track-label: 1px;
+
+  /* ---- links: accent lives in the UNDERLINE, not the text (Stratechery live, §3.2) ----
+     Read by sites/agenticadlab/src/styles/agenticadlab.css, which is the only
+     file that consumes --link-underline (global.css has no such hook). */
+  --link-color: var(--cds-text-primary); /* 16.72:1 on #f5f4ed — link text is ink */
+  --link-underline: var(
+    --site-accent
+  ); /* 5.08:1 on #f5f4ed — >3:1 non-text floor, never the only cue */
+
+  /* ---- AnswerBox recipe (spec §9.7) ---- */
+  --answerbox-radius: var(--radius-8); /* == --site-radius, no override needed */
+  --answerbox-shadow: var(--ring-separation);
+  --answerbox-label-size: var(--type-heading-04-size); /* Heading 04, 20px/600 */
+  --answerbox-label-weight: 600;
+  --answerbox-padding: var(
+    --space-06
+  ); /* 24px, up from the chassis 16px — this site's density row */
+  --answerbox-label-transform: none; /* §9.7: the hub's the only Sans (non-mono) AnswerBox label.
+    NOTE: dormant — zero `term=` usages on this site today (grepped); global.css:444 also hardcodes
+    `.answer-term{font-family:var(--font-mono)}`, overridden locally in the site CSS. */
+
+  /*
+   * Contrast table (ruling 6 deliverable — Phase D recomputes, does not trust this comment).
+   * MEASURED, not estimated. Script: /tmp/agenticadlab-contrast.mjs (WCAG 2.x
+   * relative luminance + CIE L*, same maths as /srv/ws/out/contrast-check.mjs);
+   * re-run 2026-08-14 for the light-only elevation pass. Every row below is
+   * copied from that script's stdout. Grounds: page #f5f4ed, layer-01 #faf9f5,
+   * layer-02 #e8e6dc, code panel #e3e0d3. There is no dark ground: the four
+   * dark-block rows this table used to carry are deleted with the block.
+   *
+   *   pair                          ratio   ΔL*     floor  verdict
+   *   #141413 on #f5f4ed            16.72   89.80   4.5    pass
+   *   #141413 on #faf9f5            17.50   91.61   4.5    pass
+   *   #141413 on #e8e6dc            14.73   84.91   4.5    pass
+   *   #141413 on #e3e0d3            13.93   82.80   4.5    pass    (code panel foreground)
+   *   #5e5d59 on #f5f4ed             5.98   56.63   4.5    pass
+   *   #5e5d59 on #faf9f5             6.26   58.44   4.5    pass
+   *   #5e5d59 on #e8e6dc             5.27   51.73   4.5    pass
+   *   #5e5d59 on #e3e0d3             4.98   49.62   4.5    pass    (code comments/strings, --fg-muted)
+   *   #6e6d66 on #f5f4ed             4.71   50.17   4.5    pass    (chapter numerals, breadcrumb separators)
+   *   #6e6d66 on #faf9f5             4.93   51.98   4.5    pass
+   *   #6e6d66 on #e8e6dc             4.15   45.27   4.5    FAIL — forbidden pairing, never tertiary on layer-02
+   *   #6e6d66 on #e3e0d3             3.93   43.16   4.5    FAIL — forbidden pairing, never tertiary on the code panel
+   *   #a84c33 on #f5f4ed             5.08   52.24   4.5    pass    (also >=3:1 as non-text: underlines, glyph, rules)
+   *   #a84c33 on #faf9f5             5.32   54.05   4.5    pass
+   *   #a84c33 on #e8e6dc             4.48   47.35   4.5    FAIL — forbidden pairing (D2): accent is NOT text-safe on
+   *                                                                layer-02. Live offender was Header.astro:145's
+   *                                                                hover/aria-current bg (--bg-inset) paired with
+   *                                                                global.css:183's --accent — restated in ink, site CSS.
+   *   #a84c33 on #e3e0d3             4.24   45.24   4.5    FAIL — why --code-accent exists; see the row below.
+   *   #94432d on #e3e0d3             5.12   50.36   4.5    pass    (--code-accent: the four Shiki token roles)
+   *   #94432d on #f5f4ed             6.14   57.37   4.5    pass    (headroom only; not consumed on the page ground)
+   *   #d8d5c8 ring on #f5f4ed        1.33   10.91   —      non-text — separation only, never a state boundary
+   *   #e6d2c8 chapter rule/#f5f4ed   1.32   10.54   —      non-text — dotted, accent-tinted region rule
+   *   #e3e0d3 code panel/#f5f4ed     1.20    7.01   —      non-text — --code-bg fill
+   *   #f0eee6 hairline on #f5f4ed    1.05    2.04   —      non-text — deliberately near-invisible; never painted
+   *   #d6b1a3 pull-quote rule/#f5f4ed 1.78  21.02   —      non-text — the §2.8 40x1px rule, i.e. #a84c33 composited
+   *                                                                at opacity .4 over the page; computed, not eyeballed.
+   *
+   * Consumers: --cds-text-tertiary (chapter numerals, breadcrumb separators, table
+   * head rule), --site-accent / nav hover-bg (fixes D2, see the Header override in
+   * sites/agenticadlab/src/styles/agenticadlab.css), --link-underline and the
+   * pull-quote glyph/rule (non-text, 3:1 floor), --code-accent (code panel only).
+   */
+}
+
+/*
+ * The marginalia column opens at --bp-lg (1056px). Declared here rather than in
+ * the site stylesheet so that file keeps its "declares no custom properties"
+ * contract, and so the one responsive value in this site's identity is
+ * auditable next to the layout tokens it belongs to. 96px = --space-layout-07
+ * minus nothing, i.e. this site's own region step, so the horizontal gutter and
+ * the vertical region rhythm are the same measurement.
+ *
+ * NOT a colour-scheme query — a WIDTH query. This file contains no OS
+ * dark-scheme media block and never will (orchestrator decision 2026-08-14,
+ * light-only portfolio); the warm inversion that used to live here (#1c1b19 /
+ * #252320 / #2e2b27 with a coral #d97757 accent pair) is deleted, not hidden.
+ * The phrase itself is kept out of this file so the Phase D gate grep returns
+ * a clean zero rather than a comment. See /srv/ws/out/design-system-spec.md
+ * §10 ruling 4, marked VOID.
+ */
+@media (min-width: 1056px) {
+  :root[data-site='agenticadlab'] {
+    --hang: 96px;
+  }
+}

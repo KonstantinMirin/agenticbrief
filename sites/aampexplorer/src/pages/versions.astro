@@ -1,8 +1,9 @@
 ---
-import BaseLayout from '@agenticbrief/shared-ui/BaseLayout.astro'
+import PageLayout from '@agenticbrief/shared-ui/PageLayout.astro'
 import AnswerBox from '@agenticbrief/shared-ui/AnswerBox.astro'
-import FaqBlock from '@agenticbrief/shared-ui/FaqBlock.astro'
 import SpecSource from '@agenticbrief/shared-ui/SpecSource.astro'
+import IllustrationPlaceholder from '@agenticbrief/shared-ui/IllustrationPlaceholder.astro'
+import PlaneRail from '../components/PlaneRail.astro'
 import { aamp } from '@agenticbrief/protocol-data'
 import {
   graph,
@@ -15,6 +16,8 @@ import {
   faqPageNode,
 } from '@agenticbrief/seo/schema'
 import { BASE, HUB, MATURITY, componentsByMaturity } from '../lib/site'
+import { ILLUSTRATIONS } from '../lib/illustrations'
+import '../styles/aampexplorer.css'
 
 const components = componentsByMaturity()
 
@@ -54,6 +57,16 @@ const breadcrumbs = [
   { name: 'Versions', url },
 ]
 
+const related = [
+  { href: '/', title: 'What AAMP contains' },
+  { href: '/what-does-aamp-stand-for/', title: 'What does AAMP stand for?' },
+  { href: '/repos/', title: 'Every AAMP repository, ranked by what it defines' },
+  {
+    href: `${HUB}/protocols/adcp-vs-aamp/`,
+    title: 'AdCP resolves its version from one file',
+  },
+]
+
 const jsonLd = graph([
   organizationNode(),
   personNode(),
@@ -73,22 +86,73 @@ const jsonLd = graph([
 ])
 ---
 
-<BaseLayout
+<PageLayout
   site="aampexplorer"
   title={title}
+  heading="AAMP version matrix"
   description={description}
   path={path}
   jsonLd={jsonLd}
-  wide
   ogType="article"
   publishDate={new Date('2026-08-09')}
   keywords={['aamp version', 'aamp release']}
+  layout="reference"
+  breadcrumbs={breadcrumbs}
+  faq={faq}
+  related={related}
 >
-  <nav class="breadcrumbs" aria-label="Breadcrumb">
-    <ol><li><a href="/">AAMP Explorer</a></li><li><span>Versions</span></li></ol>
-  </nav>
-  <h1>AAMP version matrix</h1>
+  <PlaneRail slot="nav" />
+
   <AnswerBox answer={answer} />
+
+  {
+    /*
+    Phase D fix (D7 / D2, re-layout): this 5-column matrix — the page's
+    entire reason for existing — used to live in the `aside` compare pane,
+    which is `display:none` below 1312px (PageLayout's own <=1055px rule,
+    this site's own <=1311px extension) and, even at full width, only 550px
+    wide: repo names broke to three lines and version chips broke mid-token
+    ("untagg/ed"). It belongs in the 12-col content column, not the
+    compare slot — SchemaPane's two-column field lists still use the aside
+    for the site's structural differentiator; a 5-col table does not fit
+    that shape at any width. No `aside` slot is filled on this page, so
+    PageLayout gives `.doc-content` the full 12 columns automatically.
+  */
+  }
+  <figure class="comparison">
+    <table>
+      <caption
+        >AAMP repositories on 12 August 2026: tag, kind, substance and hub listing. The version
+        column shows the nearest git tag.</caption
+      >
+      <thead>
+        <tr>
+          <th scope="col">Repository</th>
+          <th scope="col">Version</th>
+          <th scope="col">Kind</th>
+          <th scope="col">Substance</th>
+          <th scope="col">In the hub README</th>
+        </tr>
+      </thead>
+      <tbody>
+        {
+          components.map((c) => (
+            <tr>
+              <th scope="row">
+                <a href={`/repos/${c.name}/`}>{c.name}</a>
+              </th>
+              <td>
+                <code>{displayVersion(c.version)}</code>
+              </td>
+              <td>{c.kind.replace(/-/g, ' ')}</td>
+              <td>{MATURITY[c.name]?.level ?? 'unassessed'}</td>
+              <td>{c.listedInHub ? 'Yes' : 'No'}</td>
+            </tr>
+          ))
+        }
+      </tbody>
+    </table>
+  </figure>
 
   <p>
     AAMP is IAB Tech Lab's umbrella for agent-to-agent ad buying, expanded by the hub README as
@@ -156,41 +220,6 @@ const jsonLd = graph([
     <code>.github/</code> directory, so none has a workflow that could cut a tag.
   </p>
 
-  <figure class="comparison">
-    <table>
-      <caption
-        >AAMP repositories on 12 August 2026: tag, kind, substance and hub listing. The version
-        column shows the nearest git tag.</caption
-      >
-      <thead>
-        <tr>
-          <th scope="col">Repository</th>
-          <th scope="col">Version</th>
-          <th scope="col">Kind</th>
-          <th scope="col">Substance</th>
-          <th scope="col">In the hub README</th>
-        </tr>
-      </thead>
-      <tbody>
-        {
-          components.map((c) => (
-            <tr>
-              <th scope="row">
-                <a href={`/repos/${c.name}/`}>{c.name}</a>
-              </th>
-              <td>
-                <code>{displayVersion(c.version)}</code>
-              </td>
-              <td>{c.kind.replace(/-/g, ' ')}</td>
-              <td>{MATURITY[c.name]?.level ?? 'unassessed'}</td>
-              <td>{c.listedInHub ? 'Yes' : 'No'}</td>
-            </tr>
-          ))
-        }
-      </tbody>
-    </table>
-  </figure>
-
   <p>
     <code>agentic-audiences</code> carries no tag. It calls itself "Draft v0.1" from inside a directory
     named <code>v1.0</code>, and its <code>catalog-info.yaml</code> still files the project as
@@ -215,6 +244,24 @@ const jsonLd = graph([
     commits behind the branch it points into, and its <code>pyproject.toml</code> still reads
     <code>version = "0.1.0"</code>, its starting value. The repository has no CHANGELOG.
   </p>
+
+  {
+    /* DEV-ONLY illustration slot (user decision, light-only pass): production
+       ships no visible placeholder box. The prompt stays catalogued in
+       src/lib/illustrations.ts and /srv/ws/out/illustration-prompts-aampexplorer.md;
+       the slot renders under `astro dev` so the composition is visible locally. */
+  }
+  {
+    import.meta.env.DEV && (
+      <IllustrationPlaceholder
+        slug={ILLUSTRATIONS.tagVsBranch.slug}
+        ratio={ILLUSTRATIONS.tagVsBranch.ratio}
+        alt={ILLUSTRATIONS.tagVsBranch.alt}
+        prompt={ILLUSTRATIONS.tagVsBranch.prompt}
+      />
+    )
+  }
+
   <p>
     Three of the {components.length} repositories have CI: the primitives and the two agents. Their nine
     workflow files all run on pushes and pull requests, and none is triggered by a tag or publishes a
@@ -245,19 +292,5 @@ const jsonLd = graph([
     >, a personal fork, rather than to an IABTechLab URL.
   </p>
 
-  <FaqBlock entries={faq} />
-
-  <h2>Related</h2>
-  <ul>
-    <li><a href="/">What AAMP contains</a></li>
-    <li><a href="/what-does-aamp-stand-for/">What does AAMP stand for?</a></li>
-    <li><a href="/repos/">Every AAMP repository, ranked by what it defines</a></li>
-    <li>
-      <a href={`${HUB}/protocols/adcp-vs-aamp/`} rel="noopener"
-        >AdCP resolves its version from one file</a
-      >
-    </li>
-  </ul>
-
   <SpecSource provenance={aamp.provenance} />
-</BaseLayout>
+</PageLayout>
