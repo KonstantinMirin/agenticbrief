@@ -1,0 +1,46 @@
+{
+  "$schema": "https://adcontextprotocol.org/schemas/3.1.1/adagents.json",
+  "authorized_agents": [
+    {
+      "authorization_type": "inline_properties",
+      "properties": [
+        {
+          "property_id": "briefgateway",
+          "property_type": "website",
+          "name": "briefgateway.com",
+          "identifiers": [
+            {
+              "type": "domain",
+              "value": "briefgateway.com"
+            },
+            {
+              "type": "domain",
+              "value": "www.briefgateway.com"
+            }
+          ],
+          "publisher_domain": "briefgateway.com",
+          "tags": [
+            "all_inventory"
+          ]
+        }
+      ],
+      "url": "https://sales.briefgateway.noetis.dev",
+      "authorized_for": "Advertising inventory on properties operated by Brief Gateway",
+      "signing_keys": [
+        {
+          "kid": "briefgateway-20261010T005241Z-adaa30781167b00e",
+          "kty": "OKP",
+          "alg": "EdDSA",
+          "use": "sig",
+          "crv": "Ed25519",
+          "x": "R3QYdX86tgowTpgi51x2_XV54sujKpSJat1olgwYt-o",
+          "key_ops": [
+            "verify"
+          ],
+          "adcp_use": "request-signing"
+        }
+      ]
+    }
+  ],
+  "last_updated": "2026-10-10T17:35:00+00:00"
+}

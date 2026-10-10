@@ -111,9 +111,9 @@ const resolvedOgImage =
 
 // Google Publisher Tag, briefgateway only: a leaderboard at the top of every page and a
 // rectangle in the content, sold by the Prebid Sales Agent tenant at
-// sales.briefgateway.noetis.dev on GAM network 21808260008. The tag loads on the
-// productionDomain and the deployDomain (with or without www); anywhere else, such as a
-// local preview, the slots stay hidden and nothing is fetched from a third party. The ad
+// sales.briefgateway.noetis.dev on GAM network 21808260008. The tag loads only on the
+// productionDomain (with or without www); anywhere else, such as a local preview, the
+// slots stay hidden and nothing is fetched from a third party. The ad
 // unit paths name every level under the network: the briefgateway units sit under the
 // network's ca-pub-7616612881769559 unit. The other five sites render none of this.
 const gptSlots =
@@ -133,7 +133,7 @@ const gptSlots =
     : null
 const gptHead =
   gptSlots &&
-  `if (${JSON.stringify([def.productionDomain, def.deployDomain])}.indexOf(location.hostname.replace(/^www\\./, '')) !== -1) {
+  `if (location.hostname.replace(/^www\\./, '') === ${JSON.stringify(def.productionDomain)}) {
   document.documentElement.dataset.gpt = ''
   var gpt = document.createElement('script')
   gpt.async = true
