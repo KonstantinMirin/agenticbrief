@@ -108,6 +108,53 @@ const preloadSerif = site === 'agenticadlab'
 // per-page card for them to point at.
 const resolvedOgImage =
   ogImage ?? (noindex ? `${base}/og-default.png` : `${base}/og/${ogFileName(path)}`)
+
+// Google Publisher Tag, briefgateway only: a leaderboard at the top of every page and a
+// rectangle in the content, sold by the Prebid Sales Agent tenant at
+// sales.briefgateway.noetis.dev on GAM network 21808260008. The same build is served at
+// the productionDomain too, so the tag loads only when the page is on the deployDomain;
+// anywhere else the slots stay hidden and nothing is fetched from a third party. The
+// other five sites render none of this.
+const gptSlots =
+  site === 'briefgateway'
+    ? {
+        leaderboard: {
+          id: 'div-gpt-ad-briefgateway-leaderboard',
+          path: '/21808260008/briefgateway/briefgateway_leaderboard',
+          size: [728, 90],
+        },
+        rectangle: {
+          id: 'div-gpt-ad-briefgateway-rectangle',
+          path: '/21808260008/briefgateway/briefgateway_rectangle',
+          size: [300, 250],
+        },
+      }
+    : null
+const gptHead =
+  gptSlots &&
+  `if (location.hostname === ${JSON.stringify(def.deployDomain)}) {
+  document.documentElement.dataset.gpt = ''
+  var gpt = document.createElement('script')
+  gpt.async = true
+  gpt.src = 'https://securepubads.g.doubleclick.net/tag/js/gpt.js'
+  document.head.appendChild(gpt)
+  window.googletag = window.googletag || { cmd: [] }
+  googletag.cmd.push(function () {
+${Object.values(gptSlots)
+  .map(
+    (s) =>
+      `    googletag.defineSlot(${JSON.stringify(s.path)}, ${JSON.stringify(s.size)}, ${JSON.stringify(s.id)}).addService(googletag.pubads())`,
+  )
+  .join('\n')}
+    googletag.pubads().enableSingleRequest()
+    googletag.enableServices()
+  })
+}`
+const gptStyle =
+  '.ad-slot{display:none;margin:1.5rem auto;max-width:100%;overflow:hidden;text-align:center}' +
+  'html[data-gpt] .ad-slot{display:block}'
+const gptDisplay = (id: string) =>
+  `window.googletag && googletag.cmd.push(function () { googletag.display(${JSON.stringify(id)}) })`
 ---
 
 <!doctype html>
@@ -138,13 +185,43 @@ const resolvedOgImage =
       noindex={noindex}
       keywords={keywords}
     />
+    {
+      gptSlots && (
+        <>
+          <style is:inline set:html={gptStyle} />
+          <script is:inline set:html={gptHead} />
+        </>
+      )
+    }
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
     <div class="layout">
       <Header site={site} current={current} />
+      {
+        gptSlots && (
+          <div
+            id={gptSlots.leaderboard.id}
+            class="ad-slot"
+            style={`min-height:${gptSlots.leaderboard.size[1]}px`}
+          >
+            <script is:inline set:html={gptDisplay(gptSlots.leaderboard.id)} />
+          </div>
+        )
+      }
       <main id="main" class={wide ? 'wide' : 'prose'}>
         <slot />
+        {
+          gptSlots && (
+            <div
+              id={gptSlots.rectangle.id}
+              class="ad-slot"
+              style={`min-height:${gptSlots.rectangle.size[1]}px`}
+            >
+              <script is:inline set:html={gptDisplay(gptSlots.rectangle.id)} />
+            </div>
+          )
+        }
       </main>
       <Footer site={site} />
     </div>
