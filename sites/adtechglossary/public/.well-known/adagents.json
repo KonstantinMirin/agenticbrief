@@ -1,0 +1,42 @@
+{
+  "$schema": "https://adcontextprotocol.org/schemas/3.1.1/adagents.json",
+  "authorized_agents": [
+    {
+      "authorization_type": "inline_properties",
+      "properties": [
+        {
+          "property_id": "adtechglossary",
+          "property_type": "website",
+          "name": "adtechglossary.noetis.dev",
+          "identifiers": [
+            {
+              "type": "domain",
+              "value": "adtechglossary.noetis.dev"
+            }
+          ],
+          "publisher_domain": "adtechglossary.noetis.dev",
+          "tags": [
+            "all_inventory"
+          ]
+        }
+      ],
+      "url": "https://sales.adtechglossary.noetis.dev",
+      "authorized_for": "Advertising inventory on properties operated by AdTech Glossary Media",
+      "signing_keys": [
+        {
+          "kid": "glossary-20261001T025751Z-d105f2c0f2bb28e7",
+          "kty": "OKP",
+          "alg": "EdDSA",
+          "use": "sig",
+          "crv": "Ed25519",
+          "x": "lPTfISSqQr_TGYpdcfb1Dxawt0XKw0k5biPt1xGsybo",
+          "key_ops": [
+            "verify"
+          ],
+          "adcp_use": "request-signing"
+        }
+      ]
+    }
+  ],
+  "last_updated": "2026-10-01T02:57:51.005326+00:00"
+}

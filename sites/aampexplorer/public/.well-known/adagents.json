@@ -1,0 +1,42 @@
+{
+  "$schema": "https://adcontextprotocol.org/schemas/3.1.1/adagents.json",
+  "authorized_agents": [
+    {
+      "authorization_type": "inline_properties",
+      "properties": [
+        {
+          "property_id": "aampexplorer",
+          "property_type": "website",
+          "name": "aampexplorer.noetis.dev",
+          "identifiers": [
+            {
+              "type": "domain",
+              "value": "aampexplorer.noetis.dev"
+            }
+          ],
+          "publisher_domain": "aampexplorer.noetis.dev",
+          "tags": [
+            "all_inventory"
+          ]
+        }
+      ],
+      "url": "https://sales.agenticadlab.noetis.dev",
+      "authorized_for": "Advertising inventory on properties operated by Agentic Ad Lab Network",
+      "signing_keys": [
+        {
+          "kid": "adlab-20261001T025750Z-862d19cb3f1d4506",
+          "kty": "OKP",
+          "alg": "EdDSA",
+          "use": "sig",
+          "crv": "Ed25519",
+          "x": "hb_U0qWHzMwTto1YtCVyJdJIGXyj-OtOTtahKtBbEJM",
+          "key_ops": [
+            "verify"
+          ],
+          "adcp_use": "request-signing"
+        }
+      ]
+    }
+  ],
+  "last_updated": "2026-10-01T02:57:50.991388+00:00"
+}
