@@ -36,7 +36,43 @@
           "adcp_use": "request-signing"
         }
       ]
+    },
+    {
+      "authorization_type": "inline_properties",
+      "properties": [
+        {
+          "property_id": "adcpexplorer",
+          "property_type": "website",
+          "name": "adcpexplorer.noetis.dev",
+          "identifiers": [
+            {
+              "type": "domain",
+              "value": "adcpexplorer.noetis.dev"
+            }
+          ],
+          "publisher_domain": "adcpexplorer.noetis.dev",
+          "tags": [
+            "all_inventory"
+          ]
+        }
+      ],
+      "url": "https://conformance.noetis.dev",
+      "authorized_for": "AdCP conformance grading target (sandbox, no real delivery) for adcpexplorer.noetis.dev",
+      "signing_keys": [
+        {
+          "kid": "5d4fb592-b2fe-4745-90ce-77666157a47b-20261002T233446Z-c5c7f9bc599c077f",
+          "kty": "OKP",
+          "alg": "EdDSA",
+          "use": "sig",
+          "crv": "Ed25519",
+          "x": "1SyIZi59ZwYFipFizXVcoLNLOH8PhRQnNRIDcwuIP6A",
+          "key_ops": [
+            "verify"
+          ],
+          "adcp_use": "request-signing"
+        }
+      ]
     }
   ],
-  "last_updated": "2026-10-01T02:57:50.991388+00:00"
+  "last_updated": "2026-11-11T18:30:00+00:00"
 }

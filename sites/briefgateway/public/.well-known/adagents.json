@@ -40,7 +40,47 @@
           "adcp_use": "request-signing"
         }
       ]
+    },
+    {
+      "authorization_type": "inline_properties",
+      "properties": [
+        {
+          "property_id": "briefgateway",
+          "property_type": "website",
+          "name": "briefgateway.com",
+          "identifiers": [
+            {
+              "type": "domain",
+              "value": "briefgateway.com"
+            },
+            {
+              "type": "domain",
+              "value": "www.briefgateway.com"
+            }
+          ],
+          "publisher_domain": "briefgateway.com",
+          "tags": [
+            "all_inventory"
+          ]
+        }
+      ],
+      "url": "https://gam.test-salesagent.noetis.dev",
+      "authorized_for": "Test sales agent on the Google Ad Manager API test network (it cannot serve ads) for briefgateway.com",
+      "signing_keys": [
+        {
+          "kid": "gam-20261001T025751Z-faea2e5d2d53a5d8",
+          "kty": "OKP",
+          "alg": "EdDSA",
+          "use": "sig",
+          "crv": "Ed25519",
+          "x": "IjyYHUfmKNTzq9R9-OcHUI3zlpKMQuBFy3FVqtXz_q4",
+          "key_ops": [
+            "verify"
+          ],
+          "adcp_use": "request-signing"
+        }
+      ]
     }
   ],
-  "last_updated": "2026-10-10T17:35:00+00:00"
+  "last_updated": "2026-11-11T18:30:00+00:00"
 }
